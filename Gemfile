@@ -52,6 +52,9 @@ group :development, :test do
 
   # Fixtures made easy
   gem 'factory_girl_rails'
+
+  # JavaScript unit tests
+  gem "konacha", "~> 3.0.0"
 end
 
 # Acceptance tests
