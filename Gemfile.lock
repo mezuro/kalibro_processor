@@ -86,7 +86,7 @@ GEM
     mime-types (1.25)
     mini_portile (0.5.2)
     minitest (4.7.5)
-    modernizr-rails (2.6.2.3)
+    modernizr-rails (2.6.3)
     multi_json (1.8.2)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
