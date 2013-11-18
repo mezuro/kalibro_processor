@@ -51,7 +51,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.14.0'
 
   # Fixtures made easy
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', '~> 4.3.0'
 
   # JavaScript unit tests
   gem "konacha", "~> 3.0.0"
