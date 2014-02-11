@@ -51,7 +51,7 @@ group :development, :test do
   gem 'factory_girl_rails', '~> 4.4.0'
 
   # JavaScript unit tests
-  gem "konacha", "~> 3.0.0"
+  gem "konacha", "~> 3.1.0"
 end
 
 # Acceptance tests
