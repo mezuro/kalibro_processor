@@ -119,7 +119,7 @@ GEM
     rdoc (4.1.1)
       json (~> 1.4)
     ref (1.0.5)
-    rspec-core (2.14.7)
+    rspec-core (2.14.8)
     rspec-expectations (2.14.5)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.14.6)
