@@ -1,3 +1,16 @@
-class Language < ActiveRecord::Base
-  enum name: [ :C, :CPP, :JAVA, :PYTHON ] #FIXME turn CPP to "C++" as in Kalibro
+class Language
+  LANGUAGES = [ :C, :CPP, :JAVA, :PYTHON ]
+  attr_reader :type
+
+  def initialize(type)
+    if is_valid?(type)
+      @type = type
+    else
+      raise TypeError.new("Language #{type} not supported")
+    end
+  end
+
+  def self.is_valid?(type)
+    type.nil? ? false : LANGUAGES.include?(type.to_sym)
+  end
 end
