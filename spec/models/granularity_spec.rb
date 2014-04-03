@@ -16,7 +16,7 @@ describe Granularity do
 
     describe 'initialize' do
       context 'with a valid type' do
-        it 'should return a instance of Granularity' do
+        it 'should return an instance of Granularity' do
           Granularity.new(:SOFTWARE).should be_a(Granularity)
         end
       end
