@@ -12,8 +12,7 @@ describe Language do
 
       context 'with invalid type' do
         it 'should raise an exception' do
-          language = Language.new(:Type)
-          expect { raise TypeError}.to raise TypeError
+          expect { Language.new(:Type)}.to raise_error(TypeError)
         end
       end
     end

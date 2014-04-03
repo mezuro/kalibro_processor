@@ -3,7 +3,7 @@ class Language
   attr_reader :type
 
   def initialize(type)
-    if is_valid?(type)
+    if self.class.is_valid?(type)
       @type = type
     else
       raise TypeError.new("Language #{type} not supported")
