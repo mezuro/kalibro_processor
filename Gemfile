@@ -42,6 +42,9 @@ group :test do
 
   # Test coverage
   gem 'simplecov', require: false
+
+  # Simple Mocks
+  gem 'mocha', :require => 'mocha/api'
 end
 
 group :development, :test do
