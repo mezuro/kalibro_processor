@@ -1,0 +1,15 @@
+language: ruby
+rvm:
+  - ruby-2.1.1
+  - rbx-2.2.6
+
+before_script:
+  - "cp config/database.yml.sample config/database.yml"
+  - "bundle exec rake db:migrate RAILS_ENV=test"
+
+notifications:
+  email:
+    recipients:
+      - mezuro-core@lists.ime.usp.br
+    on_success: change
+    on_failure: always
