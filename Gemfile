@@ -36,6 +36,10 @@ gem 'sdoc', require: false
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring', group: :development
 
+
+# Communication with other parts
+gem 'kalibro_gatekeeper_client', '~> 0.0.1'
+
 group :test do
   # Easier test writing
   gem "shoulda-matchers", require: false # not requiring is necessary to avoid warnings from minitest 5, with version 2.6 this might get fixed
