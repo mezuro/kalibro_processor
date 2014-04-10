@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Granularity do
-  describe 'methods' do
+  describe 'method' do
     describe 'is_valid?' do
       it 'should accept all the items on the GRANULARITIES constant' do
         Granularity::GRANULARITIES.each do |granularity|
@@ -24,6 +24,24 @@ describe Granularity do
       context 'with a invalid type' do
         it 'should raise a TypeError' do
           expect { Granularity.new(:MCC) }.to raise_error(TypeError)
+        end
+      end
+    end
+
+    describe 'parent' do
+      context 'with a SOFTWARE granularity' do
+        subject { FactoryGirl.build(:granularity) }
+
+        it 'should return SOFTWARE' do
+          subject.parent.type.should eq(Granularity::SOFTWARE)
+        end
+      end
+
+      context 'with a SOFTWARE granularity' do
+        subject { FactoryGirl.build(:granularity, type: Granularity::METHOD) }
+
+        it 'should return CLASS' do
+          subject.parent.type.should eq(Granularity::CLASS)
         end
       end
     end
