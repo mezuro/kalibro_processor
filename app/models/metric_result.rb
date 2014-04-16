@@ -11,7 +11,9 @@ class MetricResult
 
   def has_error?; !@error.nil?; end
 
-  def aggreagated_value; raise NotImplmentedError; end
+  def aggregated_value; raise NotImplmentedError; end
 
   def has_range?; !@metric_configuration.range.nil?; end
+
+  def has_grade?; has_range? && !@metric_configuration.range.reading.nil?; end
 end
