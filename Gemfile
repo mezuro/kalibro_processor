@@ -70,6 +70,9 @@ group :cucumber do
   gem 'poltergeist', '~> 1.5.0'
 end
 
+# Some statistics
+gem 'descriptive-statistics', '~> 2.1.2'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
