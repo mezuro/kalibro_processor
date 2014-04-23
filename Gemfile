@@ -38,7 +38,7 @@ gem 'spring', group: :development
 
 
 # Communication with other parts
-gem 'kalibro_gatekeeper_client', '~> 0.0.1'
+gem 'kalibro_gatekeeper_client', '~> 0.1.0'
 
 group :test do
   # Easier test writing
