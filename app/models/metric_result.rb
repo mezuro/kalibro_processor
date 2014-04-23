@@ -7,7 +7,10 @@ class MetricResult
     @metric_configuration = metric_configuration
     @value = value
     @error = error
-    @descendant_results = DescriptiveStatistics::Stats.new(Array.new)
+  end
+
+  def descendant_results=(value)
+    @descendant_results = DescriptiveStatistics::Stats.new(value)
     def @descendant_results.average
       self.mean
     end
@@ -16,8 +19,8 @@ class MetricResult
   def has_error?; !@error.nil?; end
 
   def aggregated_value
-    if (@value.nan? && !@descendant_results.empty?)
-      @descendant_results.send( @metric_configuration.aggregation_form.to_s.downcase )
+    if (self.value.nil? && !self.descendant_results.empty?)
+      self.descendant_results.send( @metric_configuration.aggregation_form.to_s.downcase )
     else
       @value
     end
