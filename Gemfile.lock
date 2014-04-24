@@ -27,7 +27,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
-    arel (5.0.0)
+    arel (5.0.1.20140414130214)
     builder (3.2.2)
     capybara (2.2.1)
       mime-types (>= 1.16)
