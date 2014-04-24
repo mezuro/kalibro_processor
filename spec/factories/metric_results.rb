@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :metric_result do
-    metric_configuration Hash.new(aggregation_form: :AVERAGE)
+    metric_configuration { FactoryGirl.build(:metric_configuration) }
     value nil
     descendant_results [1, 2, 3]
 
