@@ -42,7 +42,7 @@ gem 'kalibro_gatekeeper_client', '~> 0.1.0'
 
 group :test do
   # Easier test writing
-  gem "shoulda-matchers", require: false # not requiring is necessary to avoid warnings from minitest 5, with version 2.6 this might get fixed
+  gem "shoulda-matchers", '~>2.6.1.rc1'
 
   # Test coverage
   gem 'simplecov', require: false
