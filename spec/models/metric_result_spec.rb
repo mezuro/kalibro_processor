@@ -29,9 +29,8 @@ describe MetricResult do
       end
     end
 
-    describe 'aggregate_value' do
-      let(:metric_configuration){ Mocha.mocha }
-
+    describe 'aggregated_value' do
+      let!(:metric_configuration){ Mocha.mocha }
       context 'when value is NaN and the descendant_results array is not empty' do
         let(:metric) { FactoryGirl.build(:metric) }
         let(:metric_result) { FactoryGirl.build(:metric_result, metric_configuration: metric_configuration) }
