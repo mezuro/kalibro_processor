@@ -39,5 +39,20 @@ describe MetricResult do
         end
       end
     end
+
+    describe 'range' do
+      let!(:range) { FactoryGirl.build(:range) }
+      let!(:yet_another_range) { FactoryGirl.build(:yet_another_range) }
+      let!(:metric_result) { FactoryGirl.build(:metric_result_with_value) }
+      
+      before :each do
+        KalibroGatekeeperClient::Entities::Range.expects(:ranges_of).
+            with(metric_result.metric_configuration.id).returns([range, yet_another_range])
+      end
+
+      it 'should return the range that contains the aggregated value of the metric result' do
+        metric_result.range.should eq(range)
+      end
+    end
   end
 end
