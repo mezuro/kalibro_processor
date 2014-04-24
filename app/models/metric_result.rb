@@ -30,7 +30,10 @@ class MetricResult
     ranges.select { |range| range.beginning <= value && value < range.end }.first
   end
 
-  def has_range?; !@metric_configuration.range.nil?; end
+  def has_grade?
+    range = self.range
+    !range.nil? && !range.reading.nil?
+  end
 
-  def has_grade?; has_range? && !@metric_configuration.range.reading.nil?; end
+  def grade; self.range.grade; end
 end

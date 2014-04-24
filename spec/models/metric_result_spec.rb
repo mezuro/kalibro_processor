@@ -44,7 +44,7 @@ describe MetricResult do
       let!(:range) { FactoryGirl.build(:range) }
       let!(:yet_another_range) { FactoryGirl.build(:yet_another_range) }
       let!(:metric_result) { FactoryGirl.build(:metric_result_with_value) }
-      
+
       before :each do
         KalibroGatekeeperClient::Entities::Range.expects(:ranges_of).
             with(metric_result.metric_configuration.id).returns([range, yet_another_range])
@@ -52,6 +52,60 @@ describe MetricResult do
 
       it 'should return the range that contains the aggregated value of the metric result' do
         metric_result.range.should eq(range)
+      end
+    end
+
+    describe 'has_grade?' do
+      subject { FactoryGirl.build(:metric_result) }
+
+      context 'without a range' do
+        before :each do
+          subject.expects(:range).returns(nil)
+        end
+
+        it 'should return false' do
+          subject.has_grade?.should be_false
+        end
+      end
+
+      context 'with a range' do
+        let!(:range) { FactoryGirl.build(:range) }
+
+        before :each do
+          subject.expects(:range).at_least_once.returns(range)
+        end
+
+        context 'without a reading' do
+          before :each do
+            range.expects(:reading).returns(nil)
+          end
+
+          it 'should return false' do
+            subject.has_grade?.should be_false
+          end
+        end
+
+        context 'with a reading' do
+          before :each do
+            range.expects(:reading).returns(FactoryGirl.build(:reading))
+          end
+
+          it 'should return true' do
+            subject.has_grade?.should be_true
+          end
+        end
+      end
+    end
+
+    describe 'grade' do
+      subject { FactoryGirl.build(:metric_result) }
+
+      it "should call range's grade" do
+        range = FactoryGirl.build(:range)
+        range.expects(:grade).returns(10.0)
+        subject.expects(:range).returns(range)
+
+        subject.grade
       end
     end
   end
