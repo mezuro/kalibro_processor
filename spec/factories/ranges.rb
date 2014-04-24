@@ -30,6 +30,15 @@ FactoryGirl.define do
       id 2
     end
 
+    trait :another_beginning do
+      beginning 5.2
+    end
+
+    trait :another_end do
+      self.end 10.0
+    end
+
     factory :another_range, traits: [:another_comment, :another_id]
+    factory :yet_another_range, traits: [:another_beginning, :another_end]
   end
 end
