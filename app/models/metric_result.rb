@@ -16,13 +16,11 @@ class MetricResult
     end
   end
 
-  def has_error?; !@error.nil?; end
-
   def aggregated_value
     if (self.value.nil? && !self.descendant_results.empty?)
-      self.descendant_results.send( @metric_configuration.aggregation_form.to_s.downcase )
+      self.descendant_results.send( self.metric_configuration.aggregation_form.to_s.downcase )
     else
-      @value
+      self.value
     end
   end
 

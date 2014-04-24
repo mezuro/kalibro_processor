@@ -30,7 +30,8 @@ describe MetricResult do
     end
 
     describe 'aggregate_value' do
-      let!(:metric_configuration){ Mocha.mocha }
+      let(:metric_configuration){ Mocha.mocha }
+
       context 'when value is NaN and the descendant_results array is not empty' do
         let(:metric) { FactoryGirl.build(:metric) }
         let(:metric_result) { FactoryGirl.build(:metric_result, metric_configuration: metric_configuration) }
@@ -51,7 +52,6 @@ describe MetricResult do
 
         before :each do
           metric_configuration.expects(:metric).returns(metric)
-          metric_configuration.expects(:aggregation_form).returns(:AVERAGE)
         end
 
         it 'should return the value' do
