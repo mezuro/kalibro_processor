@@ -1,6 +1,6 @@
 class ModuleResult
-  attr_reader :id, :height, :parent, :kalibro_module
-  attr_accessor :grade, :children, :metric_results
+  attr_reader :id, :height, :kalibro_module
+  attr_accessor :grade, :children, :metric_results, :parent
 
   def initialize(parent, kalibro_module)
     @height = 0
@@ -8,5 +8,12 @@ class ModuleResult
     @children = []
     @kalibro_module = kalibro_module
     @metric_results = []
+  end
+
+  def children
+    @children.map do |child|
+      child.parent = self
+      child
+    end
   end
 end

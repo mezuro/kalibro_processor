@@ -6,4 +6,5 @@ FactoryGirl.define do
 
     initialize_with { ModuleResult.new(parent, kalibro_module) } 
   end
+
 end
