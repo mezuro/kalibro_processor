@@ -31,5 +31,22 @@ describe ModuleResult do
         end
       end
     end
+
+    describe 'metric_result_for' do
+      subject { FactoryGirl.build(:module_result) }
+      let(:metric_result) {subject.metric_results.first}
+      context 'when a module result has the specific metric' do
+        let(:metric) { subject.metric_results.first.metric }
+        it 'should return the metric_result' do
+          subject.metric_result_for(metric).should eq(metric_result)
+        end
+      end
+      context 'when a module result has not the specific metric' do
+        let(:another_metric) { FactoryGirl.build(:native_metric) }
+        it 'should return the metric_result' do
+          subject.metric_result_for(another_metric).should be_nil
+        end
+      end
+    end
   end
 end
