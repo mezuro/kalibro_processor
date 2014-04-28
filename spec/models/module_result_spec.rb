@@ -48,5 +48,14 @@ describe ModuleResult do
         end
       end
     end
+
+    describe 'add metric_result (not a method)' do
+      subject { FactoryGirl.build(:module_result, metric_results: []) }
+      let(:metric_result) {subject.metric_results.first}
+      it 'should add a metric_result using <<' do
+        subject.metric_results << metric_result
+        subject.metric_results.should include(metric_result)
+      end
+    end
   end
 end
