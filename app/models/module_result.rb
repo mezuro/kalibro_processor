@@ -1,20 +1,15 @@
-class ModuleResult
-  attr_reader :id, :height, :kalibro_module
-  attr_accessor :grade, :children, :metric_results, :parent
+class ModuleResult < ActiveRecord::Base
+  has_one :kalibro_module
+  has_many :children, foreign_key: 'parent_id', class_name: 'ModuleResult'
+  belongs_to :parent, class_name: 'ModuleResult'
 
-  def initialize(parent, kalibro_module)
-    @height = 0
-    @parent = parent
+  attr_accessor :children, :metric_results
+
+  def initialize(attributes={})
+    super
     @children = []
-    @kalibro_module = kalibro_module
+    @kalibro_module = attributes[:kalibro_module]
     @metric_results = []
-  end
-
-  def children
-    @children.map do |child|
-      child.parent = self
-      child
-    end
   end
 
   def metric_result_for(metric)

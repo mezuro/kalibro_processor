@@ -25,7 +25,10 @@ describe ModuleResult do
       context 'when a module result has children' do
         let(:child_module_result) { FactoryGirl.build(:module_result) }
         let(:parent_module_result) { FactoryGirl.build(:module_result, children: [child_module_result]) }
+
         it 'should set the children parents' do
+          child_module_result.parent = parent_module_result
+
           parent_module_result.children.should eq([child_module_result])
           child_module_result.parent.should eq(parent_module_result)
         end

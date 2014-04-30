@@ -1,4 +1,6 @@
 class KalibroModule < ActiveRecord::Base
+  belongs_to :module_result
+
   def short_name
     name.last
   end
