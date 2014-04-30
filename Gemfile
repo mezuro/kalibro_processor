@@ -42,7 +42,7 @@ gem 'kalibro_gatekeeper_client', '~> 0.1.0'
 
 group :test do
   # Easier test writing
-  gem "shoulda-matchers", '~>2.6.1.rc1'
+  gem "shoulda-matchers", '~>2.6.1.rc2'
 
   # Test coverage
   gem 'simplecov', require: false
