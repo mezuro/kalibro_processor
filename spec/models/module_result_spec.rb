@@ -61,6 +61,8 @@ describe ModuleResult do
           subject.height.should eq(0)
           subject.children.all.should be_empty
         end
+
+        it { should have_many(:metric_result) }
       end
     end
 

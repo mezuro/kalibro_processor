@@ -24,6 +24,8 @@ describe MetricResult do
           subject.descendant_results = []
           subject.descendant_results.should respond_to :average
         end
+
+        it { should belong_to(:module_result) }
       end
     end
 

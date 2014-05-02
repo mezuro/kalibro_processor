@@ -1,6 +1,7 @@
 class ModuleResult < ActiveRecord::Base
   has_one :kalibro_module
   has_many :children, foreign_key: 'parent_id', class_name: 'ModuleResult'
+  has_many :metric_result
   belongs_to :parent, class_name: 'ModuleResult'
 
   attr_accessor :metric_results

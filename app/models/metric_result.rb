@@ -1,6 +1,7 @@
 class MetricResult < ActiveRecord::Base
   attr_reader :metric
   attr_accessor :descendant_results
+  belongs_to :module_result
 
   def initialize(attributes={})
     super
