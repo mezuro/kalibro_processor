@@ -21,6 +21,10 @@ class Granularity
     return Granularity.new(GRANULARITIES[GRANULARITIES.find_index(self.type) - 1])
   end
 
+  def to_s
+    self.type.to_s
+  end
+
   def self.is_valid?(type)
     GRANULARITIES.include?(type)
   end

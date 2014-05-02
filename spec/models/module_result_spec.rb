@@ -1,6 +1,44 @@
 require 'spec_helper'
 
 describe ModuleResult do
+  describe 'associations' do
+    it { should have_one(:kalibro_module) }
+
+    # Usually we do not touch the database on unit tests. But this is kind of a intricated self-relationship so it's worth the
+    context 'with children and parent associations' do
+      let(:parent_module_result) { FactoryGirl.create(:module_result) }
+      let(:child_module_result) { FactoryGirl.create(:module_result, parent: parent_module_result) }
+
+      describe 'children' do
+        it 'the parent should return the children' do
+          parent_module_result.children.should eq([child_module_result])
+        end
+
+        it 'should add a child' do
+          another_child = FactoryGirl.create(:module_result)
+          parent_module_result.children << another_child
+          parent_module_result.save
+
+          parent_module_result.children.should eq([another_child, child_module_result])
+        end
+      end
+
+      describe 'parent' do
+        it 'should return the child' do
+          child_module_result.parent.should eq(parent_module_result)
+        end
+
+        it 'should set the parent' do
+          another_parent = FactoryGirl.create(:module_result)
+          child_module_result.parent = another_parent
+          child_module_result.save
+
+          child_module_result.parent.should eq(another_parent)
+        end
+      end
+    end
+  end
+
   describe 'method' do
     describe 'initialize' do
       context 'with valid attributes' do
@@ -16,7 +54,7 @@ describe ModuleResult do
         it 'should have the right attributes' do
           subject.parent.should eq(my_parent)
           subject.height.should eq(0)
-          subject.children.should eq([])
+          subject.children.all.should be_empty
         end
       end
     end

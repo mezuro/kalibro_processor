@@ -47,13 +47,13 @@ describe Module do
             parent = subject.parent
 
             parent.granularity.type.should eq(Granularity::SOFTWARE)
-            parent.name.should eq("ROOT")
+            parent.name.should eq(["ROOT"])
           end
         end
 
         context 'with just more than one element on name' do
           before :each do
-            granularity.expects(:parent).returns(FactoryGirl.build(:granularity, type: Granularity::PACKAGE))
+            Granularity.any_instance.expects(:parent).returns(FactoryGirl.build(:granularity, type: Granularity::PACKAGE))
           end
 
           subject { FactoryGirl.build(:kalibro_module, {granularity: granularity, name: ['pre_name', 'name']}) }

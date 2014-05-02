@@ -3,12 +3,10 @@ class ModuleResult < ActiveRecord::Base
   has_many :children, foreign_key: 'parent_id', class_name: 'ModuleResult'
   belongs_to :parent, class_name: 'ModuleResult'
 
-  attr_accessor :children, :metric_results
+  attr_accessor :metric_results
 
   def initialize(attributes={})
     super
-    @children = []
-    @kalibro_module = attributes[:kalibro_module]
     @metric_results = []
   end
 
