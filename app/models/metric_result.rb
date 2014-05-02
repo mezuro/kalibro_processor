@@ -1,12 +1,10 @@
-class MetricResult
-  attr_reader :metric, :value, :id, :metric_configuration, :error
+class MetricResult < ActiveRecord::Base
+  attr_reader :metric
   attr_accessor :descendant_results
 
-  def initialize(metric_configuration, value, error=nil)
-    @metric = metric_configuration.metric
-    @metric_configuration = metric_configuration
-    @value = value
-    @error = error
+  def initialize(attributes={})
+    super
+    @metric = self.metric_configuration.metric
   end
 
   def descendant_results=(value)
@@ -36,4 +34,12 @@ class MetricResult
   end
 
   def grade; self.range.grade; end
+
+  def metric_configuration=(value)
+    self.metric_configuration_id = value.id
+  end
+
+  def metric_configuration
+    KalibroGatekeeperClient::Entities::MetricConfiguration.find(self.metric_configuration_id)
+  end
 end

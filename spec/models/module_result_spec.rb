@@ -41,6 +41,11 @@ describe ModuleResult do
 
   describe 'method' do
     describe 'initialize' do
+      before :each do
+        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
+          at_least_once.returns(FactoryGirl.build(:metric_configuration))
+      end
+
       context 'with valid attributes' do
         let(:my_parent) { FactoryGirl.build(:module_result) }
         let(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
@@ -60,6 +65,11 @@ describe ModuleResult do
     end
 
     describe 'children' do
+      before :each do
+        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
+          at_least_once.returns(FactoryGirl.build(:metric_configuration))
+      end
+
       context 'when a module result has children' do
         let(:child_module_result) { FactoryGirl.build(:module_result) }
         let(:parent_module_result) { FactoryGirl.build(:module_result, children: [child_module_result]) }
@@ -74,6 +84,11 @@ describe ModuleResult do
     end
 
     describe 'metric_result_for' do
+      before :each do
+        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
+          at_least_once.returns(FactoryGirl.build(:metric_configuration))
+      end
+
       subject { FactoryGirl.build(:module_result) }
       let(:metric_result) {subject.metric_results.first}
       context 'when a module result has the specific metric' do

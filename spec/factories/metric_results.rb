@@ -10,6 +10,6 @@ FactoryGirl.define do
 
     factory :metric_result_with_value, traits: [:with_value]
 
-    initialize_with { MetricResult.new(metric_configuration, value) }
+    initialize_with { MetricResult.new() }
   end
 end

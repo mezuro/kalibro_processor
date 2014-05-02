@@ -2,6 +2,12 @@ require 'spec_helper'
 
 describe MetricResult do
   describe "method" do
+    let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
+    before :each do
+        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
+          at_least_once.returns(metric_configuration)
+    end
+
     describe "initialize" do
       context "with valid attributes" do
         subject { FactoryGirl.build(:metric_result_with_value) }
@@ -12,7 +18,6 @@ describe MetricResult do
 
         it 'should have the right attributes' do
           subject.value.should eq(2.0)
-          subject.error.should be_nil
         end
 
         it 'should have the average method' do
