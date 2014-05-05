@@ -99,4 +99,15 @@ describe ModuleResult do
       end
     end
   end
+
+  describe 'records' do
+    context 'when accessing metric results (not a method)' do
+      subject { FactoryGirl.create(:module_result, metric_results: []) }
+      let(:metric_result) {subject.metric_results.first}
+      it 'should return the associated array of metric results' do
+        subject.metric_results << metric_result
+        subject.metric_results.should eq([metric_result])
+      end
+    end
+  end
 end
