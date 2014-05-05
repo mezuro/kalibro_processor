@@ -4,7 +4,7 @@ describe ModuleResult do
   describe 'associations' do
     it { should have_one(:kalibro_module) }
 
-    # Usually we do not touch the database on unit tests. But this is kind of a intricated self-relationship so it's worth the
+    # Usually we do not touch the database on unit tests. But this is kind of a intricated self-relationship so it's worth the cost.
     context 'with children and parent associations' do
       let(:parent_module_result) { FactoryGirl.create(:module_result) }
       let(:child_module_result) { FactoryGirl.create(:module_result, parent: parent_module_result) }
