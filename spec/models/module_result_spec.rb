@@ -124,20 +124,4 @@ describe ModuleResult do
       end
     end
   end
-
-  describe 'records' do
-    context 'when accessing metric results (not a method)' do
-      subject { FactoryGirl.create(:module_result, metric_results: []) }
-      let(:metric_result) { FactoryGirl.build(:metric_result) }
-
-      before :each do
-        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).at_least_once.returns(FactoryGirl.build(:metric_configuration))
-      end
-
-      it 'should return the associated array of metric results' do
-        subject.metric_results << metric_result
-        subject.metric_results.should eq([metric_result])
-      end
-    end
-  end
 end
