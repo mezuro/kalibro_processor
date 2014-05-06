@@ -8,5 +8,4 @@ FactoryGirl.define do
 
     initialize_with { ModuleResult.new({parent: parent, kalibro_module: kalibro_module}) }
   end
-
 end

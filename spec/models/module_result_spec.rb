@@ -3,6 +3,7 @@ require 'spec_helper'
 describe ModuleResult do
   describe 'associations' do
     it { should have_one(:kalibro_module) }
+    it { should have_many(:metric_results) }
 
     # Usually we do not touch the database on unit tests. But this is kind of a intricated self-relationship so it's worth the cost.
     context 'with children and parent associations' do
@@ -65,8 +66,6 @@ describe ModuleResult do
           subject.height.should eq(0)
           subject.children.all.should be_empty
         end
-
-        it { should have_many(:metric_result) }
       end
     end
 
@@ -113,7 +112,12 @@ describe ModuleResult do
 
     describe 'add metric_result (not a method)' do
       subject { FactoryGirl.build(:module_result, metric_results: []) }
-      let(:metric_result) {subject.metric_results.first}
+      let(:metric_result) { FactoryGirl.build(:metric_result) }
+
+      before :each do
+        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).at_least_once.returns(FactoryGirl.build(:metric_configuration))
+      end
+
       it 'should add a metric_result using <<' do
         subject.metric_results << metric_result
         subject.metric_results.should include(metric_result)
@@ -124,7 +128,12 @@ describe ModuleResult do
   describe 'records' do
     context 'when accessing metric results (not a method)' do
       subject { FactoryGirl.create(:module_result, metric_results: []) }
-      let(:metric_result) {subject.metric_results.first}
+      let(:metric_result) { FactoryGirl.build(:metric_result) }
+
+      before :each do
+        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).at_least_once.returns(FactoryGirl.build(:metric_configuration))
+      end
+
       it 'should return the associated array of metric results' do
         subject.metric_results << metric_result
         subject.metric_results.should eq([metric_result])
