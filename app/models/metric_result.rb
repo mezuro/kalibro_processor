@@ -1,6 +1,5 @@
 class MetricResult < ActiveRecord::Base
   attr_reader :metric
-  attr_accessor :descendant_results
   belongs_to :module_result
 
   def initialize(attributes={})
@@ -8,16 +7,10 @@ class MetricResult < ActiveRecord::Base
     @metric = self.metric_configuration.metric
   end
 
-  def descendant_results=(value)
-    @descendant_results = DescriptiveStatistics::Stats.new(value)
-    def @descendant_results.average
-      self.mean
-    end
-  end
-
   def aggregated_value
-    if (self.value.nil? && !self.descendant_results.empty?)
-      self.descendant_results.send( self.metric_configuration.aggregation_form.to_s.downcase )
+    values = self.descendant_values
+    if (self.value.nil? && !values.empty?)
+      values.send( self.metric_configuration.aggregation_form.to_s.downcase )
     else
       self.value
     end
@@ -42,5 +35,10 @@ class MetricResult < ActiveRecord::Base
 
   def metric_configuration
     KalibroGatekeeperClient::Entities::MetricConfiguration.find(self.metric_configuration_id)
+  end
+
+  def descendant_values
+    results = module_result.children.map { |child| child.metric_results_for(self.metric).value  }
+    DescriptiveStatistics::Stats.new(results)
   end
 end
