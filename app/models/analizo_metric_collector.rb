@@ -8,4 +8,8 @@ class AnalizoMetricCollector < MetricCollector
   def description
     CollectorsDescriptions.analizo_description
   end
+
+  def metric_list
+    `analizo metrics --list`
+  end
 end
