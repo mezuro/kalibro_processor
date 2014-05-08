@@ -1,12 +1,12 @@
 class AnalizoMetricCollector < MetricCollector
   attr_reader :description
 
-  def name
-    "Analizo"
+  def initialize
+    @description = YAML.load_file('config/collectors_descriptions.yml')["analizo"]
   end
 
-  def description
-    CollectorsDescriptions.analizo_description
+  def name
+    "Analizo"
   end
 
   def metric_list

@@ -8,16 +8,6 @@ describe AnalizoMetricCollector do
       end
     end
 
-    describe 'description' do
-      before :each do
-        CollectorsDescriptions.expects(:analizo_description).returns(String.new)
-      end
-
-      it 'should return the content of the analizo_descritption file' do
-        subject.description.should be_a(String)
-      end
-    end
-
     describe 'metric_list' do
       context 'when the collector is installed on the computer' do
         it "should return all the collector's metrics not parsed" do
