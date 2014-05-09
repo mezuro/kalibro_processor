@@ -22,5 +22,23 @@ describe AnalizoMetricCollector do
         end
       end
     end
+
+    describe 'parse_supported_metrics' do
+      context 'with a valid metrics list' do
+        let!(:metric) { FactoryGirl.build(:metric) }
+        let!(:acc) { FactoryGirl.build(:metric, name: 'Afferent Connections per Class (used to calculate COF - Coupling Factor)', compound: false, scope: :CLASS) }
+        before :each do
+          subject.expects(:metric_list).at_least_once.returns(YAML.load_file('spec/factories/analizo_metric_collector.yml')["list"])
+          Metric.expects(:new).with(metric.compound,metric.name,metric.scope.type).returns(metric)
+          Metric.expects(:new).with(acc.compound,acc.name,acc.scope).returns(acc)
+
+        end
+        it 'should return a hash in the format code => metric' do
+          ret = subject.parse_supported_metrics
+          ret["acc"].should eq(acc)
+          ret["total_abstract_classes"].should eq(metric)
+        end 
+      end
+    end
   end
 end

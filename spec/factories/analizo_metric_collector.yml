@@ -1,0 +1,2 @@
+list:
+  "Global Metrics:\ntotal_abstract_classes - Total Abstract Classes\nModule Metrics:\nacc - Afferent Connections per Class (used to calculate COF - Coupling Factor)"
