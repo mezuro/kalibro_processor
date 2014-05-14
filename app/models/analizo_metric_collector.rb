@@ -7,20 +7,17 @@ class AnalizoMetricCollector < MetricCollector
   end
 
   def result_parser(wanted_metrics)
-    self.wanted_metrics = Hash.new
+    @wanted_metrics = Hash.new
     @supported_metrics.each_key do |code|
       if wanted_metrics.include?(@supported_metrics[code])
-        self.wanted_metrics.store(code, @supported_metrics[code])
+        @wanted_metrics.store(code, @supported_metrics[code])
       end
     end
+    @wanted_metrics
   end
 
   def metric_result(code, result)
     native_metric_result(@wanted_metric[code], result.to_f)
-  end
-
-  def native_metric_result(code,result)
-        raise NotImplementedError.new    
   end
 
   def name
