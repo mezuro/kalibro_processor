@@ -24,6 +24,10 @@ class AnalizoMetricCollector < MetricCollector
     `analizo metrics --list`
   end
 
+  def execute_analizo(absolute_path)
+    `analizo metrics #{absolute_path}`
+  end
+
   def parse_supported_metrics
     supported_metrics = {}
     analizo_metric_list = metric_list

@@ -69,5 +69,26 @@ describe AnalizoMetricCollector do
         end
       end
     end
+
+    describe 'execute_analizo' do
+      context 'when the collector is installed on the computer and the absolute_path is valid' do
+        let(:absolute_path) { "app/models/metric.rb" }
+        it "should return all the metric results not parsed" do
+          subject.execute_analizo(absolute_path).should be_a(String)
+        end
+      end
+
+      pending 'is it better to return nil or to raise an exception?' do
+        context 'when the collector is not installed on the computer' do
+          it 'should return something' do
+          end
+        end
+
+        context 'when the absolute_path is wrong' do
+          it 'should return something' do
+          end
+        end
+      end
+    end
   end
 end
