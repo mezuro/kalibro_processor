@@ -6,7 +6,7 @@ describe BaseTool do
 
     describe 'find_supported_metric_by_name' do
       context 'when the metric is supported' do
-        let(:metric) { FactoryGirl.build(:native_metric) }
+        let(:metric) { FactoryGirl.build(:analizo_native_metric) }
 
         it 'should return the metric' do
           subject.find_supported_metric_by_name(metric.name).name.should eq(metric.name)
