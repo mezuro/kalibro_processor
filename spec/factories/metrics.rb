@@ -8,8 +8,8 @@ FactoryGirl.define  do
     initialize_with { Metric.new(compound, name, scope) }
   end
 
-  factory :native_metric, class: NativeMetric, parent: :metric do
-    languages { FactoryGirl.build(:language) }
+  factory :analizo_native_metric, class: NativeMetric, parent: :metric do
+    languages { [FactoryGirl.build(:language).type, FactoryGirl.build(:language_cpp).type, FactoryGirl.build(:language_java).type] }
 
     initialize_with { NativeMetric.new(name, scope, languages) }
   end
