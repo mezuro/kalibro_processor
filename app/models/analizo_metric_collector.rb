@@ -16,10 +16,6 @@ class AnalizoMetricCollector < MetricCollector
     end
   end
 
-  def metric_result(code, result)
-    native_metric_result(@wanted_metric[code], result.to_f)
-  end
-
   def name
     "Analizo"
   end
