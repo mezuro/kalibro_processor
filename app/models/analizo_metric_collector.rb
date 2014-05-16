@@ -41,4 +41,8 @@ class AnalizoMetricCollector < MetricCollector
     end
     supported_metrics
   end
+
+  def new_metric_result(code, value)
+    MetricResult.new(metric: self.wanted_metrics[code], value: value.to_f)
+  end
 end

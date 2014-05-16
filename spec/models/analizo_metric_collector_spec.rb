@@ -90,5 +90,22 @@ describe AnalizoMetricCollector do
         end
       end
     end
+
+    describe 'new_metric_result' do
+      let(:metric) { FactoryGirl.build(:analizo_native_metric) }
+      let(:value) { 2.0 }
+      let(:code) { "code" }
+      let(:wanted_metric) { {"code" => metric} }
+
+      before :each do
+        subject.expects(:wanted_metrics).returns(wanted_metric)
+      end
+
+      it 'should create a new metric result' do
+        metric_result = subject.new_metric_result(code, value)
+        metric_result.value.should eq(value)
+        metric_result.metric.should eq(metric)
+      end
+    end
   end
 end
