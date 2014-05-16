@@ -107,5 +107,34 @@ describe AnalizoMetricCollector do
         metric_result.metric.should eq(metric)
       end
     end
+
+    describe 'new_module_result' do
+      context 'when the hash is empty' do
+        let!(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
+        before :each do
+          KalibroModule.expects(:new).with({granularity: kalibro_module.granularity.type, name: []}).returns(kalibro_module)
+        end
+
+        it 'should create a module with software modularity' do
+          module_result = subject.new_module_result({})
+          module_result.kalibro_module.should eq(kalibro_module)
+        end
+      end
+
+      context 'when the hash is not empty' do
+        let(:result_map) { {"_module" => "FirstModule::SecondModule::FinalModule"} }
+        let!(:kalibro_module) { FactoryGirl.build(:kalibro_module, granularity: FactoryGirl.build(:class_granularity)) }
+        before :each do
+          KalibroModule.expects(:new).
+          with({granularity: kalibro_module.granularity.type, name: ["FirstModule", "SecondModule", "FinalModule"]}).
+          returns(kalibro_module)
+        end
+
+        it 'should create a module with class modularity' do
+          module_result = subject.new_module_result(result_map)
+          module_result.kalibro_module.should eq(kalibro_module)
+        end
+      end
+    end
   end
 end
