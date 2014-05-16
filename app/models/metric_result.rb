@@ -1,11 +1,6 @@
 class MetricResult < ActiveRecord::Base
-  attr_reader :metric
+  attr_accessor :metric
   belongs_to :module_result
-
-  def initialize(attributes={})
-    super
-    @metric = self.metric_configuration.metric
-  end
 
   def aggregated_value
     values = self.descendant_values

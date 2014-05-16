@@ -10,10 +10,6 @@ describe ModuleResult do
       let(:parent_module_result) { FactoryGirl.create(:module_result) }
       let(:child_module_result) { FactoryGirl.create(:module_result, parent: parent_module_result) }
 
-      before :each do
-        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).at_least_once.returns(FactoryGirl.build(:metric_configuration))
-      end
-
       describe 'children' do
         it 'the parent should return the children' do
           parent_module_result.children.should eq([child_module_result])
@@ -46,11 +42,6 @@ describe ModuleResult do
 
   describe 'method' do
     describe 'metric_result_for' do
-      before :each do
-        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
-          at_least_once.returns(FactoryGirl.build(:metric_configuration))
-      end
-
       subject { FactoryGirl.build(:module_result) }
       let(:metric_result) {subject.metric_results.first}
       context 'when a module result has the specific metric' do

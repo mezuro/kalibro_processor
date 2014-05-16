@@ -2,43 +2,25 @@ require 'spec_helper'
 
 describe MetricResult do
   describe 'associations' do
-    before :each do
-      KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).returns(FactoryGirl.build(:metric_configuration))
-    end
-
     it { should belong_to(:module_result) }
   end
 
   describe 'method' do
     let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
-    before :each do
-        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
-          at_least_once.returns(metric_configuration)
-    end
-
-    describe "initialize" do
-      context "with valid attributes" do
-        subject { FactoryGirl.build(:metric_result_with_value) }
-
-        it 'should return an instance of MetricResult' do
-          subject.should be_a(MetricResult)
-        end
-
-        it 'should have a metric' do
-          subject.metric.should eq(metric_configuration.metric)
-        end
-      end
-    end
 
     describe 'aggregated_value' do
       let!(:stats) { DescriptiveStatistics::Stats.new([1, 2, 3]) }
 
       before :each do
-        subject.expects(:descendant_values).at_least_once.returns(stats)
+        subject.expects(:descendant_values).returns(stats)
       end
 
       context 'when value is nil and the values array is not empty' do
         subject { FactoryGirl.build(:metric_result) }
+        before :each do
+          KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
+            with(subject.metric_configuration_id).returns(metric_configuration)
+        end
 
         it 'should calculate the mean value of the values array' do
           subject.aggregated_value.should eq(2.0)
@@ -60,6 +42,8 @@ describe MetricResult do
       subject { FactoryGirl.build(:metric_result_with_value) }
 
       before :each do
+        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).twice.
+          returns(metric_configuration)
         KalibroGatekeeperClient::Entities::Range.expects(:ranges_of).
             with(subject.metric_configuration.id).returns([range, yet_another_range])
         subject.expects(:aggregated_value).returns(subject.value)
