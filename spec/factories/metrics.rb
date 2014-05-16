@@ -9,7 +9,7 @@ FactoryGirl.define  do
   end
 
   factory :analizo_native_metric, class: NativeMetric, parent: :metric do
-    languages { [FactoryGirl.build(:language).type, FactoryGirl.build(:language_cpp).type, FactoryGirl.build(:language_java).type] }
+    languages { [:C, :CPP, :JAVA] }
 
     initialize_with { NativeMetric.new(name, scope, languages) }
   end

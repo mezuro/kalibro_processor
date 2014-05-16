@@ -6,7 +6,7 @@ describe NativeMetric do
       context 'with valid attributes' do
         name = "Sample name"
         scope = Granularity.new(:SOFTWARE)
-        languages = [Language.new(:C), Language.new(:CPP), Language.new(:JAVA)]
+        languages = [:C, :CPP, :JAVA]
         native_metric = NativeMetric.new(name, scope, languages)
         
         it 'should return an instance of NativeMetric' do
