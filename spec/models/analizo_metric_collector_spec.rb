@@ -96,15 +96,17 @@ describe AnalizoMetricCollector do
       let(:value) { 2.0 }
       let(:code) { "code" }
       let(:wanted_metric) { {"code" => metric} }
+      let(:module_result) { ModuleResult.create(kalibro_module: FactoryGirl.build(:kalibro_module)) }
 
       before :each do
         subject.expects(:wanted_metrics).returns(wanted_metric)
       end
 
       it 'should create a new metric result' do
-        metric_result = subject.new_metric_result(code, value)
+        metric_result = subject.new_metric_result(module_result, code, value)
         metric_result.value.should eq(value)
         metric_result.metric.should eq(metric)
+        metric_result.module_result_id.should eq(module_result.id)
       end
     end
 
@@ -148,14 +150,15 @@ describe AnalizoMetricCollector do
       context 'when there is wanted metrics' do
         let!(:module_result) { FactoryGirl.build(:module_result_class_granularity) }
         let!(:result_map) { {"total_abstract_classes" => "10"} }
+        let!(:metric_result) { FactoryGirl.build(:metric_result_with_value, value: 10.0) }
         before :each do
           subject.expects(:new_module_result).with(result_map).returns(module_result)
+          subject.expects(:new_metric_result).with(module_result, "total_abstract_classes", "10").returns(metric_result)
         end
 
         it 'should return a module result with metric results' do
           parsed_single_result = subject.parse_single_result(result_map)
           parsed_single_result.should eq(module_result)
-          #parsed_single_result.metric_results.first.should eq(metric_result)
         end
       end
 

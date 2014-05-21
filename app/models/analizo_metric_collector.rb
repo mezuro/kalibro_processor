@@ -42,21 +42,21 @@ class AnalizoMetricCollector < MetricCollector
     supported_metrics
   end
 
-  def new_metric_result(code, value)
-    MetricResult.new(metric: self.wanted_metrics[code], value: value.to_f)
+  def new_metric_result(module_result, code, value)
+    module_result.metric_results.create(metric: self.wanted_metrics[code], value: value.to_f)
   end
 
   def new_module_result(result_map)
     module_name = result_map["_module"]
     granularity = module_name.nil? ? :SOFTWARE : :CLASS
     kalibro_module = KalibroModule.new(granularity: granularity, name: module_name.to_s.split(/:+/))
-    ModuleResult.new(kalibro_module: kalibro_module)
+    ModuleResult.create(kalibro_module: kalibro_module)
   end
 
   def parse_single_result(result_map)
     module_result = new_module_result(result_map)
     result_map.each do |code, value|
-      module_result.metric_results.new(metric: self.wanted_metrics[code], value: value.to_f) if (self.wanted_metrics[code])
+       new_metric_result(module_result, code, value) if (self.wanted_metrics[code])
     end
     module_result
   end
