@@ -109,20 +109,21 @@ describe AnalizoMetricCollector do
     end
 
     describe 'new_module_result' do
-      context 'when the hash is empty' do
+      context 'when the result map contains only global values' do
+        let(:result_map) { {"total_abstract_classes" => "10"} }
         let!(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
         before :each do
           KalibroModule.expects(:new).with({granularity: kalibro_module.granularity.type, name: []}).returns(kalibro_module)
         end
 
         it 'should create a module with software modularity' do
-          module_result = subject.new_module_result({})
+          module_result = subject.new_module_result(result_map)
           module_result.kalibro_module.should eq(kalibro_module)
         end
       end
 
-      context 'when the hash is not empty' do
-        let(:result_map) { {"_module" => "FirstModule::SecondModule::FinalModule"} }
+      context 'when the result map contains a module result' do
+        let(:result_map) { {"_filename"=>["Class.rb"], "_module"=>"FirstModule::SecondModule::FinalModule", "acc"=>0} }
         let!(:kalibro_module) { FactoryGirl.build(:kalibro_module, granularity: FactoryGirl.build(:class_granularity)) }
         before :each do
           KalibroModule.expects(:new).
