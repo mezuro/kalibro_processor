@@ -52,4 +52,12 @@ class AnalizoMetricCollector < MetricCollector
     kalibro_module = KalibroModule.new(granularity: granularity, name: module_name.to_s.split(/:+/))
     ModuleResult.new(kalibro_module: kalibro_module)
   end
+
+  def parse_single_result(result_map)
+    module_result = new_module_result(result_map)
+    result_map.each do |code, value|
+      module_result.metric_results.new(metric: self.wanted_metrics[code], value: value.to_f) if (self.wanted_metrics[code])
+    end
+    module_result
+  end
 end

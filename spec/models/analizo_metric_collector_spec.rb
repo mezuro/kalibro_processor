@@ -137,5 +137,38 @@ describe AnalizoMetricCollector do
         end
       end
     end
+
+    describe 'parse_single_result' do
+      let(:metric) { FactoryGirl.build(:analizo_native_metric) }
+      let!(:wanted_metric) { {"total_abstract_classes" => metric} }
+      before :each do
+        subject.expects(:wanted_metrics).at_least_once.returns(wanted_metric)
+      end
+
+      context 'when there is wanted metrics' do
+        let!(:module_result) { FactoryGirl.build(:module_result_class_granularity) }
+        let!(:result_map) { {"total_abstract_classes" => "10"} }
+        before :each do
+          subject.expects(:new_module_result).with(result_map).returns(module_result)
+        end
+
+        it 'should return a module result with metric results' do
+          parsed_single_result = subject.parse_single_result(result_map)
+          parsed_single_result.should eq(module_result)
+          #parsed_single_result.metric_results.first.should eq(metric_result)
+        end
+      end
+
+      context 'when the there is not wanted metrics' do
+        let!(:module_result) { FactoryGirl.build(:module_result) }
+        let!(:result_map) { {"_filename"=>["Class.rb"], "_module"=>"FirstModule::SecondModule::FinalModule", "acc"=>0} }
+        before :each do
+          subject.expects(:new_module_result).with(result_map).returns(module_result)
+        end
+        it 'should return a module result with no metric results' do
+          subject.parse_single_result(result_map).should eq(module_result)
+        end
+      end
+    end
   end
 end
