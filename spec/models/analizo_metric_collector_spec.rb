@@ -10,8 +10,12 @@ describe AnalizoMetricCollector do
 
     describe 'metric_list' do
       context 'when the collector is installed on the computer' do
+        before :each do
+          subject.expects(:`).with("analizo metrics --list").returns("output")
+        end
+
         it "should return all the collector's metrics not parsed" do
-          subject.metric_list.should be_a(String)
+          subject.metric_list.should eq("output")
         end
       end
 
@@ -73,8 +77,12 @@ describe AnalizoMetricCollector do
     describe 'execute_analizo' do
       context 'when the collector is installed on the computer and the absolute_path is valid' do
         let(:absolute_path) { "app/models/metric.rb" }
+        before :each do
+          subject.expects(:`).with("analizo metrics #{absolute_path}").returns("output")
+        end
+
         it "should return all the metric results not parsed" do
-          subject.execute_analizo(absolute_path).should be_a(String)
+          subject.execute_analizo(absolute_path).should eq("output")
         end
       end
 
