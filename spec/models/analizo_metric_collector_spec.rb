@@ -173,5 +173,21 @@ describe AnalizoMetricCollector do
         end
       end
     end
+
+    describe 'parse' do
+      let(:results) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["result"] }
+      let(:response) { YAML.load_stream(results) }
+      let!(:module_result) { FactoryGirl.build(:module_result) }
+      let!(:another_module_result) { FactoryGirl.build(:module_result_class_granularity) }
+      before :each do
+        subject.expects(:parse_single_result).with({'_filename' => ['Class.rb'], '_module' => 'My::Software::Module', 'acc' => 0}).
+          returns(another_module_result)
+        subject.expects(:parse_single_result).with({'uav_variance' => 0}).returns(another_module_result)
+      end
+
+      it 'create all module e metric results' do
+        subject.parse(results).should eq(response)
+      end
+    end
   end
 end

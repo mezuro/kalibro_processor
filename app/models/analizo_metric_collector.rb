@@ -60,4 +60,10 @@ class AnalizoMetricCollector < MetricCollector
     end
     module_result
   end
+
+  def parse(results)
+    YAML.load_stream(results).each do |hash|
+      parse_single_result(hash)
+    end
+  end
 end
