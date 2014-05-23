@@ -1,10 +1,21 @@
 require 'spec_helper'
 
 describe AnalizoMetricCollector do
-  describe 'methods' do
+  describe 'method' do
     describe 'name' do
       it 'should return Analizo' do
         subject.name.should eq("Analizo")
+      end
+    end
+
+    describe 'supported_metrics' do
+      let!(:list) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["list"] }
+      before :each do
+        subject.expects(:parse_supported_metrics).returns(list)
+      end
+
+      it 'should return a list with all the supported metrics' do
+        subject.supported_metrics.should eq(list)
       end
     end
 
@@ -193,7 +204,7 @@ describe AnalizoMetricCollector do
         subject.expects(:parse_single_result).with({'uav_variance' => 0}).returns(another_module_result)
       end
 
-      it 'create all module e metric results' do
+      it 'create all module and metric results' do
         subject.parse(results).should eq(response)
       end
     end

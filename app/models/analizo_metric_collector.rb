@@ -4,7 +4,10 @@ class AnalizoMetricCollector < MetricCollector
 
   def initialize
     @description = YAML.load_file('config/collectors_descriptions.yml')["analizo"]
-    @supported_metrics = parse_supported_metrics
+  end
+
+  def supported_metrics
+    @supported_metrics ||= parse_supported_metrics
   end
 
   def wanted_metrics=(wanted_metrics_list)
