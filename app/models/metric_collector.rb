@@ -5,5 +5,5 @@ class MetricCollector
 
   def supported_metrics; raise NotImplementedError; end
 
-  def collect_metrics(code_directory, wanted_metrics, result_writer); raise NotImplementedError; end
+  def collect_metrics(code_directory, wanted_metrics); raise NotImplementedError; end
 end

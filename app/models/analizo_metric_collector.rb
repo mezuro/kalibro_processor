@@ -27,7 +27,7 @@ class AnalizoMetricCollector < MetricCollector
     `analizo metrics --list`
   end
 
-  def execute_analizo(absolute_path)
+  def analizo_results(absolute_path)
     `analizo metrics #{absolute_path}`
   end
 
@@ -68,5 +68,10 @@ class AnalizoMetricCollector < MetricCollector
     YAML.load_stream(results).each do |hash|
       parse_single_result(hash)
     end
+  end
+
+  def collect_metrics(code_directory, wanted_metrics)
+    self.wanted_metrics = wanted_metrics
+    parse analizo_results
   end
 end

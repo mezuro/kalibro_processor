@@ -85,7 +85,7 @@ describe AnalizoMetricCollector do
       end
     end
 
-    describe 'execute_analizo' do
+    describe 'analizo_results' do
       context 'when the collector is installed on the computer and the absolute_path is valid' do
         let(:absolute_path) { "app/models/metric.rb" }
         before :each do
@@ -93,7 +93,7 @@ describe AnalizoMetricCollector do
         end
 
         it "should return all the metric results not parsed" do
-          subject.execute_analizo(absolute_path).should eq("output")
+          subject.analizo_results(absolute_path).should eq("output")
         end
       end
 
@@ -206,6 +206,25 @@ describe AnalizoMetricCollector do
 
       it 'create all module and metric results' do
         subject.parse(results).should eq(response)
+      end
+    end
+
+    describe 'collect_metrics' do
+      let(:absolute_path) { "app/models/metric.rb" }
+      let!(:results) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["result"] }
+      let(:parsed_results) { YAML.load_stream(results) }
+      let(:native_metric) { FactoryGirl.build(:analizo_native_metric) }
+      let(:wanted_metrics_list) { ["total_abstract_classes", "amloc"] }
+      let!(:wanted_metrics) { {"total_abstract_classes" => native_metric} }
+
+      before :each do
+        subject.expects(:wanted_metrics=).with(wanted_metrics_list).returns(wanted_metrics)
+        subject.expects(:analizo_results).returns(results)
+        subject.expects(:parse).with(results).returns(parsed_results)
+      end
+
+      it 'should collect the metrics for a given project' do
+        subject.collect_metrics(absolute_path, wanted_metrics_list).should eq(parsed_results)
       end
     end
   end
