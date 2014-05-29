@@ -195,7 +195,7 @@ describe AnalizoMetricCollector do
 
     describe 'parse' do
       let(:results) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["result"] }
-      let(:response) { YAML.load_stream(results) }
+      let(:response) { [{"uav_variance"=>0}, {"_filename"=>["Class.rb"], "_module"=>"My::Software::Module", "acc"=>0}] }
       let!(:module_result) { FactoryGirl.build(:module_result) }
       let!(:another_module_result) { FactoryGirl.build(:module_result_class_granularity) }
       before :each do
@@ -212,7 +212,7 @@ describe AnalizoMetricCollector do
     describe 'collect_metrics' do
       let(:absolute_path) { "app/models/metric.rb" }
       let!(:results) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["result"] }
-      let(:parsed_results) { YAML.load_stream(results) }
+      let(:parsed_results) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["parsed"] }
       let(:native_metric) { FactoryGirl.build(:analizo_native_metric) }
       let(:wanted_metrics_list) { ["total_abstract_classes", "amloc"] }
       let!(:wanted_metrics) { {"total_abstract_classes" => native_metric} }
