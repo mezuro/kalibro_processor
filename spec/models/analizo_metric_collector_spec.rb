@@ -110,10 +110,13 @@ describe AnalizoMetricCollector do
         end
       end
 
-      pending 'is it better to return nil or to raise an exception?' do
-        context 'when the absolute_path is wrong' do
-          it 'should return something' do
-          end
+      context 'when the absolute_path is wrong' do
+        before :each do
+          subject.expects(:`).with("analizo metrics #{absolute_path}").returns("")
+        end
+
+        it 'should raise a NotReadableError' do
+          expect { subject.analizo_results(absolute_path) }.to raise_error(Errors::NotReadableError, "Directory not readable")
         end
       end
     end

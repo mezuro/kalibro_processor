@@ -32,6 +32,7 @@ class AnalizoMetricCollector < MetricCollector
   def analizo_results(absolute_path)
     results = `analizo metrics #{absolute_path}`
     raise Errors::NotFoundError.new("BaseTool #{name} not found") if results.nil?
+    raise Errors::NotReadableError.new("Directory not readable") if results.empty?
     results
   end
 
