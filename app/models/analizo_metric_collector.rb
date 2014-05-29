@@ -24,11 +24,15 @@ class AnalizoMetricCollector < MetricCollector
   end
 
   def metric_list
-    `analizo metrics --list`
+    list = `analizo metrics --list`
+    raise Errors::NotFoundError.new("BaseTool #{name} not found") if list.nil?
+    list
   end
 
   def analizo_results(absolute_path)
-    `analizo metrics #{absolute_path}`
+    results = `analizo metrics #{absolute_path}`
+    raise Errors::NotFoundError.new("BaseTool #{name} not found") if results.nil?
+    results
   end
 
   def parse_supported_metrics

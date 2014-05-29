@@ -30,10 +30,13 @@ describe AnalizoMetricCollector do
         end
       end
 
-      pending 'is it better to return nil or to raise an exception?' do
-        context 'when the collector is not installed on the computer' do
-          it 'should return something' do
-          end
+      context 'when the collector is not installed on the computer' do
+        before :each do
+          subject.expects(:`).with("analizo metrics --list").returns(nil)
+        end
+
+        it 'should raise a NotFoundError' do
+          expect { subject.metric_list }.to raise_error(Errors::NotFoundError, "BaseTool Analizo not found")
         end
       end
     end
@@ -86,8 +89,8 @@ describe AnalizoMetricCollector do
     end
 
     describe 'analizo_results' do
+      let(:absolute_path) { "app/models/metric.rb" }
       context 'when the collector is installed on the computer and the absolute_path is valid' do
-        let(:absolute_path) { "app/models/metric.rb" }
         before :each do
           subject.expects(:`).with("analizo metrics #{absolute_path}").returns("output")
         end
@@ -97,12 +100,17 @@ describe AnalizoMetricCollector do
         end
       end
 
-      pending 'is it better to return nil or to raise an exception?' do
-        context 'when the collector is not installed on the computer' do
-          it 'should return something' do
-          end
+      context 'when the collector is not installed on the computer' do
+        before :each do
+          subject.expects(:`).with("analizo metrics #{absolute_path}").returns(nil)
         end
 
+        it 'should raise a NotFoundError' do
+          expect { subject.analizo_results(absolute_path) }.to raise_error(Errors::NotFoundError, "BaseTool Analizo not found")
+        end
+      end
+
+      pending 'is it better to return nil or to raise an exception?' do
         context 'when the absolute_path is wrong' do
           it 'should return something' do
           end
