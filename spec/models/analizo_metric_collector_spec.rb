@@ -21,12 +21,13 @@ describe AnalizoMetricCollector do
 
     describe 'metric_list' do
       context 'when the collector is installed on the computer' do
+        let!(:list) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["list"] }
         before :each do
-          subject.expects(:`).with("analizo metrics --list").returns("output")
+          subject.expects(:`).with("analizo metrics --list").returns(list)
         end
 
         it "should return all the collector's metrics not parsed" do
-          subject.metric_list.should eq("output")
+          subject.metric_list.should eq(list)
         end
       end
 
@@ -91,12 +92,13 @@ describe AnalizoMetricCollector do
     describe 'analizo_results' do
       let(:absolute_path) { "app/models/metric.rb" }
       context 'when the collector is installed on the computer and the absolute_path is valid' do
+        let!(:result) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["result"] }
         before :each do
-          subject.expects(:`).with("analizo metrics #{absolute_path}").returns("output")
+          subject.expects(:`).with("analizo metrics #{absolute_path}").returns(result)
         end
 
         it "should return all the metric results not parsed" do
-          subject.analizo_results(absolute_path).should eq("output")
+          subject.analizo_results(absolute_path).should eq(result)
         end
       end
 
