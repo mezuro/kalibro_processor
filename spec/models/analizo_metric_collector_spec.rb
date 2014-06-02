@@ -151,6 +151,7 @@ describe AnalizoMetricCollector do
         let!(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
         before :each do
           KalibroModule.expects(:new).with({granularity: kalibro_module.granularity.type, name: []}).returns(kalibro_module)
+          ModuleResult.expects(:create).with(kalibro_module: kalibro_module).returns(FactoryGirl.build(:module_result, kalibro_module: kalibro_module))
         end
 
         it 'should create a module with software modularity' do
