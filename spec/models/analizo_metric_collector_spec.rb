@@ -124,18 +124,21 @@ describe AnalizoMetricCollector do
     end
 
     describe 'new_metric_result' do
-      let(:metric) { FactoryGirl.build(:analizo_native_metric) }
-      let(:value) { 2.0 }
+      let!(:metric) { FactoryGirl.build(:analizo_native_metric) }
+      let!(:value) { 2.0 }
+      let!(:module_result) { ModuleResult.create(kalibro_module: FactoryGirl.build(:kalibro_module)) }
+      let!(:metric_result) { FactoryGirl.build(:metric_result, {value: value, metric: metric, module_result: module_result} ) }
       let(:code) { "code" }
       let(:wanted_metric) { {"code" => metric} }
-      let(:module_result) { ModuleResult.create(kalibro_module: FactoryGirl.build(:kalibro_module)) }
 
       before :each do
         subject.expects(:wanted_metrics).returns(wanted_metric)
+        MetricResult.expects(:create).with(metric: metric, value: value, module_result: module_result).returns(metric_result)
       end
 
       it 'should create a new metric result' do
         metric_result = subject.new_metric_result(module_result, code, value)
+        metric_result.should be_a(MetricResult)
         metric_result.value.should eq(value)
         metric_result.metric.should eq(metric)
         metric_result.module_result_id.should eq(module_result.id)

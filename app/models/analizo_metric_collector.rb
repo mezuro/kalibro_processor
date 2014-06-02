@@ -51,7 +51,7 @@ class AnalizoMetricCollector < MetricCollector
   end
 
   def new_metric_result(module_result, code, value)
-    module_result.metric_results.create(metric: self.wanted_metrics[code], value: value.to_f)
+    MetricResult.create(metric: self.wanted_metrics[code], value: value.to_f, module_result: module_result)
   end
 
   def new_module_result(result_map)
