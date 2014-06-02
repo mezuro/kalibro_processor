@@ -40,6 +40,9 @@ gem 'spring', group: :development
 # Communication with other parts
 gem 'kalibro_gatekeeper_client', '~> 0.1.0'
 
+# YAML parser required for properly compactibility between mri and rbx 
+gem 'psych', '~>2.0.5'
+
 group :test do
   # Easier test writing
   gem "shoulda-matchers", '~>2.6.1.rc2'
