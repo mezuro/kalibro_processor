@@ -27,7 +27,6 @@ describe Repository do
 
       it 'should call the Gatekeeper Configuration' do
         KalibroGatekeeperClient::Entities::Configuration.expects(:find).twice.with(subject.configuration_id).returns(subject.configuration)
-
         subject.configuration
       end
     end
@@ -39,6 +38,18 @@ describe Repository do
       it 'should call the Gatekeeper Configuration' do
         subject.configuration = configuration
         subject.configuration_id.should eq(configuration.id)
+      end
+    end
+
+    describe 'complete_name' do
+      subject { FactoryGirl.build(:repository) }
+      let!(:project) { FactoryGirl.build(:project) }
+
+      before :each do
+        KalibroGatekeeperClient::Entities::Project.expects(:find).with(subject.project_id).returns(project)
+      end
+      it 'should return a concatenation of the project and repository name' do
+        subject.complete_name.should eq(project.name + "-" + subject.name)
       end
     end
   end

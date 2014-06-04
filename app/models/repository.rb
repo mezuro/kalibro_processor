@@ -10,4 +10,8 @@ class Repository < ActiveRecord::Base
   def configuration=(conf)
     self.configuration_id = conf.id
   end
+
+	def complete_name
+		KalibroGatekeeperClient::Entities::Project.find(self.project_id).name + "-" + self.name
+	end
 end
