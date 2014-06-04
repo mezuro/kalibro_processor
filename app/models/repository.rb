@@ -2,6 +2,7 @@ class Repository < ActiveRecord::Base
   validates :name, presence: true
   validates :address, presence: true
   validates :configuration_id, presence: true
+  validates :project_id, presence: true
 
   belongs_to :project
 
