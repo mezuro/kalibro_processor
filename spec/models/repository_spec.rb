@@ -35,9 +35,6 @@ describe Repository do
     describe 'complete_name' do
       subject { FactoryGirl.build(:repository) }
 
-      before :each do
-        KalibroGatekeeperClient::Entities::Project.expects(:find).with(subject.project_id).returns(subject.project)
-      end
       it 'should return a concatenation of the project and repository name' do
         subject.complete_name.should eq(subject.project.name + "-" + subject.name)
       end

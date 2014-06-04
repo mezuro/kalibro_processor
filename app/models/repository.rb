@@ -15,6 +15,6 @@ class Repository < ActiveRecord::Base
   end
 
 	def complete_name
-		KalibroGatekeeperClient::Entities::Project.find(self.project_id).name + "-" + self.name
+		self.project.name + "-" + self.name
 	end
 end
