@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe Repository do
+  describe 'validations' do
+    it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:address) }
+  end
+
   describe 'methods' do
     describe 'initialize' do
       it 'should return an instance of Repository' do
