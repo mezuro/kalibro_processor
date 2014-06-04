@@ -4,9 +4,9 @@ class CreateRepositories < ActiveRecord::Migration
       t.string :name
       t.string :scm_type
       t.string :address
-      t.string :description
-      t.string :license
-      t.integer :period
+      t.string :description, default: ""
+      t.string :license, default: ""
+      t.integer :period, default: 0
 
       t.timestamps
     end
