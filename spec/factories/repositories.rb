@@ -2,11 +2,12 @@
 
 FactoryGirl.define do
   factory :repository do
-    name "MyString"
-    type ""
-    address ""
-    description "MyString"
-    license "MyString"
-    period 1
+    name "QtCalculator"
+    scm_type "SUBVERSION"
+    address "svn://svn.code.sf.net/p/qt-calculator/code/trunk"
+    description "An easy calculator"
+    license "None"
+    period 0
+    configuration { FactoryGirl.build(:configuration) }
   end
 end

@@ -4,6 +4,7 @@ describe Repository do
   describe 'validations' do
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:address) }
+    it { should validate_presence_of(:configuration_id) }
   end
 
   describe 'methods' do
@@ -18,6 +19,26 @@ describe Repository do
         repository.description.should eq("")
         repository.license.should eq("")
         repository.period.should eq(0)
+      end
+    end
+
+    describe 'configuration' do
+      subject { FactoryGirl.build(:repository) }
+
+      it 'should call the Gatekeeper Configuration' do
+        KalibroGatekeeperClient::Entities::Configuration.expects(:find).twice.with(subject.configuration_id).returns(subject.configuration)
+
+        subject.configuration
+      end
+    end
+
+    describe 'configuration=' do
+      subject { FactoryGirl.build(:repository) }
+      let(:configuration) { FactoryGirl.build(:another_configuration) }
+
+      it 'should call the Gatekeeper Configuration' do
+        subject.configuration = configuration
+        subject.configuration_id.should eq(configuration.id)
       end
     end
   end
