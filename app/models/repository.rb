@@ -3,6 +3,8 @@ class Repository < ActiveRecord::Base
   validates :address, presence: true
   validates :configuration_id, presence: true
 
+  belongs_to :project
+
   def configuration
     KalibroGatekeeperClient::Entities::Configuration.find(self.configuration_id)
   end

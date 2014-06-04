@@ -9,5 +9,6 @@ FactoryGirl.define do
     license "None"
     period 0
     configuration { FactoryGirl.build(:configuration) }
+    project { FactoryGirl.build(:project) }
   end
 end

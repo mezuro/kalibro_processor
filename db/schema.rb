@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140604181245) do
+ActiveRecord::Schema.define(version: 20140604182012) do
 
   create_table "kalibro_modules", force: true do |t|
     t.string   "name"
@@ -37,6 +37,13 @@ ActiveRecord::Schema.define(version: 20140604181245) do
     t.datetime "updated_at"
   end
 
+  create_table "projects", force: true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "repositories", force: true do |t|
     t.string   "name"
     t.string   "scm_type"
@@ -46,8 +53,8 @@ ActiveRecord::Schema.define(version: 20140604181245) do
     t.integer  "period"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "project_id"
     t.integer  "configuration_id"
+    t.integer  "project_id"
   end
 
 end

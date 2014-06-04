@@ -7,6 +7,10 @@ describe Repository do
     it { should validate_presence_of(:configuration_id) }
   end
 
+  describe 'associations' do
+    it { should belong_to(:project)}
+  end
+
   describe 'methods' do
     describe 'initialize' do
       it 'should return an instance of Repository' do
@@ -43,13 +47,12 @@ describe Repository do
 
     describe 'complete_name' do
       subject { FactoryGirl.build(:repository) }
-      let!(:project) { FactoryGirl.build(:project) }
 
       before :each do
-        KalibroGatekeeperClient::Entities::Project.expects(:find).with(subject.project_id).returns(project)
+        KalibroGatekeeperClient::Entities::Project.expects(:find).with(subject.project_id).returns(subject.project)
       end
       it 'should return a concatenation of the project and repository name' do
-        subject.complete_name.should eq(project.name + "-" + subject.name)
+        subject.complete_name.should eq(subject.project.name + "-" + subject.name)
       end
     end
   end
