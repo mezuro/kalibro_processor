@@ -7,7 +7,12 @@ describe Repository do
         name = "Sample name"
         scm_type = "Git"
         address = "http://www.github.com/mezuro/mezuro"
-        Repository.new({name: name, scm_type: scm_type, address: address}).should be_a(Repository)
+        repository = Repository.new({name: name, scm_type: scm_type, address: address})
+        repository.should be_a(Repository)
+        repository.name.should eq(name)
+        repository.description.should eq("")
+        repository.license.should eq("")
+        repository.period.should eq(0)
       end
     end
   end
