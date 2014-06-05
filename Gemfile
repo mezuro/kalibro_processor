@@ -40,7 +40,7 @@ gem 'spring', group: :development
 # Communication with other parts
 gem 'kalibro_gatekeeper_client', '~> 0.1.0'
 
-# YAML parser required for properly compactibility between mri and rbx 
+# YAML parser required for properly compactibility between mri and rbx
 gem 'psych', '~>2.0.5'
 
 group :test do
@@ -56,7 +56,7 @@ end
 
 group :development, :test do
   # Test framework
-  gem 'rspec-rails', '~> 2.14.0'
+  gem 'rspec-rails', '~> 2.99.0'
 
   # Fixtures made easy
   gem 'factory_girl_rails', '~> 4.4.1'
