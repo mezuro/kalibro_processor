@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Granularity, :type => :model do
   describe 'method' do

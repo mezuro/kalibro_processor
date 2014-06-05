@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NativeMetric, :type => :model do
   describe 'methods' do
@@ -8,7 +8,7 @@ describe NativeMetric, :type => :model do
         scope = Granularity.new(:SOFTWARE)
         languages = [:C, :CPP, :JAVA]
         native_metric = NativeMetric.new(name, scope, languages)
-        
+
         it 'should return an instance of NativeMetric' do
           expect(native_metric).to be_a(NativeMetric)
         end
@@ -20,4 +20,4 @@ describe NativeMetric, :type => :model do
       end
     end
   end
-end 
+end

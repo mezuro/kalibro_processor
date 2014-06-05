@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Metric, :type => :model do
   describe 'methods' do
@@ -11,4 +11,4 @@ describe Metric, :type => :model do
       end
     end
   end
-end 
+end
