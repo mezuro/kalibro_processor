@@ -45,7 +45,7 @@ gem 'psych', '~>2.0.5'
 
 group :test do
   # Easier test writing
-  gem "shoulda-matchers", '~>2.6.1.rc2'
+  gem "shoulda-matchers", '~>2.6.1'
 
   # Test coverage
   gem 'simplecov', require: false
