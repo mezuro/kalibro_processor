@@ -48,9 +48,9 @@ ActiveRecord::Schema.define(version: 20140604182012) do
     t.string   "name"
     t.string   "scm_type"
     t.string   "address"
-    t.string   "description"
-    t.string   "license"
-    t.integer  "period"
+    t.string   "description",      default: ""
+    t.string   "license",          default: ""
+    t.integer  "period",           default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "configuration_id"
