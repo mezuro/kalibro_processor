@@ -60,9 +60,6 @@ group :development, :test do
 
   # Fixtures made easy
   gem 'factory_girl_rails', '~> 4.4.1'
-
-  # JavaScript unit tests
-  gem "konacha", "~> 3.2.0"
 end
 
 # Acceptance tests
@@ -70,7 +67,6 @@ group :cucumber do
   gem 'cucumber', '~> 1.3.10'
   gem 'cucumber-rails'
   gem 'database_cleaner'
-  gem 'poltergeist', '~> 1.5.0'
 end
 
 # Some statistics
