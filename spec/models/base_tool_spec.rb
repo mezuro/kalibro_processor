@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe BaseTool do
+describe BaseTool, :type => :model do
   describe 'methods' do
     subject { FactoryGirl.build(:base_tool) }
 
@@ -9,7 +9,7 @@ describe BaseTool do
         let(:metric) { FactoryGirl.build(:analizo_native_metric) }
 
         it 'should return the metric' do
-          subject.find_supported_metric_by_name(metric.name).name.should eq(metric.name)
+          expect(subject.find_supported_metric_by_name(metric.name).name).to eq(metric.name)
         end
       end
 

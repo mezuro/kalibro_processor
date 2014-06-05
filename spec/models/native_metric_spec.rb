@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NativeMetric do
+describe NativeMetric, :type => :model do
   describe 'methods' do
     describe 'initialize' do
       context 'with valid attributes' do
@@ -10,12 +10,12 @@ describe NativeMetric do
         native_metric = NativeMetric.new(name, scope, languages)
         
         it 'should return an instance of NativeMetric' do
-          native_metric.should be_a(NativeMetric)
+          expect(native_metric).to be_a(NativeMetric)
         end
         it 'should have the right attributes' do #FIXME This test is testing our knowledge of Ruby, delete it at your will.
-          native_metric.compound.should be_false
-          native_metric.name.should eq(name)
-          native_metric.scope.should eq(scope)
+          expect(native_metric.compound).to be_falsey
+          expect(native_metric.name).to eq(name)
+          expect(native_metric.scope).to eq(scope)
         end
       end
     end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe MetricCollector do
+describe MetricCollector, :type => :model do
   describe 'method' do
     describe 'name' do
       it 'should raise a NotImplementedError' do

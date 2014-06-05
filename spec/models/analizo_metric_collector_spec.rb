@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe AnalizoMetricCollector do
+describe AnalizoMetricCollector, :type => :model do
   describe 'method' do
     describe 'name' do
       it 'should return Analizo' do
-        subject.name.should eq("Analizo")
+        expect(subject.name).to eq("Analizo")
       end
     end
 
@@ -15,7 +15,7 @@ describe AnalizoMetricCollector do
       end
 
       it 'should return a list with all the supported metrics' do
-        subject.supported_metrics.should eq(list)
+        expect(subject.supported_metrics).to eq(list)
       end
     end
 
@@ -27,7 +27,7 @@ describe AnalizoMetricCollector do
         end
 
         it "should return all the collector's metrics not parsed" do
-          subject.metric_list.should eq(list)
+          expect(subject.metric_list).to eq(list)
         end
       end
 
@@ -53,8 +53,8 @@ describe AnalizoMetricCollector do
         end
         it 'should return a hash in the format code => metric' do
           ret = subject.parse_supported_metrics
-          ret["acc"].should eq(acc)
-          ret["total_abstract_classes"].should eq(metric)
+          expect(ret["acc"]).to eq(acc)
+          expect(ret["total_abstract_classes"]).to eq(metric)
         end
       end
     end
@@ -71,7 +71,7 @@ describe AnalizoMetricCollector do
 
         it 'should return a hash with the wanted metrics' do
           subject.wanted_metrics = wanted_metrics_list
-          subject.wanted_metrics.should eq(response)
+          expect(subject.wanted_metrics).to eq(response)
         end
       end
 
@@ -84,7 +84,7 @@ describe AnalizoMetricCollector do
 
         it 'should return an empty hash' do
           subject.wanted_metrics = wanted_metrics_list
-          subject.wanted_metrics.should eq({})
+          expect(subject.wanted_metrics).to eq({})
         end
       end
     end
@@ -98,7 +98,7 @@ describe AnalizoMetricCollector do
         end
 
         it "should return all the metric results not parsed" do
-          subject.analizo_results(absolute_path).should eq(result)
+          expect(subject.analizo_results(absolute_path)).to eq(result)
         end
       end
 
@@ -138,10 +138,10 @@ describe AnalizoMetricCollector do
 
       it 'should create a new metric result' do
         metric_result = subject.new_metric_result(module_result, code, value)
-        metric_result.should be_a(MetricResult)
-        metric_result.value.should eq(value)
-        metric_result.metric.should eq(metric)
-        metric_result.module_result_id.should eq(module_result.id)
+        expect(metric_result).to be_a(MetricResult)
+        expect(metric_result.value).to eq(value)
+        expect(metric_result.metric).to eq(metric)
+        expect(metric_result.module_result_id).to eq(module_result.id)
       end
     end
 
@@ -156,7 +156,7 @@ describe AnalizoMetricCollector do
 
         it 'should create a module with software modularity' do
           module_result = subject.new_module_result(result_map)
-          module_result.kalibro_module.should eq(kalibro_module)
+          expect(module_result.kalibro_module).to eq(kalibro_module)
         end
       end
 
@@ -171,7 +171,7 @@ describe AnalizoMetricCollector do
 
         it 'should create a module with class modularity' do
           module_result = subject.new_module_result(result_map)
-          module_result.kalibro_module.should eq(kalibro_module)
+          expect(module_result.kalibro_module).to eq(kalibro_module)
         end
       end
     end
@@ -194,7 +194,7 @@ describe AnalizoMetricCollector do
 
         it 'should return a module result with metric results' do
           parsed_single_result = subject.parse_single_result(result_map)
-          parsed_single_result.should eq(module_result)
+          expect(parsed_single_result).to eq(module_result)
         end
       end
 
@@ -205,7 +205,7 @@ describe AnalizoMetricCollector do
           subject.expects(:new_module_result).with(result_map).returns(module_result)
         end
         it 'should return a module result with no metric results' do
-          subject.parse_single_result(result_map).should eq(module_result)
+          expect(subject.parse_single_result(result_map)).to eq(module_result)
         end
       end
     end
@@ -222,7 +222,7 @@ describe AnalizoMetricCollector do
       end
 
       it 'create all module and metric results' do
-        subject.parse(results).should eq(response)
+        expect(subject.parse(results)).to eq(response)
       end
     end
 
@@ -241,7 +241,7 @@ describe AnalizoMetricCollector do
       end
 
       it 'should collect the metrics for a given project' do
-        subject.collect_metrics(absolute_path, wanted_metrics_list).should eq(parsed_results)
+        expect(subject.collect_metrics(absolute_path, wanted_metrics_list)).to eq(parsed_results)
       end
     end
   end

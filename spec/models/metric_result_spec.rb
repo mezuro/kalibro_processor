@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe MetricResult do
+describe MetricResult, :type => :model do
   describe 'associations' do
-    it { should belong_to(:module_result) }
+    it { is_expected.to belong_to(:module_result) }
   end
 
   describe 'method' do
@@ -23,7 +23,7 @@ describe MetricResult do
         end
 
         it 'should calculate the mean value of the values array' do
-          subject.aggregated_value.should eq(2.0)
+          expect(subject.aggregated_value).to eq(2.0)
         end
       end
 
@@ -31,7 +31,7 @@ describe MetricResult do
         subject { FactoryGirl.build(:metric_result_with_value) }
 
         it 'should return the value' do
-          subject.aggregated_value.should eq(subject.value)
+          expect(subject.aggregated_value).to eq(subject.value)
         end
       end
     end
@@ -50,7 +50,7 @@ describe MetricResult do
       end
 
       it 'should return the range that contains the aggregated value of the metric result' do
-        subject.range.should eq(range)
+        expect(subject.range).to eq(range)
       end
     end
 
@@ -63,7 +63,7 @@ describe MetricResult do
         end
 
         it 'should return false' do
-          subject.has_grade?.should be_false
+          expect(subject.has_grade?).to be_falsey
         end
       end
 
@@ -80,7 +80,7 @@ describe MetricResult do
           end
 
           it 'should return false' do
-            subject.has_grade?.should be_false
+            expect(subject.has_grade?).to be_falsey
           end
         end
 
@@ -90,7 +90,7 @@ describe MetricResult do
           end
 
           it 'should return true' do
-            subject.has_grade?.should be_true
+            expect(subject.has_grade?).to be_truthy
           end
         end
       end
@@ -121,11 +121,11 @@ describe MetricResult do
       end
 
       it "should return an array with all its children's values" do
-        subject.descendant_values.should eq([2.0, 2.0])
+        expect(subject.descendant_values).to eq([2.0, 2.0])
       end
 
       it "should be a DescriptiveStatistics array" do
-        subject.descendant_values.should be_a(DescriptiveStatistics::Stats)
+        expect(subject.descendant_values).to be_a(DescriptiveStatistics::Stats)
       end
     end
   end

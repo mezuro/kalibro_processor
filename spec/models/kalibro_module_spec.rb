@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe Module do
+describe Module, :type => :model do
   describe 'method' do
     describe 'short_name' do
       subject { FactoryGirl.build(:kalibro_module) }
 
       it 'should get the last element of the name' do
-        subject.short_name.should eq(subject.name.last)
+        expect(subject.short_name).to eq(subject.name.last)
       end
     end
 
@@ -14,7 +14,7 @@ describe Module do
       subject { FactoryGirl.build(:kalibro_module) }
 
       it 'should get the join the name' do
-        subject.long_name.should eq(subject.name.join('.'))
+        expect(subject.long_name).to eq(subject.name.join('.'))
       end
     end
 
@@ -33,7 +33,7 @@ describe Module do
         subject { FactoryGirl.build(:kalibro_module) }
 
         it 'should return nil' do
-          subject.parent.should be_nil
+          expect(subject.parent).to be_nil
         end
       end
 
@@ -46,8 +46,8 @@ describe Module do
           it 'should return a new Module with granularity SOFTWARE and name ROOT' do
             parent = subject.parent
 
-            parent.granularity.type.should eq(Granularity::SOFTWARE)
-            parent.name.should eq(["ROOT"])
+            expect(parent.granularity.type).to eq(Granularity::SOFTWARE)
+            expect(parent.name).to eq(["ROOT"])
           end
         end
 
@@ -61,8 +61,8 @@ describe Module do
           it 'should return a new Module with granularity PACKAGE and name pre_name' do
             parent = subject.parent
 
-            parent.granularity.type.should eq(Granularity::PACKAGE)
-            parent.name.should eq(['pre_name'])
+            expect(parent.granularity.type).to eq(Granularity::PACKAGE)
+            expect(parent.name).to eq(['pre_name'])
           end
         end
       end
