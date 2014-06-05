@@ -14,6 +14,18 @@ describe Repository do
   end
 
   describe 'methods' do
+    describe 'supported_types' do
+      before :each do
+        Loader.expects(:valid?).at_least_once.returns(true)
+        Loader.expects(:valid?).with(:GIT).at_least_once.returns(false)
+      end
+
+      it 'should add valid repository types to supported_types and return them' do
+        Repository.supported_types.should include(:SUBVERSION)
+        Repository.supported_types.should_not include(:GIT)
+      end
+    end
+
     describe 'configuration' do
       subject { FactoryGirl.build(:repository) }
 
