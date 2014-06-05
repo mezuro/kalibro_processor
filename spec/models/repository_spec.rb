@@ -6,6 +6,7 @@ describe Repository do
     it { should validate_presence_of(:address) }
     it { should validate_presence_of(:configuration_id) }
     it { should validate_presence_of(:project_id) }
+    it { should validate_uniqueness_of(:name).scoped_to(:project_id).with_message(/should be unique within project/) }
   end
 
   describe 'associations' do
