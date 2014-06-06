@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-describe Repository do
+describe Repository, :type => :model do
   describe 'validations' do
-    it { should validate_presence_of(:name) }
-    it { should validate_presence_of(:address) }
-    it { should validate_presence_of(:configuration_id) }
-    it { should validate_presence_of(:project_id) }
-    it { should validate_uniqueness_of(:name).scoped_to(:project_id).with_message(/should be unique within project/) }
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:address) }
+    it { is_expected.to validate_presence_of(:configuration_id) }
+    it { is_expected.to validate_presence_of(:project_id) }
+    it { is_expected.to validate_uniqueness_of(:name).scoped_to(:project_id).with_message(/should be unique within project/) }
   end
 
   describe 'associations' do
-    it { should belong_to(:project)}
+    it { is_expected.to belong_to(:project)}
   end
 
   describe 'methods' do
@@ -21,8 +21,8 @@ describe Repository do
       end
 
       it 'should add valid repository types to supported_types and return them' do
-        Repository.supported_types.should include(:SUBVERSION)
-        Repository.supported_types.should_not include(:GIT)
+        expect(Repository.supported_types).to include(:SUBVERSION)
+        expect(Repository.supported_types).not_to include(:GIT)
       end
     end
 
@@ -41,7 +41,7 @@ describe Repository do
 
       it 'should call the Gatekeeper Configuration' do
         subject.configuration = configuration
-        subject.configuration_id.should eq(configuration.id)
+        expect(subject.configuration_id).to eq(configuration.id)
       end
     end
 
@@ -49,7 +49,7 @@ describe Repository do
       subject { FactoryGirl.build(:repository) }
 
       it 'should return a concatenation of the project and repository name' do
-        subject.complete_name.should eq(subject.project.name + "-" + subject.name)
+        expect(subject.complete_name).to eq(subject.project.name + "-" + subject.name)
       end
     end
   end

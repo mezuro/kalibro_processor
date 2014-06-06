@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Project do
+describe Project, :type => :model do
   describe 'associations' do
-    it { should have_many(:repositories)}
+    it { is_expected.to have_many(:repositories)}
   end
 end
