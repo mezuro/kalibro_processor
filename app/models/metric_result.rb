@@ -33,7 +33,7 @@ class MetricResult < ActiveRecord::Base
   end
 
   def descendant_values
-    results = module_result.children.map { |child| child.metric_results_for(self.metric).value  }
+    results = module_result.children.map { |child| child.metric_result_for(self.metric).value  }
     DescriptiveStatistics::Stats.new(results)
   end
 end
