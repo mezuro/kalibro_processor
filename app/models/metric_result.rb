@@ -4,7 +4,7 @@ class MetricResult < ActiveRecord::Base
 
   def aggregated_value
     values = self.descendant_values
-    if (self.value.nil? && !values.empty?)
+    if self.value.nil? && !values.empty?
       values.send( self.metric_configuration.aggregation_form.to_s.downcase )
     else
       self.value
