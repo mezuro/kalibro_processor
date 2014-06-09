@@ -36,4 +36,8 @@ class MetricResult < ActiveRecord::Base
     results = module_result.children.map { |child| child.metric_result_for(self.metric).value  }
     DescriptiveStatistics::Stats.new(results)
   end
+
+  def metric
+    @metric ||= self.metric_configuration.metric
+  end
 end

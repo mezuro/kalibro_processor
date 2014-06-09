@@ -128,5 +128,19 @@ describe MetricResult, :type => :model do
         expect(subject.descendant_values).to be_a(DescriptiveStatistics::Stats)
       end
     end
+
+    describe 'metric' do
+      subject { FactoryGirl.build(:metric_result, metric: nil) }
+
+      before :each do
+        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
+          with(subject.metric_configuration_id).
+          returns(metric_configuration)
+      end
+
+      it 'is expected to be a KalibroGatekeeperClient::Entities::Metric' do
+        expect(subject.metric).to be_a(KalibroGatekeeperClient::Entities::Metric)
+      end
+    end
   end
 end

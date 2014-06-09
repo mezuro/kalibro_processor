@@ -18,7 +18,7 @@ FactoryGirl.define do
   factory :metric_configuration, class: KalibroGatekeeperClient::Entities::MetricConfiguration do
     id 1
     code 'code'
-    metric {FactoryGirl.build(:metric)}
+    metric { FactoryGirl.build(:kalibro_gatekeeper_client_metric) }
     base_tool_name "Analizo"
     weight 1
     aggregation_form :MEAN
