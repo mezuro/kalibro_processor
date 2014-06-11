@@ -52,5 +52,11 @@ describe Repository, :type => :model do
         expect(subject.complete_name).to eq(subject.project.name + "-" + subject.name)
       end
     end
+
+    describe 'process' do
+      it 'is expected to raise a NotImplementedError' do
+        expect{ subject.process }.to raise_error(NotImplementedError)
+      end
+    end
   end
 end

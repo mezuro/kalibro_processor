@@ -28,4 +28,6 @@ class Repository < ActiveRecord::Base
 	def complete_name
 		self.project.name + "-" + self.name
 	end
+
+  def process; raise NotImplementedError; end
 end
