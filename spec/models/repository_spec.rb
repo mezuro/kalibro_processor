@@ -16,8 +16,8 @@ describe Repository, :type => :model do
   describe 'methods' do
     describe 'supported_types' do
       before :each do
-        Loader.expects(:valid?).at_least_once.returns(true)
-        Loader.expects(:valid?).with(:GIT).at_least_once.returns(false)
+        Downloaders::Base.expects(:valid?).at_least_once.returns(true)
+        Downloaders::Base.expects(:valid?).with(:GIT).at_least_once.returns(false)
       end
 
       it 'should add valid repository types to supported_types and return them' do

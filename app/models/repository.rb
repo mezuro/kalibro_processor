@@ -14,7 +14,7 @@ class Repository < ActiveRecord::Base
   	:LOCAL_ZIP, :MERCURIAL, :REMOTE_TARBALL, :REMOTE_ZIP, :SUBVERSION]
 
   def self.supported_types
-    REPOSITORY_TYPES.select {|type| Loader.valid?(type) }
+    REPOSITORY_TYPES.select {|type| Downloaders::Base.valid?(type) }
   end
 
   def configuration
