@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MetricResultsController do
   describe 'method' do
@@ -18,10 +18,10 @@ describe MetricResultsController do
           post :descendant_values, id: metric_result.id, format: :json
         end
 
-        it { should respond_with(:success) }
+        it { is_expected.to respond_with(:success) }
 
         it 'returns the list of values' do
-          JSON.parse(response.body).should eq(JSON.parse({descendant_values: [metric_result.value]}.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({descendant_values: [metric_result.value]}.to_json))
         end
       end
     end
