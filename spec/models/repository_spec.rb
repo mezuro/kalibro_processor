@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Repository, :type => :model do
   describe 'validations' do
@@ -16,13 +16,11 @@ describe Repository, :type => :model do
   describe 'methods' do
     describe 'supported_types' do
       before :each do
-        Downloaders::Base.expects(:valid?).at_least_once.returns(true)
-        Downloaders::Base.expects(:valid?).with(:GIT).at_least_once.returns(false)
+        Downloaders::Git.expects(:available?).at_least_once.returns(true)
       end
 
-      it 'should add valid repository types to supported_types and return them' do
-        expect(Repository.supported_types).to include(:SUBVERSION)
-        expect(Repository.supported_types).not_to include(:GIT)
+      it 'should add available repository types to supported_types and return them' do
+        expect(Repository.supported_types).to include(:GIT)
       end
     end
 

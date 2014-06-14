@@ -1,5 +1,5 @@
 module Downloaders
   class Base
-    def self.valid?(type); raise NotImplementedError; end
+    def self.available?; raise NotImplementedError; end
   end
 end

@@ -10,11 +10,12 @@ class Repository < ActiveRecord::Base
 
   belongs_to :project
 
-  REPOSITORY_TYPES = [:BAZAAR, :CVS, :GIT, :LOCAL_DIRECTORY, :LOCAL_TARBALL,
-  	:LOCAL_ZIP, :MERCURIAL, :REMOTE_TARBALL, :REMOTE_ZIP, :SUBVERSION]
+  TYPES = {GIT: Downloaders::Git}
 
   def self.supported_types
-    REPOSITORY_TYPES.select {|type| Downloaders::Base.valid?(type) }
+    supported_types = []
+    TYPES.select {|type, klass| supported_types << type if klass.available? }
+    return supported_types
   end
 
   def configuration
