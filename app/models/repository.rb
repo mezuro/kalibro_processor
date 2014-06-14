@@ -10,7 +10,7 @@ class Repository < ActiveRecord::Base
 
   belongs_to :project
 
-  TYPES = {GIT: Downloaders::Git}
+  TYPES = {GIT: Downloaders::GitDownloader}
 
   def self.supported_types
     supported_types = []

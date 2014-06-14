@@ -36,12 +36,14 @@ gem 'sdoc', require: false
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring', group: :development
 
-
 # Communication with other parts
 gem 'kalibro_gatekeeper_client', '~> 0.1.0'
 
 # YAML parser required for properly compactibility between mri and rbx
 gem 'psych', '~>2.0.5'
+
+# Repository cloning
+gem 'git', '~> 1.2.7'
 
 group :test do
   # Easier test writing

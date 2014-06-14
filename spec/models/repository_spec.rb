@@ -16,7 +16,7 @@ describe Repository, :type => :model do
   describe 'methods' do
     describe 'supported_types' do
       before :each do
-        Downloaders::Git.expects(:available?).at_least_once.returns(true)
+        Downloaders::GitDownloader.expects(:available?).at_least_once.returns(true)
       end
 
       it 'should add available repository types to supported_types and return them' do
