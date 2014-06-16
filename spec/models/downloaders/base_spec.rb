@@ -23,15 +23,34 @@ describe Downloaders::Base, :type => :model do
 
         context "and it isn't updatable" do
           before :each do
-            self.class.expects(:updatable?).returns(false)
+            subject.class.expects(:updatable?).returns(false)
           end
 
           it 'is expected to delete the directory and get (so raising a error)' do
-            pending "probably the updatable? mock doesn't work"
             Dir.expects(:delete).with(directory).returns(0)
 
             expect{ subject.class.retrieve!(address, directory) }.to raise_error(NotImplementedError)
           end
+        end
+
+        context "and it isn't updatable" do
+          before :each do
+            subject.class.expects(:updatable?).returns(true)
+          end
+
+          it 'is expected to raise a NotImplementedYetError' do
+            expect{ subject.class.retrieve!(address, directory) }.to raise_error(NotImplementedError)
+          end
+        end
+      end
+
+      context 'when the directory does not exists' do
+        before :each do
+          Dir.expects(:exist?).with(directory).returns(false)
+        end
+
+        it 'is expected to raise a NotImplementedYetError' do
+          expect{ subject.class.retrieve!(address, directory) }.to raise_error(NotImplementedError)
         end
       end
     end

@@ -9,8 +9,8 @@ module Downloaders
 
     protected
 
-    def self.get(address, directory); raise NotImplementedError; end
-
     def self.updatable?; raise NotImplementedError; end
+
+    def self.get(address, directory); raise NotImplementedError; end
   end
 end
