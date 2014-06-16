@@ -14,4 +14,21 @@ class ModuleResultsController < ApplicationController
       end
     end
   end
+
+  def metric_results
+    begin
+      module_result = ModuleResult.find(params[:id])
+      return_value = module_result.metric_results
+    rescue ActiveRecord::RecordNotFound
+      return_value = {error: 'RecordNotFound'}
+    end
+
+    respond_to do |format|
+      if module_result.is_a?(ModuleResult)
+        format.json { render json: return_value }
+      else
+        format.json { render json: return_value, status: :unprocessable_entity }
+      end
+    end
+  end
 end

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'metric_results/:id/descendant_values' => 'metric_results#descendant_values'
 
   get 'module_results/:id/get' => 'module_results#get'
+  get 'module_results/:id/metric_results' => 'module_results#metric_results'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
