@@ -12,7 +12,7 @@ module Downloaders
 
     protected
 
-    def self.updatable? true; end
+    def self.updatable?; true; end
 
     def self.get(address, directory)
       if Dir.exist?(directory)
