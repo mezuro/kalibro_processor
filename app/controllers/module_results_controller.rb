@@ -1,30 +1,34 @@
 class ModuleResultsController < ApplicationController
   def get
-    begin
-      module_result = ModuleResult.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      module_result = {error: 'RecordNotFound'}
-    end
-
-    respond_to do |format|
-      if module_result.is_a?(ModuleResult)
-        format.json { render json: module_result }
-      else
-        format.json { render json: module_result, status: :unprocessable_entity }
-      end
-    end
+    record = find_module_result
+    format_response(record, record)
   end
 
   def metric_results
-    begin
-      module_result = ModuleResult.find(params[:id])
-      return_value = module_result.metric_results
-    rescue ActiveRecord::RecordNotFound
-      return_value = {error: 'RecordNotFound'}
-    end
+    record = find_module_result
+    return_value = record.is_a?(ModuleResult) ? record.metric_results : record
+    format_response(record, return_value)
+  end
 
-    respond_to do |format|
-      if module_result.is_a?(ModuleResult)
+  def children
+    record = find_module_result
+    return_value = record.is_a?(ModuleResult) ? record.children : record
+    format_response(record, return_value)
+  end
+
+  private
+
+  def find_module_result
+    begin
+      ModuleResult.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      {error: 'RecordNotFound'}
+    end
+  end
+
+  def format_response(record, return_value)
+      respond_to do |format|
+      if record.is_a?(ModuleResult)
         format.json { render json: return_value }
       else
         format.json { render json: return_value, status: :unprocessable_entity }

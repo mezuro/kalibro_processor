@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   get 'module_results/:id/get' => 'module_results#get'
   get 'module_results/:id/metric_results' => 'module_results#metric_results'
+  get 'module_results/:id/children' => 'module_results#children'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
