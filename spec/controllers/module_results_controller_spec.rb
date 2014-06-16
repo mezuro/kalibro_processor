@@ -20,10 +20,11 @@ describe ModuleResultsController do
       end
 
       context 'with invalid ModuleResult instance' do
-        let!(:error_hash) { {error: 'RecordNotFound'} }
+        let(:error_hash) { {error: 'RecordNotFound'} }
 
         before :each do
-        ModuleResult.expects(:find).with(module_result.id.to_s).returns(error_hash)
+          ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
+
           post :get, id: module_result.id, format: :json
         end
 
