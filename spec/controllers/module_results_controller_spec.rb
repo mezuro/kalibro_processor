@@ -5,26 +5,32 @@ describe ModuleResultsController do
     describe 'get' do
       let!(:module_result) { FactoryGirl.build(:module_result, id: 1) }
       
-      before :each do
-        ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
-      end
-
       context 'with valid ModuleResult instance' do
         before :each do
+        ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
           post :get, id: module_result.id, format: :json
         end
 
         it { should respond_with(:success) }
         
-        it 'returns the module_result' do
-          JSON.parse(response.body).should eq(JSON.parse({module_result: module_result}.to_json))
+        it 'should return the module_result' do
+          JSON.parse(response.body).should eq(JSON.parse(module_result.to_json))
         end
 
       end
       
       context 'with invalid ModuleResult instance' do
-        it "should respond with success"
-        it "should return a :unprocessable_entity status"
+        let!(:error_hash) { {error: 'RecordNotFound'} } 
+        before :each do
+        ModuleResult.expects(:find).with(module_result.id.to_s).returns(error_hash)
+          post :get, id: module_result.id, format: :json
+        end
+        
+        it { should respond_with(:unprocessable_entity) }
+        
+        it 'should return the error_hash' do
+          JSON.parse(response.body).should eq(JSON.parse(error_hash.to_json))
+        end
       end
     end
   end
