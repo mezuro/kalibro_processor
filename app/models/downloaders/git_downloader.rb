@@ -16,13 +16,25 @@ module Downloaders
 
     def self.get(address, directory)
       if Dir.exist?(directory)
-        raise NotimplementedError
+        reset(directory)
       else
-        # if directory is "/tmp/test", name is "test" and path is "path"
-        name = directory.split('/').last
-        path = (directory.split('/') - [name]).join('/')
-        Git.clone(address, name, path: path)
+        clone(address, directory)
       end
+    end
+
+    private
+
+    def self.clone(address, directory)
+      # if directory is "/tmp/test", name is "test" and path is "/tmp"
+      name = directory.split('/').last
+      path = (directory.split('/') - [name]).join('/')
+      Git.clone(address, name, path: path)
+    end
+
+    def self.reset(directory)
+      g = Git.open(directory)
+      g.fetch
+      g.reset("#{g.remote.name}/#{g.branch.name}", hard: true)
     end
   end
 end
