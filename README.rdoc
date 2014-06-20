@@ -1,28 +1,99 @@
-== README
+== README - Kalibro Processor
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+{<img src="https://codeclimate.com/github/mezuro/kalibro_processor.png" />}[https://codeclimate.com/github/mezuro/kalibro_processor] {<img src="https://travis-ci.org/mezuro/kalibro_processor.png?branch=master" alt="Build Status" />}[https://travis-ci.org/mezuro/kalibro_processor] {<img src="https://coveralls.io/repos/mezuro/mezuro/badge.png?branch=master" alt="Coverage Status" />}[https://coveralls.io/r/mezuro/mezuro?branch=master]
 
-Things you may want to cover:
+Kalibro Processor is a source code analysis web service. Part of the Kalibro.
+
+=== Development
+
+
+* System dependencies (Ubuntu package names)
+
+  * build-essential
+
+  * curl
+
+  * postgresql-server-dev-9.1
 
 * Ruby version
 
-* System dependencies
+  2.1.2
+
+  You can easily install it through the Ruby Version Manager - RVM. Instructions on how to do it can be found at http://rvm.io
+
+  *NOTE:* If you are using the gnome-shell, or any derivate like terminator, you have to mark on your profile the option to use a "login bash".
+
 
 * Configuration
 
+    bundle install
+
 * Database creation
 
-* Database initialization
+    rake db:setup
 
 * How to run the test suite
 
+    rake
+
 * Services (job queues, cache servers, search engines, etc.)
+
+  Kalibro Gatekeeper
+  You can find a script to install it on any machine with Rails on https://gist.github.com/rafamanzo/9859244. After running this script, run ```unset BUNDLE_GEMFILE```.
+  By default Mezuro will expect it to be running on port 8081 at localhost.
+  In order to run it as expected, run: ```rails s -p 8081```.
 
 * Deployment instructions
 
-* ...
+  Deployment is made through Capistano (https://github.com/capistrano/capistrano)
 
+    cap production deploy
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+  In order to do this, you must have the password.
+
+  Otherwise, you can also modify the deployment file at <tt>config/deploy.rb</tt>.
+
+=== Install
+
+* First Deploy
+
+  1. Make sure that the deployment file <tt>config/deploy.rb</tt> is correctly configured to the installation server;
+  2. Also, make sure that the installation server already has rvm installed;
+  3. <tt>cap deploy:setup</tt> will install the ruby correct ruby version, the gemset and all the directories tree;
+  4. <tt>cap deploy:migrations</tt> deploys the code and run all the migrations
+
+=== Contributing
+
+Please, have a look the wiki pages about development workflow and code standards:
+
+* https://github.com/mezuro/mezuro/wiki/Development-workflow
+* https://github.com/mezuro/mezuro/wiki/Standards
+
+=== License
+
+Copyright (c) 2013-2014 The Author developers.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+=== Authors
+
+Please see the humans.txt (at the `public` folder) file with the authors
+
+=== Acknowledgments
+
+The authors have been supported by organizations:
+
+University of São Paulo (USP)
+FLOSS Competence Center
+http://ccsl.ime.usp.br

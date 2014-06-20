@@ -3,7 +3,15 @@
 
 # TEAM
 
-    Rafael Reggiani Manzo - Base app maintaneir - rr.manzo at gmail.com
+    Copyright 2014
+    --------------
+
+      Alessandro Palmeira (alessandro.palmeira at gmail.com)
+      Diego Araújo (diegoamc90 at gmail.com)
+      Fellipe Souto Sampaio (fllsouto at gmail.com)
+      Paulo Meirelles (paulo at softwarelivre.org)
+      Rafael Reggiani Manzo (rr.manzo at gmail.com)
+      Renan Fichberg (rfichberg at gmail.com)
 
 # THANKSs
 
@@ -16,7 +24,3 @@
       Cucumber
       ShouldaMatchers
       Simplecov
-
-    HTML5, CSS3
-
-    Normalize.css, jQuery, Modernizr
