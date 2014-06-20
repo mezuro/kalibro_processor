@@ -8,12 +8,16 @@
 
       Alessandro Palmeira (alessandro.palmeira at gmail.com)
       Diego Araújo (diegoamc90 at gmail.com)
-      Fellipe Souto Sampaio (fllsouto at gmail.com)
       Paulo Meirelles (paulo at softwarelivre.org)
       Rafael Reggiani Manzo (rr.manzo at gmail.com)
       Renan Fichberg (rfichberg at gmail.com)
 
 # THANKSs
+
+    Former team members
+    ---------------------------------------------------------
+
+      Fellipe Souto Sampaio (fllsouto at gmail.com)
 
 # TECHNOLOGY COLOPHON
 
