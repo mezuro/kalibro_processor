@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
 
+  root 'information#data'
+
   get 'metric_results/:id/descendant_values' => 'metric_results#descendant_values'
 
   get 'module_results/:id/get' => 'module_results#get'
