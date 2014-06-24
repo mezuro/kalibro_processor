@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140624012111) do
+ActiveRecord::Schema.define(version: 20140624014115) do
 
   create_table "kalibro_modules", force: true do |t|
     t.string   "name"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20140624012111) do
     t.integer  "repository_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "root_module_result_id"
   end
 
   create_table "projects", force: true do |t|
