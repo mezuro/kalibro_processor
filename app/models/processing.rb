@@ -1,6 +1,6 @@
 class Processing < ActiveRecord::Base
-  has_one :repository
-  has_one :process_time
+  belongs_to :repository
+  has_many :process_times
 
   def get_state(process_state)
     if state == 'ERROR' then raise NotImplementedError end

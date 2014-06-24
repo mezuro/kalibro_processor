@@ -1,5 +1,6 @@
 class Repository < ActiveRecord::Base
   belongs_to :project
+  has_many :processings
 
   validates :name, presence: true
   validates :name, uniqueness: { scope: :project_id ,
@@ -7,8 +8,6 @@ class Repository < ActiveRecord::Base
   validates :address, presence: true
   validates :configuration_id, presence: true
   validates :project_id, presence: true
-
-  belongs_to :project
 
   TYPES = {GIT: Downloaders::GitDownloader}
 
