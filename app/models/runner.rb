@@ -7,7 +7,8 @@ class Runner
 
   def run
     processing = Processing.create(repository: self.repository, state: "LOADING")
-    generate_dir_name
+    self.repository.code_directory = generate_dir_name
+    Repository::TYPES[self.repository.scm_type.upcase.to_sym].retrieve!(self.repository.address, self.repository.code_directory)
   end
 
   private
@@ -19,5 +20,6 @@ class Runner
     while Dir.exists?(dir)
       dir = "#{path}/#{Digest::MD5.hexdigest(Time.now.to_s)}"
     end
+    return dir
   end
 end
