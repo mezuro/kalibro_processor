@@ -2,23 +2,45 @@ require 'rails_helper'
 
 describe AnalizoMetricCollector, :type => :model do
   describe 'method' do
-    describe 'name' do
-      it 'should return Analizo' do
-        expect(subject.name).to eq("Analizo")
+    describe 'description' do
+      it 'is expected to return the description as a string' do
+        expect(AnalizoMetricCollector.description).to be_a(String)
       end
     end
 
     describe 'supported_metrics' do
-      let!(:list) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["list"] }
+      let!(:analizo_metric_collector_list) { FactoryGirl.build(:analizo_metric_collector_list) }
       before :each do
-        subject.expects(:parse_supported_metrics).returns(list)
+        AnalizoMetricCollector.expects(:`).with("analizo metrics --list").returns(analizo_metric_collector_list.raw)
       end
 
       it 'should return a list with all the supported metrics' do
-        expect(subject.supported_metrics).to eq(list)
+        expect(AnalizoMetricCollector.supported_metrics['total_abstract_classes'].name).to eq(analizo_metric_collector_list.parsed['total_abstract_classes'].name)
       end
     end
 
+    describe 'collect_metrics' do
+      let(:parsed_results) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["parsed"] }
+      let(:native_metric) { FactoryGirl.build(:analizo_native_metric) }
+      let(:wanted_metrics_list) { ["total_abstract_classes", "amloc"] }
+      let!(:wanted_metrics) { {"total_abstract_classes" => native_metric} }
+
+      let(:processing) { FactoryGirl.build(:processing) }
+      let!(:absolute_path) { "app/models/metric.rb" }
+      let!(:result) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["result"] }
+
+      before :each do
+        subject.expects(:`).with("analizo metrics #{absolute_path}").returns(result)
+
+        subject.expects(:wanted_metrics=).with(wanted_metrics_list).returns(wanted_metrics)
+        subject.expects(:parse).with(result).returns(parsed_results)
+      end
+
+      it 'should collect the metrics for a given project' do
+        expect(subject.collect_metrics(absolute_path, wanted_metrics_list, processing)).to eq(parsed_results)
+      end
+    end
+=begin
     describe 'metric_list' do
       context 'when the collector is installed on the computer' do
         let!(:list) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["list"] }
@@ -225,24 +247,6 @@ describe AnalizoMetricCollector, :type => :model do
         expect(subject.parse(results)).to eq(response)
       end
     end
-
-    describe 'collect_metrics' do
-      let(:absolute_path) { "app/models/metric.rb" }
-      let!(:results) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["result"] }
-      let(:parsed_results) { YAML.load_file('spec/factories/analizo_metric_collector.yml')["parsed"] }
-      let(:native_metric) { FactoryGirl.build(:analizo_native_metric) }
-      let(:wanted_metrics_list) { ["total_abstract_classes", "amloc"] }
-      let!(:wanted_metrics) { {"total_abstract_classes" => native_metric} }
-
-      before :each do
-        subject.expects(:wanted_metrics=).with(wanted_metrics_list).returns(wanted_metrics)
-        subject.expects(:analizo_results).returns(results)
-        subject.expects(:parse).with(results).returns(parsed_results)
-      end
-
-      it 'should collect the metrics for a given project' do
-        expect(subject.collect_metrics(absolute_path, wanted_metrics_list)).to eq(parsed_results)
-      end
-    end
+=end
   end
 end

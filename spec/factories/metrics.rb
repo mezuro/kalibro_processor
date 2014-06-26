@@ -2,7 +2,7 @@ FactoryGirl.define  do
   factory :metric do
     compound false
     name "Total Abstract Classes"
-    scope { FactoryGirl.build(:granularity) }
+    scope { :SOFTWARE }
     description "Total Abstract Classes"
 
     initialize_with { Metric.new(compound, name, scope) }

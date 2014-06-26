@@ -6,5 +6,6 @@ FactoryGirl.define do
     process_times {[FactoryGirl.build(:process_time)]}
     root_module_result_id 13
     repository { FactoryGirl.build(:repository) }
+    module_results { [] }
   end
 end

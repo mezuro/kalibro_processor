@@ -2,12 +2,6 @@ require 'rails_helper'
 
 describe MetricCollector, :type => :model do
   describe 'method' do
-    describe 'name' do
-      it 'should raise a NotImplementedError' do
-        expect { subject.name }.to raise_error(NotImplementedError)
-      end
-    end
-
     describe 'description' do
       it 'should raise a NotImplementedError' do
         expect { subject.description }.to raise_error(NotImplementedError)

@@ -1,5 +1,8 @@
 class MetricCollector
-  def name; raise NotImplementedError; end
+  def initialize
+    @wanted_metrics = {}
+    @processing = nil
+  end
 
   def description; raise NotImplementedError; end
 

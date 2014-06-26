@@ -14,7 +14,7 @@ class Runner
     processing = Processing.create(repository: self.repository, state: "LOADING")
     self.repository.code_directory = generate_dir_name
     Repository::TYPES[self.repository.scm_type.upcase].retrieve!(self.repository.address, self.repository.code_directory)
-    wanted_metrics_list
+    metrics_list
   end
 
   private
@@ -29,7 +29,7 @@ class Runner
     return dir
   end
 
-  def wanted_metrics_list
+  def metrics_list
     metric_configurations = KalibroGatekeeperClient::Entities::MetricConfiguration.metric_configurations_of(self.repository.configuration.id)
     metric_configurations.each do |metric_configuration|
       if metric_configuration.metric.compound

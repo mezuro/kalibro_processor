@@ -8,5 +8,6 @@ RSpec.describe Processing, :type => :model do
           class_name('ModuleResult')
         }
     it {is_expected.to have_many(:process_times)}
+    it {is_expected.to have_many(:module_results)}
   end
 end

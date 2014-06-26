@@ -1,13 +1,25 @@
 class AnalizoMetricCollector < MetricCollector
-  attr_reader :description, :supported_metrics
-  attr_accessor :wanted_metrics
+  @@description = YAML.load_file("#{Rails.root}/config/collectors_descriptions.yml")["analizo"]
+  @@supported_metrics = nil
 
-  def initialize
-    @description = YAML.load_file('config/collectors_descriptions.yml')["analizo"]
+  def self.supported_metrics
+    @@supported_metrics ||= parse_supported_metrics
   end
 
-  def supported_metrics
-    @supported_metrics ||= parse_supported_metrics
+  def self.description
+    @@description
+  end
+
+  def collect_metrics(code_directory, wanted_metrics, processing)
+    self.wanted_metrics = wanted_metrics
+    self.processing = processing
+    parse(analizo_results(code_directory))
+  end
+
+  private
+
+  def processing=(processing)
+    @processing = processing
   end
 
   def wanted_metrics=(wanted_metrics_list)
@@ -19,24 +31,20 @@ class AnalizoMetricCollector < MetricCollector
     end
   end
 
-  def name
-    "Analizo"
-  end
-
-  def metric_list
+  def self.metric_list
     list = `analizo metrics --list`
-    raise Errors::NotFoundError.new("BaseTool #{name} not found") if list.nil?
+    raise Errors::NotFoundError.new("BaseTool Analizo not found") if list.nil?
     list
   end
 
   def analizo_results(absolute_path)
     results = `analizo metrics #{absolute_path}`
-    raise Errors::NotFoundError.new("BaseTool #{name} not found") if results.nil?
+    raise Errors::NotFoundError.new("BaseTool Analizo not found") if results.nil?
     raise Errors::NotReadableError.new("Directory not readable") if results.empty?
     results
   end
 
-  def parse_supported_metrics
+  def self.parse_supported_metrics
     supported_metrics = {}
     analizo_metric_list = metric_list
     analizo_metric_list.each_line do |line|
@@ -75,8 +83,4 @@ class AnalizoMetricCollector < MetricCollector
     end
   end
 
-  def collect_metrics(code_directory, wanted_metrics)
-    self.wanted_metrics = wanted_metrics
-    parse analizo_results
-  end
 end

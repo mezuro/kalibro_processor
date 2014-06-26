@@ -1,6 +1,3 @@
-list:
-  "Global Metrics:\ntotal_abstract_classes - Total Abstract Classes\nModule Metrics:\nacc - Afferent Connections per Class (used to calculate COF - Coupling Factor)"
-
 result:
   "---\nuav_variance: 0\n---\n_filename:\n  - Class.rb\n_module: My::Software::Module\nacc: 0"
 
