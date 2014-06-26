@@ -25,9 +25,5 @@ class Repository < ActiveRecord::Base
     self.configuration_id = conf.id
   end
 
-	def complete_name
-		self.project.name + "-" + self.name
-	end
-
   def process; raise NotImplementedError; end
 end

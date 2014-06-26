@@ -46,14 +46,6 @@ describe Repository, :type => :model do
       end
     end
 
-    describe 'complete_name' do
-      subject { FactoryGirl.build(:repository) }
-
-      it 'should return a concatenation of the project and repository name' do
-        expect(subject.complete_name).to eq(subject.project.name + "-" + subject.name)
-      end
-    end
-
     describe 'process' do
       it 'is expected to raise a NotImplementedError' do
         expect{ subject.process }.to raise_error(NotImplementedError)
