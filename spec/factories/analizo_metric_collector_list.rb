@@ -1,5 +1,5 @@
 class AnalizoMetricCollectorList
-  attr_accessor :raw, :parsed
+  attr_accessor :raw, :parsed, :raw_result, :parsed_result
 end
 
 FactoryGirl.define do
@@ -10,5 +10,7 @@ FactoryGirl.define do
             "acc" =>
               FactoryGirl.build(:analizo_native_metric, name: "Afferent Connections per Class (used to calculate COF - Coupling Factor)", description: "", scope: :CLASS)
            }}
+    raw_result "---\nuav_variance: 0\n---\n_filename:\n  - Class.rb\n_module: My::Software::Module\nacc: 0"
+    parsed_result { [{"uav_variance"=>0}, {"_filename"=>["Class.rb"], "_module"=>"My::Software::Module", "acc"=>0}] }
   end
 end

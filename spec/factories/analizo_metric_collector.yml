@@ -1,5 +1,0 @@
-result:
-  "---\nuav_variance: 0\n---\n_filename:\n  - Class.rb\n_module: My::Software::Module\nacc: 0"
-
-parsed:
-  "[{\"uav_variance\"=>0}, {\"_filename\"=>[\"Class.rb\"], \"_module\"=>\"My::Software::Module\", \"acc\"=>0}]"

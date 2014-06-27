@@ -24,11 +24,15 @@ class AnalizoMetricCollector < MetricCollector
 
   def wanted_metrics=(wanted_metrics_list)
     @wanted_metrics = {}
-    self.supported_metrics.each do |code, metric|
+    self.class.supported_metrics.each do |code, metric|
       if wanted_metrics_list.include?(code)
         @wanted_metrics[code] = metric
       end
     end
+  end
+
+  def wanted_metrics
+    @wanted_metrics
   end
 
   def self.metric_list
@@ -59,7 +63,7 @@ class AnalizoMetricCollector < MetricCollector
   end
 
   def new_metric_result(module_result, code, value)
-    MetricResult.create(metric: self.wanted_metrics[code], value: value.to_f, module_result: module_result)
+    MetricResult.create(metric: wanted_metrics[code], value: value.to_f, module_result: module_result)
   end
 
   def new_module_result(result_map)
@@ -72,7 +76,7 @@ class AnalizoMetricCollector < MetricCollector
   def parse_single_result(result_map)
     module_result = new_module_result(result_map)
     result_map.each do |code, value|
-       new_metric_result(module_result, code, value) if (self.wanted_metrics[code])
+      new_metric_result(module_result, code, value) if (wanted_metrics[code])
     end
     module_result
   end
