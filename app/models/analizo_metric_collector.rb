@@ -18,23 +18,6 @@ class AnalizoMetricCollector < MetricCollector
 
   private
 
-  def processing=(processing)
-    @processing = processing
-  end
-
-  def wanted_metrics=(wanted_metrics_list)
-    @wanted_metrics = {}
-    self.class.supported_metrics.each do |code, metric|
-      if wanted_metrics_list.include?(code)
-        @wanted_metrics[code] = metric
-      end
-    end
-  end
-
-  def wanted_metrics
-    @wanted_metrics
-  end
-
   def self.metric_list
     list = `analizo metrics --list`
     raise Errors::NotFoundError.new("BaseTool Analizo not found") if list.nil?
@@ -66,15 +49,14 @@ class AnalizoMetricCollector < MetricCollector
     MetricResult.create(metric: wanted_metrics[code], value: value.to_f, module_result: module_result)
   end
 
-  def new_module_result(result_map)
-    module_name = result_map["_module"]
+  def new_module_result(module_name)
     granularity = module_name.nil? ? Granularity::SOFTWARE : Granularity::CLASS
     kalibro_module = KalibroModule.new(granularity: granularity, name: module_name.to_s.split(/:+/))
-    ModuleResult.create(kalibro_module: kalibro_module)
+    ModuleResult.create(kalibro_module: kalibro_module, processing: processing)
   end
 
   def parse_single_result(result_map)
-    module_result = new_module_result(result_map)
+    module_result = new_module_result(result_map['_module'])
     result_map.each do |code, value|
       new_metric_result(module_result, code, value) if (wanted_metrics[code])
     end
@@ -86,5 +68,4 @@ class AnalizoMetricCollector < MetricCollector
       parse_single_result(hash)
     end
   end
-
 end
