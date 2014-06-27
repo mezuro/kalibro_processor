@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Downloaders::GitDownloader, :type => :model do
   describe 'method' do
     describe 'available?' do
-      context 'with git installed' do
+      context 'with git installed and running init in a valid directory' do
         before :each do
           Git.expects(:init).returns(true)
         end
@@ -13,12 +13,12 @@ describe Downloaders::GitDownloader, :type => :model do
         end
       end
 
-      context 'with git installed' do
+      context 'with git not installed or running init in an invalid directory' do
         before :each do
           Git.expects(:init).raises(Git::GitExecuteError)
         end
 
-        it 'is expected to be true' do
+        it 'is expected to be false' do
           expect(subject.class.available?).to be_falsey
         end
       end
