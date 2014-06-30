@@ -12,9 +12,21 @@ class Runner
 
   def run
     processing = Processing.create(repository: self.repository, state: "LOADING")
+
     self.repository.code_directory = generate_dir_name
     Repository::TYPES[self.repository.scm_type.upcase].retrieve!(self.repository.address, self.repository.code_directory)
+
     metrics_list
+
+    self.native_metrics.each do |base_tool_name, wanted_metrics|
+      unless wanted_metrics.empty?
+        BASE_TOOLS[base_tool_name].new.
+          collect_metrics(repository.code_directory,
+                          wanted_metrics.map {|metric_configuration| metric_configuration.code},
+                          processing)
+      end
+    end
+
   end
 
   private
