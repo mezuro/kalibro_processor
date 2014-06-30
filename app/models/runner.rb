@@ -11,12 +11,17 @@ class Runner
   end
 
   def run
-    processing = Processing.create(repository: self.repository, state: "LOADING")
+
+    processing = Processing.create(repository: self.repository, state: "PREPARING")
 
     self.repository.update(code_directory: generate_dir_name)
+    metrics_list
+
+    processing.update(state: "DOWNLOADING")
+
     Repository::TYPES[self.repository.scm_type.upcase].retrieve!(self.repository.address, self.repository.code_directory)
 
-    metrics_list
+    processing.update(state: "COLLECTING")
 
     self.native_metrics.each do |base_tool_name, wanted_metrics|
       unless wanted_metrics.empty?
@@ -27,6 +32,10 @@ class Runner
       end
     end
 
+    processing.update(state: "BUILDING")
+    processing.update(state: "AGGREGATING")
+    processing.update(state: "ANALYZING")
+    processing.update(state: "READY")
   end
 
   private
