@@ -1,0 +1,4 @@
+svn_version:
+  "svn, version 1.6.17 (r1128011)\n\n   compiled Jun 26 2013, 20:44:36\n\nCopyright (C) 2000-2009 CollabNet.\nSubversion is open source software, see http://subversion.apache.org/\nThis product includes software developed by CollabNet (http://www.Collab.Net/).\n\nThe following repository access (RA) modules are available:\n\n* ra_neon : Module for accessing a repository via WebDAV protocol using Neon.\n  - handles 'http' scheme\n  - handles 'https' scheme\n* ra_svn : Module for accessing a repository using the svn network protocol.\n  - with Cyrus SASL authentication\n  - handles 'svn' scheme\n* ra_local : Module for accessing a repository on local disk.\n  - handles 'file' scheme\n\n"
+svn_checkout:
+  "A    qt-calculator/main.cpp\nA    qt-calculator/MyDialog.cpp\nA    qt-calculator/calculator.pro\nA    qt-calculator/MyDialog.h\nA    qt-calculator/dialog.ui\n U   directory\nChecked out revision 21."

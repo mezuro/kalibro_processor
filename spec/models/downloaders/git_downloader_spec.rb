@@ -54,7 +54,7 @@ describe Downloaders::GitDownloader, :type => :model do
         end
       end
 
-      context "when the directory doesn't exists" do
+      context "when the directory doesn't exist" do
         before :each do
           Dir.expects(:exist?).with(directory).at_least_once.returns(false)
         end

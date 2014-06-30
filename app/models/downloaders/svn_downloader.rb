@@ -13,6 +13,5 @@ module Downloaders
 
     def self.updatable?; true; end
 
-    
   end
 end
