@@ -13,7 +13,7 @@ class Runner
   def run
     processing = Processing.create(repository: self.repository, state: "LOADING")
 
-    self.repository.code_directory = generate_dir_name
+    self.repository.update(code_directory: generate_dir_name)
     Repository::TYPES[self.repository.scm_type.upcase].retrieve!(self.repository.address, self.repository.code_directory)
 
     metrics_list

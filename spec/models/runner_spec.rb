@@ -24,6 +24,9 @@ describe Runner, :type => :model do
           Dir.expects(:exists?).with(code_dir).returns(false)
           Downloaders::GitDownloader.expects(:retrieve!).with(repository.address, code_dir).returns true
           repository.expects(:configuration).at_least_once.returns(configuration)
+          repository_clone = repository.clone
+          repository_clone.code_directory = code_dir
+          repository.expects(:update).with(code_directory: code_dir).returns(repository_clone)
           KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:metric_configurations_of).
             with(configuration.id).returns([metric_configuration, compound_metric_configuration])
           AnalizoMetricCollector.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration.code], processing)
