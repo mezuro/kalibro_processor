@@ -51,7 +51,12 @@ class AnalizoMetricCollector < MetricCollector
 
   def new_module_result(module_name)
     granularity = module_name.nil? ? Granularity::SOFTWARE : Granularity::CLASS
-    kalibro_module = KalibroModule.new(granularity: granularity, name: module_name.to_s.split(/:+/))
+    module_name = module_name.to_s.split(/:+/)
+    kalibro_module = ModuleResult.joins(:kalibro_module).
+                        where(processing: self.processing).
+                        where("kalibro_modules.name" => module_name).
+                        where("kalibro_modules.granularity" => granularity.to_s).first
+    kalibro_module ||= KalibroModule.new(granularity: granularity, name: module_name)
     ModuleResult.create(kalibro_module: kalibro_module, processing: processing)
   end
 

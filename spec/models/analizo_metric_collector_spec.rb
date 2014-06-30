@@ -36,6 +36,14 @@ describe AnalizoMetricCollector, :type => :model do
         MetricResult.expects(:create).with(metric: native_metric,
                                            value: analizo_metric_collector_list.parsed_result[1]["acc"],
                                            module_result: module_result).returns(FactoryGirl.build(:metric_result))
+
+        name_filtered_results = Object.new
+        name_filtered_results.expects(:where).at_least_once.returns([])
+        processing_filtered_results = Object.new
+        processing_filtered_results.expects(:where).at_least_once.returns(name_filtered_results)
+        join_result = Object.new
+        join_result.expects(:where).with(processing: processing).at_least_once.returns(processing_filtered_results)
+        ModuleResult.expects(:joins).at_least_once.with(:kalibro_module).returns(join_result)
       end
 
       it 'should collect the metrics for a given project' do
