@@ -16,20 +16,15 @@ describe Runner, :type => :model do
       end
 
       context 'when the base directory exists' do
+        include RunnerMockHelper
         let!(:code_dir) { "/tmp/test" }
+        let!(:module_result) { FactoryGirl.build(:module_result) }
 
         before :each do
-          Dir.expects(:exists?).with("/tmp").at_least_once.returns(true)
-          Digest::MD5.expects(:hexdigest).returns("test")
-          Dir.expects(:exists?).with(code_dir).returns(false)
-          Downloaders::GitDownloader.expects(:retrieve!).with(repository.address, code_dir).returns true
-          repository.expects(:configuration).at_least_once.returns(configuration)
-          repository_clone = repository.clone
-          repository_clone.code_directory = code_dir
-          repository.expects(:update).with(code_directory: code_dir).returns(repository_clone)
-          KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:metric_configurations_of).
-            with(configuration.id).returns([metric_configuration, compound_metric_configuration])
-          AnalizoMetricCollector.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration.code], processing)
+          preparing_state_mocks
+          downloading_state_mocks
+          collecting_state_mocks
+          building_state_mocks
         end
 
         it 'should run' do

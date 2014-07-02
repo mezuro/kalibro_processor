@@ -26,6 +26,9 @@ class Runner
     collect(processing)
 
     processing.update(state: "BUILDING")
+
+    build_tree(processing)
+
     processing.update(state: "AGGREGATING")
     processing.update(state: "ANALYZING")
     processing.update(state: "READY")
@@ -63,5 +66,18 @@ class Runner
                           processing)
       end
     end
+  end
+
+  def build_tree(processing)
+    offset = 0
+    module_result = module_result_batch(processing, offset)
+    while !module_result.empty?
+      offset += 100
+      module_result = module_result_batch(processing, offset)
+    end
+  end
+
+  def module_result_batch(processing, offset)
+    ModuleResult.where(processing: processing).limit(100).offset(offset)
   end
 end
