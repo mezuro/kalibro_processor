@@ -32,24 +32,30 @@ describe Downloaders::SvnDownloader, :type => :model do
       context "when the directory doesn't exist" do
         let!(:svn_checkout) { YAML.load_file('spec/factories/svn_downloader.yml')["svn_checkout"] }
         let!(:command) { "svn checkout #{address} #{directory}" }
+        
         before :each do
           Dir.expects(:exist?).with(directory).at_least_once.returns(false)
         end
-        context "and the checkout works" do
-          it 'is expected to checkout the repository' do
-            pending "check return value of checkout"
-            subject.class.expects(:`).with(command).returns(svn_checkout)
+        
+        it 'is expected to checkout the repository' do
+          subject.class.expects(:`).with(command).returns(svn_checkout)
 
-            subject.class.retrieve!(address, directory)
-          end
+          subject.class.retrieve!(address, directory)
         end
-        context "and the checkout doesn't work" do
-          it 'is expected to raise an exception' do
-            pending "choose an exception to raise"
-            subject.class.expects(:`).with(command).returns(svn_checkout)
+      end
 
-            subject.class.retrieve!(address, directory)
-          end
+      context "when the directory exists" do
+        let!(:svn_revert_command) { "svn revert -R #{directory}" }
+        let!(:svn_update_command) { "svn update #{directory}" }
+        
+        before :each do
+          Dir.expects(:exist?).with(directory).at_least_once.returns(true)
+          subject.class.expects(:`).with(svn_revert_command).returns(nil)
+          subject.class.expects(:`).with(svn_update_command).returns(nil)
+        end
+
+        it 'should revert the directory changes and update it to the last version (reset)' do
+          expect(subject.class.get(address, directory)).to eq(nil)
         end
       end
     end
