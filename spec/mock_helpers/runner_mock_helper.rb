@@ -22,15 +22,18 @@ module RunnerMockHelper
   def building_state_mocks
     filtered_module_results = Object.new
     module_result_limits = Object.new
+    module_result.expects(:update).with(parent: module_result).returns true
     module_result_limits.expects(:offset).with(0).returns([module_result])
     module_result_limits.expects(:offset).with(100).returns([])
     filtered_module_results.expects(:limit).at_least_once.with(100).returns(module_result_limits)
     ModuleResult.expects(:where).with(processing: processing).at_least_once.returns(filtered_module_results)
+    module_result.kalibro_module.expects(:parent).returns(kalibro_module)
+    find_module_result_mocks([module_result])
   end
 
-  def find_module_result_mocks
+  def find_module_result_mocks(found_module_results=[])
     name_filtered_results = Object.new
-    name_filtered_results.expects(:where).at_least_once.returns([])
+    name_filtered_results.expects(:where).at_least_once.returns(found_module_results)
     processing_filtered_results = Object.new
     processing_filtered_results.expects(:where).at_least_once.returns(name_filtered_results)
     join_result = Object.new

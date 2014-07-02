@@ -70,10 +70,18 @@ class Runner
 
   def build_tree(processing)
     offset = 0
-    module_result = module_result_batch(processing, offset)
-    while !module_result.empty?
+    module_results = module_result_batch(processing, offset)
+    while !module_results.empty?
+      module_results.each do |module_result|
+        parent_module = module_result.kalibro_module.parent
+        parent_module_result = ModuleResult.joins(:kalibro_module).
+                        where(processing: processing).
+                        where("kalibro_modules.name" => parent_module.long_name).
+                        where("kalibro_modules.granularity" => parent_module.granularity.to_s).first
+        module_result.update(parent: parent_module_result)
+      end
       offset += 100
-      module_result = module_result_batch(processing, offset)
+      module_results = module_result_batch(processing, offset)
     end
   end
 

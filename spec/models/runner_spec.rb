@@ -19,6 +19,7 @@ describe Runner, :type => :model do
         include RunnerMockHelper
         let!(:code_dir) { "/tmp/test" }
         let!(:module_result) { FactoryGirl.build(:module_result) }
+        let!(:kalibro_module) {FactoryGirl.build(:kalibro_module) }
 
         before :each do
           preparing_state_mocks
