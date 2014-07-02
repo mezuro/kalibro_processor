@@ -27,4 +27,14 @@ module RunnerMockHelper
     filtered_module_results.expects(:limit).at_least_once.with(100).returns(module_result_limits)
     ModuleResult.expects(:where).with(processing: processing).at_least_once.returns(filtered_module_results)
   end
+
+  def find_module_result_mocks
+    name_filtered_results = Object.new
+    name_filtered_results.expects(:where).at_least_once.returns([])
+    processing_filtered_results = Object.new
+    processing_filtered_results.expects(:where).at_least_once.returns(name_filtered_results)
+    join_result = Object.new
+    join_result.expects(:where).with(processing: processing).at_least_once.returns(processing_filtered_results)
+    ModuleResult.expects(:joins).at_least_once.with(:kalibro_module).returns(join_result)
+  end
 end

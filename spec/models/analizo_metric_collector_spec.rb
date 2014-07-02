@@ -21,6 +21,7 @@ describe AnalizoMetricCollector, :type => :model do
     end
 
     describe 'collect_metrics' do
+      include RunnerMockHelper
       let!(:wanted_metrics) { {"acc" => native_metric} }
       let!(:absolute_path) { "app/models/metric.rb" }
       let!(:module_result) { FactoryGirl.build(:module_result) }
@@ -37,13 +38,7 @@ describe AnalizoMetricCollector, :type => :model do
                                            value: analizo_metric_collector_list.parsed_result[1]["acc"],
                                            module_result: module_result).returns(FactoryGirl.build(:metric_result))
 
-        name_filtered_results = Object.new
-        name_filtered_results.expects(:where).at_least_once.returns([])
-        processing_filtered_results = Object.new
-        processing_filtered_results.expects(:where).at_least_once.returns(name_filtered_results)
-        join_result = Object.new
-        join_result.expects(:where).with(processing: processing).at_least_once.returns(processing_filtered_results)
-        ModuleResult.expects(:joins).at_least_once.with(:kalibro_module).returns(join_result)
+        find_module_result_mocks
       end
 
       it 'should collect the metrics for a given project' do
