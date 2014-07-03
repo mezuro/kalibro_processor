@@ -18,10 +18,12 @@ describe Repository, :type => :model do
     describe 'supported_types' do
       before :each do
         Downloaders::GitDownloader.expects(:available?).at_least_once.returns(true)
+        Downloaders::SvnDownloader.expects(:available?).at_least_once.returns(true)
       end
 
       it 'should add available repository types to supported_types and return them' do
         expect(Repository.supported_types).to include(:GIT)
+        expect(Repository.supported_types).to include(:SVN)
       end
     end
 

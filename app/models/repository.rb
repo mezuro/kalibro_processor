@@ -9,7 +9,7 @@ class Repository < ActiveRecord::Base
   validates :configuration_id, presence: true
   validates :project_id, presence: true
 
-  TYPES = {GIT: Downloaders::GitDownloader}
+  TYPES = {GIT: Downloaders::GitDownloader, SVN: Downloaders::SvnDownloader}
 
   def self.supported_types
     supported_types = []
