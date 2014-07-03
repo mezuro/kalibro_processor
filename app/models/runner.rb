@@ -74,11 +74,15 @@ class Runner
     while !module_results.empty?
       module_results.each do |module_result|
         parent_module = module_result.kalibro_module.parent
-        parent_module_result = ModuleResult.joins(:kalibro_module).
-                        where(processing: processing).
-                        where("kalibro_modules.name" => parent_module.long_name).
-                        where("kalibro_modules.granularity" => parent_module.granularity.to_s).first
-        module_result.update(parent: parent_module_result)
+        if parent_module.nil?
+          processing.update(root_module_result: module_result)
+        else
+          parent_module_result = ModuleResult.joins(:kalibro_module).
+                          where(processing: processing).
+                          where("kalibro_modules.name" => parent_module.long_name).
+                          where("kalibro_modules.granularity" => parent_module.granularity.to_s).first
+          module_result.update(parent: parent_module_result)
+        end
       end
       offset += 100
       module_results = module_result_batch(processing, offset)

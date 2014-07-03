@@ -18,7 +18,8 @@ describe Runner, :type => :model do
       context 'when the base directory exists' do
         include RunnerMockHelper
         let!(:code_dir) { "/tmp/test" }
-        let!(:module_result) { FactoryGirl.build(:module_result) }
+        let!(:root_module_result) { FactoryGirl.build(:module_result) }
+        let!(:module_result) { FactoryGirl.build(:module_result_class_granularity) }
         let!(:kalibro_module) {FactoryGirl.build(:kalibro_module) }
 
         before :each do
@@ -26,6 +27,9 @@ describe Runner, :type => :model do
           downloading_state_mocks
           collecting_state_mocks
           building_state_mocks
+          processing.expects(:update).with(state: "AGGREGATING")
+          processing.expects(:update).with(state: "ANALYZING")
+          processing.expects(:update).with(state: "READY")
         end
 
         it 'should run' do

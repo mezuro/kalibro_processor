@@ -8,6 +8,7 @@ module RunnerMockHelper
   end
 
   def downloading_state_mocks
+    processing.expects(:update).with(state: "DOWNLOADING")
     Downloaders::GitDownloader.expects(:retrieve!).with(repository.address, code_dir).returns true
     repository.expects(:configuration).at_least_once.returns(configuration)
     repository_clone = repository.clone
@@ -16,19 +17,23 @@ module RunnerMockHelper
   end
 
   def collecting_state_mocks
+    processing.expects(:update).with(state: "COLLECTING")
     AnalizoMetricCollector.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration.code], processing)
   end
 
   def building_state_mocks
+    processing.expects(:update).with(state: "BUILDING")
     filtered_module_results = Object.new
     module_result_limits = Object.new
-    module_result.expects(:update).with(parent: module_result).returns true
-    module_result_limits.expects(:offset).with(0).returns([module_result])
+    module_result.expects(:update).with(parent: root_module_result).returns(true)
+    module_result_limits.expects(:offset).with(0).returns([module_result, root_module_result])
     module_result_limits.expects(:offset).with(100).returns([])
     filtered_module_results.expects(:limit).at_least_once.with(100).returns(module_result_limits)
     ModuleResult.expects(:where).with(processing: processing).at_least_once.returns(filtered_module_results)
-    module_result.kalibro_module.expects(:parent).returns(kalibro_module)
-    find_module_result_mocks([module_result])
+    module_result.kalibro_module.expects(:parent).returns(root_module_result.kalibro_module)
+    find_module_result_mocks([root_module_result])
+    root_module_result.kalibro_module.expects(:parent).returns(nil)
+    processing.expects(:update).with(root_module_result: root_module_result).returns(true)
   end
 
   def find_module_result_mocks(found_module_results=[])
