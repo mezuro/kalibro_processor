@@ -1,5 +1,5 @@
 class Runner
-  attr_accessor :repository, :native_metrics, :compound_metrics
+  attr_accessor :repository, :native_metrics, :compound_metrics, :processing
 
   BASE_TOOLS = {"Analizo" => AnalizoMetricCollector}
 
@@ -11,27 +11,26 @@ class Runner
   end
 
   def run
-
-    processing = Processing.create(repository: self.repository, state: "PREPARING")
+    self.processing = Processing.create(repository: self.repository, state: "PREPARING")
 
     self.repository.update(code_directory: generate_dir_name)
     metrics_list
 
-    processing.update(state: "DOWNLOADING")
+    self.processing.update(state: "DOWNLOADING")
 
     Repository::TYPES[self.repository.scm_type.upcase].retrieve!(self.repository.address, self.repository.code_directory)
 
-    processing.update(state: "COLLECTING")
+    self.processing.update(state: "COLLECTING")
 
-    collect(processing)
+    collect
 
-    processing.update(state: "BUILDING")
+    self.processing.update(state: "BUILDING")
 
-    build_tree(processing)
+    build_tree
 
-    processing.update(state: "AGGREGATING")
-    processing.update(state: "ANALYZING")
-    processing.update(state: "READY")
+    self.processing.update(state: "AGGREGATING")
+    self.processing.update(state: "ANALYZING")
+    self.processing.update(state: "READY")
   end
 
   private
@@ -57,39 +56,43 @@ class Runner
     end
   end
 
-  def collect(processing)
+  def collect
     self.native_metrics.each do |base_tool_name, wanted_metrics|
       unless wanted_metrics.empty?
         BASE_TOOLS[base_tool_name].new.
           collect_metrics(repository.code_directory,
                           wanted_metrics.map {|metric_configuration| metric_configuration.code},
-                          processing)
+                          self.processing)
       end
     end
   end
 
-  def build_tree(processing)
+  def build_tree
     offset = 0
-    module_results = module_result_batch(processing, offset)
+    module_results = module_result_batch(self.processing, offset)
     while !module_results.empty?
       module_results.each do |module_result|
-        parent_module = module_result.kalibro_module.parent
-        if parent_module.nil?
-          processing.update(root_module_result: module_result)
-        else
-          parent_module_result = ModuleResult.joins(:kalibro_module).
-                          where(processing: processing).
-                          where("kalibro_modules.name" => parent_module.long_name).
-                          where("kalibro_modules.granularity" => parent_module.granularity.to_s).first
-          module_result.update(parent: parent_module_result)
-        end
+        set_parent(module_result)
       end
       offset += 100
-      module_results = module_result_batch(processing, offset)
+      module_results = module_result_batch(self.processing, offset)
     end
   end
 
   def module_result_batch(processing, offset)
-    ModuleResult.where(processing: processing).limit(100).offset(offset)
+    ModuleResult.where(processing: self.processing).limit(100).offset(offset)
+  end
+
+  def set_parent(module_result)
+    parent_module = module_result.kalibro_module.parent
+    if parent_module.nil?
+      self.processing.update(root_module_result: module_result)
+    else
+      parent_module_result = ModuleResult.joins(:kalibro_module).
+                      where(processing: self.processing).
+                      where("kalibro_modules.name" => parent_module.long_name).
+                      where("kalibro_modules.granularity" => parent_module.granularity.to_s).first
+      module_result.update(parent: parent_module_result)
+    end
   end
 end
