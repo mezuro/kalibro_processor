@@ -32,11 +32,11 @@ describe Downloaders::SvnDownloader, :type => :model do
       context "when the directory doesn't exist" do
         let!(:svn_checkout) { YAML.load_file('spec/factories/svn_downloader.yml')["svn_checkout"] }
         let!(:command) { "svn checkout #{address} #{directory}" }
-        
+
         before :each do
           Dir.expects(:exist?).with(directory).at_least_once.returns(false)
         end
-        
+
         it 'is expected to checkout the repository' do
           subject.class.expects(:`).with(command).returns(svn_checkout)
 
@@ -47,7 +47,7 @@ describe Downloaders::SvnDownloader, :type => :model do
       context "when the directory exists" do
         let!(:svn_revert_command) { "svn revert -R #{directory}" }
         let!(:svn_update_command) { "svn update #{directory}" }
-        
+
         before :each do
           Dir.expects(:exist?).with(directory).at_least_once.returns(true)
           subject.class.expects(:`).with(svn_revert_command).returns(nil)
