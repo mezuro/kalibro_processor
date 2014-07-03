@@ -65,3 +65,9 @@ end
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
 require "#{File.dirname(__FILE__)}/hooks"
+
+# KalibroGatekeeper hooks
+require 'kalibro_gatekeeper_client/kalibro_cucumber_helpers/hooks.rb'
+
+# Configuring the right hooks
+KalibroGatekeeperClient::KalibroCucumberHelpers.configure_from_yml("#{__dir__}/kalibro_cucumber_helpers.yml")

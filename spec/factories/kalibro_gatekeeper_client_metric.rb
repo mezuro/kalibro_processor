@@ -9,6 +9,15 @@ FactoryGirl.define  do
       compound true
     end
 
+    trait :loc do
+      name "Lines of Code"
+      scope "CLASS"
+      description nil
+      language ["C", "CPP", "JAVA"]
+    end
+
     factory :kalibro_gatekeeper_client_compound_metric, traits: [:compound]
+
+    factory :kalibro_gatekeeper_client_loc, traits: [:loc]
   end
 end

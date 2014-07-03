@@ -37,7 +37,6 @@ describe AnalizoMetricCollector, :type => :model do
         MetricResult.expects(:create).with(metric: native_metric,
                                            value: analizo_metric_collector_list.parsed_result[1]["acc"],
                                            module_result: module_result).returns(FactoryGirl.build(:metric_result))
-
         find_module_result_mocks
       end
 

@@ -21,7 +21,7 @@ FactoryGirl.define do
     metric { FactoryGirl.build(:kalibro_gatekeeper_client_metric) }
     base_tool_name "Analizo"
     weight 1
-    aggregation_form :MEAN
+    aggregation_form :AVERAGE
     reading_group_id 1
     configuration_id 1
 

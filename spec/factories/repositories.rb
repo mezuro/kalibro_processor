@@ -10,5 +10,14 @@ FactoryGirl.define do
     period 0
     configuration { FactoryGirl.build(:configuration) }
     project { FactoryGirl.build(:project) }
+
+    trait :sbking do
+      name "SBKing"
+      scm_type "GIT"
+      address "https://git.gitorious.org/sbking/sbking.git"
+      description "SBKing"
+    end
+
+    factory :sbking_repository, traits: [:sbking]
   end
 end
