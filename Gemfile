@@ -39,9 +39,6 @@ gem 'psych', '~>2.0.5'
 # Repository cloning
 gem 'git', '~> 1.2.7'
 
-# Ruby bindings for subversion (SVN) based on FFI
-gem 'svn', '~> 0.2.0'
-
 group :test do
   # Easier test writing
   gem "shoulda-matchers", '~>2.6.1'
