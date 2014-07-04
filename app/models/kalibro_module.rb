@@ -2,20 +2,16 @@ class KalibroModule < ActiveRecord::Base
   belongs_to :module_result
 
   def name=(value)
-    @name = value
-    @name = value.join('.') if value.is_a?(Array)
+    self.long_name = value
+    self.long_name = value.join('.') if value.is_a?(Array)
   end
 
   def name
-    @name.split('.')
+    self.long_name.split('.')
   end
 
   def short_name
     name.last
-  end
-
-  def long_name
-    name.join('.')
   end
 
   def parent
@@ -25,11 +21,11 @@ class KalibroModule < ActiveRecord::Base
   end
 
   def granularity=(value)
-    @granularity = value.to_s
+    self.granlrty = value.to_s
   end
 
   def granularity
-    Granularity.new(@granularity.to_sym)
+    Granularity.new(self.granlrty.to_sym)
   end
 
   def to_s

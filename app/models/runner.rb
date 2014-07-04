@@ -90,8 +90,8 @@ class Runner
     else
       parent_module_result = ModuleResult.joins(:kalibro_module).
                       where(processing: self.processing).
-                      where("kalibro_modules.name" => parent_module.long_name).
-                      where("kalibro_modules.granularity" => parent_module.granularity.to_s).first
+                      where("kalibro_modules.long_name" => parent_module.long_name).
+                      where("kalibro_modules.granlrty" => parent_module.granularity.to_s).first
       module_result.update(parent: parent_module_result)
     end
   end

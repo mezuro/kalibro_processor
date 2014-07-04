@@ -31,7 +31,7 @@ gem 'sdoc', require: false
 gem 'spring', group: :development
 
 # Communication with other parts
-gem 'kalibro_gatekeeper_client', '~> 0.1.0'
+gem 'kalibro_gatekeeper_client', '~> 0.1.1'
 
 # YAML parser required for properly compactibility between mri and rbx
 gem 'psych', '~>2.0.5'

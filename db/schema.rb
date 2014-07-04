@@ -11,11 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140626132603) do
+ActiveRecord::Schema.define(version: 20140704025218) do
 
   create_table "kalibro_modules", force: true do |t|
-    t.string   "name"
-    t.string   "granularity"
+    t.string   "long_name"
+    t.string   "granlrty"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "module_result_id"

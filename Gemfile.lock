@@ -194,7 +194,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.4.1)
   git (~> 1.2.7)
   jbuilder (~> 2.0)
-  kalibro_gatekeeper_client (~> 0.1.0)
+  kalibro_gatekeeper_client (~> 0.1.1)
   mocha
   psych (~> 2.0.5)
   rails (= 4.1.4)

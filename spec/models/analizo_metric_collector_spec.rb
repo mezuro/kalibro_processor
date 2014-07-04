@@ -33,6 +33,7 @@ describe AnalizoMetricCollector, :type => :model do
       before :each do
         subject.expects(:`).with("analizo metrics #{absolute_path}").returns(analizo_metric_collector_list.raw_result)
         AnalizoMetricCollector.expects(:supported_metrics).returns(wanted_metrics)
+        KalibroModule.expects(:create).at_least_once.returns(FactoryGirl.build(:kalibro_module))
         ModuleResult.expects(:create).at_least_once.returns(module_result)
         MetricResult.expects(:create).with(metric: native_metric,
                                            value: analizo_metric_collector_list.parsed_result[1]["acc"],
