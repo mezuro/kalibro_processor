@@ -23,7 +23,7 @@ describe Repository, :type => :model do
 
       it 'should add available repository types to supported_types and return them' do
         expect(Repository.supported_types).to include("GIT")
-        expect(Repository.supported_types).to include(:SVN)
+        expect(Repository.supported_types).to include("SVN")
       end
     end
 
