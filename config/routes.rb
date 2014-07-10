@@ -13,6 +13,12 @@ Rails.application.routes.draw do
   get 'module_results/:id/metric_results' => 'module_results#metric_results'
   get 'module_results/:id/children' => 'module_results#children'
 
+  get 'projects' => 'projects#all'
+  get 'projects/:id' => 'projects#get'
+  get 'projects/:id/exists' => 'projects#exists'
+  put 'projects' => 'projects#save'
+  delete 'projects/:id' => 'projects#delete'
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
