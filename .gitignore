@@ -15,5 +15,7 @@
 /log/*.log
 /tmp
 
+config/repositories.yml
 config/database.yml
+features/support/kalibro_cucumber_helpers.yml
 coverage
