@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def get
+  def show
     begin
       set_project
       response = {project: @project}
