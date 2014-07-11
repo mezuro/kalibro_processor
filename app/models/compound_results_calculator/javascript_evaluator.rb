@@ -1,14 +1,19 @@
 module CompoundResultsCalculator
   class JavascriptEvaluator
-    def add_variable(identifier, value)
-      validate_identifier(identifier)
-      #TODO add variable to context
+
+    def initialize
+      @script = V8::Context.new #V8 is a JavaScript interpreter
     end
 
-    private
+    def add_variable(identifier, value)
+      validate_identifier(identifier)
+      @script[identifier] = value
+    end
+
+    #private
 
     def validate_identifier(identifier)
-      #TODO raise exception if identifier is invalid
+      raise Errors::InvalidIdentifierError.new("Invalid identifier: #{identifier}") if (identifier =~ /^[a-zA-Z_$][a-zA-Z0-9_$]*$/).nil?
     end
   end
 end
