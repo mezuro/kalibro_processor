@@ -34,6 +34,18 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def update
+    set_project
+
+    respond_to do |format|
+      if @project.update(project_params)
+        format.json { render json: {project: @project} , status: :created }
+      else
+        format.json { render json: {project: @project} , status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
 
   def set_project
