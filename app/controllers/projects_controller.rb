@@ -52,6 +52,14 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def repositories_of
+    set_project
+
+    respond_to do |format|
+      format.json { render json: {repositories: @project.repositories} }
+    end
+  end
+
   def destroy
     set_project
 

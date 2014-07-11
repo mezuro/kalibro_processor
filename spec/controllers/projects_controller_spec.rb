@@ -136,7 +136,7 @@ RSpec.describe ProjectsController, :type => :controller do
       end
     end
 
-    context 'when the project exists' do
+    context 'when the project does not exist' do
       before :each do
         Project.expects(:exists?).with(project.id).returns(false)
 
@@ -147,6 +147,39 @@ RSpec.describe ProjectsController, :type => :controller do
 
       it 'should return the error description with the project' do
         expect(JSON.parse(response.body)).to eq(JSON.parse({exists: false}.to_json))
+      end
+    end
+  end
+
+  describe 'repositories_of' do
+    context 'with at least 1 repository' do
+      let(:repository) { FactoryGirl.create(:repository, id: 1, project: project) }
+      let!(:repositories) { [repository] }
+      before :each do
+        Project.expects(:find).with(project.id).returns(project)
+
+        get :repositories_of, id: project.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return an array of repositories' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({repositories: repositories}.to_json))
+      end
+    end
+
+    context 'without repositories' do
+      let!(:repositories) { [] }
+      before :each do
+        Project.expects(:find).with(project.id).returns(project)
+
+        get :repositories_of, id: project.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return an empty array' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({repositories: repositories}.to_json))
       end
     end
   end
