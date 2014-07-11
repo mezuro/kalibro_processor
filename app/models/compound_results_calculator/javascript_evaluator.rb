@@ -10,7 +10,7 @@ module CompoundResultsCalculator
       @script[identifier] = value
     end
 
-    #private
+    private
 
     def validate_identifier(identifier)
       raise Errors::InvalidIdentifierError.new("Invalid identifier: #{identifier}") if (identifier =~ /^[a-zA-Z_$][a-zA-Z0-9_$]*$/).nil?
