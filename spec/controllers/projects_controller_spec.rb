@@ -120,4 +120,34 @@ RSpec.describe ProjectsController, :type => :controller do
       end
     end
   end
+
+  describe 'exists' do
+    context 'when the project exists' do
+      before :each do
+        Project.expects(:exists?).with(project.id).returns(true)
+
+        get :exists, id: project.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return the error description with the project' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: true}.to_json))
+      end
+    end
+
+    context 'when the project exists' do
+      before :each do
+        Project.expects(:exists?).with(project.id).returns(false)
+
+        get :exists, id: project.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return the error description with the project' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: false}.to_json))
+      end
+    end
+  end
 end

@@ -46,6 +46,12 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def exists
+    respond_to do |format|
+      format.json { render json: {exists: Project.exists?(params[:id].to_i)} }
+    end
+  end
+
   private
 
   def set_project
