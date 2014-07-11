@@ -150,4 +150,15 @@ RSpec.describe ProjectsController, :type => :controller do
       end
     end
   end
+
+  describe 'destroy' do
+    before :each do
+      project.expects(:destroy).returns(true)
+      Project.expects(:find).with(project.id).returns(project)
+
+      delete :destroy, id: project.id, format: :json
+    end
+
+    it { is_expected.to respond_with(:success) }
+  end
 end

@@ -52,6 +52,15 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def destroy
+    set_project
+
+    @project.destroy
+    respond_to do |format|
+      format.json { render json: {}, status: :ok }
+    end
+  end
+
   private
 
   def set_project
