@@ -21,8 +21,6 @@ RSpec.describe ProjectsController, :type => :controller do
 
   describe 'show' do
     context 'when the Project exists' do
-      let(:project_params) { Hash[FactoryGirl.attributes_for(:project).map { |k,v| [k.to_s, v.to_s] }] } #FIXME: Mocha is creating the expectations with strings, but FactoryGirl returns everything with sybols and integers
-
       before :each do
         Project.expects(:find).with(project.id).returns(project)
 
@@ -52,10 +50,36 @@ RSpec.describe ProjectsController, :type => :controller do
   end
 
   describe 'create' do
-    before :each do
-      Project.expects(:find).with(project.id).raises(ActiveRecord::RecordNotFound)
+    let(:project_params) { Hash[FactoryGirl.attributes_for(:project).map { |k,v| [k.to_s, v.to_s] }] } #FIXME: Mocha is creating the expectations with strings, but FactoryGirl returns everything with sybols and integers
 
-      post :create, project: project.to_hash, format: :json
+    context 'with valid attributes' do
+      before :each do
+        Project.any_instance.expects(:save).returns(true)
+
+        post :create, project: project_params, format: :json
+      end
+
+      it { is_expected.to respond_with(:created) }
+
+      it 'is expected to return the project' do
+        project.id = nil
+        expect(JSON.parse(response.body)).to eq(JSON.parse({project: project}.to_json))
+      end
+    end
+
+    context 'with invalid attributes' do
+      before :each do
+        Project.any_instance.expects(:save).returns(false)
+
+        post :create, project: project_params, format: :json
+      end
+
+      it { is_expected.to respond_with(:unprocessable_entity) }
+
+      it 'should return the error description with the project' do
+        project.id = nil
+        expect(JSON.parse(response.body)).to eq(JSON.parse({project: project}.to_json))
+      end
     end
   end
 end

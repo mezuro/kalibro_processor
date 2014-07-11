@@ -22,9 +22,25 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def create
+    project = Project.new(project_params)
+
+    respond_to do |format|
+      if project.save
+        format.json { render json: {project: project} , status: :created }
+      else
+        format.json { render json: {project: project} , status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
 
   def set_project
     @project = Project.find(params[:id].to_i)
+  end
+
+  def project_params
+    params.require(:project).permit(:name, :description)
   end
 end
