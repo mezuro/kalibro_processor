@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get 'projects' => 'projects#all'
 
   get 'base_tools' => 'base_tools#all_names'
+  get 'base_tools/:id/find' => 'base_tools#find'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
