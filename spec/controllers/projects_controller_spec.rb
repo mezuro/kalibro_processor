@@ -153,9 +153,10 @@ RSpec.describe ProjectsController, :type => :controller do
 
   describe 'repositories_of' do
     context 'with at least 1 repository' do
-      let(:repository) { FactoryGirl.create(:repository, id: 1, project: project) }
+      let!(:repository) { FactoryGirl.build(:repository, id: 1, project: project) }
       let!(:repositories) { [repository] }
       before :each do
+        project.repositories = repositories
         Project.expects(:find).with(project.id).returns(project)
 
         get :repositories_of, id: project.id, format: :json
@@ -171,6 +172,7 @@ RSpec.describe ProjectsController, :type => :controller do
     context 'without repositories' do
       let!(:repositories) { [] }
       before :each do
+        project.repositories = repositories
         Project.expects(:find).with(project.id).returns(project)
 
         get :repositories_of, id: project.id, format: :json
