@@ -5,7 +5,7 @@ class MetricResult < ActiveRecord::Base
   def aggregated_value
     values = self.descendant_values
     if self.value.nil? && !values.empty?
-      # Fix for while we're using vintage Kalibro
+      # Fix for the period while we're using vintage Kalibro
       form = self.metric_configuration.aggregation_form.to_s.downcase
       form = "mean" if form == "average"
 

@@ -29,6 +29,9 @@ class Runner
     build_tree
 
     self.processing.update(state: "AGGREGATING")
+
+    aggregate(self.processing.root_module_result)
+
     self.processing.update(state: "ANALYZING")
     self.processing.update(state: "READY")
   end
@@ -72,7 +75,7 @@ class Runner
     module_results = module_result_batch(self.processing, offset)
     while !module_results.empty?
       module_results.each do |module_result|
-        set_parent(module_result)
+        set_parent(module_result, module_results)
       end
       offset += 100
       module_results = module_result_batch(self.processing, offset)
@@ -83,16 +86,34 @@ class Runner
     ModuleResult.where(processing: self.processing).limit(100).offset(offset)
   end
 
-  def set_parent(module_result)
+  def parent_result(parent_module, module_results)
+    parent_module_result = ModuleResult.joins(:kalibro_module).
+                      where(processing: self.processing).
+                      where("kalibro_modules.long_name" => parent_module.long_name).
+                      where("kalibro_modules.granlrty" => parent_module.granularity.to_s).first
+    if parent_module_result.nil?
+      parent_module_result = ModuleResult.create(kalibro_module: parent_module, processing: self.processing)
+      #TODO: create metric results for this new module
+      module_results << parent_module_result
+    end
+
+    return parent_module_result
+  end
+
+  def set_parent(module_result, module_results)
     parent_module = module_result.kalibro_module.parent
     if parent_module.nil?
       self.processing.update(root_module_result: module_result)
     else
-      parent_module_result = ModuleResult.joins(:kalibro_module).
-                      where(processing: self.processing).
-                      where("kalibro_modules.long_name" => parent_module.long_name).
-                      where("kalibro_modules.granlrty" => parent_module.granularity.to_s).first
-      module_result.update(parent: parent_module_result)
+      module_result.update(parent: parent_result(parent_module, module_results))
     end
+  end
+
+  def aggregate(module_result)
+    unless module_result.children.empty?
+      module_result.children.each { |child| aggregate(child) }
+    end
+
+    module_result.metric_results.each { |metric_result| metric_result.update(value: metric_result.aggregated_value) }
   end
 end

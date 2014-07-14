@@ -45,4 +45,15 @@ module RunnerMockHelper
     join_result.expects(:where).with(processing: processing).at_least_once.returns(processing_filtered_results)
     ModuleResult.expects(:joins).at_least_once.with(:kalibro_module).returns(join_result)
   end
+
+  def aggregating_state_mocks
+    processing.expects(:update).with(state: "AGGREGATING")
+    metric_result.expects(:aggregated_value).returns(1.0)
+    metric_result.expects(:update).with(value: 1.0).returns(true)
+    module_result.expects(:metric_results).returns([metric_result])
+    module_result.expects(:children).returns([])
+    root_module_result.expects(:metric_results).returns([])
+    root_module_result.expects(:children).twice.returns([module_result])
+    processing.expects(:root_module_result).returns(root_module_result)
+  end
 end

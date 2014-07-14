@@ -21,13 +21,14 @@ describe Runner, :type => :model do
         let!(:root_module_result) { FactoryGirl.build(:module_result) }
         let!(:module_result) { FactoryGirl.build(:module_result_class_granularity) }
         let!(:kalibro_module) {FactoryGirl.build(:kalibro_module) }
+        let!(:metric_result) { FactoryGirl.build(:metric_result) }
 
         before :each do
           preparing_state_mocks
           downloading_state_mocks
           collecting_state_mocks
           building_state_mocks
-          processing.expects(:update).with(state: "AGGREGATING")
+          aggregating_state_mocks
           processing.expects(:update).with(state: "ANALYZING")
           processing.expects(:update).with(state: "READY")
         end
