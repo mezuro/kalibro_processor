@@ -1,6 +1,17 @@
 class RepositoriesController < ApplicationController
   def show
-    
+    begin
+      set_repository
+      response = {repository: @repository}
+      status = :ok
+    rescue ActiveRecord::RecordNotFound
+      response = {error: 'RecordNotFound'}
+      status = :unprocessable_entity
+    end
+
+    respond_to do |format|
+      format.json { render json: response, status: status }
+    end
   end
 
   def create
