@@ -36,5 +36,14 @@ describe CompoundResultsCalculator::JavascriptEvaluator, :type => :model do
         end
       end
     end
+
+    describe 'evaluate' do
+      let(:identifier) { "code" }
+
+      it 'is expected to call V8 eval method' do
+        V8::Context.any_instance.expects(:eval).with(identifier)
+        subject.evaluate(identifier)
+      end
+    end
   end
 end

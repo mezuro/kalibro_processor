@@ -16,6 +16,10 @@ module CompoundResultsCalculator
       @script.eval("#{identifier} = function (){ #{body} }")
     end
 
+    def evaluate(identifier)
+      @script.eval("#{identifier}")
+    end
+
     private
 
     def validate_identifier(identifier)
