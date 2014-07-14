@@ -1,4 +1,4 @@
-module CompoundResultsCalculator
+module CompoundResults
   class JavascriptEvaluator
 
     def initialize

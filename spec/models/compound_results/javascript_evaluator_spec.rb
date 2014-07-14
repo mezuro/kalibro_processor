@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe CompoundResultsCalculator::JavascriptEvaluator, :type => :model do
+describe CompoundResults::JavascriptEvaluator, :type => :model do
   describe 'method' do
     describe 'add_variable' do
       let(:value) { 2 }
