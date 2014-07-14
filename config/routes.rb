@@ -15,8 +15,13 @@ Rails.application.routes.draw do
 
   resources :projects, except: [:index, :new, :edit]
   get 'projects/:id/exists' => 'projects#exists'
-  get 'projects/:id/repositories_of' => 'projects#repositories_of'
   get 'projects' => 'projects#all'
+  get 'projects/:id/repositories_of' => 'projects#repositories_of'
+
+  get 'repositories/types' => 'repositories#types'
+  get 'repositories/:id/process' => 'repositories#process'
+  get 'repositories/:id/cancel_process' => 'repositories#cancel_process'
+  resources :repositories , except: [:index, :new, :edit]
 
   get 'base_tools' => 'base_tools#all_names'
   get 'base_tools/:name/find' => 'base_tools#find'
