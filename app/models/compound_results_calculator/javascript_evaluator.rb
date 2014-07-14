@@ -2,12 +2,18 @@ module CompoundResultsCalculator
   class JavascriptEvaluator
 
     def initialize
-      @script = V8::Context.new #V8 is a JavaScript interpreter
+      #V8 is a JavaScript interpreter
+      @script = V8::Context.new #FIXME: set a timeout to avoid infinite loops and cyclic dependencies
     end
 
     def add_variable(identifier, value)
       validate_identifier(identifier)
       @script[identifier] = value
+    end
+
+    def add_function(identifier, body)
+      validate_identifier(identifier)
+      @script.eval("#{identifier} = function (){ #{body} }")
     end
 
     private
