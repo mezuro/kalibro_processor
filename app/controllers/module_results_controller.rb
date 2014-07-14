@@ -27,7 +27,7 @@ class ModuleResultsController < ApplicationController
   end
 
   def format_response(record, return_value)
-      respond_to do |format|
+    respond_to do |format|
       if record.is_a?(ModuleResult)
         format.json { render json: return_value }
       else
