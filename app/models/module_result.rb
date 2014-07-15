@@ -6,7 +6,7 @@ class ModuleResult < ActiveRecord::Base
   belongs_to :processing
 
   def metric_result_for(metric)
-    metric_results.each {|metric_result| return metric_result if metric_result.metric == metric}
+    self.metric_results.each {|metric_result| return metric_result if metric_result.metric == metric}
     return nil
   end
 end

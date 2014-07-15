@@ -22,22 +22,25 @@ describe AnalizoMetricCollector, :type => :model do
 
     describe 'collect_metrics' do
       include RunnerMockHelper
-      let!(:wanted_metrics) { {"acc" => native_metric} }
+      let!(:wanted_metric_configuration) { FactoryGirl.build(:metric_configuration, metric: native_metric, code: "acc") }
+      let!(:wanted_metrics) { [wanted_metric_configuration] }
+      let!(:supported_metrics) { {"acc" => native_metric} }
       let!(:absolute_path) { "app/models/metric.rb" }
       let!(:module_result) { FactoryGirl.build(:module_result) }
 
       let(:native_metric) { FactoryGirl.build(:analizo_native_metric) }
-      let(:wanted_metrics_list) { ["acc", "amloc"] }
+      let(:wanted_metrics_list) { [wanted_metric_configuration, FactoryGirl.build(:metric_configuration, code: "amloc")] }
       let(:processing) { FactoryGirl.build(:processing) }
 
       before :each do
         subject.expects(:`).with("analizo metrics #{absolute_path}").returns(analizo_metric_collector_list.raw_result)
-        AnalizoMetricCollector.expects(:supported_metrics).returns(wanted_metrics)
+        AnalizoMetricCollector.expects(:supported_metrics).twice.returns(supported_metrics)
         KalibroModule.expects(:create).at_least_once.returns(FactoryGirl.build(:kalibro_module))
         ModuleResult.expects(:create).at_least_once.returns(module_result)
         MetricResult.expects(:create).with(metric: native_metric,
-                                           value: analizo_metric_collector_list.parsed_result[1]["acc"],
-                                           module_result: module_result).returns(FactoryGirl.build(:metric_result))
+                                           value: analizo_metric_collector_list.parsed_result[1]["acc"].to_f,
+                                           module_result: module_result,
+                                           metric_configuration_id: wanted_metric_configuration.id).returns(FactoryGirl.build(:metric_result))
         find_module_result_mocks
       end
 

@@ -4,6 +4,7 @@ Given(/^I have a sample configuration with native metrics$/) do
   @configuration = FactoryGirl.create(:configuration, id: nil)
   metric_configuration = FactoryGirl.create(:metric_configuration,
                                             {id: nil,
+                                             code: 'loc',
                                              metric: FactoryGirl.build(:kalibro_gatekeeper_client_loc),
                                              reading_group_id: reading_group.id,
                                              configuration_id: @configuration.id})

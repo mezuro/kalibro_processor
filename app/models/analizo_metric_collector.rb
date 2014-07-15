@@ -46,7 +46,7 @@ class AnalizoMetricCollector < MetricCollector
   end
 
   def new_metric_result(module_result, code, value)
-    MetricResult.create(metric: wanted_metrics[code], value: value.to_f, module_result: module_result)
+    MetricResult.create(metric: self.wanted_metrics[code].metric, value: value.to_f, module_result: module_result, metric_configuration_id: self.wanted_metrics[code].id)
   end
 
   def new_module_result(module_name)
@@ -63,7 +63,7 @@ class AnalizoMetricCollector < MetricCollector
   def parse_single_result(result_map)
     module_result = new_module_result(result_map['_module'])
     result_map.each do |code, value|
-      new_metric_result(module_result, code, value) if (wanted_metrics[code])
+      new_metric_result(module_result, code, value) if (self.wanted_metrics[code])
     end
     module_result
   end

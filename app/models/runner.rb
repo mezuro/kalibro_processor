@@ -64,7 +64,7 @@ class Runner
       unless wanted_metrics.empty?
         BASE_TOOLS[base_tool_name].new.
           collect_metrics(repository.code_directory,
-                          wanted_metrics.map {|metric_configuration| metric_configuration.code},
+                          wanted_metrics,
                           self.processing)
       end
     end
@@ -93,7 +93,6 @@ class Runner
                       where("kalibro_modules.granlrty" => parent_module.granularity.to_s).first
     if parent_module_result.nil?
       parent_module_result = ModuleResult.create(kalibro_module: parent_module, processing: self.processing)
-      #TODO: create metric results for this new module
       module_results << parent_module_result
     end
 
@@ -109,11 +108,38 @@ class Runner
     end
   end
 
+  def metric_configuration(metric)
+    self.native_metrics.each_value do |metric_configurations|
+      metric_configurations.each do |metric_configuration|
+        return metric_configuration if metric_configuration.metric == metric
+      end
+    end
+
+    self.compound_metrics.each do |metric_configuration|
+      return metric_configuration if metric_configuration.metric == metric
+    end
+  end
+
   def aggregate(module_result)
     unless module_result.children.empty?
       module_result.children.each { |child| aggregate(child) }
     end
 
-    module_result.metric_results.each { |metric_result| metric_result.update(value: metric_result.aggregated_value) }
+    all_metrics = []
+    self.native_metrics.each_value do |metric_configurations|
+      metric_configurations.each do |metric_configuration|
+        all_metrics << metric_configuration.metric
+      end
+    end
+
+    already_calculated_metrics = module_result.metric_results.map { |metric_result| metric_result.metric}
+
+    all_metrics.each do |metric|
+      unless already_calculated_metrics.include?(metric)
+        metric_result = MetricResult.new(metric: metric, module_result: module_result, metric_configuration_id: metric_configuration(metric).id)
+        metric_result.value = metric_result.aggregated_value
+        metric_result.save
+      end
+    end
   end
 end

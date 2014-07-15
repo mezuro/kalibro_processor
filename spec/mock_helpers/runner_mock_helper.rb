@@ -18,7 +18,7 @@ module RunnerMockHelper
 
   def collecting_state_mocks
     processing.expects(:update).with(state: "COLLECTING")
-    AnalizoMetricCollector.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration.code], processing)
+    AnalizoMetricCollector.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
   end
 
   def building_state_mocks
@@ -49,12 +49,12 @@ module RunnerMockHelper
 
   def aggregating_state_mocks
     processing.expects(:update).with(state: "AGGREGATING")
-    metric_result.expects(:aggregated_value).returns(1.0)
-    metric_result.expects(:update).with(value: 1.0).returns(true)
     module_result.expects(:metric_results).returns([metric_result])
     module_result.expects(:children).returns([])
     root_module_result.expects(:metric_results).returns([])
     root_module_result.expects(:children).twice.returns([module_result])
     processing.expects(:root_module_result).returns(root_module_result)
+    MetricResult.any_instance.expects(:aggregated_value).twice.returns(1.0)
+    MetricResult.any_instance.expects(:save).twice.returns(true)
   end
 end

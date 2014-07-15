@@ -16,11 +16,11 @@ class MetricCollector
     @processing = processing
   end
 
-  def wanted_metrics=(wanted_metrics_list)
+  def wanted_metrics=(wanted_metric_configurations)
     @wanted_metrics = {}
-    self.class.supported_metrics.each do |code, metric|
-      if wanted_metrics_list.include?(code)
-        @wanted_metrics[code] = metric
+    wanted_metric_configurations.each do |metric_configuration|
+      if self.class.supported_metrics.keys.include?(metric_configuration.code)
+        @wanted_metrics[metric_configuration.code] = metric_configuration
       end
     end
   end
