@@ -8,11 +8,11 @@ class BaseToolsController < ApplicationController
   end
 
   def find
-    collector = Runner::BASE_TOOLS.values_at(params[:id]).first
+    collector = Runner::BASE_TOOLS.values_at(params[:name]).first
     if collector.nil?
-      base_tool = {error: Errors::NotFoundError.new("Base tool #{params[:id]} not found.")}
+      base_tool = {error: Errors::NotFoundError.new("Base tool #{params[:name]} not found.")}
     else
-      base_tool = {base_tool: BaseTool.new(params[:id], collector.description, collector.to_s, collector.supported_metrics)}
+      base_tool = {base_tool: BaseTool.new(params[:name], collector.description, collector.to_s, collector.supported_metrics)}
     end
 
     respond_to do |format|

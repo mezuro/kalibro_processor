@@ -5,6 +5,6 @@ describe BaseToolsController, :type => :routing do
     it { is_expected.to route(:get, '/base_tools').
                   to(controller: :base_tools, action: :all_names) }
     it { is_expected.to route(:get, '/base_tools/Analizo/find').
-                  to(controller: :base_tools, action: :find, id: "Analizo") }
+                  to(controller: :base_tools, action: :find, name: "Analizo") }
   end
 end

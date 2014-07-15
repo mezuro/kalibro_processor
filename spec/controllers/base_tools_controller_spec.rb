@@ -21,7 +21,7 @@ RSpec.describe BaseToolsController, :type => :controller do
         AnalizoMetricCollector.expects(:description).returns(base_tool.description)
         AnalizoMetricCollector.expects(:supported_metrics).returns(base_tool.supported_metrics)
 
-        get :find, id: base_tool.name, format: :json
+        get :find, name: base_tool.name, format: :json
       end
 
       it { is_expected.to respond_with(:success) }
@@ -36,7 +36,7 @@ RSpec.describe BaseToolsController, :type => :controller do
       let(:error_hash) { {error: Errors::NotFoundError.new("Base tool #{base_tool_name} not found.")} }
 
       before :each do
-        get :find, id: base_tool_name, format: :json
+        get :find, name: base_tool_name, format: :json
       end
 
       it { is_expected.to respond_with(:unprocessable_entity) }
