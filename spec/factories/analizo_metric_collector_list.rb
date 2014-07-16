@@ -1,5 +1,5 @@
 class AnalizoMetricCollectorList
-  attr_accessor :raw, :parsed, :raw_result, :parsed_result
+  attr_accessor :raw, :parsed, :raw_result, :parsed_result, :version
 end
 
 FactoryGirl.define do
@@ -12,5 +12,6 @@ FactoryGirl.define do
            }}
     raw_result "---\nuav_variance: 0\n---\n_filename:\n  - Class.rb\n_module: My::Software::Module\nacc: 0"
     parsed_result { [{"uav_variance"=>0}, {"_filename"=>["Class.rb"], "_module"=>"My::Software::Module", "acc"=>0}] }
+    version "analizo version 1.16.0\n"
   end
 end

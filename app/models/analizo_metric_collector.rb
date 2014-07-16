@@ -16,6 +16,10 @@ class AnalizoMetricCollector < MetricCollector
     parse(analizo_results(code_directory))
   end
 
+  def self.available?
+    `analizo --version`.nil? ? false : true
+  end
+
   private
 
   def self.metric_list
@@ -53,9 +57,9 @@ class AnalizoMetricCollector < MetricCollector
     granularity = module_name.nil? ? Granularity::SOFTWARE : Granularity::CLASS
     module_name = module_name.to_s.split(/:+/).join('.')
     kalibro_module = ModuleResult.joins(:kalibro_module).
-                        where(processing: self.processing).
-                        where("kalibro_modules.long_name" => module_name).
-                        where("kalibro_modules.granlrty" => granularity.to_s).first
+    where(processing: self.processing).
+    where("kalibro_modules.long_name" => module_name).
+    where("kalibro_modules.granlrty" => granularity.to_s).first
     kalibro_module ||= KalibroModule.create(granularity: granularity.to_s, long_name: module_name)
     ModuleResult.create(kalibro_module: kalibro_module, processing: processing)
   end

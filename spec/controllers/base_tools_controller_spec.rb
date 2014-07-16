@@ -2,22 +2,40 @@ require 'rails_helper'
 
 RSpec.describe BaseToolsController, :type => :controller do
   describe 'all_names' do
-    let(:names) { ["Analizo"] }
-    before :each do
-      get :all_names, format: :json
+    context 'with an available collector' do
+      let(:names) { ["Analizo"] }
+      before :each do
+        AnalizoMetricCollector.expects(:available?).returns(true)
+        get :all_names, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'is expected to return the list of base tool names converted to JSON' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({base_tool_names: names}.to_json))
+      end
     end
 
-    it { is_expected.to respond_with(:success) }
+    context 'with an unavailable collector' do
+      let(:names) { [] }
+      before :each do
+        AnalizoMetricCollector.expects(:available?).returns(false)
+        get :all_names, format: :json
+      end
 
-    it 'is expected to return the list of base tool names converted to JSON' do
-      expect(JSON.parse(response.body)).to eq(JSON.parse({base_tool_names: names}.to_json))
+      it { is_expected.to respond_with(:success) }
+
+      it 'is expected to return the list of base tool names converted to JSON' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({base_tool_names: names}.to_json))
+      end
     end
   end
 
   describe 'find' do
-    context 'with a valid base tool' do
+    context 'with an available collector' do
       let!(:base_tool) { FactoryGirl.build(:base_tool) }
       before :each do
+        AnalizoMetricCollector.expects(:available?).returns(true)
         AnalizoMetricCollector.expects(:description).returns(base_tool.description)
         AnalizoMetricCollector.expects(:supported_metrics).returns(base_tool.supported_metrics)
 
@@ -31,11 +49,12 @@ RSpec.describe BaseToolsController, :type => :controller do
       end
     end
 
-    context 'with an invalid base tool' do
+    context 'with an unavailable collector' do
       let(:base_tool_name) { "BaseTool" }
       let(:error_hash) { {error: Errors::NotFoundError.new("Base tool #{base_tool_name} not found.")} }
 
       before :each do
+        AnalizoMetricCollector.expects(:available?).returns(false)
         get :find, name: base_tool_name, format: :json
       end
 

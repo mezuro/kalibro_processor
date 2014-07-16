@@ -1,6 +1,6 @@
 class BaseToolsController < ApplicationController
   def all_names
-    names = {base_tool_names: Runner::BASE_TOOLS.map {|name, klass| name }}
+    names = {base_tool_names: available_base_tools.keys }
 
     respond_to do |format|
       format.json { render json: names }
@@ -8,7 +8,7 @@ class BaseToolsController < ApplicationController
   end
 
   def find
-    collector = Runner::BASE_TOOLS.values_at(params[:name]).first
+    collector = available_base_tools.values_at(params[:name]).first
     if collector.nil?
       base_tool = {error: Errors::NotFoundError.new("Base tool #{params[:name]} not found.")}
     else
@@ -23,4 +23,11 @@ class BaseToolsController < ApplicationController
       end
     end
   end
+
+  private
+
+  def available_base_tools
+    Runner::BASE_TOOLS.select {|name, collector| collector.available?}
+  end
+
 end

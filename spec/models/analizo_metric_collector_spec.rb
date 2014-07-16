@@ -4,6 +4,25 @@ describe AnalizoMetricCollector, :type => :model do
   describe 'method' do
     let(:analizo_metric_collector_list) { FactoryGirl.build(:analizo_metric_collector_list) }
 
+    describe 'available?' do
+      context 'when analizo is installed' do
+        before :each do
+          AnalizoMetricCollector.expects(:`).with("analizo --version").returns(analizo_metric_collector_list.version)
+        end
+        it 'is expected to be truthy' do
+          expect(AnalizoMetricCollector.available?).to be_truthy
+        end
+      end
+      context 'when analizo is not installed' do
+        before :each do
+          AnalizoMetricCollector.expects(:`).with("analizo --version").returns(nil)
+        end
+        it 'is expected to be falsey' do
+          expect(AnalizoMetricCollector.available?).to be_falsey
+        end
+      end
+    end
+
     describe 'description' do
       it 'is expected to return the description as a string' do
         expect(AnalizoMetricCollector.description).to be_a(String)
