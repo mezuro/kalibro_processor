@@ -29,7 +29,8 @@ describe Runner, :type => :model do
           collecting_state_mocks
           building_state_mocks
           aggregating_state_mocks
-          processing.expects(:update).with(state: "ANALYZING")
+          calculating_state_mocks
+          processing.expects(:update).with(state: "INTERPRATATING")
           processing.expects(:update).with(state: "READY")
         end
 

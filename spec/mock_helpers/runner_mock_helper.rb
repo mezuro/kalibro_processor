@@ -50,11 +50,16 @@ module RunnerMockHelper
   def aggregating_state_mocks
     processing.expects(:update).with(state: "AGGREGATING")
     module_result.expects(:metric_results).returns([metric_result])
-    module_result.expects(:children).returns([])
+    module_result.expects(:children).twice.returns([])
     root_module_result.expects(:metric_results).returns([])
-    root_module_result.expects(:children).twice.returns([module_result])
-    processing.expects(:root_module_result).returns(root_module_result)
+    root_module_result.expects(:children).times(4).returns([module_result])
+    processing.expects(:root_module_result).twice.returns(root_module_result)
     MetricResult.any_instance.expects(:aggregated_value).twice.returns(1.0)
     MetricResult.any_instance.expects(:save).twice.returns(true)
+  end
+
+  def calculating_state_mocks
+    processing.expects(:update).with(state: "CALCULATING")
+    CompoundResults::Calculator.any_instance.expects(:calculate).twice
   end
 end

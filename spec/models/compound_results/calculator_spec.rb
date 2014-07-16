@@ -9,9 +9,9 @@ describe CompoundResults::Calculator, :type => :model do
     let! (:value) { 13.0 }
 
     before :each do
-      CompoundResults::JavascriptEvaluator.any_instance.expects(:add_variable).with(metric_configuration.code, metric_result.value)
+      CompoundResults::JavascriptEvaluator.any_instance.expects(:add_function).with(metric_configuration.code, "return #{metric_result.value};")
       CompoundResults::JavascriptEvaluator.any_instance.expects(:add_function).with(compound_metric_configuration.code, compound_metric_configuration.metric.script)
-      CompoundResults::JavascriptEvaluator.any_instance.expects(:evaluate).with(compound_metric_configuration.code).returns(value)
+      CompoundResults::JavascriptEvaluator.any_instance.expects(:evaluate).with("#{compound_metric_configuration.code}()").returns(value)
       metric_result.expects(:metric_configuration).returns(metric_configuration)
       module_result.expects(:metric_results).returns([metric_result])
     end

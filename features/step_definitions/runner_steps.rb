@@ -10,6 +10,13 @@ Given(/^I have a sample configuration with native metrics$/) do
                                              configuration_id: @configuration.id})
   range = FactoryGirl.build(:range, {id: nil, reading_id: reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
   range.save
+  compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
+                                                      id: nil,
+                                                      code: 'two_loc',
+                                                      metric: FactoryGirl.build(:kalibro_gatekeeper_client_compound_metric,
+                                                        script: "return loc() * 2;"))
+  compound_range = FactoryGirl.build(:range, {id: nil, reading_id: reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: compound_metric_configuration.id})
+  compound_range.save
 end
 
 Given(/^I have a sample repository within the sample project$/) do

@@ -3,7 +3,7 @@ Feature: Runner run
   As a regular user
   I should be able to run it through all
 
-  @clear_repository @kalibro_restart
+  @wip @clear_repository @kalibro_restart
   Scenario: An existing repository with a configuration
     Given I have a sample configuration with native metrics
     And I have a sample repository within the sample project

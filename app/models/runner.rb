@@ -32,7 +32,11 @@ class Runner
 
     aggregate(self.processing.root_module_result)
 
-    self.processing.update(state: "ANALYZING")
+    self.processing.update(state: "CALCULATING")
+
+    calculate_compound_results(self.processing.root_module_result)
+
+    self.processing.update(state: "INTERPRATATING")
     self.processing.update(state: "READY")
   end
 
@@ -114,11 +118,6 @@ class Runner
         return metric_configuration if metric_configuration.metric == metric
       end
     end
-
-    #FIXME: this should get unit test coverage when implementing the CALCULATING stage
-    self.compound_metrics.each do |metric_configuration|
-      return metric_configuration if metric_configuration.metric == metric
-    end
   end
 
   def aggregate(module_result)
@@ -142,5 +141,14 @@ class Runner
         metric_result.save
       end
     end
+  end
+
+  def calculate_compound_results(module_result)
+    unless module_result.children.empty?
+      module_result.children.each { |child| calculate_compound_results(child) }
+    end
+
+    #TODO: there might exist the need to check the scope before trying to calculate
+    CompoundResults::Calculator.new(module_result, @compound_metrics).calculate
   end
 end
