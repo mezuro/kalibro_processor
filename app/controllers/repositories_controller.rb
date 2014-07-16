@@ -27,7 +27,15 @@ class RepositoriesController < ApplicationController
   end
 
   def update
-    
+    set_repository
+
+    respond_to do |format|
+      if @repository.update(repository_params)
+        format.json { render json: {repository: @repository} , status: :created }
+      else
+        format.json { render json: {repository: @repository} , status: :unprocessable_entity }
+      end
+    end
   end
 
   def destroy
@@ -41,6 +49,6 @@ class RepositoriesController < ApplicationController
   end
 
   def repository_params
-    params.require(:repository).permit(:name, :description, :period)
+    params.require(:repository).permit(:name, :address, :license, :scm_type, :description, :period, :configuration_id, :project_id)
   end
 end

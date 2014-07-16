@@ -156,7 +156,7 @@ RSpec.describe ProjectsController, :type => :controller do
       let!(:repository) { FactoryGirl.build(:repository, id: 1, project: project) }
       let!(:repositories) { [repository] }
       before :each do
-        project.repositories = repositories
+        project.expects(:repositories).returns(repositories)
         Project.expects(:find).with(project.id).returns(project)
 
         get :repositories_of, id: project.id, format: :json
