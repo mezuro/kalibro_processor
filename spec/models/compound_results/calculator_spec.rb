@@ -14,6 +14,7 @@ describe CompoundResults::Calculator, :type => :model do
       CompoundResults::JavascriptEvaluator.any_instance.expects(:evaluate).with("#{compound_metric_configuration.code}()").returns(value)
       metric_result.expects(:metric_configuration).returns(metric_configuration)
       module_result.expects(:metric_results).returns([metric_result])
+      module_result.expects(:reload)
     end
 
     it 'is expected to create a new MetricResult' do
