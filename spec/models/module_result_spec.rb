@@ -44,7 +44,13 @@ describe ModuleResult, :type => :model do
   describe 'method' do
     describe 'metric_result_for' do
       subject { FactoryGirl.build(:module_result) }
+
       let(:metric_result) {subject.metric_results.first}
+
+      before :each do
+        subject.expects(:reload)
+      end
+
       context 'when a module result has the specific metric' do
         let(:metric) { subject.metric_results.first.metric }
         it 'should return the metric_result' do

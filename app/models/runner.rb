@@ -115,6 +115,7 @@ class Runner
       end
     end
 
+    #FIXME: this should get unit test coverage when implementing the CALCULATING stage
     self.compound_metrics.each do |metric_configuration|
       return metric_configuration if metric_configuration.metric == metric
     end

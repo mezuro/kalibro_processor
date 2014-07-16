@@ -6,6 +6,7 @@ class ModuleResult < ActiveRecord::Base
   belongs_to :processing
 
   def metric_result_for(metric)
+    self.reload # reloads to get recently created MetricResults
     self.metric_results.each {|metric_result| return metric_result if metric_result.metric == metric}
     return nil
   end
