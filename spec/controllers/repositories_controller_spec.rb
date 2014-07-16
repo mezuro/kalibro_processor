@@ -103,4 +103,15 @@ RSpec.describe RepositoriesController, :type => :controller do
       end
     end
   end
+
+  describe 'destroy' do
+    before :each do
+      repository.expects(:destroy).returns(true)
+      Repository.expects(:find).with(repository.id).returns(repository)
+
+      delete :destroy, id: repository.id, format: :json
+    end
+
+    it { is_expected.to respond_with(:success) }
+  end
 end

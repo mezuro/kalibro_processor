@@ -39,7 +39,12 @@ class RepositoriesController < ApplicationController
   end
 
   def destroy
+    set_repository
 
+    @repository.destroy
+    respond_to do |format|
+      format.json { render json: {}, status: :ok }
+    end
   end
 
   private
