@@ -46,7 +46,6 @@ describe MetricResult, :type => :model do
           returns(metric_configuration)
         KalibroGatekeeperClient::Entities::Range.expects(:ranges_of).
             with(subject.metric_configuration.id).returns([range, yet_another_range])
-        subject.expects(:aggregated_value).returns(subject.value)
       end
 
       it 'should return the range that contains the aggregated value of the metric result' do

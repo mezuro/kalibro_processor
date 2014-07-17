@@ -16,9 +16,8 @@ class MetricResult < ActiveRecord::Base
   end
 
   def range
-    value = self.aggregated_value
     ranges = KalibroGatekeeperClient::Entities::Range.ranges_of(metric_configuration.id)
-    ranges.select { |range| range.beginning <= value && value < range.end }.first
+    ranges.select { |range| range.beginning <= self.value && self.value < range.end }.first
   end
 
   def has_grade?
