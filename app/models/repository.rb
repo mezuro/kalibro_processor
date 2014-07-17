@@ -25,5 +25,7 @@ class Repository < ActiveRecord::Base
     self.configuration_id = conf.id
   end
 
-  def process; raise NotImplementedError; end
+  def process
+    Runner.new(self).run
+  end
 end

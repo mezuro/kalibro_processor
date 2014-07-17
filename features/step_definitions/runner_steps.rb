@@ -24,7 +24,7 @@ Given(/^I have a sample repository within the sample project$/) do
 end
 
 When(/^I run for the given repository$/) do
-  Runner.new(@repository).run
+  @repository.process
 end
 
 Then(/^the repository code_directory should exist$/) do

@@ -48,7 +48,8 @@ describe Repository, :type => :model do
 
     describe 'process' do
       it 'is expected to raise a NotImplementedError' do
-        expect{ subject.process }.to raise_error(NotImplementedError)
+        Runner.any_instance.expects(:run)
+        subject.process
       end
     end
   end
