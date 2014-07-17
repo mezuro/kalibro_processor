@@ -22,6 +22,8 @@ describe Runner, :type => :model do
         let!(:module_result) { FactoryGirl.build(:module_result_class_granularity) }
         let!(:kalibro_module) {FactoryGirl.build(:kalibro_module) }
         let!(:metric_result) { FactoryGirl.build(:metric_result) }
+        let!(:range) { FactoryGirl.build(:range) }
+        let!(:reading) { FactoryGirl.build(:reading) }
 
         before :each do
           preparing_state_mocks
@@ -30,7 +32,7 @@ describe Runner, :type => :model do
           building_state_mocks
           aggregating_state_mocks
           calculating_state_mocks
-          processing.expects(:update).with(state: "INTERPRATATING")
+          interpratating_state_mocks
           processing.expects(:update).with(state: "READY")
         end
 
