@@ -114,4 +114,19 @@ RSpec.describe RepositoriesController, :type => :controller do
 
     it { is_expected.to respond_with(:success) }
   end
+
+  describe 'types' do
+    let(:supported_types) { [:GIT, :SVN] }
+    before :each do
+      Repository.expects(:supported_types).returns(supported_types)
+
+      get :types, format: :json
+    end
+
+    it { is_expected.to respond_with(:success) }
+
+    it 'should return the supported types' do
+      expect(JSON.parse(response.body)).to eq(JSON.parse({types: supported_types.map{|x| x.to_s}}.to_json))
+    end
+  end
 end

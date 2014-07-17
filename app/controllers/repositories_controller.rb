@@ -47,6 +47,15 @@ class RepositoriesController < ApplicationController
     end
   end
 
+ def types
+    supported_types = []
+
+    supported_types = Repository.supported_types
+    respond_to do |format|
+      format.json { render json: {types: supported_types}, status: :ok }
+    end
+  end
+
   private
 
   def set_repository
