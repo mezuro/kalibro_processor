@@ -32,7 +32,7 @@ class MetricResult < ActiveRecord::Base
   end
 
   def metric_configuration
-    KalibroGatekeeperClient::Entities::MetricConfiguration.find(self.metric_configuration_id)
+    @metric_configuration ||= KalibroGatekeeperClient::Entities::MetricConfiguration.find(self.metric_configuration_id)
   end
 
   def descendant_values

@@ -42,7 +42,7 @@ describe MetricResult, :type => :model do
       subject { FactoryGirl.build(:metric_result_with_value) }
 
       before :each do
-        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).twice.
+        KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
           returns(metric_configuration)
         KalibroGatekeeperClient::Entities::Range.expects(:ranges_of).
             with(subject.metric_configuration.id).returns([range, yet_another_range])
