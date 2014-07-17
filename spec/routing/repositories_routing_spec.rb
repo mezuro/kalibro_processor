@@ -13,7 +13,7 @@ describe RepositoriesController, :type => :routing do
     it { is_expected.to route(:get, '/repositories/types').
                   to(controller: :repositories, action: :types) }
     it { is_expected.to route(:get, '/repositories/1/process').
-                  to(controller: :repositories, action: :process, id: 1) }
+                  to(controller: :repositories, action: :process_repository, id: 1) }
     it { is_expected.to route(:get, '/repositories/1/cancel_process').
                   to(controller: :repositories, action: :cancel_process, id: 1) }
   end

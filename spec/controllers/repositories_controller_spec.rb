@@ -129,4 +129,30 @@ RSpec.describe RepositoriesController, :type => :controller do
       expect(JSON.parse(response.body)).to eq(JSON.parse({types: supported_types.map{|x| x.to_s}}.to_json))
     end
   end
+
+  describe 'process' do
+    context 'with a successful processing' do
+      before :each do
+        Repository.expects(:find).with(repository.id).returns(repository)
+        repository.expects(:process).returns(true)
+
+        get :process_repository, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+    end
+
+    context 'with an unsuccessful processing' do
+      before :each do
+        Repository.expects(:find).with(repository.id).returns(repository)
+        repository.expects(:process).raises(Errors::ProcessingError)
+
+        get :process_repository, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:internal_server_error) }
+    end
+
+  end
+
 end

@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   get 'projects/:id/repositories_of' => 'projects#repositories_of'
 
   get 'repositories/types' => 'repositories#types'
-  get 'repositories/:id/process' => 'repositories#process'
+  get 'repositories/:id/process' => 'repositories#process_repository'
   get 'repositories/:id/cancel_process' => 'repositories#cancel_process'
   resources :repositories , except: [:index, :new, :edit]
 

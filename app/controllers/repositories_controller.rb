@@ -47,12 +47,25 @@ class RepositoriesController < ApplicationController
     end
   end
 
- def types
+  def types
     supported_types = []
 
     supported_types = Repository.supported_types
     respond_to do |format|
       format.json { render json: {types: supported_types}, status: :ok }
+    end
+  end
+
+  def process_repository #FIXME Naming this method process is causing conflicts. Fix them.
+    begin
+      set_repository
+      @repository.process
+      status = :ok
+    rescue Errors::ProcessingError
+      status = :internal_server_error
+    end
+    respond_to do |format|
+      format.json { render json: {}, status: status }
     end
   end
 
