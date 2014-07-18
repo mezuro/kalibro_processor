@@ -69,6 +69,13 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  def has_processing
+    set_repository
+    respond_to do |format|
+      format.json { render json: { has_processing: !@repository.processings.empty? } }
+    end
+  end
+
   private
 
   def set_repository

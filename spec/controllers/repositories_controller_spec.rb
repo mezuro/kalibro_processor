@@ -152,7 +152,39 @@ RSpec.describe RepositoriesController, :type => :controller do
 
       it { is_expected.to respond_with(:internal_server_error) }
     end
-
   end
 
+  describe 'has_processing' do
+    before :each do
+      Repository.expects(:find).with(repository.id).returns(repository)
+    end
+
+    context 'with a repository with processings' do
+      before :each do
+        repository.expects(:processings).returns([FactoryGirl.build(:processing)])
+
+        get :has_processing, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return true' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({has_processing: true}.to_json))
+      end
+    end
+
+    context 'with a repository without processings' do
+      before :each do
+        repository.expects(:processings).returns([])
+
+        get :has_processing, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({has_processing: false}.to_json))
+      end
+    end
+  end
 end

@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   get 'repositories/types' => 'repositories#types'
   get 'repositories/:id/process' => 'repositories#process_repository'
   get 'repositories/:id/cancel_process' => 'repositories#cancel_process'
+  get 'repositories/:id/has_processing' => 'repositories#has_processing'
   resources :repositories , except: [:index, :new, :edit]
 
   get 'base_tools' => 'base_tools#all_names'
