@@ -57,11 +57,38 @@ describe ModuleResult, :type => :model do
           expect(subject.metric_result_for(metric)).to eq(metric_result)
         end
       end
+
       context 'when a module result has not the specific metric' do
         let(:another_metric) { FactoryGirl.build(:analizo_native_metric) }
         it 'should return the metric_result' do
           expect(subject.metric_result_for(another_metric)).to be_nil
         end
+      end
+    end
+
+    describe 'find_by_module_and_processing' do
+      let!(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
+      let!(:processing) { FactoryGirl.build(:processing) }
+      let!(:module_result) { FactoryGirl.build(:module_result) }
+
+      before :each do
+        name_filtered_results = Object.new
+        name_filtered_results.expects(:where).
+          with("kalibro_modules.granlrty" => kalibro_module.granularity.to_s).
+          returns([module_result])
+
+        processing_filtered_results = Object.new
+        processing_filtered_results.expects(:where).
+          with("kalibro_modules.long_name" => kalibro_module.long_name).
+          returns(name_filtered_results)
+
+        join_result = Object.new
+        join_result.expects(:where).with(processing: processing).at_least_once.returns(processing_filtered_results)
+        ModuleResult.expects(:joins).at_least_once.with(:kalibro_module).returns(join_result)
+      end
+
+      it 'is expected to return the module_result' do
+        expect(ModuleResult.find_by_module_and_processing(kalibro_module, processing)).to eq(module_result)
       end
     end
   end
