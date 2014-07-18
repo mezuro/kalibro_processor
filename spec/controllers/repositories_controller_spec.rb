@@ -187,4 +187,16 @@ RSpec.describe RepositoriesController, :type => :controller do
       end
     end
   end
+
+  describe 'has_processing_in_time' do
+    before :each do
+      Repository.expects(:find).with(repository.id).returns(repository)
+    end
+
+    context 'with a processing' do
+      context 'after a specific date' do
+      pending
+      end
+    end
+  end
 end

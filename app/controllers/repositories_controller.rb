@@ -76,6 +76,18 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  def has_processing_in_time
+    set_repository
+
+    order = params[:after_or_before] == "after" ? ">=" : "<="
+
+    processings = Processing.where(repository: @repository).where("updated_at #{order} #{params[:date]}")
+
+    respond_to do |format|
+      format.json { render json: { has_processing: !processings.empty? } }
+    end
+  end
+
   private
 
   def set_repository
