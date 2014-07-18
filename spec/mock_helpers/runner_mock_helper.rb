@@ -38,13 +38,7 @@ module RunnerMockHelper
   end
 
   def find_module_result_mocks(found_module_results=[])
-    name_filtered_results = Object.new
-    name_filtered_results.expects(:where).at_least_once.returns(found_module_results)
-    processing_filtered_results = Object.new
-    processing_filtered_results.expects(:where).at_least_once.returns(name_filtered_results)
-    join_result = Object.new
-    join_result.expects(:where).with(processing: processing).at_least_once.returns(processing_filtered_results)
-    ModuleResult.expects(:joins).at_least_once.with(:kalibro_module).returns(join_result)
+    ModuleResult.expects(:find_by_module_and_processing).at_least_once.returns(found_module_results.first)
   end
 
   def aggregating_state_mocks
