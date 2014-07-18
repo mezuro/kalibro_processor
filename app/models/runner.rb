@@ -94,10 +94,7 @@ class Runner
   end
 
   def parent_result(parent_module, module_results)
-    parent_module_result = ModuleResult.joins(:kalibro_module).
-                      where(processing: self.processing).
-                      where("kalibro_modules.long_name" => parent_module.long_name).
-                      where("kalibro_modules.granlrty" => parent_module.granularity.to_s).first
+    parent_module_result = ModuleResult.find_by_module_and_processing(parent_module, self.processing)
     if parent_module_result.nil?
       parent_module_result = ModuleResult.create(kalibro_module: parent_module, processing: self.processing)
       module_results << parent_module_result

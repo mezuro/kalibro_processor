@@ -53,19 +53,23 @@ class AnalizoMetricCollector < MetricCollector
     MetricResult.create(metric: self.wanted_metrics[code].metric, value: value.to_f, module_result: module_result, metric_configuration_id: self.wanted_metrics[code].id)
   end
 
-  def new_module_result(module_name)
+  def module_result(module_name)
     granularity = module_name.nil? ? Granularity::SOFTWARE : Granularity::CLASS
     module_name = module_name.to_s.split(/:+/).join('.')
-    kalibro_module = ModuleResult.joins(:kalibro_module).
-    where(processing: self.processing).
-    where("kalibro_modules.long_name" => module_name).
-    where("kalibro_modules.granlrty" => granularity.to_s).first
-    kalibro_module ||= KalibroModule.create(granularity: granularity.to_s, long_name: module_name)
-    ModuleResult.create(kalibro_module: kalibro_module, processing: processing)
+    kalibro_module = KalibroModule.new({long_name: module_name, granularity: granularity})
+
+    module_result = ModuleResult.find_by_module_and_processing(kalibro_module, self.processing)
+
+    if module_result.nil?
+      kalibro_module.save
+      ModuleResult.create(kalibro_module: kalibro_module, processing: self.processing)
+    else
+      module_result
+    end
   end
 
   def parse_single_result(result_map)
-    module_result = new_module_result(result_map['_module'])
+    module_result = module_result(result_map['_module'])
     result_map.each do |code, value|
       new_metric_result(module_result, code, value) if (self.wanted_metrics[code])
     end

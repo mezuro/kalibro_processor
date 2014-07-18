@@ -54,17 +54,32 @@ describe AnalizoMetricCollector, :type => :model do
       before :each do
         subject.expects(:`).with("analizo metrics #{absolute_path}").returns(analizo_metric_collector_list.raw_result)
         AnalizoMetricCollector.expects(:supported_metrics).twice.returns(supported_metrics)
-        KalibroModule.expects(:create).at_least_once.returns(FactoryGirl.build(:kalibro_module))
-        ModuleResult.expects(:create).at_least_once.returns(module_result)
         MetricResult.expects(:create).with(metric: native_metric,
                                            value: analizo_metric_collector_list.parsed_result[1]["acc"].to_f,
                                            module_result: module_result,
                                            metric_configuration_id: wanted_metric_configuration.id).returns(FactoryGirl.build(:metric_result))
-        find_module_result_mocks
       end
 
-      it 'should collect the metrics for a given project' do
-        expect(subject.collect_metrics(absolute_path, wanted_metrics_list, processing)).to eq(analizo_metric_collector_list.parsed_result)
+      context 'when there are no ModuleResults with the same module and processing' do
+        before :each do
+          KalibroModule.any_instance.expects(:save).twice.returns(true)
+          ModuleResult.expects(:create).at_least_once.returns(module_result)
+          find_module_result_mocks
+        end
+
+        it 'should collect the metrics for a given project' do
+          expect(subject.collect_metrics(absolute_path, wanted_metrics_list, processing)).to eq(analizo_metric_collector_list.parsed_result)
+        end
+      end
+
+      context 'when there is an existing ModuleResult with the same module and processing' do
+        before :each do
+          find_module_result_mocks([module_result])
+        end
+
+        it 'should collect the metrics for a given project' do
+          expect(subject.collect_metrics(absolute_path, wanted_metrics_list, processing)).to eq(analizo_metric_collector_list.parsed_result)
+        end
       end
     end
   end
