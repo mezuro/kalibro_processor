@@ -28,4 +28,13 @@ class Repository < ActiveRecord::Base
   def process
     Runner.new(self).run
   end
+
+  def history_of(module_name)
+    history = []
+    self.processings.each do |processing|
+      module_result = processing.module_results.select { |module_result| module_result.kalibro_module.long_name == module_name }.first
+      history << [processing.updated_at, module_result] unless module_result.nil?
+    end
+    return history
+  end
 end
