@@ -81,7 +81,7 @@ class RepositoriesController < ApplicationController
 
     order = params[:after_or_before] == "after" ? ">=" : "<="
 
-    processings = Processing.where(repository: @repository).where("updated_at #{order} #{params[:date]}")
+    processings = Processing.where(repository: @repository).where("updated_at :order :date", {order: order, date: params[:date]})
 
     respond_to do |format|
       format.json { render json: { has_processing: !processings.empty? } }
