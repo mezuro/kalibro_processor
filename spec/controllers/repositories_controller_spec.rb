@@ -286,4 +286,40 @@ RSpec.describe RepositoriesController, :type => :controller do
       end
     end
   end
+
+  describe 'last_ready_processing' do
+    let!(:processing) { FactoryGirl.build(:processing) }
+    let!(:ordered_processings) { [processing] }
+    before :each do
+      Repository.expects(:find).with(repository.id).returns(repository)
+      Processing.expects(:order).with(updated_at: :desc).returns(ordered_processings)
+    end
+    context 'with a ready processing' do
+      let!(:ordered_ready_processings) { [processing] }
+      before :each do
+        ordered_processings.expects(:where).with(repository: repository, state: "READY").returns(ordered_ready_processings)
+
+        get :last_ready_processing, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return true' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({last_ready_processing: processing}.to_json))
+      end
+    end
+    context 'without a ready processing' do
+      before :each do
+        ordered_processings.expects(:where).with(repository: repository, state: "READY").returns([])
+
+        get :last_ready_processing, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({last_ready_processing: nil}.to_json))
+      end
+    end
+  end
 end

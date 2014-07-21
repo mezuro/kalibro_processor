@@ -98,6 +98,16 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  def last_ready_processing
+    set_repository
+
+    ready_processing = Processing.order(updated_at: :desc).where(repository: @repository, state: "READY")
+
+    respond_to do |format|
+      format.json { render json: { last_ready_processing: ready_processing.first } }
+    end
+  end
+
   private
 
   def set_repository
