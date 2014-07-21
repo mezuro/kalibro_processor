@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   get 'repositories/:id/process' => 'repositories#process_repository'
   get 'repositories/:id/cancel_process' => 'repositories#cancel_process'
   get 'repositories/:id/has_processing' => 'repositories#has_processing'
+  get 'repositories/:id/has_ready_processing' => 'repositories#has_ready_processing'
   post 'repositories/:id/has_processing/:after_or_before' => 'repositories#has_processing_in_time'
   resources :repositories , except: [:index, :new, :edit]
 

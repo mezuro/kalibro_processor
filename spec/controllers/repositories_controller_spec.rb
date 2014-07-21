@@ -199,7 +199,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     context 'with a processing' do
       context 'after a specific date' do
         before :each do
-          repository_processings.expects(:where).with("updated_at :order :date", {order: ">=", date: date}).returns([FactoryGirl.build(:processing)])
+          repository_processings.expects(:where).with("updated_at >= :date", {date: date}).returns([FactoryGirl.build(:processing)])
 
           get :has_processing_in_time, id: repository.id, date: date, after_or_before: "after", format: :json
         end
@@ -207,12 +207,12 @@ RSpec.describe RepositoriesController, :type => :controller do
         it { is_expected.to respond_with(:success) }
 
         it 'should return true' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse({has_processing: true}.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({has_processing_in_time: true}.to_json))
         end
       end
       context 'before a specific date' do
         before :each do
-          repository_processings.expects(:where).with("updated_at :order :date", {order: "<=", date: date}).returns([FactoryGirl.build(:processing)])
+          repository_processings.expects(:where).with("updated_at <= :date", {date: date}).returns([FactoryGirl.build(:processing)])
 
           get :has_processing_in_time, id: repository.id, date: date, after_or_before: "before", format: :json
         end
@@ -220,7 +220,7 @@ RSpec.describe RepositoriesController, :type => :controller do
         it { is_expected.to respond_with(:success) }
 
         it 'should return true' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse({has_processing: true}.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({has_processing_in_time: true}.to_json))
         end
       end
     end
@@ -228,7 +228,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     context 'without a processing' do
       context 'after a specific date' do
         before :each do
-          repository_processings.expects(:where).with("updated_at :order :date", {order: ">=", date: date}).returns([])
+          repository_processings.expects(:where).with("updated_at >= :date", {date: date}).returns([])
 
           get :has_processing_in_time, id: repository.id, date: date, after_or_before: "after", format: :json
         end
@@ -236,12 +236,12 @@ RSpec.describe RepositoriesController, :type => :controller do
         it { is_expected.to respond_with(:success) }
 
         it 'should return false' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse({has_processing: false}.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({has_processing_in_time: false}.to_json))
         end
       end
       context 'before a specific date' do
         before :each do
-          repository_processings.expects(:where).with("updated_at :order :date", {order: "<=", date: date}).returns([])
+          repository_processings.expects(:where).with("updated_at <= :date", {date: date}).returns([])
 
           get :has_processing_in_time, id: repository.id, date: date, after_or_before: "before", format: :json
         end
@@ -249,8 +249,40 @@ RSpec.describe RepositoriesController, :type => :controller do
         it { is_expected.to respond_with(:success) }
 
         it 'should return false' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse({has_processing: false}.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({has_processing_in_time: false}.to_json))
         end
+      end
+    end
+  end
+
+  describe 'has_ready_processing' do
+    before :each do
+      Repository.expects(:find).with(repository.id).returns(repository)
+    end
+    context 'with a ready processing' do
+      before :each do
+        Processing.expects(:where).with(repository: repository, state: "READY").returns([FactoryGirl.build(:processing)])
+
+        get :has_ready_processing, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return true' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({has_ready_processing: true}.to_json))
+      end
+    end
+    context 'without a ready processing' do
+      before :each do
+        Processing.expects(:where).with(repository: repository, state: "READY").returns([])
+
+        get :has_ready_processing, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({has_ready_processing: false}.to_json))
       end
     end
   end

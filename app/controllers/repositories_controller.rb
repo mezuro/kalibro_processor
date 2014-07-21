@@ -76,15 +76,25 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  def has_ready_processing
+    set_repository
+
+    ready_processings = Processing.where(repository: @repository, state: "READY")
+
+    respond_to do |format|
+      format.json { render json: { has_ready_processing: !ready_processings.empty? } }
+    end
+  end
+
   def has_processing_in_time
     set_repository
 
     order = params[:after_or_before] == "after" ? ">=" : "<="
 
-    processings = Processing.where(repository: @repository).where("updated_at :order :date", {order: order, date: params[:date]})
+    processings = Processing.where(repository: @repository).where("updated_at #{order} :date", {date: params[:date]})
 
     respond_to do |format|
-      format.json { render json: { has_processing: !processings.empty? } }
+      format.json { render json: { has_processing_in_time: !processings.empty? } }
     end
   end
 
