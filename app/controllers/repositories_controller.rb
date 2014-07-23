@@ -91,7 +91,7 @@ class RepositoriesController < ApplicationController
 
     order = params[:after_or_before] == "after" ? ">=" : "<="
 
-    processings = Processing.where(repository: @repository).where("updated_at #{order} :date", {date: params[:date]})
+    processings = Processing.find_by_repository_and_date(@repository, params[:date], order)
 
     respond_to do |format|
       format.json { render json: { has_processing_in_time: !processings.empty? } }
@@ -101,10 +101,25 @@ class RepositoriesController < ApplicationController
   def last_ready_processing
     set_repository
 
-    ready_processing = Processing.order(updated_at: :desc).where(repository: @repository, state: "READY")
+    ready_processings = Processing.where(repository: @repository, state: "READY")
 
     respond_to do |format|
-      format.json { render json: { last_ready_processing: ready_processing.first } }
+      format.json { render json: { last_ready_processing: ready_processings.last } }
+    end
+  end
+
+  def first_processing_in_time
+    set_repository
+
+    if params[:date].nil?
+      processings = Processing.where(repository: @repository)
+    else
+      order = params[:after_or_before] == "after" ? ">=" : "<="
+      processings = Processing.find_by_repository_and_date(@repository, params[:date], order)
+    end
+
+    respond_to do |format|
+      format.json { render json: { processing: processings.first } }
     end
   end
 

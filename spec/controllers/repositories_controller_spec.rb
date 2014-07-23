@@ -189,17 +189,16 @@ RSpec.describe RepositoriesController, :type => :controller do
   end
 
   describe 'has_processing_in_time' do
+    let!(:processing) { FactoryGirl.build(:processing) }
     let!(:date) {"2011-10-20T18:26:43.151+00:00"}
-    let!(:repository_processings) {Object.new}
     before :each do
       Repository.expects(:find).with(repository.id).returns(repository)
-      Processing.expects(:where).with(repository: repository).returns(repository_processings)
     end
 
     context 'with a processing' do
       context 'after a specific date' do
         before :each do
-          repository_processings.expects(:where).with("updated_at >= :date", {date: date}).returns([FactoryGirl.build(:processing)])
+          Processing.expects(:find_by_repository_and_date).with(repository, date, ">=").returns([processing])
 
           get :has_processing_in_time, id: repository.id, date: date, after_or_before: "after", format: :json
         end
@@ -212,7 +211,7 @@ RSpec.describe RepositoriesController, :type => :controller do
       end
       context 'before a specific date' do
         before :each do
-          repository_processings.expects(:where).with("updated_at <= :date", {date: date}).returns([FactoryGirl.build(:processing)])
+          Processing.expects(:find_by_repository_and_date).with(repository, date, "<=").returns([processing])
 
           get :has_processing_in_time, id: repository.id, date: date, after_or_before: "before", format: :json
         end
@@ -228,7 +227,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     context 'without a processing' do
       context 'after a specific date' do
         before :each do
-          repository_processings.expects(:where).with("updated_at >= :date", {date: date}).returns([])
+          Processing.expects(:find_by_repository_and_date).with(repository, date, ">=").returns([])
 
           get :has_processing_in_time, id: repository.id, date: date, after_or_before: "after", format: :json
         end
@@ -241,7 +240,7 @@ RSpec.describe RepositoriesController, :type => :controller do
       end
       context 'before a specific date' do
         before :each do
-          repository_processings.expects(:where).with("updated_at <= :date", {date: date}).returns([])
+          Processing.expects(:find_by_repository_and_date).with(repository, date, "<=").returns([])
 
           get :has_processing_in_time, id: repository.id, date: date, after_or_before: "before", format: :json
         end
@@ -289,15 +288,12 @@ RSpec.describe RepositoriesController, :type => :controller do
 
   describe 'last_ready_processing' do
     let!(:processing) { FactoryGirl.build(:processing) }
-    let!(:ordered_processings) { [processing] }
     before :each do
       Repository.expects(:find).with(repository.id).returns(repository)
-      Processing.expects(:order).with(updated_at: :desc).returns(ordered_processings)
     end
     context 'with a ready processing' do
-      let!(:ordered_ready_processings) { [processing] }
       before :each do
-        ordered_processings.expects(:where).with(repository: repository, state: "READY").returns(ordered_ready_processings)
+        Processing.expects(:where).with(repository: repository, state: "READY").returns([processing])
 
         get :last_ready_processing, id: repository.id, format: :json
       end
@@ -310,7 +306,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     end
     context 'without a ready processing' do
       before :each do
-        ordered_processings.expects(:where).with(repository: repository, state: "READY").returns([])
+        Processing.expects(:where).with(repository: repository, state: "READY").returns([])
 
         get :last_ready_processing, id: repository.id, format: :json
       end
@@ -319,6 +315,41 @@ RSpec.describe RepositoriesController, :type => :controller do
 
       it 'should return false' do
         expect(JSON.parse(response.body)).to eq(JSON.parse({last_ready_processing: nil}.to_json))
+      end
+    end
+  end
+
+  describe 'first_processing_in_time' do
+    let!(:processing) { FactoryGirl.build(:processing) }
+    before :each do
+      Repository.expects(:find).with(repository.id).returns(repository)
+    end
+    context 'without a date' do
+      before :each do
+        Processing.expects(:where).with(repository: repository).returns([processing])
+
+        get :first_processing_in_time, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({processing: processing}.to_json))
+      end
+    end
+
+    context 'with a date' do
+      let!(:date) {"2011-10-20T18:26:43.151+00:00"}
+      before :each do
+        Processing.expects(:find_by_repository_and_date).with(repository, date, ">=").returns([processing])
+
+        get :first_processing_in_time, id: repository.id, after_or_before: "after", date: date, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({processing: processing}.to_json))
       end
     end
   end
