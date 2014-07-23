@@ -23,5 +23,15 @@ RSpec.describe Processing, :type => :model do
         expect(Processing.find_by_repository_and_date(repository, date, order)).to eq([subject])
       end
     end
+
+    describe 'find_ready_by_repository' do
+      let(:repository) { FactoryGirl.build(:repository) }
+
+      it 'is expected to return a processing' do
+        Processing.expects(:where).with(repository: repository, state: "READY").returns([subject])
+
+        expect(Processing.find_ready_by_repository(repository)).to eq([subject])
+      end
+    end
   end
 end

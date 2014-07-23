@@ -1,4 +1,6 @@
 class RepositoriesController < ApplicationController
+  before_action :set_repository, except: [:show, :create, :types]
+
   def show
     begin
       set_repository
@@ -27,8 +29,6 @@ class RepositoriesController < ApplicationController
   end
 
   def update
-    set_repository
-
     respond_to do |format|
       if @repository.update(repository_params)
         format.json { render json: {repository: @repository} , status: :created }
@@ -39,8 +39,6 @@ class RepositoriesController < ApplicationController
   end
 
   def destroy
-    set_repository
-
     @repository.destroy
     respond_to do |format|
       format.json { render json: {}, status: :ok }
@@ -58,7 +56,6 @@ class RepositoriesController < ApplicationController
 
   def process_repository #FIXME Naming this method process is causing conflicts. Fix them.
     begin
-      set_repository
       @repository.process
       status = :ok
     rescue Errors::ProcessingError
@@ -70,16 +67,13 @@ class RepositoriesController < ApplicationController
   end
 
   def has_processing
-    set_repository
     respond_to do |format|
       format.json { render json: { has_processing: !@repository.processings.empty? } }
     end
   end
 
   def has_ready_processing
-    set_repository
-
-    ready_processings = Processing.where(repository: @repository, state: "READY")
+    ready_processings = Processing.find_ready_by_repository(@repository)
 
     respond_to do |format|
       format.json { render json: { has_ready_processing: !ready_processings.empty? } }
@@ -87,8 +81,6 @@ class RepositoriesController < ApplicationController
   end
 
   def has_processing_in_time
-    set_repository
-
     order = params[:after_or_before] == "after" ? ">=" : "<="
 
     processings = Processing.find_by_repository_and_date(@repository, params[:date], order)
@@ -99,9 +91,7 @@ class RepositoriesController < ApplicationController
   end
 
   def last_ready_processing
-    set_repository
-
-    ready_processings = Processing.where(repository: @repository, state: "READY")
+    ready_processings = Processing.find_ready_by_repository(@repository)
 
     respond_to do |format|
       format.json { render json: { last_ready_processing: ready_processings.last } }
@@ -109,8 +99,6 @@ class RepositoriesController < ApplicationController
   end
 
   def first_processing_in_time
-    set_repository
-
     if params[:date].nil?
       processings = Processing.where(repository: @repository)
     else
@@ -124,8 +112,6 @@ class RepositoriesController < ApplicationController
   end
 
   def last_processing_in_time
-    set_repository
-
     if params[:date].nil?
       processings = Processing.where(repository: @repository)
     else

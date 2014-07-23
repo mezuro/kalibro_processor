@@ -260,7 +260,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     end
     context 'with a ready processing' do
       before :each do
-        Processing.expects(:where).with(repository: repository, state: "READY").returns([FactoryGirl.build(:processing)])
+        Processing.expects(:find_ready_by_repository).with(repository).returns([FactoryGirl.build(:processing)])
 
         get :has_ready_processing, id: repository.id, format: :json
       end
@@ -273,7 +273,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     end
     context 'without a ready processing' do
       before :each do
-        Processing.expects(:where).with(repository: repository, state: "READY").returns([])
+        Processing.expects(:find_ready_by_repository).with(repository).returns([])
 
         get :has_ready_processing, id: repository.id, format: :json
       end
@@ -293,7 +293,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     end
     context 'with a ready processing' do
       before :each do
-        Processing.expects(:where).with(repository: repository, state: "READY").returns([processing])
+        Processing.expects(:find_ready_by_repository).with(repository).returns([processing])
 
         get :last_ready_processing, id: repository.id, format: :json
       end
@@ -306,7 +306,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     end
     context 'without a ready processing' do
       before :each do
-        Processing.expects(:where).with(repository: repository, state: "READY").returns([])
+        Processing.expects(:find_ready_by_repository).with(repository).returns([])
 
         get :last_ready_processing, id: repository.id, format: :json
       end
