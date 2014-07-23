@@ -29,5 +29,9 @@ describe RepositoriesController, :type => :routing do
                   to(controller: :repositories, action: :first_processing_in_time, after_or_before: "after", id: id) }
     it { is_expected.to route(:post, "/repositories/#{id}/first_processing").
                   to(controller: :repositories, action: :first_processing_in_time, id: id) }
+    it { is_expected.to route(:post, "/repositories/#{id}/last_processing/before").
+                  to(controller: :repositories, action: :last_processing_in_time, after_or_before: "before", id: id) }
+    it { is_expected.to route(:post, "/repositories/#{id}/last_processing").
+                  to(controller: :repositories, action: :last_processing_in_time, id: id) }
   end
 end

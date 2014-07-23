@@ -123,6 +123,21 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  def last_processing_in_time
+    set_repository
+
+    if params[:date].nil?
+      processings = Processing.where(repository: @repository)
+    else
+      order = params[:after_or_before] == "after" ? ">=" : "<="
+      processings = Processing.find_by_repository_and_date(@repository, params[:date], order)
+    end
+
+    respond_to do |format|
+      format.json { render json: { processing: processings.last } }
+    end
+  end
+
   private
 
   def set_repository

@@ -353,4 +353,39 @@ RSpec.describe RepositoriesController, :type => :controller do
       end
     end
   end
+
+  describe 'last_processing_in_time' do
+    let!(:processing) { FactoryGirl.build(:processing) }
+    before :each do
+      Repository.expects(:find).with(repository.id).returns(repository)
+    end
+    context 'without a date' do
+      before :each do
+        Processing.expects(:where).with(repository: repository).returns([processing])
+
+        get :last_processing_in_time, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({processing: processing}.to_json))
+      end
+    end
+
+    context 'with a date' do
+      let!(:date) {"2011-10-20T18:26:43.151+00:00"}
+      before :each do
+        Processing.expects(:find_by_repository_and_date).with(repository, date, "<=").returns([processing])
+
+        get :last_processing_in_time, id: repository.id, after_or_before: "before", date: date, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({processing: processing}.to_json))
+      end
+    end
+  end
 end
