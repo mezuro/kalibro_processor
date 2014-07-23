@@ -37,4 +37,12 @@ class Repository < ActiveRecord::Base
     end
     return history
   end
+
+  def find_processing_by_date(date, order)
+    self.processings.where("updated_at #{order} :date", {date: date})
+  end
+
+  def find_ready_processing
+    self.processings.where(state: "READY")
+  end
 end

@@ -198,7 +198,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     context 'with a processing' do
       context 'after a specific date' do
         before :each do
-          Processing.expects(:find_by_repository_and_date).with(repository, date, ">=").returns([processing])
+          repository.expects(:find_processing_by_date).with(date, ">=").returns([processing])
 
           get :has_processing_in_time, id: repository.id, date: date, after_or_before: "after", format: :json
         end
@@ -211,7 +211,7 @@ RSpec.describe RepositoriesController, :type => :controller do
       end
       context 'before a specific date' do
         before :each do
-          Processing.expects(:find_by_repository_and_date).with(repository, date, "<=").returns([processing])
+          repository.expects(:find_processing_by_date).with(date, "<=").returns([processing])
 
           get :has_processing_in_time, id: repository.id, date: date, after_or_before: "before", format: :json
         end
@@ -227,7 +227,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     context 'without a processing' do
       context 'after a specific date' do
         before :each do
-          Processing.expects(:find_by_repository_and_date).with(repository, date, ">=").returns([])
+          repository.expects(:find_processing_by_date).with(date, ">=").returns([])
 
           get :has_processing_in_time, id: repository.id, date: date, after_or_before: "after", format: :json
         end
@@ -240,7 +240,7 @@ RSpec.describe RepositoriesController, :type => :controller do
       end
       context 'before a specific date' do
         before :each do
-          Processing.expects(:find_by_repository_and_date).with(repository, date, "<=").returns([])
+          repository.expects(:find_processing_by_date).with(date, "<=").returns([])
 
           get :has_processing_in_time, id: repository.id, date: date, after_or_before: "before", format: :json
         end
@@ -260,7 +260,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     end
     context 'with a ready processing' do
       before :each do
-        Processing.expects(:find_ready_by_repository).with(repository).returns([FactoryGirl.build(:processing)])
+        repository.expects(:find_ready_processing).returns([FactoryGirl.build(:processing)])
 
         get :has_ready_processing, id: repository.id, format: :json
       end
@@ -273,7 +273,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     end
     context 'without a ready processing' do
       before :each do
-        Processing.expects(:find_ready_by_repository).with(repository).returns([])
+        repository.expects(:find_ready_processing).returns([])
 
         get :has_ready_processing, id: repository.id, format: :json
       end
@@ -293,7 +293,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     end
     context 'with a ready processing' do
       before :each do
-        Processing.expects(:find_ready_by_repository).with(repository).returns([processing])
+        repository.expects(:find_ready_processing).returns([processing])
 
         get :last_ready_processing, id: repository.id, format: :json
       end
@@ -306,7 +306,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     end
     context 'without a ready processing' do
       before :each do
-        Processing.expects(:find_ready_by_repository).with(repository).returns([])
+        repository.expects(:find_ready_processing).returns([])
 
         get :last_ready_processing, id: repository.id, format: :json
       end
@@ -326,7 +326,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     end
     context 'without a date' do
       before :each do
-        Processing.expects(:where).with(repository: repository).returns([processing])
+        repository.expects(:processings).returns([processing])
 
         get :first_processing_in_time, id: repository.id, format: :json
       end
@@ -341,7 +341,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     context 'with a date' do
       let!(:date) {"2011-10-20T18:26:43.151+00:00"}
       before :each do
-        Processing.expects(:find_by_repository_and_date).with(repository, date, ">=").returns([processing])
+        repository.expects(:find_processing_by_date).with(date, ">=").returns([processing])
 
         get :first_processing_in_time, id: repository.id, after_or_before: "after", date: date, format: :json
       end
@@ -361,7 +361,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     end
     context 'without a date' do
       before :each do
-        Processing.expects(:where).with(repository: repository).returns([processing])
+        repository.expects(:processings).returns([processing])
 
         get :last_processing_in_time, id: repository.id, format: :json
       end
@@ -376,7 +376,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     context 'with a date' do
       let!(:date) {"2011-10-20T18:26:43.151+00:00"}
       before :each do
-        Processing.expects(:find_by_repository_and_date).with(repository, date, "<=").returns([processing])
+        repository.expects(:find_processing_by_date).with(date, "<=").returns([processing])
 
         get :last_processing_in_time, id: repository.id, after_or_before: "before", date: date, format: :json
       end

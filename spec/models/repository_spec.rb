@@ -76,5 +76,32 @@ describe Repository, :type => :model do
         end
       end
     end
+
+    describe 'find_processing_by_date' do
+      let(:date) {"2011-10-20T18:26:43.151+00:00"}
+      let(:order) { ">=" }
+      let(:processing) { FactoryGirl.build(:processing) }
+      let(:repository_processings) { mock('repository_processings') }
+
+      it 'is expected to return a processing' do
+        repository_processings.expects(:where).with("updated_at >= :date", {date: date}).returns([processing])
+        subject.expects(:processings).returns(repository_processings)
+        expect(subject.find_processing_by_date(date, order)).to eq([processing])
+      end
+    end
+
+    describe 'find_ready_processing' do
+      let(:processing) { FactoryGirl.build(:processing) }
+      let(:repository_processings) { mock('repository_processings') }
+
+      it 'is expected to return a processing' do
+        repository_processings.expects(:where).with(state: "READY").returns([processing])
+        subject.expects(:processings).returns(repository_processings)
+
+        expect(subject.find_ready_processing).to eq([processing])
+      end
+    end
   end
+
+
 end

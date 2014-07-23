@@ -73,7 +73,7 @@ class RepositoriesController < ApplicationController
   end
 
   def has_ready_processing
-    ready_processings = Processing.find_ready_by_repository(@repository)
+    ready_processings = @repository.find_ready_processing
 
     respond_to do |format|
       format.json { render json: { has_ready_processing: !ready_processings.empty? } }
@@ -83,7 +83,7 @@ class RepositoriesController < ApplicationController
   def has_processing_in_time
     order = params[:after_or_before] == "after" ? ">=" : "<="
 
-    processings = Processing.find_by_repository_and_date(@repository, params[:date], order)
+    processings = @repository.find_processing_by_date(params[:date], order)
 
     respond_to do |format|
       format.json { render json: { has_processing_in_time: !processings.empty? } }
@@ -91,7 +91,7 @@ class RepositoriesController < ApplicationController
   end
 
   def last_ready_processing
-    ready_processings = Processing.find_ready_by_repository(@repository)
+    ready_processings = @repository.find_ready_processing
 
     respond_to do |format|
       format.json { render json: { last_ready_processing: ready_processings.last } }
@@ -100,10 +100,10 @@ class RepositoriesController < ApplicationController
 
   def first_processing_in_time
     if params[:date].nil?
-      processings = Processing.where(repository: @repository)
+      processings = @repository.processings
     else
       order = params[:after_or_before] == "after" ? ">=" : "<="
-      processings = Processing.find_by_repository_and_date(@repository, params[:date], order)
+      processings = @repository.find_processing_by_date(params[:date], order)
     end
 
     respond_to do |format|
@@ -113,10 +113,10 @@ class RepositoriesController < ApplicationController
 
   def last_processing_in_time
     if params[:date].nil?
-      processings = Processing.where(repository: @repository)
+      processings = @repository.processings
     else
       order = params[:after_or_before] == "after" ? ">=" : "<="
-      processings = Processing.find_by_repository_and_date(@repository, params[:date], order)
+      processings = @repository.find_processing_by_date(params[:date], order)
     end
 
     respond_to do |format|
