@@ -18,6 +18,9 @@ end
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
+# Requiring since the Gemfile is not requiring it
+require 'database_cleaner'
+
 require 'cucumber/rails'
 
 # require 'capybara/poltergeist'

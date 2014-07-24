@@ -32,6 +32,8 @@ Rails.application.routes.draw do
   get 'base_tools' => 'base_tools#all_names'
   get 'base_tools/:name/find' => 'base_tools#find'
 
+  post 'tests/clean_database' => 'tests#clean_database'
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

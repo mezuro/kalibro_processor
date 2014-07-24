@@ -39,6 +39,9 @@ gem 'psych', '~>2.0.5'
 # Repository cloning
 gem 'git', '~> 1.2.7'
 
+# Clean the database for acceptance test
+gem 'database_cleaner', require: false
+
 group :test do
   # Easier test writing
   gem "shoulda-matchers", '~>2.6.1'
@@ -62,7 +65,7 @@ end
 group :cucumber do
   gem 'cucumber', '~> 1.3.10'
   gem 'cucumber-rails'
-  gem 'database_cleaner'
+  # gem 'database_cleaner' # Removed because it is getting added above.
 end
 
 # Some statistics
