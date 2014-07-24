@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   get 'repositories/:id/has_processing' => 'repositories#has_processing'
   get 'repositories/:id/has_ready_processing' => 'repositories#has_ready_processing'
   get 'repositories/:id/last_ready_processing' => 'repositories#last_ready_processing'
+  get 'repositories/:id/last_processing_state' => 'repositories#last_processing_state'
   post 'repositories/:id/first_processing(/:after_or_before)' => 'repositories#first_processing_in_time' # after_or_before is optional for this route
   post 'repositories/:id/last_processing(/:after_or_before)' => 'repositories#last_processing_in_time' # after_or_before is optional for this route
   post 'repositories/:id/has_processing/:after_or_before' => 'repositories#has_processing_in_time'

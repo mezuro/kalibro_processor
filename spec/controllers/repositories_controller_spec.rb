@@ -388,4 +388,18 @@ RSpec.describe RepositoriesController, :type => :controller do
       end
     end
   end
+
+  describe 'last_processing_state' do
+    let!(:processing) { FactoryGirl.build(:processing) }
+    before :each do
+      repository.expects(:processings).returns([processing])
+      Repository.expects(:find).with(repository.id).returns(repository)
+
+      get :last_processing_state, id: repository.id, format: :json
+    end
+
+    it 'is expected to return the processing state' do
+      expect(JSON.parse(response.body)).to eq(JSON.parse({processing_state: processing.state}.to_json))
+    end
+  end
 end

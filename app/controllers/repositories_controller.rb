@@ -124,6 +124,12 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  def last_processing_state
+    respond_to do |format|
+      format.json { render json: { processing_state: @repository.processings.last.state } }
+    end
+  end
+
   private
 
   def set_repository
