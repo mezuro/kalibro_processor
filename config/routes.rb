@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get 'module_results/:id/get' => 'module_results#get'
   get 'module_results/:id/metric_results' => 'module_results#metric_results'
   get 'module_results/:id/children' => 'module_results#children'
+  get 'module_results/:id/repository_id' => 'module_results#repository_id'
 
   resources :projects, except: [:index, :new, :edit]
   get 'projects/:id/exists' => 'projects#exists'
