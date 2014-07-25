@@ -402,4 +402,25 @@ RSpec.describe RepositoriesController, :type => :controller do
       expect(JSON.parse(response.body)).to eq(JSON.parse({processing_state: processing.state}.to_json))
     end
   end
+
+  describe 'module_result_history_of' do
+    let(:kalibro_module) { FactoryGirl.build(:kalibro_module, id: 1) }
+    let(:module_result) { FactoryGirl.build(:module_result) }
+    let(:processing) { FactoryGirl.build(:processing) }
+    let(:module_result_history_of_a_module) { [[processing.updated_at, module_result], [processing.updated_at, module_result]] }
+    before :each do
+      Repository.expects(:find).with(repository.id).returns(repository)
+      KalibroModule.expects(:find).with(kalibro_module.id).returns(kalibro_module)
+      kalibro_module.expects(:name).returns(kalibro_module.long_name)
+      repository.expects(:module_result_history_of).with(kalibro_module.long_name).returns(module_result_history_of_a_module)
+
+      post :module_result_history_of, id: repository.id, module_id: kalibro_module.id, format: :json
+    end
+
+    it { is_expected.to respond_with(:success) }
+
+    it 'should return the module_result_history_of a module' do
+      expect(JSON.parse(response.body)).to eq(JSON.parse({module_result_history_of: module_result_history_of_a_module}.to_json))
+    end
+  end
 end

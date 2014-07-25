@@ -53,7 +53,7 @@ describe Repository, :type => :model do
       end
     end
 
-    describe 'history_of' do
+    describe 'module_result_history_of' do
       let!(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
       let!(:module_result) { FactoryGirl.build(:module_result) }
       let!(:processing) { FactoryGirl.build(:processing) }
@@ -66,13 +66,13 @@ describe Repository, :type => :model do
       context 'when the module result exists' do
         let(:response) { [[processing.updated_at, module_result], [processing.updated_at, module_result]] }
         it 'is expected to return a list of all module_results associated with the time when it was last updated' do
-          expect(subject.history_of(kalibro_module.long_name)).to eq(response)
+          expect(subject.module_result_history_of(kalibro_module.long_name)).to eq(response)
         end
       end
 
       context 'when the module result does not exist' do
         it 'is expected to return an empty list' do
-          expect(subject.history_of("kalibro_module.long_name")).to eq([])
+          expect(subject.module_result_history_of("kalibro_module.long_name")).to eq([])
         end
       end
     end

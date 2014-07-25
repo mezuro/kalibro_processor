@@ -130,6 +130,15 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  def module_result_history_of
+    module_name = KalibroModule.find(params[:module_id].to_i).name
+    history = @repository.module_result_history_of(module_name)
+
+    respond_to do |format|
+      format.json { render json: {module_result_history_of: history} }
+    end
+  end
+
   private
 
   def set_repository
