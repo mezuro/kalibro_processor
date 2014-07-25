@@ -79,6 +79,37 @@ describe Repository, :type => :model do
       end
     end
 
+    describe 'metric_result_history_of' do
+      let!(:metric_result) { FactoryGirl.build(:metric_result_with_value) }
+      let!(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
+      let!(:module_result) { FactoryGirl.build(:module_result) }
+      let!(:processing) { FactoryGirl.build(:processing) }
+
+      context 'when the metric result exists' do
+       before :each do
+          subject.expects(:processings).returns([processing, processing])
+          processing.expects(:module_results).twice.returns([module_result])
+          module_result.expects(:kalibro_module).twice.returns(kalibro_module)
+          module_result.expects(:metric_results).twice.returns([metric_result])
+        end
+        let(:response) { [[processing.updated_at, metric_result.value], [processing.updated_at, metric_result.value]] }
+        it 'is expected to return a list of all metric_results associated with the time when it was last updated' do
+          expect(subject.metric_result_history_of(kalibro_module.long_name, metric_result.metric.name)).to eq(response)
+        end
+      end
+
+      context 'when the metric result does not exist' do
+        before :each do
+          subject.expects(:processings).returns([processing, processing])
+          processing.expects(:module_results).twice.returns([module_result])
+          module_result.expects(:kalibro_module).twice.returns(kalibro_module)
+        end
+        it 'is expected to return an empty list' do
+          expect(subject.metric_result_history_of("kalibro_module.long_name", "metric_result.metric.name")).to eq([])
+        end
+      end
+    end
+
     describe 'find_processing_by_date' do
       let(:date) {"2011-10-20T18:26:43.151+00:00"}
       let(:order) { ">=" }

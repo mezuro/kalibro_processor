@@ -38,6 +38,19 @@ class Repository < ActiveRecord::Base
     return history
   end
 
+  def metric_result_history_of(module_name, metric_name)
+    history = []
+    self.processings.each do |processing|
+      module_result = processing.module_results.select { |module_result| module_result.kalibro_module.long_name == module_name }.first
+      unless module_result.nil?
+        module_result.metric_results.each do |metric_result|
+          history << [processing.updated_at, metric_result.value] if metric_result.metric.name == metric_name
+        end
+      end
+    end
+    return history
+  end
+
   def find_processing_by_date(date, order)
     self.processings.where("updated_at #{order} :date", {date: date})
   end
