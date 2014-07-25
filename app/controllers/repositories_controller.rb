@@ -56,7 +56,7 @@ class RepositoriesController < ApplicationController
 
   def process_repository #FIXME Naming this method process is causing conflicts. Fix them.
     begin
-      @repository.delay.process
+      @repository.delay.process(Processing.create(repository: @repository, state: "PREPARING"))
       status = :ok
     rescue Errors::ProcessingError
       status = :internal_server_error

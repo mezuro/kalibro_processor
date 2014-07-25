@@ -133,10 +133,13 @@ RSpec.describe RepositoriesController, :type => :controller do
   describe 'process' do
     let!(:delayed_job) { mock("delayed_job") }
     context 'with a successful processing' do
+      let!(:processing) { FactoryGirl.build(:processing) }
+
       before :each do
+        Processing.expects(:create).with(repository: repository, state: "PREPARING").returns(processing)
         Repository.expects(:find).with(repository.id).returns(repository)
         repository.expects(:delay).returns(delayed_job)
-        delayed_job.expects(:process).returns(true)
+        delayed_job.expects(:process).with(processing).returns(true)
 
         get :process_repository, id: repository.id, format: :json
       end

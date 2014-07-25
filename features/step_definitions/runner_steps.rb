@@ -23,8 +23,12 @@ Given(/^I have a sample repository within the sample project$/) do
   @repository = FactoryGirl.create(:sbking_repository, configuration: @configuration)
 end
 
+Given(/^I have a processing within the sample repository$/) do
+  @processing = FactoryGirl.create(:processing, repository: @repository, state: "PREPARING")
+end
+
 When(/^I run for the given repository$/) do
-  @repository.process
+  @repository.process(@processing)
 end
 
 Then(/^the repository code_directory should exist$/) do

@@ -3,47 +3,61 @@ class Runner
 
   BASE_TOOLS = {"Analizo" => AnalizoMetricCollector}
 
-  def initialize(repository)
+  def initialize(repository, processing)
     @repository = repository
+    @processing = processing
     @native_metrics = {}
     BASE_TOOLS.each_key { |key| @native_metrics[key] = [] }
     @compound_metrics = []
   end
 
   def run
-    self.processing = Processing.create(repository: self.repository, state: "PREPARING")
+    begin
+      continue_processing?
+      self.repository.update(code_directory: generate_dir_name)
+      metrics_list
 
-    self.repository.update(code_directory: generate_dir_name)
-    metrics_list
+      continue_processing?
+      self.processing.update(state: "DOWNLOADING")
 
-    self.processing.update(state: "DOWNLOADING")
+      Repository::TYPES[self.repository.scm_type.upcase].retrieve!(self.repository.address, self.repository.code_directory)
 
-    Repository::TYPES[self.repository.scm_type.upcase].retrieve!(self.repository.address, self.repository.code_directory)
+      continue_processing?
+      self.processing.update(state: "COLLECTING")
 
-    self.processing.update(state: "COLLECTING")
+      collect
 
-    collect
+      continue_processing?
+      self.processing.update(state: "BUILDING")
 
-    self.processing.update(state: "BUILDING")
+      build_tree
 
-    build_tree
+      continue_processing?
+      self.processing.update(state: "AGGREGATING")
 
-    self.processing.update(state: "AGGREGATING")
+      aggregate(self.processing.root_module_result)
 
-    aggregate(self.processing.root_module_result)
+      continue_processing?
+      self.processing.update(state: "CALCULATING")
 
-    self.processing.update(state: "CALCULATING")
+      calculate_compound_results(self.processing.root_module_result)
 
-    calculate_compound_results(self.processing.root_module_result)
+      continue_processing?
+      self.processing.update(state: "INTERPRATATING")
 
-    self.processing.update(state: "INTERPRATATING")
+      interpratate_results(self.processing.root_module_result)
 
-    interpratate_results(self.processing.root_module_result)
-
-    self.processing.update(state: "READY")
+      self.processing.update(state: "READY")
+    rescue Errors::ProcessingCanceledError
+      self.processing.destroy
+    end
   end
 
   private
+
+  def continue_processing?
+    raise Errors::ProcessingCanceledError if self.processing.state == "CANCELED"
+  end
 
   def generate_dir_name
     path = YAML.load_file("#{Rails.root}/config/repositories.yml")["repositories"]["path"]

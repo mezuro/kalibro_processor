@@ -47,9 +47,11 @@ describe Repository, :type => :model do
     end
 
     describe 'process' do
+      let(:processing) { FactoryGirl.build(:processing) }
+
       it 'is expected to process a repository' do
         Runner.any_instance.expects(:run)
-        subject.process
+        subject.process(processing)
       end
     end
 

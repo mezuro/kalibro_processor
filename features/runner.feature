@@ -7,6 +7,7 @@ Feature: Runner run
   Scenario: An existing repository with a configuration
     Given I have a sample configuration with native metrics
     And I have a sample repository within the sample project
+    And I have a processing within the sample repository
     When I run for the given repository
     Then the repository code_directory should exist
     And I should have a READY processing for the given repository

@@ -25,8 +25,8 @@ class Repository < ActiveRecord::Base
     self.configuration_id = conf.id
   end
 
-  def process
-    Runner.new(self).run
+  def process(processing)
+    Runner.new(self, processing).run
   end
 
   def module_result_history_of(module_name)
