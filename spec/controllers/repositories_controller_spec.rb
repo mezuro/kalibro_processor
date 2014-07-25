@@ -428,4 +428,18 @@ RSpec.describe RepositoriesController, :type => :controller do
       expect(JSON.parse(response.body)).to eq(JSON.parse({module_result_history_of: module_result_history_of_a_module}.to_json))
     end
   end
+  
+  describe 'cancel_process' do
+    let!(:processing) { FactoryGirl.build(:processing, state: "PREPARING") }
+
+    before :each do
+      processing.expects(:update).with(state: "CANCELED")
+      repository.expects(:processings).returns([processing])
+      Repository.expects(:find).with(repository.id).returns(repository)
+
+      get :cancel_process, id: repository.id, format: :json
+    end
+
+    it { is_expected.to respond_with(:success) }
+  end
 end

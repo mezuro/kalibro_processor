@@ -138,6 +138,15 @@ class RepositoriesController < ApplicationController
       format.json { render json: {module_result_history_of: history} }
     end
   end
+  
+  def cancel_process
+    processing = @repository.processings.last
+    processing.update(state: "CANCELED") unless processing.state == "READY"
+
+    respond_to do |format|
+      format.json { render json: {}, status: :ok }
+    end
+  end
 
   private
 
