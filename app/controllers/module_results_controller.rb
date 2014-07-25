@@ -16,6 +16,19 @@ class ModuleResultsController < ApplicationController
     format_response(record, return_value)
   end
 
+  def repository_id
+    record = find_module_result
+
+    respond_to do |format|
+      if record.is_a?(ModuleResult)
+        format.json { render json: {repository_id: record.processing.repository.id} }
+      else
+        format.json { render json: record, status: :unprocessable_entity }
+      end
+    end
+
+  end
+
   private
 
   def find_module_result
