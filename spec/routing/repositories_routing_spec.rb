@@ -39,5 +39,7 @@ describe RepositoriesController, :type => :routing do
                   to(controller: :repositories, action: :last_processing_in_time, id: id) }
     it { is_expected.to route(:post, "/repositories/#{id}/module_result_history_of").
                   to(controller: :repositories, action: :module_result_history_of, id: id) }
+    it { is_expected.to route(:post, "/repositories/#{id}/metric_result_history_of").
+                  to(controller: :repositories, action: :metric_result_history_of, id: id) }
   end
 end

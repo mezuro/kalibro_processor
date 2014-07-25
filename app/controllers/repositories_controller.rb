@@ -138,7 +138,16 @@ class RepositoriesController < ApplicationController
       format.json { render json: {module_result_history_of: history} }
     end
   end
-  
+
+  def metric_result_history_of
+    module_name = KalibroModule.find(params[:module_id].to_i).name
+    history = @repository.metric_result_history_of(module_name, params[:metric_name])
+
+    respond_to do |format|
+      format.json { render json: {metric_result_history_of: history} }
+    end
+  end
+
   def cancel_process
     processing = @repository.processings.last
     processing.update(state: "CANCELED") unless processing.state == "READY"

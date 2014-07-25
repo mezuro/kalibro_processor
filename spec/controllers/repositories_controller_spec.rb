@@ -428,7 +428,29 @@ RSpec.describe RepositoriesController, :type => :controller do
       expect(JSON.parse(response.body)).to eq(JSON.parse({module_result_history_of: module_result_history_of_a_module}.to_json))
     end
   end
-  
+
+  describe 'metric_result_history_of' do
+    let(:metric_result) { FactoryGirl.build(:metric_result_with_value) }
+    let(:kalibro_module) { FactoryGirl.build(:kalibro_module, id: 1) }
+    let(:module_result) { FactoryGirl.build(:module_result) }
+    let(:processing) { FactoryGirl.build(:processing) }
+    let(:metric_result_history_of_a_metric) { [[processing.updated_at, metric_result.value], [processing.updated_at, metric_result.value]] }
+    before :each do
+      Repository.expects(:find).with(repository.id).returns(repository)
+      KalibroModule.expects(:find).with(kalibro_module.id).returns(kalibro_module)
+      kalibro_module.expects(:name).returns(kalibro_module.long_name)
+      repository.expects(:metric_result_history_of).with(kalibro_module.long_name, metric_result.metric.name).returns(metric_result_history_of_a_metric)
+
+      post :metric_result_history_of, id: repository.id, module_id: kalibro_module.id, metric_name: metric_result.metric.name, format: :json
+    end
+
+    it { is_expected.to respond_with(:success) }
+
+    it 'should return the metric_result_history_of a metric' do
+      expect(JSON.parse(response.body)).to eq(JSON.parse({metric_result_history_of: metric_result_history_of_a_metric}.to_json))
+    end
+  end
+
   describe 'cancel_process' do
     let!(:processing) { FactoryGirl.build(:processing, state: "PREPARING") }
 

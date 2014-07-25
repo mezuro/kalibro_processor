@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   post 'repositories/:id/last_processing(/:after_or_before)' => 'repositories#last_processing_in_time' # after_or_before is optional for this route
   post 'repositories/:id/has_processing/:after_or_before' => 'repositories#has_processing_in_time'
   post 'repositories/:id/module_result_history_of' => 'repositories#module_result_history_of'
+  post 'repositories/:id/metric_result_history_of' => 'repositories#metric_result_history_of'
   resources :repositories , except: [:index, :new, :edit]
 
   get 'base_tools' => 'base_tools#all_names'
