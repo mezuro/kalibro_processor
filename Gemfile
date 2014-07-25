@@ -42,6 +42,9 @@ gem 'git', '~> 1.2.7'
 # Clean the database for acceptance test
 gem 'database_cleaner', require: false
 
+# Create a processing queue
+gem 'delayed_job_active_record', '~> 4.0.1'
+
 group :test do
   # Easier test writing
   gem "shoulda-matchers", '~>2.6.1'
