@@ -1,7 +1,7 @@
 class ModuleResult < ActiveRecord::Base
-  has_one :kalibro_module
-  has_many :children, foreign_key: 'parent_id', class_name: 'ModuleResult'
-  has_many :metric_results
+  has_one :kalibro_module, dependent: :destroy #It can go wrong if someday we want to destroy only module results and not the whole processing
+  has_many :children, foreign_key: 'parent_id', class_name: 'ModuleResult', dependent: :destroy
+  has_many :metric_results, dependent: :destroy
   belongs_to :parent, class_name: 'ModuleResult'
   belongs_to :processing
 

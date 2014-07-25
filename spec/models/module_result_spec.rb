@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe ModuleResult, :type => :model do
   describe 'associations' do
-    it { is_expected.to have_one(:kalibro_module) }
-    it { is_expected.to have_many(:metric_results) }
+    it { is_expected.to have_one(:kalibro_module).dependent(:destroy) }
+    it { is_expected.to have_many(:metric_results).dependent(:destroy) }
     it { is_expected.to belong_to(:processing) }
 
     # Usually we do not touch the database on unit tests. But this is kind of a intricated self-relationship so it's worth the cost.
