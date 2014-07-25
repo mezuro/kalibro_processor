@@ -131,10 +131,12 @@ RSpec.describe RepositoriesController, :type => :controller do
   end
 
   describe 'process' do
+    let!(:delayed_job) { mock("delayed_job") }
     context 'with a successful processing' do
       before :each do
         Repository.expects(:find).with(repository.id).returns(repository)
-        repository.expects(:process).returns(true)
+        repository.expects(:delay).returns(delayed_job)
+        delayed_job.expects(:process).returns(true)
 
         get :process_repository, id: repository.id, format: :json
       end
@@ -145,7 +147,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     context 'with an unsuccessful processing' do
       before :each do
         Repository.expects(:find).with(repository.id).returns(repository)
-        repository.expects(:process).raises(Errors::ProcessingError)
+        repository.expects(:delay).raises(Errors::ProcessingError)
 
         get :process_repository, id: repository.id, format: :json
       end

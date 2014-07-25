@@ -45,6 +45,9 @@ gem 'database_cleaner', require: false
 # Create a processing queue
 gem 'delayed_job_active_record', '~> 4.0.1'
 
+# Required for workers creation
+gem 'daemons', '~> 1.1.9'
+
 group :test do
   # Easier test writing
   gem "shoulda-matchers", '~>2.6.1'
