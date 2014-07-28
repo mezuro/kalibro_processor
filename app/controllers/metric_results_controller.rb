@@ -7,4 +7,26 @@ class MetricResultsController < ApplicationController
       format.json { render json: descendant_values }
     end
   end
+
+  def repository_id
+    record = find_metric_result
+
+    respond_to do |format|
+      if record.is_a?(MetricResult)
+        format.json { render json: {repository_id: record.processing.repository.id} }
+      else
+        format.json { render json: record, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  private
+
+  def find_metric_result
+    begin
+      MetricResult.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      {error: 'RecordNotFound'}
+    end
+  end
 end

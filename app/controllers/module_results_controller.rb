@@ -26,7 +26,6 @@ class ModuleResultsController < ApplicationController
         format.json { render json: record, status: :unprocessable_entity }
       end
     end
-
   end
 
   private

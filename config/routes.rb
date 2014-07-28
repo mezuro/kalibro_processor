@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   root 'information#data'
 
   get 'metric_results/:id/descendant_values' => 'metric_results#descendant_values'
+  get 'metric_results/:id/repository_id' => 'metric_results#repository_id'
 
   get 'module_results/:id/get' => 'module_results#get'
   get 'module_results/:id/metric_results' => 'module_results#metric_results'
