@@ -102,6 +102,7 @@ GEM
     multipart-post (2.0.0)
     nokogiri (1.6.2.1)
       mini_portile (= 0.6.0)
+    pg (0.17.1)
     polyglot (0.3.5)
     psych (2.0.5)
     rack (1.5.2)
@@ -204,6 +205,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   kalibro_gatekeeper_client (~> 0.1.1)
   mocha
+  pg
   psych (~> 2.0.5)
   rails (= 4.1.4)
   rspec-rails (~> 3.0.1)
