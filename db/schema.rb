@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140725170307) do
+ActiveRecord::Schema.define(version: 20140730165805) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -63,7 +63,6 @@ ActiveRecord::Schema.define(version: 20140725170307) do
 
   create_table "processings", force: true do |t|
     t.string   "state"
-    t.integer  "process_time_id"
     t.integer  "repository_id"
     t.datetime "created_at"
     t.datetime "updated_at"
