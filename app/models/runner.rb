@@ -14,38 +14,54 @@ class Runner
   def run
     begin
       continue_processing?
+
+      process_time = ProcessTime.create(state: "PREPARING", processing: @processing)
       self.repository.update(code_directory: generate_dir_name)
       metrics_list
+      process_time.update(updated_at: DateTime.now)
 
       continue_processing?
+
       self.processing.update(state: "DOWNLOADING")
 
+      process_time = ProcessTime.create(state: "DOWNLOADING", processing: @processing)
       Repository::TYPES[self.repository.scm_type.upcase].retrieve!(self.repository.address, self.repository.code_directory)
+      process_time.update(updated_at: DateTime.now)
 
       continue_processing?
       self.processing.update(state: "COLLECTING")
 
+      process_time = ProcessTime.create(state: "COLLECTING", processing: @processing)
       collect
+      process_time.update(updated_at: DateTime.now)
 
       continue_processing?
       self.processing.update(state: "BUILDING")
 
+      process_time = ProcessTime.create(state: "BUILDING", processing: @processing)
       build_tree
+      process_time.update(updated_at: DateTime.now)
 
       continue_processing?
       self.processing.update(state: "AGGREGATING")
 
+      process_time = ProcessTime.create(state: "AGGREGATING", processing: @processing)
       aggregate(self.processing.root_module_result)
+      process_time.update(updated_at: DateTime.now)
 
       continue_processing?
       self.processing.update(state: "CALCULATING")
 
+      process_time = ProcessTime.create(state: "CALCULATING", processing: @processing)
       calculate_compound_results(self.processing.root_module_result)
+      process_time.update(updated_at: DateTime.now)
 
       continue_processing?
-      self.processing.update(state: "INTERPRATATING")
+      self.processing.update(state: "INTERPRETATING")
 
+      process_time = ProcessTime.create(state: "INTERPRETATING", processing: @processing)
       interpratate_results(self.processing.root_module_result)
+      process_time.update(updated_at: DateTime.now)
 
       self.processing.update(state: "READY")
     rescue Errors::ProcessingCanceledError

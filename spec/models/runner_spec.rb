@@ -6,6 +6,7 @@ describe Runner, :type => :model do
       let(:configuration) { FactoryGirl.build(:configuration) }
       let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration) }
       let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
+      let!(:process_time) { FactoryGirl.build(:process_time) }
       subject { Runner.new(repository, processing) }
       let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
       let!(:compound_metric_configuration) { FactoryGirl.build(:compound_metric_configuration) }
@@ -33,7 +34,7 @@ describe Runner, :type => :model do
             building_state_mocks
             aggregating_state_mocks
             calculating_state_mocks
-            interpratating_state_mocks
+            interpretating_state_mocks
             processing.expects(:update).with(state: "READY")
           end
 

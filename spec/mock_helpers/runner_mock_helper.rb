@@ -1,5 +1,7 @@
 module RunnerMockHelper
   def preparing_state_mocks
+    ProcessTime.expects(:create).with(state: "PREPARING", processing: processing).returns(process_time)
+    process_time.expects(:update)
     Dir.expects(:exists?).with("/tmp").at_least_once.returns(true)
     Digest::MD5.expects(:hexdigest).returns("test")
     Dir.expects(:exists?).with(code_dir).returns(false)
@@ -8,6 +10,8 @@ module RunnerMockHelper
   end
 
   def downloading_state_mocks
+    ProcessTime.expects(:create).with(state: "DOWNLOADING", processing: processing).returns(process_time)
+    process_time.expects(:update)
     processing.expects(:update).with(state: "DOWNLOADING")
     Downloaders::GitDownloader.expects(:retrieve!).with(repository.address, code_dir).returns true
     repository.expects(:configuration).at_least_once.returns(configuration)
@@ -17,11 +21,15 @@ module RunnerMockHelper
   end
 
   def collecting_state_mocks
+    ProcessTime.expects(:create).with(state: "COLLECTING", processing: processing).returns(process_time)
+    process_time.expects(:update)
     processing.expects(:update).with(state: "COLLECTING")
     AnalizoMetricCollector.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
   end
 
   def building_state_mocks
+    ProcessTime.expects(:create).with(state: "BUILDING", processing: processing).returns(process_time)
+    process_time.expects(:update)
     processing.expects(:update).with(state: "BUILDING")
     filtered_module_results = Object.new
     module_result_limits = Object.new
@@ -42,6 +50,8 @@ module RunnerMockHelper
   end
 
   def aggregating_state_mocks
+    ProcessTime.expects(:create).with(state: "AGGREGATING", processing: processing).returns(process_time)
+    process_time.expects(:update)
     processing.expects(:update).with(state: "AGGREGATING")
     module_result.expects(:metric_results).twice.returns([metric_result])
     module_result.expects(:children).times(3).returns([])
@@ -53,12 +63,16 @@ module RunnerMockHelper
   end
 
   def calculating_state_mocks
+    ProcessTime.expects(:create).with(state: "CALCULATING", processing: processing).returns(process_time)
+    process_time.expects(:update)
     processing.expects(:update).with(state: "CALCULATING")
     CompoundResults::Calculator.any_instance.expects(:calculate).twice
   end
 
-  def interpratating_state_mocks
-    processing.expects(:update).with(state: "INTERPRATATING")
+  def interpretating_state_mocks
+    ProcessTime.expects(:create).with(state: "INTERPRETATING", processing: processing).returns(process_time)
+    process_time.expects(:update)
+    processing.expects(:update).with(state: "INTERPRETATING")
     metric_result.expects(:metric_configuration).returns(metric_configuration)
     metric_result.expects(:has_grade?).returns(true)
     metric_result.expects(:range).returns(range)
