@@ -38,6 +38,8 @@ Rails.application.routes.draw do
   get 'base_tools' => 'base_tools#all_names'
   get 'base_tools/:name/find' => 'base_tools#find'
 
+  get 'processings/:id/process_times' => 'processings#process_times'
+
   post 'tests/clean_database' => 'tests#clean_database'
 
   # Example of regular route:
