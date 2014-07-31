@@ -3,7 +3,8 @@ rvm:
   - 2.1.2
 
 before_script:
-  - "cp config/database.yml.sample config/database.yml"
+  - psql -c "create role kalibro_processor with createdb login password 'kalibro_processor'" -U postgres
+  - "cp config/database.yml.postgresql_sample config/database.yml"
   - "bundle exec rake db:migrate RAILS_ENV=test"
   - git clone https://gist.github.com/0c4ad3b5700c6364abf1.git -b v1.0 kalibro_install
   - pushd kalibro_install
