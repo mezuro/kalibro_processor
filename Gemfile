@@ -68,6 +68,12 @@ group :development, :test do
 
   # Fixtures made easy
   gem 'factory_girl_rails', '~> 4.4.1'
+
+  # Deployment
+  gem 'capistrano', "~>3.2.1", require: false
+  gem 'capistrano-rails'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rvm', "~>0.1.0"
 end
 
 # Acceptance tests
