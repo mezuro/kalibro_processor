@@ -44,3 +44,7 @@ end
 Then(/^the processing retrieved should have a Root ModuleResult$/) do
   expect(@processing.root_module_result).to be_a(ModuleResult)
 end
+
+Then(/^the Root ModuleResult retrieved should have a list of MetricResults$/) do
+  expect(@processing.root_module_result.metric_results.first).to be_a(MetricResult)
+end

@@ -12,3 +12,4 @@ Feature: Runner run
     Then the repository code_directory should exist
     And I should have a READY processing for the given repository
     And the processing retrieved should have a Root ModuleResult
+    And the Root ModuleResult retrieved should have a list of MetricResults
