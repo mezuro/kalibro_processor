@@ -91,5 +91,19 @@ describe ModuleResult, :type => :model do
         expect(ModuleResult.find_by_module_and_processing(kalibro_module, processing)).to eq(module_result)
       end
     end
+
+    describe 'to_json' do
+      subject { FactoryGirl.build(:module_result) }
+
+      it 'is expected to add the kalibro_module to the JSON' do
+        expect(JSON.parse(subject.to_json)['kalibro_module']).to eq(JSON.parse(subject.kalibro_module.to_json))
+      end
+
+      it 'is expected to preserve all the attributes' do
+        expect(JSON.parse(subject.to_json)['parent']).to eq(JSON.parse(subject.to_json)['parent'])
+        expect(JSON.parse(subject.to_json)['grade']).to eq(JSON.parse(subject.to_json)['grade'])
+        expect(JSON.parse(subject.to_json)['height']).to eq(JSON.parse(subject.to_json)['height'])
+      end
+    end
   end
 end

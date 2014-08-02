@@ -17,4 +17,12 @@ class ModuleResult < ActiveRecord::Base
     self.metric_results.each {|metric_result| return metric_result if metric_result.metric == metric}
     return nil
   end
+
+  # Adding kalibro_module to the result
+  def to_json(options={})
+    json = super(options)
+    hash = JSON.parse(json)
+    hash["kalibro_module"] = kalibro_module
+    hash.to_json
+  end
 end
