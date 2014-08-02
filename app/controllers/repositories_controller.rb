@@ -140,7 +140,7 @@ class RepositoriesController < ApplicationController
   end
 
   def metric_result_history_of
-    module_name = KalibroModule.find(params[:module_id].to_i).name
+    module_name = KalibroModule.find(params[:module_id].to_i).long_name
     history = @repository.metric_result_history_of(module_name, params[:metric_name])
 
     respond_to do |format|
