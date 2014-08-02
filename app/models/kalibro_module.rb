@@ -15,9 +15,15 @@ class KalibroModule < ActiveRecord::Base
   end
 
   def parent
-    return nil if self.granularity.type == Granularity::SOFTWARE
-    return KalibroModule.new({granularity: Granularity.new(Granularity::SOFTWARE), name: "ROOT"}) if self.name.length <= 1
-    return KalibroModule.new({granularity: self.granularity.parent, name: self.name[0..-2]}) # 0..-2 creates a range from 0 to the element before the last element
+    if self.granularity.type == Granularity::SOFTWARE
+      return nil
+    elsif self.name.length <= 1
+      return KalibroModule.new({granularity: Granularity.new(Granularity::SOFTWARE), name: "ROOT"})
+    else
+      new_granularity = self.granularity.parent
+      new_granularity = Granularity::PACKAGE if new_granularity.type == Granularity::SOFTWARE # if the parent is not the ROOT, so, it should be a PACKAGE not a SOFTWARE
+      return KalibroModule.new({granularity: new_granularity, name: self.name[0..-2]}) # 0..-2 creates a range from 0 to the element before the last element
+    end
   end
 
   def granularity=(value)
