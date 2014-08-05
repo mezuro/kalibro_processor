@@ -5,7 +5,7 @@ class ProcessTime < ActiveRecord::Base
 
   def time
     unless self.created_at.nil?
-      self.updated_at.to_datetime - self.created_at.to_datetime
+      self.updated_at - self.created_at
     else
       nil
     end

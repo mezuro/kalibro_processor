@@ -13,7 +13,7 @@ RSpec.describe ProcessTime, :type => :model do
     describe "time" do
       subject { FactoryGirl.build(:process_time) }
       it "is expected to return the process time" do
-        process_time = subject.updated_at.to_datetime - subject.created_at.to_datetime
+        process_time = subject.updated_at - subject.created_at
         expect( subject.time ).to eq(process_time)
       end
     end
@@ -22,8 +22,8 @@ RSpec.describe ProcessTime, :type => :model do
       subject { FactoryGirl.build(:process_time) }
 
       it 'is expected to add the time to the JSON' do
-        process_time = subject.updated_at.to_datetime - subject.created_at.to_datetime
-        expect(JSON.parse(subject.to_json)['time']).to eq(process_time.to_s)
+        process_time = subject.updated_at - subject.created_at
+        expect(JSON.parse(subject.to_json)['time']).to eq(process_time)
       end
 
       it 'is expected to preserve all the attributes' do
