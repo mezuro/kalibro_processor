@@ -86,7 +86,7 @@ describe ModuleResultsController do
         it { is_expected.to respond_with(:success) }
 
         it 'should return the children' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse([module_result_with_parent].to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse([JSON.parse(module_result_with_parent.to_json)].to_json))
         end
       end
 
