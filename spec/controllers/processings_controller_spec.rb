@@ -13,7 +13,7 @@ RSpec.describe ProcessingsController, :type => :controller do
     it { is_expected.to respond_with(:success) }
 
     it 'is expected to return the list of process_times converted to JSON' do
-      expect(JSON.parse(response.body)).to eq(JSON.parse({process_times: processing.process_times}.to_json))
+      expect(JSON.parse(response.body)).to eq(JSON.parse({process_times: processing.process_times.map { |process_time| JSON.parse(process_time.to_json) }}.to_json))
     end
   end
 end
