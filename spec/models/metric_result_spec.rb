@@ -16,7 +16,7 @@ describe MetricResult, :type => :model do
       end
 
       context 'when value is nil and the values array is not empty' do
-        subject { FactoryGirl.build(:metric_result) }
+        subject { FactoryGirl.build(:metric_result, module_result: FactoryGirl.build(:module_result)) }
         before :each do
           KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
             with(subject.metric_configuration_id).returns(metric_configuration)
@@ -24,6 +24,10 @@ describe MetricResult, :type => :model do
 
         it 'should calculate the mean value of the values array' do
           expect(subject.aggregated_value).to eq(2.0)
+        end
+
+        after :each do
+          Rails.cache.clear # This test depends on metric configuration
         end
       end
 
@@ -39,7 +43,7 @@ describe MetricResult, :type => :model do
     describe 'range' do
       let!(:range) { FactoryGirl.build(:range) }
       let!(:yet_another_range) { FactoryGirl.build(:yet_another_range) }
-      subject { FactoryGirl.build(:metric_result_with_value) }
+      subject { FactoryGirl.build(:metric_result_with_value, module_result: FactoryGirl.build(:module_result)) }
 
       before :each do
         KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
@@ -50,6 +54,10 @@ describe MetricResult, :type => :model do
 
       it 'should return the range that contains the aggregated value of the metric result' do
         expect(subject.range).to eq(range)
+      end
+
+      after :each do
+        Rails.cache.clear # This test depends on metric configuration
       end
     end
 
@@ -129,7 +137,7 @@ describe MetricResult, :type => :model do
     end
 
     describe 'metric' do
-      subject { FactoryGirl.build(:metric_result, metric: nil) }
+      subject { FactoryGirl.build(:metric_result, metric: nil, module_result: FactoryGirl.build(:module_result)) }
 
       before :each do
         KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
@@ -139,6 +147,10 @@ describe MetricResult, :type => :model do
 
       it 'is expected to be a KalibroGatekeeperClient::Entities::Metric' do
         expect(subject.metric).to be_a(KalibroGatekeeperClient::Entities::Metric)
+      end
+
+      after :each do
+        Rails.cache.clear # This test depends on metric configuration
       end
     end
   end
