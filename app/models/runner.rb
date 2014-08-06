@@ -16,8 +16,7 @@ class Runner
       continue_processing?
 
       process_time = ProcessTime.create(state: "PREPARING", processing: @processing)
-      self.repository.update(code_directory: generate_dir_name)
-      metrics_list
+      Processor::Preparer.prepare(self)
       process_time.update(updated_at: DateTime.now)
 
       continue_processing?
@@ -73,27 +72,6 @@ class Runner
 
   def continue_processing?
     raise Errors::ProcessingCanceledError if self.processing.state == "CANCELED"
-  end
-
-  def generate_dir_name
-    path = YAML.load_file("#{Rails.root}/config/repositories.yml")["repositories"]["path"]
-    dir = path
-    raise RuntimeError unless Dir.exists?(dir)
-    while Dir.exists?(dir)
-      dir = "#{path}/#{Digest::MD5.hexdigest(Time.now.to_s)}"
-    end
-    return dir
-  end
-
-  def metrics_list
-    metric_configurations = KalibroGatekeeperClient::Entities::MetricConfiguration.metric_configurations_of(self.repository.configuration.id)
-    metric_configurations.each do |metric_configuration|
-      if metric_configuration.metric.compound
-        self.compound_metrics << metric_configuration
-      else
-        self.native_metrics[metric_configuration.base_tool_name] << metric_configuration
-      end
-    end
   end
 
   def collect
