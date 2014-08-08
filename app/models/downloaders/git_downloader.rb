@@ -15,7 +15,7 @@ module Downloaders
     def self.updatable?; true; end
 
     def self.get(address, directory)
-      if Dir.exist?(directory)
+      if Dir.exists?(directory) and is_git?(directory) 
         reset(directory)
       else
         clone(address, directory)
@@ -23,6 +23,10 @@ module Downloaders
     end
 
     private
+
+    def self.is_git?(directory) 
+      Dir.exists?("#{directory}/.git")
+    end
 
     def self.clone(address, directory)
       # if directory is "/tmp/test", name is "test" and path is "/tmp"

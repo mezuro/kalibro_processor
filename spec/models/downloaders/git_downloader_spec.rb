@@ -30,33 +30,51 @@ describe Downloaders::GitDownloader, :type => :model do
 
       context 'when the directory exists' do
         before :each do
-          Dir.expects(:exist?).with(directory).at_least_once.returns(true)
+          Dir.expects(:exists?).with(directory).at_least_once.returns(true)
+        end
+        context 'and it is a git repository' do
+
+          it 'is expected to open, fetch and reset the repository' do
+            remote = Object.new
+            remote_name = 'test'
+            remote.expects(:name).returns(remote_name)
+
+            branch = Object.new
+            branch_name = 'test'
+            branch.expects(:name).returns(branch_name)
+
+            git = Object.new
+            git.expects(:remote).returns(remote)
+            git.expects(:branch).returns(branch)
+            git.expects(:fetch).returns(true)
+            git.expects(:reset).with("#{remote_name}/#{branch_name}", hard: true).returns(true)
+
+            Dir.expects(:exists?).with("#{directory}/.git").returns(true)
+
+            Git.expects(:open).with(directory).returns(git)
+
+            subject.class.retrieve!(address, directory)
+          end
         end
 
-        it 'is expected to open, fetch and reset the repository' do
-          remote = Object.new
-          remote_name = 'test'
-          remote.expects(:name).returns(remote_name)
+        context 'and it is not a git repository' do
 
-          branch = Object.new
-          branch_name = 'test'
-          branch.expects(:name).returns(branch_name)
+          it 'is expected to clone the repository' do
+            name = directory.split('/').last
+            path = (directory.split('/') - [name]).join('/')
 
-          git = Object.new
-          git.expects(:remote).returns(remote)
-          git.expects(:branch).returns(branch)
-          git.expects(:fetch).returns(true)
-          git.expects(:reset).with("#{remote_name}/#{branch_name}", hard: true).returns(true)
+            Git.expects(:clone).with(address, name, path: path).returns(true)
+            Dir.expects(:exists?).with("#{directory}/.git").returns(false)
 
-          Git.expects(:open).with(directory).returns(git)
-
-          subject.class.retrieve!(address, directory)
+            subject.class.retrieve!(address, directory)
+          end
         end
+
       end
 
       context "when the directory doesn't exist" do
         before :each do
-          Dir.expects(:exist?).with(directory).at_least_once.returns(false)
+          Dir.expects(:exists?).with(directory).at_least_once.returns(false)
         end
 
         it 'is expected to clone the repository' do
