@@ -24,7 +24,7 @@ class Runner
       self.processing.update(state: "DOWNLOADING")
 
       process_time = ProcessTime.create(state: "DOWNLOADING", processing: @processing)
-      Repository::TYPES[self.repository.scm_type.upcase].retrieve!(self.repository.address, self.repository.code_directory)
+      Processor::Downloader.download(self)
       process_time.update(updated_at: DateTime.now)
 
       continue_processing?
