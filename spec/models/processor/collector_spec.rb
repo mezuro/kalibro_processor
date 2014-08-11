@@ -7,7 +7,6 @@ describe Processor::Collector, :type => :model do
       let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration) }
       let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
       let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
-      let(:native_metric) { [metric_configuration.base_tool_name] }
       let!(:runner) { Runner.new(repository, processing) }
       let!(:code_dir) { "/tmp/test" }
 

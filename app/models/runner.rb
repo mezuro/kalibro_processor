@@ -76,17 +76,6 @@ class Runner
     raise Errors::ProcessingCanceledError if self.processing.state == "CANCELED"
   end
 
-  def collect
-    self.native_metrics.each do |base_tool_name, wanted_metrics|
-      unless wanted_metrics.empty?
-        BASE_TOOLS[base_tool_name].new.
-          collect_metrics(repository.code_directory,
-                          wanted_metrics,
-                          self.processing)
-      end
-    end
-  end
-
   def metric_configuration(metric)
     self.native_metrics.each_value do |metric_configurations|
       metric_configurations.each do |metric_configuration|
