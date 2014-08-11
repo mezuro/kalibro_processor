@@ -54,7 +54,7 @@ class Runner
       self.processing.update(state: "CALCULATING")
 
       process_time = ProcessTime.create(state: "CALCULATING", processing: @processing)
-      calculate_compound_results(self.processing.root_module_result)
+      Processor::CompoundResultCalculator.calculate_compound_results(self.processing.root_module_result, @compound_metrics)
       process_time.update(updated_at: DateTime.now)
 
       continue_processing?
@@ -105,15 +105,6 @@ class Runner
         metric_result.save
       end
     end
-  end
-
-  def calculate_compound_results(module_result)
-    unless module_result.children.empty?
-      module_result.children.each { |child| calculate_compound_results(child) }
-    end
-
-    #TODO: there might exist the need to check the scope before trying to calculate
-    CompoundResults::Calculator.new(module_result, @compound_metrics).calculate
   end
 
   def interpratate_results(module_result)
