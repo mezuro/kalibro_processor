@@ -40,7 +40,7 @@ class Runner
       self.processing.update(state: "BUILDING")
 
       process_time = ProcessTime.create(state: "BUILDING", processing: @processing)
-      build_tree
+      Processor::TreeBuilder.build_tree(self.processing)
       process_time.update(updated_at: DateTime.now)
 
       continue_processing?
@@ -84,41 +84,6 @@ class Runner
                           wanted_metrics,
                           self.processing)
       end
-    end
-  end
-
-  def build_tree
-    offset = 0
-    module_results = module_result_batch(self.processing, offset)
-    while !module_results.empty?
-      module_results.each do |module_result|
-        set_parent(module_result, module_results)
-      end
-      offset += 100
-      module_results = module_result_batch(self.processing, offset)
-    end
-  end
-
-  def module_result_batch(processing, offset)
-    ModuleResult.where(processing: self.processing).limit(100).offset(offset)
-  end
-
-  def parent_result(parent_module, module_results)
-    parent_module_result = ModuleResult.find_by_module_and_processing(parent_module, self.processing)
-    if parent_module_result.nil?
-      parent_module_result = ModuleResult.create(kalibro_module: parent_module, processing: self.processing)
-      module_results << parent_module_result
-    end
-
-    return parent_module_result
-  end
-
-  def set_parent(module_result, module_results)
-    parent_module = module_result.kalibro_module.parent
-    if parent_module.nil?
-      self.processing.update(root_module_result: module_result)
-    else
-      module_result.update(parent: parent_result(parent_module, module_results))
     end
   end
 
