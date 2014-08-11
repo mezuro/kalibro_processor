@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Processor::TreeBuilder, :type => :model do
+describe Processor::TreeBuilder do
   describe 'methods' do
     let!(:configuration) { FactoryGirl.build(:configuration) }
     let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration) }

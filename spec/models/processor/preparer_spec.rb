@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Processor::Preparer, :type => :model do
+describe Processor::Preparer do
   describe 'methods' do
     let!(:code_dir) { "/tmp/test" }
     let!(:configuration) { FactoryGirl.build(:configuration) }

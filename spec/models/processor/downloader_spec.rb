@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Processor::Downloader, :type => :model do
+describe Processor::Downloader do
  describe 'methods' do
   describe 'download' do
     let(:configuration) { FactoryGirl.build(:configuration) }

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Processor::Collector, :type => :model do
+describe Processor::Collector do
   describe 'methods' do
     describe 'collect' do
       let(:configuration) { FactoryGirl.build(:configuration) }
