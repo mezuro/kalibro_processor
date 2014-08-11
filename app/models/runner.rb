@@ -28,13 +28,15 @@ class Runner
       process_time.update(updated_at: DateTime.now)
 
       continue_processing?
+
       self.processing.update(state: "COLLECTING")
 
       process_time = ProcessTime.create(state: "COLLECTING", processing: @processing)
-      collect
+      Processor::Collector.collect(self)
       process_time.update(updated_at: DateTime.now)
 
       continue_processing?
+
       self.processing.update(state: "BUILDING")
 
       process_time = ProcessTime.create(state: "BUILDING", processing: @processing)
