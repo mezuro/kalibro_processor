@@ -19,7 +19,7 @@ module CompoundResults
         MetricResult.create(metric: compound_metric_configuration.metric,
                             module_result: @module_result,
                             metric_configuration_id: compound_metric_configuration.id,
-                            value: evaluator.evaluate("#{compound_metric_configuration.code}()"))
+                            value: evaluator.evaluate("#{compound_metric_configuration.code}"))
       end
     end
   end

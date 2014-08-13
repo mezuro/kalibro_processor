@@ -17,7 +17,7 @@ module CompoundResults
     end
 
     def evaluate(identifier)
-      @script.eval("#{identifier}")
+      @script.eval("#{identifier}()")
     end
 
     private
