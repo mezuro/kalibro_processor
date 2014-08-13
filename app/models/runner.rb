@@ -47,7 +47,7 @@ class Runner
       self.processing.update(state: "AGGREGATING")
 
       process_time = ProcessTime.create(state: "AGGREGATING", processing: @processing)
-      aggregate(self.processing.root_module_result)
+      Processor::Aggregator.aggregate(self.processing.root_module_result, @native_metrics)
       process_time.update(updated_at: DateTime.now)
 
       continue_processing?
@@ -74,37 +74,6 @@ class Runner
 
   def continue_processing?
     raise Errors::ProcessingCanceledError if self.processing.state == "CANCELED"
-  end
-
-  def metric_configuration(metric)
-    self.native_metrics.each_value do |metric_configurations|
-      metric_configurations.each do |metric_configuration|
-        return metric_configuration if metric_configuration.metric == metric
-      end
-    end
-  end
-
-  def aggregate(module_result)
-    unless module_result.children.empty?
-      module_result.children.each { |child| aggregate(child) }
-    end
-
-    all_metrics = []
-    self.native_metrics.each_value do |metric_configurations|
-      metric_configurations.each do |metric_configuration|
-        all_metrics << metric_configuration.metric
-      end
-    end
-
-    already_calculated_metrics = module_result.metric_results.map { |metric_result| metric_result.metric}
-
-    all_metrics.each do |metric|
-      unless already_calculated_metrics.include?(metric)
-        metric_result = MetricResult.new(metric: metric, module_result: module_result, metric_configuration_id: metric_configuration(metric).id)
-        metric_result.value = metric_result.aggregated_value
-        metric_result.save
-      end
-    end
   end
 
   def interpratate_results(module_result)
