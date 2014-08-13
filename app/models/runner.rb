@@ -61,7 +61,7 @@ class Runner
       self.processing.update(state: "INTERPRETATING")
 
       process_time = ProcessTime.create(state: "INTERPRETATING", processing: @processing)
-      interpratate_results(self.processing.root_module_result)
+      Processor::Interpreter.interpret(self.processing.root_module_result)
       process_time.update(updated_at: DateTime.now)
 
       self.processing.update(state: "READY")
@@ -74,22 +74,5 @@ class Runner
 
   def continue_processing?
     raise Errors::ProcessingCanceledError if self.processing.state == "CANCELED"
-  end
-
-  def interpratate_results(module_result)
-    unless module_result.children.empty?
-      module_result.children.each { |child| interpratate_results(child) }
-    end
-
-    numerator = 0
-    denominator = 0
-    module_result.metric_results.each do |metric_result|
-      weight = metric_result.metric_configuration.weight
-      grade = metric_result.has_grade? ? metric_result.range.reading.grade : 0
-      numerator += weight*grade
-      denominator += weight
-    end
-    quotient = denominator == 0 ? 0 : numerator/denominator
-    module_result.update(grade: quotient)
   end
 end
