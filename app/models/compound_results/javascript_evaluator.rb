@@ -1,9 +1,9 @@
 module CompoundResults
   class JavascriptEvaluator
 
-    def initialize
+    def initialize(timeout=60000)
       #V8 is a JavaScript interpreter
-      @script = V8::Context.new #FIXME: set a timeout to avoid infinite loops and cyclic dependencies
+      @script = V8::Context.new(timeout: timeout)
     end
 
     def add_function(identifier, body)

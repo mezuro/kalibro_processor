@@ -23,9 +23,20 @@ describe CompoundResults::JavascriptEvaluator, :type => :model do
     describe 'evaluate' do
       let(:identifier) { "code" }
 
-      it 'is expected to call V8 eval method' do
-        V8::Context.any_instance.expects(:eval).with("#{identifier}()")
-        subject.evaluate(identifier)
+      context 'before timeout' do
+        it 'is expected to call V8 eval method' do
+          V8::Context.any_instance.expects(:eval).with("#{identifier}()")
+          subject.evaluate(identifier)
+        end
+      end
+
+      context 'after timeout' do
+        let(:infinite_loop) { "while (true) {;}"}
+        it 'is expected to raise a V8 timeout exception' do
+          subject = CompoundResults::JavascriptEvaluator.new(2000)
+          subject.add_function(identifier, infinite_loop)
+          expect{ subject.evaluate(identifier) }.to raise_error(V8::Error, 'Script Timed Out')
+        end
       end
     end
   end
