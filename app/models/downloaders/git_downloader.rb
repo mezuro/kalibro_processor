@@ -2,11 +2,11 @@ module Downloaders
   # Downloader sufix was put because otherwise it would conflict with the Git class from the git gem
   class GitDownloader < Base
     def self.available?
-      begin
-        Git.init
-        return true
-      rescue Git::GitExecuteError
+      git_version = `git --version`
+      if git_version.nil?
         return false
+      else
+        return true
       end
     end
 

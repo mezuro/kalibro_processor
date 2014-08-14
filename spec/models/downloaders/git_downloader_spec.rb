@@ -5,7 +5,7 @@ describe Downloaders::GitDownloader, :type => :model do
     describe 'available?' do
       context 'with git installed and running init in a valid directory' do
         before :each do
-          Git.expects(:init).returns(true)
+          subject.class.expects(:`).with("git --version").returns("git version 2.0.4")
         end
 
         it 'is expected to be true' do
@@ -15,7 +15,7 @@ describe Downloaders::GitDownloader, :type => :model do
 
       context 'with git not installed or running init in an invalid directory' do
         before :each do
-          Git.expects(:init).raises(Git::GitExecuteError)
+          subject.class.expects(:`).with("git --version").returns(nil)
         end
 
         it 'is expected to be false' do
