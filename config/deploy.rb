@@ -42,6 +42,8 @@ set :rvm_ruby_string, :local              # use the same ruby as used locally fo
 set :rvm_autolibs_flag, "read-only"       # more info: rvm help autolibs
 set :rvm_type, :auto
 
+set :delayed_job_args, "-n 12"
+
 namespace :deploy do
 
   desc 'Restart application'
