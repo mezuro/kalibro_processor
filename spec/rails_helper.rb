@@ -58,4 +58,4 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 end
 
-require Rails.root.join("spec/mock_helpers/runner_mock_helper.rb")
+require Rails.root.join("spec/mock_helpers/mock_helper.rb")

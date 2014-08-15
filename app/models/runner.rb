@@ -58,9 +58,9 @@ class Runner
       process_time.update(updated_at: DateTime.now)
 
       continue_processing?
-      self.processing.update(state: "INTERPRETATING")
+      self.processing.update(state: "INTERPRETING")
 
-      process_time = ProcessTime.create(state: "INTERPRETATING", processing: @processing)
+      process_time = ProcessTime.create(state: "INTERPRETING", processing: @processing)
       Processor::Interpreter.interpret(self.processing.root_module_result)
       process_time.update(updated_at: DateTime.now)
 
