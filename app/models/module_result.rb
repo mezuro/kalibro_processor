@@ -25,4 +25,23 @@ class ModuleResult < ActiveRecord::Base
     hash["kalibro_module"] = kalibro_module
     hash.to_json
   end
+
+  def subtree_elements
+    descendants = [self]
+    descendants += fetch_children(self)
+    return descendants
+  end
+
+  private
+
+  def fetch_children(module_result)
+    descendants = []
+    children = module_result.children
+    unless children.empty?
+      descendants += children
+      children.each { | child | descendants += fetch_children(child) }
+    end
+    return descendants
+  end
+
 end
