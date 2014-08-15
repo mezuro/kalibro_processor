@@ -1,8 +1,9 @@
 module Processor
   class Interpreter
     def self.interpret(module_result)
-      unless module_result.children.empty?
-        module_result.children.each { |child| interpret(child) }
+      children = module_result.children
+      unless children.empty?
+        children.each { |child| interpret(child) }
       end
 
       numerator = 0
