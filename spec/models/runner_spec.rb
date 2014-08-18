@@ -25,13 +25,25 @@ describe Runner, :type => :model do
 
       end
 
-      context 'with a cenceled processing' do
+      context 'with a canceled processing' do
         before :each do
           processing.state = "CANCELED"
         end
 
         it 'is expected to destroy yhe processing' do
           processing.expects(:destroy)
+          subject.run
+        end
+      end
+
+      context 'with a failed step' do
+        before :each do
+          Processor::Preparer.expects(:perform).with(subject).raises(Errors::ProcessingError)
+        end
+
+        it 'is expected to update the processing state to ERROR' do
+          processing.expects(:update).with(state: 'ERROR')
+
           subject.run
         end
       end
