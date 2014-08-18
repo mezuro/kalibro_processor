@@ -1,7 +1,9 @@
 module Processor
-  class Interpreter
-    def self.interpret(module_result)
-      all_module_results = module_result.subtree_elements
+  class Interpreter < ProcessingStep
+    protected
+
+    def self.task(runner)
+      all_module_results = runner.processing.root_module_result.subtree_elements
       all_module_results.each do | module_result_child |
         numerator = 0
         denominator = 0
@@ -14,6 +16,10 @@ module Processor
         quotient = denominator == 0 ? 0 : numerator/denominator
         module_result_child.update(grade: quotient)
       end
+    end
+
+    def self.state
+      "INTERPRETING"
     end
   end
 end

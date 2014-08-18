@@ -1,9 +1,15 @@
 module Processor
-  class Aggregator
-    def self.aggregate(root_module_result, native_metrics)
-      @native_metrics = native_metrics
+  class Aggregator < ProcessingStep
+    protected
+
+    def self.task(runner)
+      @native_metrics = runner.native_metrics
       set_all_metrics
-      aggregate_module(root_module_result)
+      aggregate_module(runner.processing.root_module_result)
+    end
+
+    def self.state
+      "AGGREGATING"
     end
 
     private

@@ -10,7 +10,8 @@ describe Processor::Preparer do
     let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
     let!(:compound_metric_configuration) { FactoryGirl.build(:compound_metric_configuration) }
     let!(:dir) { YAML.load_file("#{Rails.root}/config/repositories.yml")["repositories"]["path"] }
-    describe 'prepare' do
+
+    describe 'task' do
       context 'when the base directory exists' do
         before :each do
           repository.expects(:update).with(code_directory: code_dir)
@@ -24,7 +25,7 @@ describe Processor::Preparer do
         end
 
         it 'is expected to accomplish the preparing state of a process successfully' do
-          Processor::Preparer.prepare(runner)
+          Processor::Preparer.task(runner)
         end
       end
 
@@ -34,8 +35,14 @@ describe Processor::Preparer do
         end
 
         it 'is expected to raise a RunTimeError exception' do
-          expect { Processor::Preparer.prepare(runner) }.to raise_error(RuntimeError)
+          expect { Processor::Preparer.task(runner) }.to raise_error(RuntimeError)
         end
+      end
+    end
+
+    describe 'state' do
+      it 'is expected to return "PREPARING"' do
+        expect(Processor::Preparer.state).to eq("PREPARING")
       end
     end
   end

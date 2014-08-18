@@ -10,21 +10,13 @@ describe Runner, :type => :model do
       context 'when the process is not cancelled' do
         let!(:process_time) { FactoryGirl.build(:process_time) }
         before :each do
-          ProcessTime.expects(:create).with(state: "PREPARING", processing: processing).returns(process_time)
-          ProcessTime.expects(:create).with(state: "DOWNLOADING", processing: processing).returns(process_time)
-          ProcessTime.expects(:create).with(state: "COLLECTING", processing: processing).returns(process_time)
-          ProcessTime.expects(:create).with(state: "BUILDING", processing: processing).returns(process_time)
-          ProcessTime.expects(:create).with(state: "AGGREGATING", processing: processing).returns(process_time)
-          ProcessTime.expects(:create).with(state: "CALCULATING", processing: processing).returns(process_time)
-          ProcessTime.expects(:create).with(state: "INTERPRETING", processing: processing).returns(process_time)
-          Processor::Preparer.expects(:prepare).with(subject)
-          Processor::Downloader.expects(:download).with(subject)
-          Processor::Collector.expects(:collect).with(subject)
-          Processor::TreeBuilder.expects(:build_tree).with(processing)
-          Processor::Aggregator.expects(:aggregate).with(processing.root_module_result, subject.native_metrics)
-          Processor::CompoundResultCalculator.expects(:calculate_compound_results).with(processing.root_module_result, subject.compound_metrics)
-          Processor::Interpreter.expects(:interpret).with(processing.root_module_result)
-          process_time.expects(:update).times(7)
+          Processor::Preparer.expects(:perform).with(subject)
+          Processor::Downloader.expects(:perform).with(subject)
+          Processor::Collector.expects(:perform).with(subject)
+          Processor::TreeBuilder.expects(:perform).with(subject)
+          Processor::Aggregator.expects(:perform).with(subject)
+          Processor::CompoundResultCalculator.expects(:perform).with(subject)
+          Processor::Interpreter.expects(:perform).with(subject)
         end
 
         it 'should run' do

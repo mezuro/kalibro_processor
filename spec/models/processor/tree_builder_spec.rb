@@ -7,8 +7,9 @@ describe Processor::TreeBuilder do
     let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
     let!(:root_module_result) { FactoryGirl.build(:module_result) }
     let!(:module_result) { FactoryGirl.build(:module_result_class_granularity) }
+    let!(:runner) { Runner.new(repository, processing) }
 
-    describe 'build_tree' do
+    describe 'task' do
       context 'when there are module results' do
         before :each do
           filtered_module_results = Object.new
@@ -26,8 +27,14 @@ describe Processor::TreeBuilder do
         end
 
         it 'is expected to build the module results tree' do
-          Processor::TreeBuilder.build_tree(processing)
+          Processor::TreeBuilder.task(runner)
         end
+      end
+    end
+
+    describe 'state' do
+      it 'is expected to return "BUILDING"' do
+        expect(Processor::TreeBuilder.state).to eq("BUILDING")
       end
     end
   end

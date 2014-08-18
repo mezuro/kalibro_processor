@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Processor::Collector do
   describe 'methods' do
-    describe 'collect' do
+    describe 'task' do
       let(:configuration) { FactoryGirl.build(:configuration) }
       let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration) }
       let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
@@ -17,7 +17,13 @@ describe Processor::Collector do
       end
 
       it 'is expected to accomplish the collecting state of a process successfully' do
-        Processor::Collector.collect(runner)
+        Processor::Collector.task(runner)
+      end
+    end
+
+    describe 'state' do
+      it 'is expected to return "COLLECTING"' do
+        expect(Processor::Collector.state).to eq("COLLECTING")
       end
     end
   end

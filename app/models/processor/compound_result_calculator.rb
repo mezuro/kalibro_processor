@@ -1,5 +1,17 @@
 module Processor
-  class CompoundResultCalculator
+  class CompoundResultCalculator < ProcessingStep
+
+    protected
+
+    def self.task(runner)
+      self.calculate_compound_results(runner.processing.root_module_result, runner.compound_metrics)
+    end
+
+    def self.state
+      "CALCULATING"
+    end
+
+    private
 
     def self.calculate_compound_results(module_result, compound_metric_configurations)
       unless module_result.children.empty?
