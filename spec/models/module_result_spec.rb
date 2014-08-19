@@ -105,5 +105,30 @@ describe ModuleResult, :type => :model do
         expect(JSON.parse(subject.to_json)['height']).to eq(JSON.parse(subject.to_json)['height'])
       end
     end
+
+    describe 'subtree_elements' do
+      context 'when it does not have children' do
+        before :each do
+          subject.expects(:children).returns([])
+        end
+        it 'is expected to return an array with only itself' do
+          expect(subject.subtree_elements).to eq([subject])
+        end
+      end
+
+      context 'when it does have children' do
+        let!(:child) { FactoryGirl.build(:module_result) }
+        let!(:grandchild) { FactoryGirl.build(:module_result) }
+
+        before :each do
+          subject.expects(:children).returns([child])
+          child.expects(:children).returns([grandchild])
+          grandchild.expects(:children).returns([])
+        end
+        it 'is expected to return an array with all subtree elements' do
+          expect(subject.subtree_elements).to eq([subject, child, grandchild])
+        end
+      end
+    end
   end
 end

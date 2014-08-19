@@ -40,7 +40,7 @@ describe AnalizoMetricCollector, :type => :model do
     end
 
     describe 'collect_metrics' do
-      include RunnerMockHelper
+      include MockHelper
       let!(:wanted_metric_configuration) { FactoryGirl.build(:metric_configuration, metric: native_metric, code: "acc") }
       let!(:wanted_metrics) { [wanted_metric_configuration] }
       let!(:supported_metrics) { {"acc" => native_metric} }
