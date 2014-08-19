@@ -34,11 +34,11 @@ describe Processor::CompoundResultCalculator do
 
         context 'with calculation errors' do
           before :each do
-            CompoundResults::Calculator.any_instance.expects(:calculate).twice.raises(V8::Error)
+            # To create a V8 error object, three params are needed. The first concerns the message error. However, we do not know the usage of the others.
+            CompoundResults::Calculator.any_instance.expects(:calculate).raises(V8::Error.new("Error", nil, nil))
           end
 
           it 'is expected to raise a processing error' do
-            pending 'unexpected error'
             expect {Processor::CompoundResultCalculator.task(runner)}.to raise_error(Errors::ProcessingError)
           end
         end
