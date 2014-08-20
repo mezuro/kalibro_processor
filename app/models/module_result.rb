@@ -7,9 +7,9 @@ class ModuleResult < ActiveRecord::Base
 
   def self.find_by_module_and_processing(kalibro_module, processing)
     ModuleResult.joins(:kalibro_module).
-      where(processing: processing).
-      where("kalibro_modules.long_name" => kalibro_module.long_name).
-      where("kalibro_modules.granlrty" => kalibro_module.granularity.to_s).first
+    where(processing: processing).
+    where("kalibro_modules.long_name" => kalibro_module.long_name).
+    where("kalibro_modules.granlrty" => kalibro_module.granularity.to_s).first
   end
 
   def metric_result_for(metric)
@@ -26,22 +26,18 @@ class ModuleResult < ActiveRecord::Base
     hash.to_json
   end
 
-  def subtree_elements
-    descendants = [self]
-    descendants += fetch_children(self)
-    return descendants
+  def pre_order
+    pre_order_traverse(self)
   end
 
   private
 
-  def fetch_children(module_result)
-    descendants = []
+  def pre_order_traverse(module_result)
+    pre_order_array = [module_result]
     children = module_result.children
     unless children.empty?
-      descendants += children
-      children.each { | child | descendants += fetch_children(child) }
+      children.each { |child| pre_order_array += pre_order_traverse(child) }
     end
-    return descendants
+    pre_order_array
   end
-
 end
