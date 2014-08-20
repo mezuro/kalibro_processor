@@ -24,8 +24,8 @@ class Runner
       self.processing.update(state: "READY")
     rescue Errors::ProcessingCanceledError
       self.processing.destroy
-    rescue Errors::ProcessingError
-      self.processing.update(state: 'ERROR')
+    rescue Errors::ProcessingError => error
+      self.processing.update(state: 'ERROR', error_message: error.message)
     end
   end
 end

@@ -37,12 +37,13 @@ describe Runner, :type => :model do
       end
 
       context 'with a failed step' do
+        let!(:error_message) { 'Error message' }
         before :each do
-          Processor::Preparer.expects(:perform).with(subject).raises(Errors::ProcessingError)
+          Processor::Preparer.expects(:perform).with(subject).raises(Errors::ProcessingError, error_message)
         end
 
         it 'is expected to update the processing state to ERROR' do
-          processing.expects(:update).with(state: 'ERROR')
+          processing.expects(:update).with(state: 'ERROR', error_message: error_message)
 
           subject.run
         end
