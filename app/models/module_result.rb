@@ -7,9 +7,9 @@ class ModuleResult < ActiveRecord::Base
 
   def self.find_by_module_and_processing(kalibro_module, processing)
     ModuleResult.joins(:kalibro_module).
-    where(processing: processing).
-    where("kalibro_modules.long_name" => kalibro_module.long_name).
-    where("kalibro_modules.granlrty" => kalibro_module.granularity.to_s).first
+      where(processing: processing).
+      where("kalibro_modules.long_name" => kalibro_module.long_name).
+      where("kalibro_modules.granlrty" => kalibro_module.granularity.to_s).first
   end
 
   def metric_result_for(metric)
