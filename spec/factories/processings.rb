@@ -8,5 +8,11 @@ FactoryGirl.define do
     root_module_result_id 13
     repository { FactoryGirl.build(:repository) }
     module_results { [] }
+
+    trait :error do
+      error_message "ERROR message"
+    end
+
+    factory :processing_with_error, traits: [:error]
   end
 end
