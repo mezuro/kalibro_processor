@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.4'
+gem 'rails', '4.1.5'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
@@ -34,7 +34,7 @@ gem 'sdoc', require: false
 gem 'spring', group: :development
 
 # Communication with other parts
-gem 'kalibro_gatekeeper_client', '~> 0.1.1'
+gem 'kalibro_gatekeeper_client', '~> 0.2.2'
 
 # YAML parser required for properly compactibility between mri and rbx
 gem 'psych', '~>2.0.5'
