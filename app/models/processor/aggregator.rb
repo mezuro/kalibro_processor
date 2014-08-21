@@ -14,9 +14,9 @@ module Processor
 
     private
 
-    def self.aggregate(pre_order_array)
+    def self.aggregate(pre_order_module_results)
       # The upper nodes of the tree need the children to be calculated first, so we reverse the pre_order
-      pre_order_array.reverse_each do | module_result_child |
+      pre_order_module_results.reverse_each do | module_result_child |
 
         already_calculated_metric_results = module_result_child.metric_results.map { |metric_result| metric_result.metric}
 
