@@ -42,10 +42,7 @@ Given(/^I have a compound metric with an invalid script$/) do
 end
 
 When(/^I run for the given repository$/) do
-  begin
-    @repository.process(@processing)
-  rescue => @error
-  end
+  @repository.process(@processing)
 end
 
 Then(/^the repository code_directory should exist$/) do
@@ -67,6 +64,6 @@ Then(/^the Root ModuleResult retrieved should have a list of MetricResults$/) do
 end
 
 Then(/^I should receive a processing error$/) do
-  expect(@error).to be_a(Errors::ProcessingError)
+  expect(@processing.error_message).to_not be_nil
 end
 

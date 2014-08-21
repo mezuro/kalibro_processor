@@ -14,7 +14,7 @@ Feature: Runner run
     And the processing retrieved should have a Root ModuleResult
     And the Root ModuleResult retrieved should have a list of MetricResults
 
-  @clear_repository @kalibro_restart @wip
+  @clear_repository @kalibro_restart
   Scenario: A failing processing
     Given I have a sample configuration with native metrics
     And I have a compound metric with an invalid script
