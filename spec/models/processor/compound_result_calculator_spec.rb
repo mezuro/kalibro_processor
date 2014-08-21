@@ -19,7 +19,7 @@ describe Processor::CompoundResultCalculator do
       context 'when the module result tree has been well-built' do
 
         before :each do
-          root_module_result.expects(:children).twice.returns([module_result])
+          root_module_result.expects(:pre_order).returns([root_module_result, module_result])
           CompoundResults::Calculator.any_instance.expects(:calculate).twice #One for each module_result
         end
 
