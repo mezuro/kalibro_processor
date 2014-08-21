@@ -5,6 +5,8 @@ class ModuleResult < ActiveRecord::Base
   belongs_to :parent, class_name: 'ModuleResult'
   belongs_to :processing
 
+  attr_reader :pre_order
+
   def self.find_by_module_and_processing(kalibro_module, processing)
     ModuleResult.joins(:kalibro_module).
       where(processing: processing).
@@ -26,22 +28,20 @@ class ModuleResult < ActiveRecord::Base
     hash.to_json
   end
 
-  def subtree_elements
-    descendants = [self]
-    descendants += fetch_children(self)
-    return descendants
+  def pre_order
+    root = self
+    root = root.parent until root.parent==nil
+    @pre_order ||= pre_order_traverse(root)
   end
 
   private
 
-  def fetch_children(module_result)
-    descendants = []
+  def pre_order_traverse(module_result)
+    pre_order_array = [module_result]
     children = module_result.children
     unless children.empty?
-      descendants += children
-      children.each { | child | descendants += fetch_children(child) }
+      children.each { |child| pre_order_array += pre_order_traverse(child) }
     end
-    return descendants
+    pre_order_array
   end
-
 end

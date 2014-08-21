@@ -3,7 +3,7 @@ module Processor
     protected
 
     def self.task(runner)
-      all_module_results = runner.processing.root_module_result.subtree_elements
+      all_module_results = runner.processing.root_module_result.pre_order
       all_module_results.each do | module_result_child |
         numerator = 0
         denominator = 0

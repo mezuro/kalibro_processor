@@ -106,27 +106,48 @@ describe ModuleResult, :type => :model do
       end
     end
 
-    describe 'subtree_elements' do
+    describe 'pre_order' do
       context 'when it does not have children' do
         before :each do
           subject.expects(:children).returns([])
         end
         it 'is expected to return an array with only itself' do
-          expect(subject.subtree_elements).to eq([subject])
+          expect(subject.pre_order).to eq([subject])
         end
       end
 
       context 'when it does have children' do
-        let!(:child) { FactoryGirl.build(:module_result) }
-        let!(:grandchild) { FactoryGirl.build(:module_result) }
+        let!(:child_1) { FactoryGirl.build(:module_result, id: 1) }
+        let!(:child_2) { FactoryGirl.build(:module_result, id: 2) }
+        let!(:grandchild_1) { FactoryGirl.build(:module_result, id: 3) }
+        let!(:grandchild_2) { FactoryGirl.build(:module_result, id: 4) }
+        let!(:grandchild_3) { FactoryGirl.build(:module_result, id: 5) }
+        let!(:grandchild_4) { FactoryGirl.build(:module_result, id: 6) }
 
         before :each do
-          subject.expects(:children).returns([child])
-          child.expects(:children).returns([grandchild])
-          grandchild.expects(:children).returns([])
+          subject.expects(:children).returns([child_1, child_2])
+          child_1.expects(:children).returns([grandchild_1, grandchild_2])
+          child_2.expects(:children).returns([grandchild_3, grandchild_4])
+          grandchild_1.expects(:children).returns([])
+          grandchild_2.expects(:children).returns([])
+          grandchild_3.expects(:children).returns([])
+          grandchild_4.expects(:children).returns([])
         end
-        it 'is expected to return an array with all subtree elements' do
-          expect(subject.subtree_elements).to eq([subject, child, grandchild])
+        it 'is expected to return an array with the pre order tree traversal' do
+          expect(subject.pre_order).to eq([subject, child_1, grandchild_1, grandchild_2, child_2, grandchild_3, grandchild_4])
+        end
+      end
+
+      context 'when it is not the root module result' do
+        let!(:root) { FactoryGirl.build(:module_result, id: 1)}
+        let!(:child) { FactoryGirl.build(:module_result, id: 2)}
+        before :each do
+          child.expects(:parent).twice.returns(root)
+          root.expects(:parent).returns(nil)
+          root.expects(:children).returns([child])
+        end
+        it 'is expected to return the complete pre order tree traversal (from root)' do
+          expect(child.pre_order).to eq([root, child])
         end
       end
     end

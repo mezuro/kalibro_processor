@@ -25,7 +25,7 @@ describe Processor::Aggregator do
       context 'when the module result tree has been well-built' do
 
         before :each do
-          root_module_result.expects(:subtree_elements).returns([root_module_result, child])
+          root_module_result.expects(:pre_order).returns([root_module_result, child])
           MetricResult.any_instance.expects(:aggregated_value).times(4)
           MetricResult.any_instance.expects(:save).times(4)
         end

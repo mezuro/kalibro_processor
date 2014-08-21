@@ -5,7 +5,7 @@ module Processor
     def self.task(runner)
       @native_metrics = runner.native_metrics
       set_all_metrics
-      aggregate_module(runner.processing.root_module_result)
+      aggregate(runner.processing.root_module_result.pre_order)
     end
 
     def self.state
@@ -14,11 +14,9 @@ module Processor
 
     private
 
-    def self.aggregate_module(module_result)
-
-      all_module_results = module_result.subtree_elements
-      # The upper nodes of the tree need the children to be calculated first
-      all_module_results.reverse_each do | module_result_child |
+    def self.aggregate(pre_order_module_results)
+      # The upper nodes of the tree need the children to be calculated first, so we reverse the pre_order
+      pre_order_module_results.reverse_each do | module_result_child |
 
         already_calculated_metric_results = module_result_child.metric_results.map { |metric_result| metric_result.metric}
 
