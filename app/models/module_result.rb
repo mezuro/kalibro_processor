@@ -5,6 +5,8 @@ class ModuleResult < ActiveRecord::Base
   belongs_to :parent, class_name: 'ModuleResult'
   belongs_to :processing
 
+  attr_reader :pre_order
+
   def self.find_by_module_and_processing(kalibro_module, processing)
     ModuleResult.joins(:kalibro_module).
       where(processing: processing).
@@ -27,7 +29,9 @@ class ModuleResult < ActiveRecord::Base
   end
 
   def pre_order
-    pre_order_traverse(self)
+    root = self
+    root = root.parent until root.parent==nil
+    @pre_order ||= pre_order_traverse(root)
   end
 
   private
