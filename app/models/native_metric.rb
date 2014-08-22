@@ -1,7 +1,7 @@
 class NativeMetric < Metric
   attr_accessor :languages
-  def initialize(name, scope, languages)
-    super(false,name,scope)
+  def initialize(name, code, scope, languages)
+    super(false,name,code,scope)
     @languages = languages
   end
 end

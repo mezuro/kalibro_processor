@@ -43,7 +43,7 @@ class AnalizoMetricCollector < MetricCollector
         code = line[/^[^ ]*/] # From the beginning of line to the first space
         name = line[/- .*$/].slice(2..-1) # After the "- " to the end of line
         scope = code.start_with?("total") ? :SOFTWARE : :CLASS
-        supported_metrics[code] = NativeMetric.new(name, scope, [:C, :CPP, :JAVA])
+        supported_metrics[code] = NativeMetric.new(name, code, scope, [:C, :CPP, :JAVA])
       end
     end
     supported_metrics
