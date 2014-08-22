@@ -15,9 +15,13 @@ module Processor
 
     def self.calculate_compound_results(pre_order_module_results, compound_metric_configurations)
       # The upper nodes of the tree need the children to be calculated first, so we reverse the pre_order
-      pre_order_module_results.reverse_each do | module_result_child |
-        #TODO: there might exist the need to check the scope before trying to calculate
-        CompoundResults::Calculator.new(module_result_child, compound_metric_configurations).calculate
+      pre_order_module_results.reverse_each do | module_result |
+        begin
+          #TODO: there might exist the need to check the scope before trying to calculate
+          CompoundResults::Calculator.new(module_result, compound_metric_configurations).calculate
+        rescue V8::Error => error
+          raise Errors::ProcessingError.new("Javascript error with message: #{error.message}")
+        end
       end
     end
   end

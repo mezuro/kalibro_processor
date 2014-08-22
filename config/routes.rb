@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   get 'base_tools/:name/find' => 'base_tools#find'
 
   get 'processings/:id/process_times' => 'processings#process_times'
+  get 'processings/:id/error_message' => 'processings#error_message'
 
   post 'tests/clean_database' => 'tests#clean_database'
 

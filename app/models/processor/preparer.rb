@@ -17,7 +17,7 @@ module Processor
     def self.generate_dir_name
       path = YAML.load_file("#{Rails.root}/config/repositories.yml")["repositories"]["path"]
       dir = path
-      raise RuntimeError unless Dir.exists?(dir)
+      raise Errors::ProcessingError.new("Repository's directory (#{dir}) does not exist") unless Dir.exists?(dir)
       while Dir.exists?(dir)
         dir = "#{path}/#{Digest::MD5.hexdigest(Time.now.to_s)}"
       end

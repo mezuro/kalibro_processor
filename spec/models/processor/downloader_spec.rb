@@ -9,12 +9,25 @@ describe Processor::Downloader do
       let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
       let!(:runner) { Runner.new(repository, processing) }
 
-      before :each do
-        Downloaders::GitDownloader.expects(:retrieve!).with(repository.address, code_dir).returns true
+      context 'successfully downloading' do
+
+        before :each do
+          Downloaders::GitDownloader.expects(:retrieve!).with(repository.address, code_dir).returns true
+        end
+
+        it 'is expected to download' do
+          Processor::Downloader.task(runner)
+        end
       end
 
-      it 'is expected to download' do
-        Processor::Downloader.task(runner)
+      context 'with error when downloading' do
+        before :each do
+          Downloaders::GitDownloader.expects(:retrieve!).with(repository.address, code_dir).raises(Git::GitExecuteError)
+        end
+
+        it 'is expected to raise a processing error' do
+          expect {Processor::Downloader.task(runner)}.to raise_error(Errors::ProcessingError)
+        end
       end
     end
 

@@ -35,7 +35,7 @@ describe Processor::Preparer do
         end
 
         it 'is expected to raise a RunTimeError exception' do
-          expect { Processor::Preparer.task(runner) }.to raise_error(RuntimeError)
+          expect { Processor::Preparer.task(runner) }.to raise_error(Errors::ProcessingError, "Repository's directory (#{dir}) does not exist")
         end
       end
     end
