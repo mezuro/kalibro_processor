@@ -19,7 +19,7 @@ describe Processor::CompoundResultCalculator do
       context 'when the module result tree has been well-built' do
 
         before :each do
-          root_module_result.expects(:children).twice.returns([module_result])
+          runner.processing.root_module_result.expects(:pre_order).returns([root_module_result, module_result])
         end
 
         context 'without calculation errors' do
@@ -39,7 +39,7 @@ describe Processor::CompoundResultCalculator do
           end
 
           it 'is expected to raise a processing error' do
-            expect {Processor::CompoundResultCalculator.task(runner)}.to raise_error(Errors::ProcessingError)
+            expect {Processor::CompoundResultCalculator.task(runner)}.to raise_error(Errors::ProcessingError, "Javascript error with message: Error")
           end
         end
       end
