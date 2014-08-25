@@ -40,7 +40,7 @@ It was strongly based on the vintage Kalibro (https://github.com/mezuro/kalibro)
 
 * Services (job queues, cache servers, search engines, etc.)
 
-  Kalibro Gatekeeper v0.1.1 (https://github.com/mezuro/kalibro_gatekeeper/releases/tag/v0.1.1)
+  Kalibro Gatekeeper v0.1.1 (https://github.com/mezuro/kalibro_gatekeeper/releases/tag/v0.1.2)
   You can find a script to install it on any machine with Rails on https://gist.github.com/rafamanzo/9859244. After running this script, run ```unset BUNDLE_GEMFILE```.
   By default Kalibro Processor will expect it to be running on port 8081 at localhost.
   In order to run it as expected, run: ```rails s -p 8081```.
