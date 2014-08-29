@@ -95,7 +95,7 @@ Rails.application.configure do
   # Exception Notification
   config.middleware.use ExceptionNotification::Rack,
   :email => {
-    :email_prefix => "[Prezento Error] ",
+    :email_prefix => "[KalibroProcessor Error] ",
     :sender_address => %{"mezurometrics" <mezurometrics@gmail.com>},
     :exception_recipients => %w{mezuro-core@lists.ime.usp.br}
   }
