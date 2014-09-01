@@ -416,7 +416,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     before :each do
       Repository.expects(:find).with(repository.id).returns(repository)
       KalibroModule.expects(:find).with(kalibro_module.id).returns(kalibro_module)
-      kalibro_module.expects(:name).returns(kalibro_module.long_name)
+      kalibro_module.expects(:long_name).at_least_once.returns(kalibro_module.long_name)
       repository.expects(:module_result_history_of).with(kalibro_module.long_name).returns(module_result_history_of_a_module)
 
       post :module_result_history_of, id: repository.id, module_id: kalibro_module.id, format: :json
