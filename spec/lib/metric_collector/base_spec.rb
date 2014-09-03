@@ -1,16 +1,19 @@
 require 'rails_helper'
+require 'metric_collector'
 
-describe MetricCollector, :type => :model do
+include MetricCollector
+
+describe MetricCollector::Base, :type => :model do
   describe 'method' do
     describe 'description' do
       it 'should raise a NotImplementedError' do
-        expect { MetricCollector.description }.to raise_error(NotImplementedError)
+        expect { MetricCollector::Base.description }.to raise_error(NotImplementedError)
       end
     end
 
     describe 'supported_metrics' do
       it 'should raise a NotImplementedError' do
-        expect { MetricCollector.supported_metrics }.to raise_error(NotImplementedError)
+        expect { MetricCollector::Base.supported_metrics }.to raise_error(NotImplementedError)
       end
     end
 

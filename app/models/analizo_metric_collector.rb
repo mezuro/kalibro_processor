@@ -1,4 +1,8 @@
-class AnalizoMetricCollector < MetricCollector
+require "metric_collector"
+
+include MetricCollector
+
+class AnalizoMetricCollector < MetricCollector::Base
   @@description = YAML.load_file("#{Rails.root}/config/collectors_descriptions.yml")["analizo"]
   @@supported_metrics = nil
 
