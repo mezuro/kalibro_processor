@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'metric_collector'
 
 describe Processor::Collector do
   describe 'methods' do
@@ -13,7 +14,7 @@ describe Processor::Collector do
       before :each do
         runner.repository.expects(:code_directory).returns(code_dir)
         runner.expects(:native_metrics).returns({metric_configuration.base_tool_name => [metric_configuration]})
-        AnalizoMetricCollector.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
+        MetricCollector::Native::Analizo.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
       end
 
       it 'is expected to accomplish the collecting state of a process successfully' do

@@ -1,7 +1,9 @@
+require 'metric_collector'
+
 class Runner
   attr_accessor :repository, :native_metrics, :compound_metrics, :processing
 
-  BASE_TOOLS = {"Analizo" => AnalizoMetricCollector}
+  BASE_TOOLS = {"Analizo" => MetricCollector::Native::Analizo}
 
   def initialize(repository, processing)
     @repository = repository

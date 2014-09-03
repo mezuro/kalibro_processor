@@ -1,11 +1,12 @@
 require 'rails_helper'
+require 'metric_collector'
 
 RSpec.describe BaseToolsController, :type => :controller do
   describe 'all_names' do
     context 'with an available collector' do
       let(:names) { ["Analizo"] }
       before :each do
-        AnalizoMetricCollector.expects(:available?).returns(true)
+        MetricCollector::Native::Analizo.expects(:available?).returns(true)
         get :all_names, format: :json
       end
 
@@ -19,7 +20,7 @@ RSpec.describe BaseToolsController, :type => :controller do
     context 'with an unavailable collector' do
       let(:names) { [] }
       before :each do
-        AnalizoMetricCollector.expects(:available?).returns(false)
+        MetricCollector::Native::Analizo.expects(:available?).returns(false)
         get :all_names, format: :json
       end
 
@@ -35,9 +36,9 @@ RSpec.describe BaseToolsController, :type => :controller do
     context 'with an available collector' do
       let!(:base_tool) { FactoryGirl.build(:base_tool) }
       before :each do
-        AnalizoMetricCollector.expects(:available?).returns(true)
-        AnalizoMetricCollector.expects(:description).returns(base_tool.description)
-        AnalizoMetricCollector.expects(:supported_metrics).returns(base_tool.supported_metrics)
+        MetricCollector::Native::Analizo.expects(:available?).returns(true)
+        MetricCollector::Native::Analizo.expects(:description).returns(base_tool.description)
+        MetricCollector::Native::Analizo.expects(:supported_metrics).returns(base_tool.supported_metrics)
 
         get :find, name: base_tool.name, format: :json
       end
@@ -54,7 +55,7 @@ RSpec.describe BaseToolsController, :type => :controller do
       let(:error_hash) { {error: Errors::NotFoundError.new("Base tool #{base_tool_name} not found.")} }
 
       before :each do
-        AnalizoMetricCollector.expects(:available?).returns(false)
+        MetricCollector::Native::Analizo.expects(:available?).returns(false)
         get :find, name: base_tool_name, format: :json
       end
 
