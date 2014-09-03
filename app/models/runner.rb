@@ -3,13 +3,11 @@ require 'metric_collector'
 class Runner
   attr_accessor :repository, :native_metrics, :compound_metrics, :processing
 
-  BASE_TOOLS = {"Analizo" => MetricCollector::Native::Analizo}
-
   def initialize(repository, processing)
     @repository = repository
     @processing = processing
     @native_metrics = {}
-    BASE_TOOLS.each_key { |key| @native_metrics[key] = [] }
+    MetricCollector::Native::ALL.each_key { |key| @native_metrics[key] = [] }
     @compound_metrics = []
   end
 

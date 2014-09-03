@@ -1,3 +1,5 @@
+require 'metric_collector'
+
 module Processor
   class Collector < ProcessingStep
     protected
@@ -5,7 +7,7 @@ module Processor
     def self.task(runner)
       runner.native_metrics.each do |base_tool_name, wanted_metrics|
         unless wanted_metrics.empty?
-          Runner::BASE_TOOLS[base_tool_name].new.
+          MetricCollector::Native::ALL[base_tool_name].new.
             collect_metrics(runner.repository.code_directory,
                             wanted_metrics,
                             runner.processing)

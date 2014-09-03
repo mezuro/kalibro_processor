@@ -1,6 +1,8 @@
+require 'metric_collector'
+
 class BaseToolsController < ApplicationController
   def all_names
-    names = {base_tool_names: available_base_tools.keys }
+    names = {base_tool_names: MetricCollector::Native.available.keys }
 
     respond_to do |format|
       format.json { render json: names }
@@ -8,7 +10,7 @@ class BaseToolsController < ApplicationController
   end
 
   def find
-    collector = available_base_tools.values_at(params[:name]).first
+    collector = MetricCollector::Native.available.values_at(params[:name]).first
     if collector.nil?
       base_tool = {error: Errors::NotFoundError.new("Base tool #{params[:name]} not found.")}
     else
@@ -23,11 +25,4 @@ class BaseToolsController < ApplicationController
       end
     end
   end
-
-  private
-
-  def available_base_tools
-    Runner::BASE_TOOLS.select {|name, collector| collector.available?}
-  end
-
 end
