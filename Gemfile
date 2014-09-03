@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.5'
+gem 'rails', '4.2.0.beta1'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
@@ -10,7 +10,7 @@ gem 'sqlite3'
 gem 'pg'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.1'
+gem 'sass-rails', '~> 5.0.0.beta1'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -19,7 +19,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer', :platforms => :ruby
+gem 'therubyracer', platforms: :ruby
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -28,10 +28,10 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', require: false
+gem 'sdoc', '~> 0.4.0', group: :doc
 
-# Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-gem 'spring', group: :development
+# Use Rails Html Sanitizer for HTML sanitization
+gem 'rails-html-sanitizer', '~> 1.0'
 
 # Communication with other parts
 gem 'kalibro_gatekeeper_client', '~> 1.0.0'
@@ -55,6 +55,15 @@ gem 'daemons', '~> 1.1.9'
 gem 'exception_notification', '~> 4.0.1'
 
 group :test do
+  # Call 'debugger' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug'
+
+  # Access an IRB console on exceptions page and /console in development
+  gem 'web-console', '~> 2.0.0.beta2'
+
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring', group: :development
+
   # Easier test writing
   gem "shoulda-matchers", '~>2.6.1'
 
