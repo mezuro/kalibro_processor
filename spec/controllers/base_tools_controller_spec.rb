@@ -34,19 +34,19 @@ RSpec.describe BaseToolsController, :type => :controller do
 
   describe 'find' do
     context 'with an available collector' do
-      let!(:base_tool) { FactoryGirl.build(:base_tool) }
+      let!(:base_metric_collector) { FactoryGirl.build(:base_metric_collector) }
       before :each do
         MetricCollector::Native::Analizo.expects(:available?).returns(true)
-        MetricCollector::Native::Analizo.expects(:description).returns(base_tool.description)
-        MetricCollector::Native::Analizo.expects(:supported_metrics).returns(base_tool.supported_metrics)
+        YAML.expects(:load_file).with("#{Rails.root}/config/collectors_descriptions.yml").returns({"analizo" => base_metric_collector.description})
+        MetricCollector::Native::Analizo.any_instance.expects(:parse_supported_metrics).returns(base_metric_collector.supported_metrics)
 
-        get :find, name: base_tool.name, format: :json
+        get :find, name: base_metric_collector.name, format: :json
       end
 
       it { is_expected.to respond_with(:success) }
 
       it 'should return the module_result' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse({base_tool: base_tool}.to_json))
+        expect(JSON.parse(response.body)).to eq(JSON.parse({base_tool: base_metric_collector}.to_json))
       end
     end
 

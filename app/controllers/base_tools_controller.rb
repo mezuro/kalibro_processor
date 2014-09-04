@@ -14,7 +14,7 @@ class BaseToolsController < ApplicationController
     if collector.nil?
       base_tool = {error: Errors::NotFoundError.new("Base tool #{params[:name]} not found.")}
     else
-      base_tool = {base_tool: BaseTool.new(params[:name], collector.description, collector.to_s, collector.supported_metrics)}
+      base_tool = {base_tool: collector.new}
     end
 
     respond_to do |format|
