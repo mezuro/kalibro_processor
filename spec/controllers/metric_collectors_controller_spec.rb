@@ -12,8 +12,8 @@ RSpec.describe MetricCollectorsController, :type => :controller do
 
       it { is_expected.to respond_with(:success) }
 
-      it 'is expected to return the list of base tool names converted to JSON' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse({base_tool_names: names}.to_json))
+      it 'is expected to return the list of metric collector names converted to JSON' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({metric_collector_names: names}.to_json))
       end
     end
 
@@ -26,8 +26,8 @@ RSpec.describe MetricCollectorsController, :type => :controller do
 
       it { is_expected.to respond_with(:success) }
 
-      it 'is expected to return the list of base tool names converted to JSON' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse({base_tool_names: names}.to_json))
+      it 'is expected to return the list of metric collector names converted to JSON' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({metric_collector_names: names}.to_json))
       end
     end
   end
@@ -46,17 +46,17 @@ RSpec.describe MetricCollectorsController, :type => :controller do
       it { is_expected.to respond_with(:success) }
 
       it 'should return the module_result' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse({base_tool: base_metric_collector}.to_json))
+        expect(JSON.parse(response.body)).to eq(JSON.parse({metric_collector: base_metric_collector}.to_json))
       end
     end
 
     context 'with an unavailable collector' do
-      let(:base_tool_name) { "BaseTool" }
-      let(:error_hash) { {error: Errors::NotFoundError.new("Base tool #{base_tool_name} not found.")} }
+      let(:metric_collector_name) { "BaseTool" }
+      let(:error_hash) { {error: Errors::NotFoundError.new("Metric collector #{metric_collector_name} not found.")} }
 
       before :each do
         MetricCollector::Native::Analizo.expects(:available?).returns(false)
-        get :find, name: base_tool_name, format: :json
+        get :find, name: metric_collector_name, format: :json
       end
 
       it { is_expected.to respond_with(:unprocessable_entity) }

@@ -19,7 +19,7 @@ FactoryGirl.define do
     id 1
     code 'code'
     metric { FactoryGirl.build(:kalibro_gatekeeper_client_metric) }
-    base_tool_name "Analizo"
+    metric_collector_name "Analizo"
     weight 1
     aggregation_form :AVERAGE
     reading_group_id 1

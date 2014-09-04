@@ -13,7 +13,7 @@ describe Processor::Collector do
 
       before :each do
         runner.repository.expects(:code_directory).returns(code_dir)
-        runner.expects(:native_metrics).returns({metric_configuration.base_tool_name => [metric_configuration]})
+        runner.expects(:native_metrics).returns({metric_configuration.metric_collector_name => [metric_configuration]})
         MetricCollector::Native::Analizo.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
       end
 

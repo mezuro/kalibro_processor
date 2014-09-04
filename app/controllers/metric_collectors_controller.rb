@@ -2,7 +2,7 @@ require 'metric_collector'
 
 class MetricCollectorsController < ApplicationController
   def all_names
-    names = {base_tool_names: MetricCollector::Native.available.keys }
+    names = {metric_collector_names: MetricCollector::Native.available.keys }
 
     respond_to do |format|
       format.json { render json: names }
@@ -10,18 +10,18 @@ class MetricCollectorsController < ApplicationController
   end
 
   def find
-    collector = MetricCollector::Native.available.values_at(params[:name]).first
-    if collector.nil?
-      base_tool = {error: Errors::NotFoundError.new("Base tool #{params[:name]} not found.")}
+    metric_collector = MetricCollector::Native.available.values_at(params[:name]).first
+    if metric_collector.nil?
+      return_value = {error: Errors::NotFoundError.new("Metric Collector #{params[:name]} not found.")}
     else
-      base_tool = {base_tool: collector.new}
+      return_value = {metric_collector: metric_collector.new}
     end
 
     respond_to do |format|
-      if base_tool[:error].nil?
-        format.json { render json: base_tool}
+      if return_value[:error].nil?
+        format.json { render json: return_value}
       else
-        format.json { render json: base_tool, status: :unprocessable_entity }
+        format.json { render json: return_value, status: :unprocessable_entity }
       end
     end
   end
