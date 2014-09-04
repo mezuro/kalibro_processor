@@ -1,13 +1,14 @@
 module MetricCollector
   class Base
-    def initialize
+    attr_reader :name, :description, :supported_metrics
+
+    def initialize(name, description, supported_metrics)
+      @name = name
+      @description = description
+      @supported_metrics = supported_metrics
       @wanted_metrics = {}
       @processing = nil
     end
-
-    def self.description; raise NotImplementedError; end
-
-    def self.supported_metrics; raise NotImplementedError; end
 
     def collect_metrics(code_directory, wanted_metrics); raise NotImplementedError; end
 
@@ -20,7 +21,7 @@ module MetricCollector
     def wanted_metrics=(wanted_metric_configurations)
       @wanted_metrics = {}
       wanted_metric_configurations.each do |metric_configuration|
-        if self.class.supported_metrics.keys.include?(metric_configuration.code)
+        if self.supported_metrics.keys.include?(metric_configuration.code)
           @wanted_metrics[metric_configuration.code] = metric_configuration
         end
       end

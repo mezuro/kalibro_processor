@@ -24,22 +24,6 @@ describe MetricCollector::Native::Analizo, :type => :model do
       end
     end
 
-    describe 'description' do
-      it 'is expected to return the description as a string' do
-        expect(MetricCollector::Native::Analizo.description).to be_a(String)
-      end
-    end
-
-    describe 'supported_metrics' do
-      before :each do
-        MetricCollector::Native::Analizo.expects(:`).with("analizo metrics --list").returns(analizo_metric_collector_list.raw)
-      end
-
-      it 'should return a list with all the supported metrics' do
-        expect(MetricCollector::Native::Analizo.supported_metrics['total_abstract_classes'].name).to eq(analizo_metric_collector_list.parsed['total_abstract_classes'].name)
-      end
-    end
-
     describe 'collect_metrics' do
       include MockHelper
       let!(:wanted_metric_configuration) { FactoryGirl.build(:metric_configuration, metric: native_metric, code: "acc") }
@@ -54,7 +38,7 @@ describe MetricCollector::Native::Analizo, :type => :model do
 
       before :each do
         subject.expects(:`).with("analizo metrics #{absolute_path}").returns(analizo_metric_collector_list.raw_result)
-        MetricCollector::Native::Analizo.expects(:supported_metrics).twice.returns(supported_metrics)
+        MetricCollector::Native::Analizo.any_instance.expects(:supported_metrics).twice.returns(supported_metrics)
         MetricResult.expects(:create).with(metric: native_metric,
                                            value: analizo_metric_collector_list.parsed_result[1]["acc"].to_f,
                                            module_result: module_result,

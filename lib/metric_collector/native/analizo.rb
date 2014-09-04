@@ -1,15 +1,10 @@
 module MetricCollector
   module Native
     class Analizo < MetricCollector::Base
-      @@description = YAML.load_file("#{Rails.root}/config/collectors_descriptions.yml")["analizo"]
-      @@supported_metrics = nil
-
-      def self.supported_metrics
-        @@supported_metrics ||= parse_supported_metrics
-      end
-
-      def self.description
-        @@description
+      def initialize
+        super("Analizo",
+              YAML.load_file("#{Rails.root}/config/collectors_descriptions.yml")["analizo"],
+              parse_supported_metrics)
       end
 
       def collect_metrics(code_directory, wanted_metrics, processing)
@@ -24,7 +19,7 @@ module MetricCollector
 
       private
 
-      def self.metric_list
+      def metric_list
         list = `analizo metrics --list`
         raise Errors::NotFoundError.new("BaseTool Analizo not found") if list.nil?
         list
@@ -37,7 +32,7 @@ module MetricCollector
         results
       end
 
-      def self.parse_supported_metrics
+      def parse_supported_metrics
         supported_metrics = {}
         analizo_metric_list = metric_list
         analizo_metric_list.each_line do |line|
