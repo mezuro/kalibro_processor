@@ -35,8 +35,8 @@ Rails.application.routes.draw do
   post 'repositories/:id/metric_result_history_of' => 'repositories#metric_result_history_of'
   resources :repositories , except: [:index, :new, :edit]
 
-  get 'base_tools' => 'base_tools#all_names'
-  get 'base_tools/:name/find' => 'base_tools#find'
+  get 'metric_collectors' => 'metric_collectors#all_names'
+  get 'metric_collectors/:name/find' => 'metric_collectors#find'
 
   get 'processings/:id/process_times' => 'processings#process_times'
   get 'processings/:id/error_message' => 'processings#error_message'

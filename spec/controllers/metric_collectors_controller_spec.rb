@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'metric_collector'
 
-RSpec.describe BaseToolsController, :type => :controller do
+RSpec.describe MetricCollectorsController, :type => :controller do
   describe 'all_names' do
     context 'with an available collector' do
       let(:names) { ["Analizo"] }

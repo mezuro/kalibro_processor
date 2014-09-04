@@ -1,6 +1,6 @@
 require 'metric_collector'
 
-class BaseToolsController < ApplicationController
+class MetricCollectorsController < ApplicationController
   def all_names
     names = {base_tool_names: MetricCollector::Native.available.keys }
 
