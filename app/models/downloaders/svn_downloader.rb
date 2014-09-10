@@ -25,16 +25,17 @@ module Downloaders
 
     def self.update(directory)
       # Recursively revert the directory and its contents and then update it to the latest version
-      `svn revert -R #{directory}`
-      `svn update #{directory}`
+      revert = `svn revert -R #{directory}`
+      update = `svn update #{directory}`
+      raise Errors::SvnExecuteError.new('Failed to update svn repository') if revert.nil? || update.nil?
     end
 
     def self.checkout(address, directory)
       # Copy contents of address to a new directory
       name = directory.split('/').last
       path = (directory.split('/') - [name]).join('/')
-      `svn checkout #{address} #{directory}`
+      checkout = `svn checkout #{address} #{directory}`
+      raise Errors::SvnExecuteError.new('Failed to checkout to svn repository') if checkout.nil?
     end
-
   end
 end
