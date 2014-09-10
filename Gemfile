@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.0.beta1'
+#gem 'rails', '4.2.0.beta1'
+gem 'rails', github: 'rails/rails' # FIXME: beta1 is behind edgeguides, as soon as the next beta gets released, update this
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
