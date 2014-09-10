@@ -1,18 +1,21 @@
 require 'metric_collector'
 require 'processor'
 
-class Runner
+class RunnerJob < ActiveJob::Base
+  queue_as :default
+
   attr_accessor :repository, :native_metrics, :compound_metrics, :processing
 
-  def initialize(repository, processing)
-    @repository = repository
-    @processing = processing
-    @native_metrics = {}
+  before_perform do |job|
+    job.native_metrics = {}
     MetricCollector::Native::ALL.each_key { |key| @native_metrics[key] = [] }
-    @compound_metrics = []
+    job.compound_metrics = []
   end
 
-  def run
+  def perform(repository, processing)
+    @repository = repository
+    @processing = processing
+
     begin
       Processor::Preparer.perform(self)
       Processor::Downloader.perform(self)
