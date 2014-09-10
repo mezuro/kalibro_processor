@@ -17,15 +17,15 @@ ActiveRecord::Schema.define(version: 20140820161548) do
   enable_extension "plpgsql"
 
   create_table "delayed_jobs", force: true do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
+    t.integer  "priority",               default: 0, null: false
+    t.integer  "attempts",               default: 0, null: false
+    t.text     "handler",                            null: false
     t.text     "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
     t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
+    t.string   "locked_by",  limit: 255
+    t.string   "queue",      limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -33,8 +33,8 @@ ActiveRecord::Schema.define(version: 20140820161548) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "kalibro_modules", force: true do |t|
-    t.string   "long_name"
-    t.string   "granlrty"
+    t.string   "long_name",        limit: 255
+    t.string   "granlrty",         limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "module_result_id"
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 20140820161548) do
   add_index "module_results", ["parent_id"], name: "index_module_results_on_parent_id", using: :btree
 
   create_table "process_times", force: true do |t|
-    t.string   "state"
+    t.string   "state",         limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "processing_id"
@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(version: 20140820161548) do
   end
 
   create_table "processings", force: true do |t|
-    t.string   "state"
+    t.string   "state",                 limit: 255
     t.integer  "repository_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -77,24 +77,24 @@ ActiveRecord::Schema.define(version: 20140820161548) do
   end
 
   create_table "projects", force: true do |t|
-    t.string   "name"
-    t.string   "description"
+    t.string   "name",        limit: 255
+    t.string   "description", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "repositories", force: true do |t|
-    t.string   "name"
-    t.string   "scm_type"
-    t.string   "address"
-    t.string   "description",      default: ""
-    t.string   "license",          default: ""
-    t.integer  "period",           default: 0
+    t.string   "name",             limit: 255
+    t.string   "scm_type",         limit: 255
+    t.string   "address",          limit: 255
+    t.string   "description",      limit: 255, default: ""
+    t.string   "license",          limit: 255, default: ""
+    t.integer  "period",                       default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "configuration_id"
     t.integer  "project_id"
-    t.string   "code_directory"
+    t.string   "code_directory",   limit: 255
   end
 
 end
