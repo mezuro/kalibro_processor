@@ -9,7 +9,7 @@ module Processor
       rescue Git::GitExecuteError => error
         raise Errors::ProcessingError.new("Failed to download code with message: #{error.message}")
       rescue Errors::SvnExecuteError => error
-        raise Erros::ProcessingError.new("Failed to download code with message: #{error.message}")
+        raise Errors::ProcessingError.new("Failed to download code with message: #{error.message}")
       end
     end
 
