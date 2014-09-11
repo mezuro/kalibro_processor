@@ -34,7 +34,7 @@ gem 'sdoc', require: false
 gem 'spring', group: :development
 
 # Communication with other parts
-gem 'kalibro_gatekeeper_client', '~> 1.0.0.rc1'
+gem 'kalibro_gatekeeper_client', github: 'mezuro/kalibro_gatekeeper_client', branch: 'refactoring_metric_collector' # FIXME: to gem 'kalibro_gatekeeper_client', "~> 1.0.0" as soon as it gets released
 
 # YAML parser required for properly compactibility between mri and rbx
 gem 'psych', '~>2.0.5'
