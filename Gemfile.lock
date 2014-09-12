@@ -101,7 +101,7 @@ GEM
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
     json (1.8.1)
-    kalibro_gatekeeper_client (0.2.2)
+    kalibro_gatekeeper_client (1.0.0)
       activesupport (>= 2.2.1)
       faraday_middleware (~> 0.9.0)
     libv8 (3.16.14.3)
@@ -111,7 +111,7 @@ GEM
     metaclass (0.0.4)
     mime-types (1.25.1)
     mini_portile (0.6.0)
-    minitest (5.4.0)
+    minitest (5.4.1)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     multi_json (1.10.1)
@@ -232,7 +232,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.4.1)
   git (~> 1.2.7)
   jbuilder (~> 2.0)
-  kalibro_gatekeeper_client (~> 0.2.2)
+  kalibro_gatekeeper_client (~> 1.0.0)
   mocha
   pg
   psych (~> 2.0.5)

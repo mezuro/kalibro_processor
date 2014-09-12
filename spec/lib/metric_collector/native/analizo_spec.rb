@@ -1,41 +1,26 @@
 require 'rails_helper'
+require 'metric_collector'
 
-describe AnalizoMetricCollector, :type => :model do
+describe MetricCollector::Native::Analizo, :type => :model do
   describe 'method' do
     let(:analizo_metric_collector_list) { FactoryGirl.build(:analizo_metric_collector_list) }
 
     describe 'available?' do
       context 'when analizo is installed' do
         before :each do
-          AnalizoMetricCollector.expects(:`).with("analizo --version").returns(analizo_metric_collector_list.version)
+          MetricCollector::Native::Analizo.expects(:`).with("analizo --version").returns(analizo_metric_collector_list.version)
         end
         it 'is expected to be truthy' do
-          expect(AnalizoMetricCollector.available?).to be_truthy
+          expect(MetricCollector::Native::Analizo.available?).to be_truthy
         end
       end
       context 'when analizo is not installed' do
         before :each do
-          AnalizoMetricCollector.expects(:`).with("analizo --version").returns(nil)
+          MetricCollector::Native::Analizo.expects(:`).with("analizo --version").returns(nil)
         end
         it 'is expected to be falsey' do
-          expect(AnalizoMetricCollector.available?).to be_falsey
+          expect(MetricCollector::Native::Analizo.available?).to be_falsey
         end
-      end
-    end
-
-    describe 'description' do
-      it 'is expected to return the description as a string' do
-        expect(AnalizoMetricCollector.description).to be_a(String)
-      end
-    end
-
-    describe 'supported_metrics' do
-      before :each do
-        AnalizoMetricCollector.expects(:`).with("analizo metrics --list").returns(analizo_metric_collector_list.raw)
-      end
-
-      it 'should return a list with all the supported metrics' do
-        expect(AnalizoMetricCollector.supported_metrics['total_abstract_classes'].name).to eq(analizo_metric_collector_list.parsed['total_abstract_classes'].name)
       end
     end
 
@@ -53,7 +38,7 @@ describe AnalizoMetricCollector, :type => :model do
 
       before :each do
         subject.expects(:`).with("analizo metrics #{absolute_path}").returns(analizo_metric_collector_list.raw_result)
-        AnalizoMetricCollector.expects(:supported_metrics).twice.returns(supported_metrics)
+        MetricCollector::Native::Analizo.any_instance.expects(:supported_metrics).twice.returns(supported_metrics)
         MetricResult.expects(:create).with(metric: native_metric,
                                            value: analizo_metric_collector_list.parsed_result[1]["acc"].to_f,
                                            module_result: module_result,

@@ -30,7 +30,7 @@ module Processor
         if metric_configuration.metric.compound
           runner.compound_metrics << metric_configuration
         else
-          runner.native_metrics[metric_configuration.base_tool_name] << metric_configuration
+          runner.native_metrics[metric_configuration.metric_collector_name] << metric_configuration
         end
       end
     end
