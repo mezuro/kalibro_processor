@@ -1,4 +1,6 @@
 class ProjectsController < ApplicationController
+  before_action :set_project, except: [:all, :show, :create, :exists]
+
   def all
     projects = {projects: Project.all}
 
@@ -35,8 +37,6 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    set_project
-
     respond_to do |format|
       if @project.update(project_params)
         format.json { render json: {project: @project} , status: :created }
@@ -53,16 +53,12 @@ class ProjectsController < ApplicationController
   end
 
   def repositories_of
-    set_project
-
     respond_to do |format|
       format.json { render json: {repositories: @project.repositories} }
     end
   end
 
   def destroy
-    set_project
-
     @project.destroy
     respond_to do |format|
       format.json { render json: {}, status: :ok }
