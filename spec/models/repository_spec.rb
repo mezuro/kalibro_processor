@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'downloaders'
 
 describe Repository, :type => :model do
   describe 'validations' do

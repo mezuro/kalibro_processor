@@ -1,6 +1,7 @@
 require 'rails_helper'
+require 'downloaders'
 
-describe Downloaders::Base, :type => :model do
+describe Downloaders::Base do
   describe 'method' do
     describe 'available?' do
       it 'is expected to raise a not implemented exception' do
