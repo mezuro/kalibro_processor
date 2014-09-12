@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'compound_results'
 
 describe CompoundResults::Calculator, :type => :model do
   describe 'calculate' do

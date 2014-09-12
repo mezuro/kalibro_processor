@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'compound_results'
 
 describe CompoundResults::JavascriptEvaluator, :type => :model do
   describe 'method' do
