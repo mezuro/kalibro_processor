@@ -47,8 +47,8 @@ class RepositoriesController < ApplicationController
 
   def types
     supported_types = []
-
     supported_types = Repository.supported_types
+
     respond_to do |format|
       format.json { render json: {types: supported_types}, status: :ok }
     end
@@ -99,28 +99,14 @@ class RepositoriesController < ApplicationController
   end
 
   def first_processing_in_time
-    if params[:date].nil?
-      processings = @repository.processings
-    else
-      order = params[:after_or_before] == "after" ? ">=" : "<="
-      processings = @repository.find_processing_by_date(params[:date], order)
-    end
-
     respond_to do |format|
-      format.json { render json: { processing: processings.first } }
+      format.json { render json: { processing: processings_in_time.first } }
     end
   end
 
   def last_processing_in_time
-    if params[:date].nil?
-      processings = @repository.processings
-    else
-      order = params[:after_or_before] == "after" ? ">=" : "<="
-      processings = @repository.find_processing_by_date(params[:date], order)
-    end
-
     respond_to do |format|
-      format.json { render json: { processing: processings.last } }
+      format.json { render json: { processing: processings_in_time.last } }
     end
   end
 
@@ -165,5 +151,16 @@ class RepositoriesController < ApplicationController
 
   def repository_params
     params.require(:repository).permit(:name, :address, :license, :scm_type, :description, :period, :configuration_id, :project_id)
+  end
+
+  def processings_in_time
+    if params[:date].nil?
+      processings = @repository.processings
+    else
+      order = params[:after_or_before] == "after" ? ">=" : "<="
+      processings = @repository.find_processing_by_date(params[:date], order)
+    end
+
+    processings
   end
 end
