@@ -1,5 +1,3 @@
-require 'compound_results/javascript_evaluator'
-
 module CompoundResults
   class Calculator
     def initialize(module_result, compound_metric_configurations)
