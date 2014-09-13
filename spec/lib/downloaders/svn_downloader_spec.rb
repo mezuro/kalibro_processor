@@ -1,6 +1,7 @@
 require 'rails_helper'
+require 'downloaders'
 
-describe Downloaders::SvnDownloader, :type => :model do
+describe Downloaders::SvnDownloader do
   describe 'method' do
     describe 'available?' do
       context 'with svn installed' do

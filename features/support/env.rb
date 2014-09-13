@@ -84,3 +84,6 @@ require 'kalibro_gatekeeper_client/kalibro_cucumber_helpers/hooks.rb'
 
 # Configuring the right hooks
 KalibroGatekeeperClient::KalibroCucumberHelpers.configure_from_yml("#{__dir__}/kalibro_cucumber_helpers.yml")
+
+# Some steps access this module directly. Require it here so we don't need this line in every step definition that uses some class on this module.
+require 'downloaders'

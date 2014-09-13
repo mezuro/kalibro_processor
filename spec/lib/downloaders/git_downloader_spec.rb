@@ -1,6 +1,7 @@
 require 'rails_helper'
+require 'downloaders'
 
-describe Downloaders::GitDownloader, :type => :model do
+describe Downloaders::GitDownloader do
   describe 'method' do
     describe 'available?' do
       context 'with git installed and running init in a valid directory' do
