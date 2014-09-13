@@ -1,6 +1,7 @@
 require 'rails_helper'
+require 'compound_results'
 
-describe CompoundResults::Calculator, :type => :model do
+describe CompoundResults::Calculator do
   describe 'calculate' do
     let! (:module_result) { FactoryGirl.build(:module_result) }
     let! (:metric_result) { FactoryGirl.build(:metric_result) }

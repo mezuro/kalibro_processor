@@ -1,3 +1,5 @@
+require 'compound_results'
+
 module Processor
   class CompoundResultCalculator < ProcessingStep
 

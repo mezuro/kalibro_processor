@@ -1,6 +1,7 @@
 require 'rails_helper'
+require 'compound_results'
 
-describe CompoundResults::JavascriptEvaluator, :type => :model do
+describe CompoundResults::JavascriptEvaluator do
   describe 'method' do
     describe 'add_function' do
       let(:body) { "return 2;"}
