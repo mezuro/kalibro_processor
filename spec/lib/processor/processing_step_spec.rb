@@ -6,7 +6,7 @@ describe Processor::ProcessingStep do
     let!(:configuration) { FactoryGirl.build(:configuration) }
     let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration) }
     let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
-    let(:runner) { Runner.new(repository, processing) }
+    let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 
     describe 'perform' do
       context 'with a canceled processing' do
@@ -15,7 +15,7 @@ describe Processor::ProcessingStep do
         end
 
         it 'is expected to raise a ProcessingCanceledError' do
-          expect { Processor::ProcessingStep.perform(runner) }.to raise_error(Errors::ProcessingCanceledError)
+          expect { Processor::ProcessingStep.perform(context) }.to raise_error(Errors::ProcessingCanceledError)
         end
       end
 
@@ -29,10 +29,10 @@ describe Processor::ProcessingStep do
 
         it 'is expected to create the processing time and call the task' do
           ProcessTime.expects(:create).with(anything).returns(process_time)
-          Processor::ProcessingStep.expects(:task).with(runner)
+          Processor::ProcessingStep.expects(:task).with(context)
           processing.expects(:update).with(state: state)
 
-          Processor::ProcessingStep.perform(runner)
+          Processor::ProcessingStep.perform(context)
         end
       end
     end

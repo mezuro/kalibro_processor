@@ -3,9 +3,9 @@ module Processor
 
     protected
 
-    def self.task(runner)
-      runner.repository.update(code_directory: generate_dir_name)
-      metrics_list(runner)
+    def self.task(context)
+      context.repository.update(code_directory: generate_dir_name)
+      metrics_list(context)
     end
 
     def self.state
@@ -24,13 +24,13 @@ module Processor
       return dir
     end
 
-    def self.metrics_list(runner)
-      metric_configurations = KalibroGatekeeperClient::Entities::MetricConfiguration.metric_configurations_of(runner.repository.configuration.id)
+    def self.metrics_list(context)
+      metric_configurations = KalibroGatekeeperClient::Entities::MetricConfiguration.metric_configurations_of(context.repository.configuration.id)
       metric_configurations.each do |metric_configuration|
         if metric_configuration.metric.compound
-          runner.compound_metrics << metric_configuration
+          context.compound_metrics << metric_configuration
         else
-          runner.native_metrics[metric_configuration.metric_collector_name] << metric_configuration
+          context.native_metrics[metric_configuration.metric_collector_name] << metric_configuration
         end
       end
     end

@@ -8,7 +8,7 @@ describe Processor::TreeBuilder do
     let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
     let!(:root_module_result) { FactoryGirl.build(:module_result) }
     let!(:module_result) { FactoryGirl.build(:module_result_class_granularity) }
-    let!(:runner) { Runner.new(repository, processing) }
+    let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 
     describe 'task' do
       context 'when there are module results' do
@@ -28,7 +28,7 @@ describe Processor::TreeBuilder do
         end
 
         it 'is expected to build the module results tree' do
-          Processor::TreeBuilder.task(runner)
+          Processor::TreeBuilder.task(context)
         end
       end
     end
