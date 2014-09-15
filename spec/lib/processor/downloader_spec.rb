@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'downloaders'
+require 'processor'
 
 describe Processor::Downloader do
   describe 'methods' do

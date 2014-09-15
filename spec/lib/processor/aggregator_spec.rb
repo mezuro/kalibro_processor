@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'processor'
 
 describe Processor::Aggregator do
   describe 'methods' do
