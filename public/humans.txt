@@ -7,7 +7,9 @@
     --------------
 
       Alessandro Palmeira (alessandro.palmeira at gmail.com)
-      Diego Araújo (diegoamc90 at gmail.com)
+      Daniel Paulino Alves (danpaulalves at gmail.com)
+      Diego de Araújo Martinez Camarinha (diegoamc90 at gmail.com)
+      Heitor Reis Ribeiro (marcheing at gmail.com)
       Paulo Meirelles (paulo at softwarelivre.org)
       Rafael Reggiani Manzo (rr.manzo at gmail.com)
       Renan Fichberg (rfichberg at gmail.com)
