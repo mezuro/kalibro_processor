@@ -1,4 +1,3 @@
-require 'processor/processing_step'
 module Processor
   class Interpreter < ProcessingStep
     protected
