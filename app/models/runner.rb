@@ -1,4 +1,5 @@
 require 'metric_collector'
+require 'processor'
 
 class Runner
   attr_accessor :repository, :native_metrics, :compound_metrics, :processing

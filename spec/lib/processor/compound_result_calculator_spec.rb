@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'processor'
 
 describe Processor::CompoundResultCalculator do
   describe 'methods' do

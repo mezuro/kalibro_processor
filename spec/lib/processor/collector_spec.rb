@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'metric_collector'
+require 'processor'
 
 describe Processor::Collector do
   describe 'methods' do
