@@ -1,28 +1,29 @@
 require 'rails_helper'
 
-describe Runner, :type => :model do
-  let!(:processing) { FactoryGirl.build(:processing) }
-  let!(:repository) { FactoryGirl.build(:repository) }
-  subject { Runner.new(repository, processing) }
+describe RunnerJob, :type => :model do
+  let(:processing) { FactoryGirl.build(:processing) }
+  let(:repository) { FactoryGirl.build(:repository) }
+  let(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
+
+  pending 'lacks rails update' do
   describe 'methods' do
     describe 'run' do
-
       context 'when the process is not cancelled' do
         let!(:process_time) { FactoryGirl.build(:process_time) }
+
         before :each do
-          Processor::Preparer.expects(:perform).with(subject)
-          Processor::Downloader.expects(:perform).with(subject)
-          Processor::Collector.expects(:perform).with(subject)
-          Processor::TreeBuilder.expects(:perform).with(subject)
-          Processor::Aggregator.expects(:perform).with(subject)
-          Processor::CompoundResultCalculator.expects(:perform).with(subject)
-          Processor::Interpreter.expects(:perform).with(subject)
+          Processor::Preparer.expects(:perform).with(context)
+          Processor::Downloader.expects(:perform).with(context)
+          Processor::Collector.expects(:perform).with(context)
+          Processor::TreeBuilder.expects(:perform).with(context)
+          Processor::Aggregator.expects(:perform).with(context)
+          Processor::CompoundResultCalculator.expects(:perform).with(context)
+          Processor::Interpreter.expects(:perform).with(context)
         end
 
         it 'should run' do
-          subject.run
+          RunnerJob.perform(repository, processing)
         end
-
       end
 
       context 'with a canceled processing' do
@@ -32,20 +33,20 @@ describe Runner, :type => :model do
 
         it 'is expected to destroy yhe processing' do
           processing.expects(:destroy)
-          subject.run
+          RunnerJob.perform(repository, processing)
         end
       end
 
       context 'with a failed step' do
         let!(:error_message) { 'Error message' }
         before :each do
-          Processor::Preparer.expects(:perform).with(subject).raises(Errors::ProcessingError, error_message)
+          Processor::Preparer.expects(:perform).with(context).raises(Errors::ProcessingError, error_message)
         end
 
         it 'is expected to update the processing state to ERROR' do
           processing.expects(:update).with(state: 'ERROR', error_message: error_message)
 
-          subject.run
+          RunnerJob.perform(repository, processing)
         end
       end
 
@@ -62,5 +63,6 @@ describe Runner, :type => :model do
         end
       end
     end
+  end
   end
 end

@@ -51,7 +51,8 @@ describe Repository, :type => :model do
       let(:processing) { FactoryGirl.build(:processing) }
 
       it 'is expected to process a repository' do
-        Runner.any_instance.expects(:run)
+        pending 'lacks rails update'
+        RunnerJob.any_instance.expects(:perform)
         subject.process(processing)
       end
     end

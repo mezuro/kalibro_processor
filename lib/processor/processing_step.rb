@@ -1,13 +1,13 @@
 module Processor
   class ProcessingStep
-    def self.perform(runner)
-      if runner.processing.state == "CANCELED"
+    def self.perform(context)
+      if context.processing.state == "CANCELED"
         raise Errors::ProcessingCanceledError
       else
         start = Time.now
-        runner.processing.update(state: self.state)
-        self.task(runner)
-        ProcessTime.create(state: self.state, processing: runner.processing, time: (Time.now - start))
+        context.processing.update(state: self.state)
+        self.task(context)
+        ProcessTime.create(state: self.state, processing: context.processing, time: (Time.now - start))
       end
     end
 
@@ -15,6 +15,6 @@ module Processor
 
     def self.state; raise NotImplementedError; end
 
-    def self.task(runner); raise NotImplementedError; end
+    def self.task(context); raise NotImplementedError; end
   end
 end

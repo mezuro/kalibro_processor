@@ -10,7 +10,7 @@ describe Processor::Downloader do
         let!(:code_dir) { "/tmp/test" }
         let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration, code_directory: code_dir) }
         let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
-        let!(:runner) { Runner.new(repository, processing) }
+        let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 
         context 'successfully downloading' do
           before :each do
@@ -18,7 +18,7 @@ describe Processor::Downloader do
           end
 
           it 'is expected to download' do
-            Processor::Downloader.task(runner)
+            Processor::Downloader.task(context)
           end
          end
 
@@ -28,7 +28,7 @@ describe Processor::Downloader do
           end
 
           it 'is expected to raise a processing error' do
-            expect {Processor::Downloader.task(runner)}.to raise_error(Errors::ProcessingError)
+            expect {Processor::Downloader.task(context)}.to raise_error(Errors::ProcessingError)
           end
         end
       end
@@ -38,7 +38,7 @@ describe Processor::Downloader do
         let!(:code_dir) { "/tmp/test" }
         let!(:repository) { FactoryGirl.build(:repository, scm_type: "SVN", configuration: configuration, code_directory: code_dir) }
         let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
-        let!(:runner) { Runner.new(repository, processing) }
+        let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 
         context 'successfully downloading' do
           before :each do
@@ -46,7 +46,7 @@ describe Processor::Downloader do
           end
 
           it 'is expected to download' do
-            Processor::Downloader.task(runner)
+            Processor::Downloader.task(context)
           end
         end
 
@@ -56,7 +56,7 @@ describe Processor::Downloader do
           end
 
           it 'is expected to raise a processing error' do
-            expect {Processor::Downloader.task(runner)}.to raise_error(Errors::ProcessingError)
+            expect {Processor::Downloader.task(context)}.to raise_error(Errors::ProcessingError)
           end
         end
       end
