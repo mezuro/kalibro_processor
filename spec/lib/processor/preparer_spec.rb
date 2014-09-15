@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'processor'
 
 describe Processor::Preparer do
   describe 'methods' do
