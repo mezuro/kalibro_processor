@@ -13,19 +13,19 @@ class RunnerJob < ActiveJob::Base
     @context.processing = processing
 
     begin
-      Processor::Preparer.perform(context)
-      Processor::Downloader.perform(context)
-      Processor::Collector.perform(context)
-      Processor::TreeBuilder.perform(context)
-      Processor::Aggregator.perform(context)
-      Processor::CompoundResultCalculator.perform(context)
-      Processor::Interpreter.perform(context)
+      Processor::Preparer.perform(@context)
+      Processor::Downloader.perform(@context)
+      Processor::Collector.perform(@context)
+      Processor::TreeBuilder.perform(@context)
+      Processor::Aggregator.perform(@context)
+      Processor::CompoundResultCalculator.perform(@context)
+      Processor::Interpreter.perform(@context)
 
-      context.processing.update(state: "READY")
+      @context.processing.update(state: "READY")
     rescue Errors::ProcessingCanceledError
-      context.processing.destroy
+      @context.processing.destroy
     rescue Errors::ProcessingError => error
-      context.processing.update(state: 'ERROR', error_message: error.message)
+      @context.processing.update(state: 'ERROR', error_message: error.message)
     rescue Errors::EmptyModuleResultsError
       self.processing.update(state: "READY")
     end
