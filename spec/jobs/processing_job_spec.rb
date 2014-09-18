@@ -2,7 +2,7 @@ require 'rails_helper'
 
 
 # FIXME: Rewrite this after rspec gets support to ActiveJob
-describe RunnerJob, :type => :job do
+describe ProcessingJob, :type => :job do
   # GLobalID tries to serialize the objects and then find them by id.
   let!(:processing) { FactoryGirl.build(:processing, id: 1) }
   let!(:repository) { FactoryGirl.build(:repository, id: 1) }
@@ -31,7 +31,7 @@ describe RunnerJob, :type => :job do
         end
 
         it 'should run' do
-          RunnerJob.perform_later(repository, processing)
+          ProcessingJob.perform_later(repository, processing)
         end
       end
 
@@ -42,7 +42,7 @@ describe RunnerJob, :type => :job do
 
         it 'is expected to destroy the processing' do
           processing.expects(:destroy)
-          RunnerJob.perform_later(repository, processing)
+          ProcessingJob.perform_later(repository, processing)
         end
       end
 
@@ -55,7 +55,7 @@ describe RunnerJob, :type => :job do
         it 'is expected to update the processing state to ERROR' do
           processing.expects(:update).with(state: 'ERROR', error_message: error_message)
 
-          RunnerJob.perform_later(repository, processing)
+          ProcessingJob.perform_later(repository, processing)
         end
       end
 
