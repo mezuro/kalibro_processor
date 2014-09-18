@@ -1,28 +1,37 @@
 require 'rails_helper'
 
-describe RunnerJob, :type => :model do
-  let(:processing) { FactoryGirl.build(:processing) }
-  let(:repository) { FactoryGirl.build(:repository) }
+
+# FIXME: Rewrite this after rspec gets support to ActiveJob
+describe RunnerJob, :type => :job do
+  # GLobalID tries to serialize the objects and then find them by id.
+  let!(:processing) { FactoryGirl.build(:processing, id: 1) }
+  let!(:repository) { FactoryGirl.build(:repository, id: 1) }
   let(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 
-  pending 'lacks rails update' do
+  # GLobalID tries to serialize the objects and then find them.
+  # This may get fixed on a new version of RSpec compatible with Rails 4.2
+  before :each do
+    Repository.expects(:find).with(repository.id.to_s).returns(repository)
+    Processing.expects(:find).with(processing.id.to_s).returns(processing)
+  end
+
   describe 'methods' do
-    describe 'run' do
+    describe 'perform' do
       context 'when the process is not cancelled' do
         let!(:process_time) { FactoryGirl.build(:process_time) }
 
         before :each do
-          Processor::Preparer.expects(:perform).with(context)
-          Processor::Downloader.expects(:perform).with(context)
-          Processor::Collector.expects(:perform).with(context)
-          Processor::TreeBuilder.expects(:perform).with(context)
-          Processor::Aggregator.expects(:perform).with(context)
-          Processor::CompoundResultCalculator.expects(:perform).with(context)
-          Processor::Interpreter.expects(:perform).with(context)
+          Processor::Preparer.expects(:perform)
+          Processor::Downloader.expects(:perform)
+          Processor::Collector.expects(:perform)
+          Processor::TreeBuilder.expects(:perform)
+          Processor::Aggregator.expects(:perform)
+          Processor::CompoundResultCalculator.expects(:perform)
+          Processor::Interpreter.expects(:perform)
         end
 
         it 'should run' do
-          RunnerJob.perform(repository, processing)
+          RunnerJob.perform_later(repository, processing)
         end
       end
 
@@ -31,22 +40,22 @@ describe RunnerJob, :type => :model do
           processing.state = "CANCELED"
         end
 
-        it 'is expected to destroy yhe processing' do
+        it 'is expected to destroy the processing' do
           processing.expects(:destroy)
-          RunnerJob.perform(repository, processing)
+          RunnerJob.perform_later(repository, processing)
         end
       end
 
       context 'with a failed step' do
         let!(:error_message) { 'Error message' }
         before :each do
-          Processor::Preparer.expects(:perform).with(context).raises(Errors::ProcessingError, error_message)
+          Processor::Preparer.expects(:perform).raises(Errors::ProcessingError, error_message)
         end
 
         it 'is expected to update the processing state to ERROR' do
           processing.expects(:update).with(state: 'ERROR', error_message: error_message)
 
-          RunnerJob.perform(repository, processing)
+          RunnerJob.perform_later(repository, processing)
         end
       end
 
@@ -63,6 +72,5 @@ describe RunnerJob, :type => :model do
         end
       end
     end
-  end
   end
 end
