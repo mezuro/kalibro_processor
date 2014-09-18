@@ -100,6 +100,7 @@ Then(/^the Root ModuleResult retrieved should have a list of MetricResults$/) do
 end
 
 Then(/^I should receive a processing error$/) do
+  @processing.reload
   expect(@processing.error_message).to_not be_nil
 end
 
