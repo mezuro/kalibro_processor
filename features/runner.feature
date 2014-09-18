@@ -10,7 +10,6 @@ Feature: Runner run
     And I have a sample repository within the sample project
     And I have a processing within the sample repository
     When I run for the given repository
-    And I wait for the "READY" state
     Then the repository code_directory should exist
     And I should have a READY processing for the given repository
     And the processing retrieved should have a Root ModuleResult
@@ -24,7 +23,6 @@ Feature: Runner run
     And I have a sample repository within the sample project
     And I have a processing within the sample repository
     When I run for the given repository
-    And I wait for the "ERROR" state
     Then I should receive a processing error
 
   @clear_repository @kalibro_restart
