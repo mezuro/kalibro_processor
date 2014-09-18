@@ -30,5 +30,8 @@ production:
   username: kalibro_processor
   password: kalibro_processor
 
+local:
+  <<: *development
+
 cucumber:
   <<: *test
