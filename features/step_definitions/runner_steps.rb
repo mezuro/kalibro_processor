@@ -45,7 +45,7 @@ Given(/^I have sample readings$/) do
 end
 
 Given(/^I have a sample configuration$/) do
-  @configuration = FactoryGirl.create(:configuration, name: "teste")
+  @configuration = FactoryGirl.create(:configuration, name: "teste", id: nil)
 end
 
 Given(/^I have a range for this metric configuration$/) do
