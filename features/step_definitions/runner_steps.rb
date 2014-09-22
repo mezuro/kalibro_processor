@@ -1,6 +1,4 @@
 Given(/^I have a sample configuration with native metrics$/) do
-  @reading_group = FactoryGirl.create(:reading_group, id: nil)
-  @reading = FactoryGirl.create(:reading, {id: nil, group_id: @reading_group.id})
   @configuration = FactoryGirl.create(:configuration, id: nil)
   metric_configuration = FactoryGirl.create(:metric_configuration,
                                             {id: nil,
@@ -39,6 +37,29 @@ Given(/^I have a compound metric with an invalid script$/) do
                                                                                        configuration_id: @configuration.id)
   compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: invalid_compound_metric_configuration.id})
   compound_range.save
+end
+
+Given(/^I have sample readings$/) do
+  @reading_group = FactoryGirl.create(:reading_group, id: nil)
+  @reading = FactoryGirl.create(:reading, {id: nil, group_id: @reading_group.id})
+end
+
+Given(/^I have a sample configuration$/) do
+  @configuration = FactoryGirl.create(:configuration, name: "teste")
+end
+
+Given(/^I have a range for this metric configuration$/) do
+  range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @metric_configuration.id})
+  range.save
+end
+
+Given(/^I add the "(.*?)" analizo metric with scope "(.*?)" and code "(.*?)"$/) do |name, scope, code|
+  @metric_configuration = FactoryGirl.create(:metric_configuration,
+                                             {id: nil,
+                                             code: code,
+                                             metric: FactoryGirl.build(:kalibro_gatekeeper_client_metric, name: name, scope: scope),
+                                             reading_group_id: @reading_group.id,
+                                             configuration_id: @configuration.id})
 end
 
 When(/^I run for the given repository$/) do

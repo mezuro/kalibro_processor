@@ -45,5 +45,47 @@ describe Granularity, :type => :model do
         end
       end
     end
+
+    describe '<=' do
+      subject { FactoryGirl.build(:granularity, type: Granularity::CLASS) }
+      context 'comparing to a greater one' do
+        let(:other_granularity) { FactoryGirl.build(:granularity, type: Granularity::SOFTWARE) }
+        it 'should return true' do
+          expect(subject <= other_granularity).to be_truthy
+        end
+      end
+      context 'comparing to an equal one' do
+        let(:other_granularity) { FactoryGirl.build(:granularity, type: Granularity::CLASS) }
+        it 'should return true' do
+          expect(subject <= other_granularity).to be_truthy
+        end
+      end
+      context 'comparing to a smaller one' do
+        let(:other_granularity) { FactoryGirl.build(:granularity, type: Granularity::METHOD) }
+        it 'should return false' do
+          expect(subject <= other_granularity).to be_falsey
+        end
+      end
+    end
+
+    describe '<' do
+      subject { FactoryGirl.build(:granularity, type: Granularity::CLASS) }
+      context 'comparing to a greater one' do
+        let(:other_granularity) { FactoryGirl.build(:granularity, type: Granularity::CLASS) }
+        it 'should return false' do
+          expect(subject < other_granularity).to be_falsey
+        end
+      end
+    end
+
+    describe '>' do
+      subject { FactoryGirl.build(:granularity, type: Granularity::CLASS) }
+      context 'comparing to a greater one' do
+        let(:other_granularity) { FactoryGirl.build(:granularity, type: Granularity::SOFTWARE) }
+        it 'should return false' do
+          expect(subject > other_granularity).to be_falsey
+        end
+      end
+    end
   end
 end

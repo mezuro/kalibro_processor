@@ -28,4 +28,17 @@ class Granularity
   def self.is_valid?(type)
     GRANULARITIES.include?(type)
   end
+  
+  def <(other_granularity)
+    self.type != other_granularity.type && self <= other_granularity
+  end
+
+  def >(other_granularity)
+    !(self.type <= other_granularity.type)
+  end
+
+  def <=(other_granularity)
+    GRANULARITIES.find_index(self.type) >= GRANULARITIES.find_index(other_granularity.type)
+  end
+
 end

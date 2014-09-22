@@ -21,10 +21,14 @@ module Processor
         already_calculated_metric_results = module_result_child.metric_results.map { |metric_result| metric_result.metric}
 
         @all_metrics.each do |metric|
-          unless already_calculated_metric_results.include?(metric)
-            metric_result = MetricResult.new(metric: metric, module_result: module_result_child, metric_configuration_id: metric_configuration(metric).id)
-            metric_result.value = metric_result.aggregated_value
-            metric_result.save
+          if module_result_child.kalibro_module.granularity > Granularity.new(metric.scope.to_s.to_sym)
+            unless already_calculated_metric_results.include?(metric)
+              metric_result = MetricResult.new(metric: metric, module_result: module_result_child, metric_configuration_id: metric_configuration(metric).id)
+              p metric
+              p module_result_child.kalibro_module
+              metric_result.value = metric_result.aggregated_value
+              metric_result.save
+            end
           end
         end
       end
