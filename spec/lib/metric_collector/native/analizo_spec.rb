@@ -31,7 +31,6 @@ describe MetricCollector::Native::Analizo, :type => :model do
       let!(:supported_metrics) { {"acc" => native_metric} }
       let!(:absolute_path) { "app/models/metric.rb" }
       let!(:module_result) { FactoryGirl.build(:module_result) }
-
       let(:native_metric) { FactoryGirl.build(:analizo_native_metric) }
       let(:wanted_metrics_list) { [wanted_metric_configuration, FactoryGirl.build(:metric_configuration, code: "amloc")] }
       let(:processing) { FactoryGirl.build(:processing) }

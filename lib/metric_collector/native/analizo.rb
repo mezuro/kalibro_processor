@@ -52,7 +52,12 @@ module MetricCollector
 
       def module_result(module_name)
         granularity = module_name.nil? ? Granularity::SOFTWARE : Granularity::CLASS
-        module_name = module_name.to_s.split(/:+/).join('.')
+        module_name = module_name.to_s.split("/")
+
+        if module_name.size > 0
+          module_name[module_name.size - 1] = remove_extension(module_name.last)
+        end
+        module_name.join(".")
         kalibro_module = KalibroModule.new({long_name: module_name, granularity: granularity})
 
         module_result = ModuleResult.find_by_module_and_processing(kalibro_module, self.processing)
@@ -66,7 +71,11 @@ module MetricCollector
       end
 
       def parse_single_result(result_map)
-        module_result = module_result(result_map['_module'])
+        if result_map['_filename'].nil?
+          module_result = module_result(nil)
+        else
+          module_result = module_result(result_map['_filename'].last)
+        end
         result_map.each do |code, value|
           new_metric_result(module_result, code, value) if (self.wanted_metrics[code])
         end
@@ -77,6 +86,14 @@ module MetricCollector
         YAML.load_documents(results).each do |hash|
           parse_single_result(hash)
         end
+      end
+
+      def remove_extension(name)
+        list = name.split(".")
+        if (list.size > 1)
+          list.delete_at(list.size - 1)
+        end
+        list.join(".")
       end
     end
   end
