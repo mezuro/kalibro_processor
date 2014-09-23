@@ -57,9 +57,9 @@ module MetricCollector
         if module_name.size > 0
           module_name[module_name.size - 1] = remove_extension(module_name.last)
         end
-        module_name.join(".")
-        kalibro_module = KalibroModule.new({long_name: module_name, granularity: granularity})
+        module_name = module_name.join(".")
 
+        kalibro_module = KalibroModule.new({long_name: module_name, granularity: granularity})
         module_result = ModuleResult.find_by_module_and_processing(kalibro_module, self.processing)
 
         if module_result.nil?
