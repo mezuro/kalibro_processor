@@ -21,7 +21,7 @@ describe ModuleResult, :type => :model do
           parent_module_result.children << another_child
           parent_module_result.save
 
-          expect(parent_module_result.children).to eq([child_module_result, another_child])
+          expect(parent_module_result.children).to eq([another_child, child_module_result])
         end
       end
 
