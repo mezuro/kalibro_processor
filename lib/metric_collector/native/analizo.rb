@@ -50,15 +50,14 @@ module MetricCollector
         MetricResult.create(metric: self.wanted_metrics[code].metric, value: value.to_f, module_result: module_result, metric_configuration_id: self.wanted_metrics[code].id)
       end
 
-      def module_result(module_name)
-        granularity = module_name.nil? ? Granularity::SOFTWARE : Granularity::CLASS
-        module_name = module_name.to_s.split("/")
+      def parse_file_name(file_name)
+        file_name_tokenized = file_name.to_s.split("/")
+        file_name_tokenized[file_name_tokenized.size - 1] = remove_extension(file_name_tokenized.last)
+        file_name_tokenized.join(".")
+      end
 
-        if module_name.size > 0
-          module_name[module_name.size - 1] = remove_extension(module_name.last)
-        end
-        module_name = module_name.join(".")
 
+      def module_result(module_name, granularity)
         kalibro_module = KalibroModule.new({long_name: module_name, granularity: granularity})
         module_result = ModuleResult.find_by_module_and_processing(kalibro_module, self.processing)
 
@@ -72,9 +71,9 @@ module MetricCollector
 
       def parse_single_result(result_map)
         if result_map['_filename'].nil?
-          module_result = module_result(nil)
+          module_result = module_result("", Granularity::SOFTWARE)
         else
-          module_result = module_result(result_map['_filename'].last)
+          module_result = module_result(parse_file_name(result_map['_filename'].last), Granularity::CLASS)
         end
         result_map.each do |code, value|
           new_metric_result(module_result, code, value) if (self.wanted_metrics[code])
