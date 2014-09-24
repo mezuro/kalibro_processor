@@ -48,6 +48,19 @@ describe Runner, :type => :model do
           subject.run
         end
       end
+
+      context 'with empty module_results' do
+        before :each do
+          Processor::Preparer.expects(:perform).with(subject)
+          Processor::Downloader.expects(:perform).with(subject)
+          Processor::Collector.expects(:perform).with(subject).raises(Errors::EmptyModuleResultsError)
+        end
+        it 'is expected to update the processing state to READY' do
+          processing.expects(:update).with(state: 'READY')
+
+          subject.run
+        end
+      end
     end
   end
 end
