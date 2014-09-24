@@ -51,4 +51,4 @@ Feature: Runner run
     When I run for the given repository
     Then the repository code_directory should exist
     And I should have a READY processing for the given repository
-    And the processing retrieved should not any ModuleResults
+    And the processing retrieved should not have any ModuleResults

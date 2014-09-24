@@ -88,7 +88,7 @@ Then(/^I should receive a processing error$/) do
   expect(@processing.error_message).to_not be_nil
 end
 
-Then(/^the processing retrieved should not any ModuleResults$/) do
+Then(/^the processing retrieved should not have any ModuleResults$/) do
   expect(@processing.module_results).to be_empty
 end
 
