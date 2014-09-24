@@ -27,6 +27,8 @@ class Runner
       self.processing.destroy
     rescue Errors::ProcessingError => error
       self.processing.update(state: 'ERROR', error_message: error.message)
+    rescue Errors::EmptyModuleResultsError
+      self.processing.update(state: "READY")
     end
   end
 end

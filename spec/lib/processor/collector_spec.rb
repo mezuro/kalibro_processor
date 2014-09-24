@@ -18,8 +18,19 @@ describe Processor::Collector do
         MetricCollector::Native::Analizo.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
       end
 
-      it 'is expected to accomplish the collecting state of a process successfully' do
-        Processor::Collector.task(runner)
+      context 'without producing module_results' do
+        it 'is expected to raise an EmptyModuleResultsError' do
+          expect { Processor::Collector.task(runner) }.to raise_error(Errors::EmptyModuleResultsError)
+        end
+      end
+
+      context 'producing module_results' do
+        before :each do
+          runner.processing.expects(:module_results).returns([mock("module_result")])
+        end
+        it 'is expected to accomplish the collecting state of a process successfully' do
+          Processor::Collector.task(runner)
+        end
       end
     end
 
