@@ -61,14 +61,14 @@ describe ProcessingJob, :type => :job do
 
       context 'with empty module_results' do
         before :each do
-          Processor::Preparer.expects(:perform).with(subject)
-          Processor::Downloader.expects(:perform).with(subject)
-          Processor::Collector.expects(:perform).with(subject).raises(Errors::EmptyModuleResultsError)
+          Processor::Preparer.expects(:perform)
+          Processor::Downloader.expects(:perform)
+          Processor::Collector.expects(:perform).raises(Errors::EmptyModuleResultsError)
         end
         it 'is expected to update the processing state to READY' do
           processing.expects(:update).with(state: 'READY')
 
-          subject.run
+          ProcessingJob.perform_later(repository, processing)
         end
       end
     end

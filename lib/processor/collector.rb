@@ -14,8 +14,8 @@ module Processor
         end
       end
 
-      runner.processing.reload
-      raise Errors::EmptyModuleResultsError if(runner.processing.module_results.empty?)
+      context.processing.reload
+      raise Errors::EmptyModuleResultsError if(context.processing.module_results.empty?)
     end
 
     def self.state

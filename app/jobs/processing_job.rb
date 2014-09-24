@@ -16,6 +16,10 @@ class ProcessingJob < ActiveJob::Base
     @context.processing.update(state: 'ERROR', error_message: exception.message)
   end
 
+  rescue_from(Errors::EmptyModuleResultsError) do
+    @context.processing.update(state: "READY")
+  end
+
   def perform(repository, processing)
     @context.repository = repository
     @context.processing = processing
@@ -29,7 +33,5 @@ class ProcessingJob < ActiveJob::Base
     Processor::Interpreter.perform(@context)
 
     @context.processing.update(state: "READY")
-    rescue Errors::EmptyModuleResultsError
-      self.processing.update(state: "READY")
   end
 end
