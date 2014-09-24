@@ -35,12 +35,15 @@ module MetricCollector
       def parse_supported_metrics
         supported_metrics = {}
         analizo_metric_list = metric_list
+        global = true
         analizo_metric_list.each_line do |line|
           if line.include?("-")
             code = line[/^[^ ]*/] # From the beginning of line to the first space
             name = line[/- .*$/].slice(2..-1) # After the "- " to the end of line
-            scope = code.start_with?("total") ? :SOFTWARE : :CLASS
+            scope = global ? :SOFTWARE : :CLASS
             supported_metrics[code] = NativeMetric.new(name, code, scope, [:C, :CPP, :JAVA])
+          elsif line.include?("Module Metrics:")
+            global = false
           end
         end
         supported_metrics
