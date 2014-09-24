@@ -42,3 +42,13 @@ Feature: Runner run
     And I should have a READY processing for the given repository
     And the processing retrieved should have a Root ModuleResult
     And the Root ModuleResult retrieved should have a list of MetricResults
+
+  @clear_repository @kalibro_restart
+  Scenario: A processing with an empty configuration
+    Given I have a sample configuration
+    And I have a sample repository within the sample project
+    And I have a processing within the sample repository
+    When I run for the given repository
+    Then the repository code_directory should exist
+    And I should have a READY processing for the given repository
+    And the processing retrieved should not any ModuleResults

@@ -13,6 +13,8 @@ module Processor
                             runner.processing)
         end
       end
+
+      raise Errors::EmptyModuleResultsError if(runner.processing.module_results.empty?)
     end
 
     def self.state
