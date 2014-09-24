@@ -26,7 +26,7 @@ Feature: Runner run
     Then I should receive a processing error
 
   @clear_repository @kalibro_restart
-  Scenario: A bug
+  Scenario: Aggregating some metric values
     Given I have sample readings
     And I have a sample configuration
     And I add the "Number of Attributes" analizo metric with scope "CLASS" and code "noa"
