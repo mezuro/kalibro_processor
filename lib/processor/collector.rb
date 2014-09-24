@@ -14,6 +14,7 @@ module Processor
         end
       end
 
+      runner.processing.reload
       raise Errors::EmptyModuleResultsError if(runner.processing.module_results.empty?)
     end
 
