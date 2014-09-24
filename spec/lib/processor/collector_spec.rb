@@ -13,6 +13,7 @@ describe Processor::Collector do
       let!(:code_dir) { "/tmp/test" }
 
       before :each do
+        runner.processing.expects(:reload)
         runner.repository.expects(:code_directory).returns(code_dir)
         runner.expects(:native_metrics).returns({metric_configuration.metric_collector_name => [metric_configuration]})
         MetricCollector::Native::Analizo.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
