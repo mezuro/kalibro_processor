@@ -8,6 +8,8 @@ class MetricResult < ActiveRecord::Base
       # Fix for the period while we're using vintage Kalibro
       form = self.metric_configuration.aggregation_form.to_s.downcase
       form = "mean" if form == "average"
+      form = "max" if form == "maximum"
+      form = "min" if form == "minimum"
 
       values.send( form )
     else
