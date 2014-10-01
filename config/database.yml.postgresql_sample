@@ -3,7 +3,7 @@
 #
 #   Ensure the PostgreSQL gem is defined in your Gemfile
 #   gem 'pg'
-development:
+development: &development
   adapter: postgresql
   encoding: unicode
   database: kalibro_processor_development
