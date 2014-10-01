@@ -5,8 +5,8 @@ module Processor
 
     protected
 
-    def self.task(runner)
-      self.calculate_compound_results(runner.processing.root_module_result.pre_order, runner.compound_metrics)
+    def self.task(context)
+      self.calculate_compound_results(context.processing.root_module_result.pre_order, context.compound_metrics)
     end
 
     def self.state

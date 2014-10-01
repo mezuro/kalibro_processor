@@ -2,8 +2,8 @@ module Processor
   class Interpreter < ProcessingStep
     protected
 
-    def self.task(runner)
-      all_module_results = runner.processing.root_module_result.pre_order
+    def self.task(context)
+      all_module_results = context.processing.root_module_result.pre_order
       all_module_results.each do | module_result_child |
         numerator = 0
         denominator = 0

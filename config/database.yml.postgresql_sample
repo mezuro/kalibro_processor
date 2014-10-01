@@ -3,7 +3,7 @@
 #
 #   Ensure the PostgreSQL gem is defined in your Gemfile
 #   gem 'pg'
-development:
+development: &development
   adapter: postgresql
   encoding: unicode
   database: kalibro_processor_development
@@ -29,6 +29,9 @@ production:
   pool: 5
   username: kalibro_processor
   password: kalibro_processor
+
+local:
+  <<: *development
 
 cucumber:
   <<: *test

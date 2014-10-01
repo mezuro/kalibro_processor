@@ -14,7 +14,7 @@ describe Processor::Interpreter do
         let!(:module_result) { FactoryGirl.build(:module_result_class_granularity,
                                                  metric_results: [metric_result]) }
         let!(:processing) { FactoryGirl.build(:processing, repository: repository, root_module_result: module_result) }
-        let!(:runner) { Runner.new(repository, processing) }
+        let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 
         before :each do
           module_result.expects(:children).returns([])
@@ -35,7 +35,7 @@ describe Processor::Interpreter do
           end
 
           it 'is expected to interpret, updating grade to quotient' do
-            Processor::Interpreter.task(runner)
+            Processor::Interpreter.task(context)
           end
         end
 
@@ -47,7 +47,7 @@ describe Processor::Interpreter do
           end
 
           it 'is expected to interpret, updating grade to 0' do
-            Processor::Interpreter.task(runner)
+            Processor::Interpreter.task(context)
           end
         end
       end

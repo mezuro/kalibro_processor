@@ -28,7 +28,7 @@ class Repository < ActiveRecord::Base
   end
 
   def process(processing)
-    Runner.new(self, processing).run
+    ProcessingJob.perform_later(self, processing)
   end
 
   def module_result_history_of(module_name)

@@ -17,10 +17,10 @@ describe Processor::Aggregator do
       let!(:compound_metric_configurations) { [FactoryGirl.build(:compound_metric_configuration)] }
       let!(:native_metrics) { { "Analizo" => native_metric_configurations } }
       let!(:all_metrics) { [native_metric_configurations.first.metric, native_metric_configurations.last.metric] }
-      let!(:runner) { Runner.new(repository, processing) }
+      let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 
       before :each do
-        runner.native_metrics = native_metrics
+        context.native_metrics = native_metrics
       end
 
       context 'when the module result tree has been well-built' do
@@ -32,7 +32,7 @@ describe Processor::Aggregator do
         end
 
         it 'is expected to aggregate results' do
-          Processor::Aggregator.task(runner)
+          Processor::Aggregator.task(context)
         end
       end
     end

@@ -66,7 +66,22 @@ When(/^I run for the given repository$/) do
   @repository.process(@processing)
 end
 
+When(/^I wait for the "(.*?)" state$/) do |state|
+  @processing.reload
+  unless @processing.state == state
+    while(true)
+      if @processing.state == state
+        break
+      else
+        sleep(10)
+      end
+    end
+  end
+end
+
+
 Then(/^the repository code_directory should exist$/) do
+  @repository.reload
   expect(Dir.exists?(@repository.code_directory)).to be_truthy
 end
 
@@ -85,6 +100,7 @@ Then(/^the Root ModuleResult retrieved should have a list of MetricResults$/) do
 end
 
 Then(/^I should receive a processing error$/) do
+  @processing.reload
   expect(@processing.error_message).to_not be_nil
 end
 

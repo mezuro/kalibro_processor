@@ -7,7 +7,7 @@ describe Processor::Preparer do
     let!(:configuration) { FactoryGirl.build(:configuration) }
     let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration) }
     let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
-    let(:runner) { Runner.new(repository, processing) }
+    let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
     let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
     let!(:compound_metric_configuration) { FactoryGirl.build(:compound_metric_configuration) }
     let!(:dir) { YAML.load_file("#{Rails.root}/config/repositories.yml")["repositories"]["path"] }
@@ -22,11 +22,11 @@ describe Processor::Preparer do
           Digest::MD5.expects(:hexdigest).returns("test")
           Dir.expects(:exists?).with(code_dir).returns(false)
           KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:metric_configurations_of).
-            with(runner.repository.configuration.id).returns([metric_configuration, compound_metric_configuration])
+            with(context.repository.configuration.id).returns([metric_configuration, compound_metric_configuration])
         end
 
         it 'is expected to accomplish the preparing state of a process successfully' do
-          Processor::Preparer.task(runner)
+          Processor::Preparer.task(context)
         end
       end
 
@@ -36,7 +36,7 @@ describe Processor::Preparer do
         end
 
         it 'is expected to raise a RunTimeError exception' do
-          expect { Processor::Preparer.task(runner) }.to raise_error(Errors::ProcessingError, "Repository's directory (#{dir}) does not exist")
+          expect { Processor::Preparer.task(context) }.to raise_error(Errors::ProcessingError, "Repository's directory (#{dir}) does not exist")
         end
       end
     end
