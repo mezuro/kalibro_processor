@@ -2,18 +2,6 @@ require 'rails_helper'
 
 describe Granularity, :type => :model do
   describe 'method' do
-    describe 'is_valid?' do
-      it 'should accept all the items on the GRANULARITIES constant' do
-        Granularity::GRANULARITIES.each do |granularity|
-          expect(Granularity.is_valid?(granularity)).to be_truthy
-        end
-      end
-
-      it 'should not accept :MQQ' do
-        expect(Granularity.is_valid?(:MQQ)).to be_falsey
-      end
-    end
-
     describe 'initialize' do
       context 'with a valid type' do
         it 'should return an instance of Granularity' do
@@ -37,7 +25,7 @@ describe Granularity, :type => :model do
         end
       end
 
-      context 'with a SOFTWARE granularity' do
+      context 'with a METHOD granularity' do
         subject { FactoryGirl.build(:granularity, type: Granularity::METHOD) }
 
         it 'should return CLASS' do
@@ -46,44 +34,53 @@ describe Granularity, :type => :model do
       end
     end
 
-    describe '<=' do
+    describe 'Comparison Operators' do
       subject { FactoryGirl.build(:granularity, type: Granularity::CLASS) }
       context 'comparing to a greater one' do
         let(:other_granularity) { FactoryGirl.build(:granularity, type: Granularity::SOFTWARE) }
-        it 'should return true' do
+        it 'should return true when checking for <' do
+          expect(subject < other_granularity).to be_truthy
+        end
+        it 'should return true when checking for <=' do
           expect(subject <= other_granularity).to be_truthy
         end
+        it 'should return false when checking for >' do
+          expect(subject > other_granularity).to be_falsey
+        end
+        it 'should return false when checking for >=' do
+          expect(subject >= other_granularity).to be_falsey
+        end
       end
+
       context 'comparing to an equal one' do
         let(:other_granularity) { FactoryGirl.build(:granularity, type: Granularity::CLASS) }
-        it 'should return true' do
-          expect(subject <= other_granularity).to be_truthy
-        end
-      end
-      context 'comparing to a smaller one' do
-        let(:other_granularity) { FactoryGirl.build(:granularity, type: Granularity::METHOD) }
-        it 'should return false' do
-          expect(subject <= other_granularity).to be_falsey
-        end
-      end
-    end
-
-    describe '<' do
-      subject { FactoryGirl.build(:granularity, type: Granularity::CLASS) }
-      context 'comparing to a greater one' do
-        let(:other_granularity) { FactoryGirl.build(:granularity, type: Granularity::CLASS) }
-        it 'should return false' do
+        it 'should return false when checking for <' do
           expect(subject < other_granularity).to be_falsey
         end
-      end
-    end
-
-    describe '>' do
-      subject { FactoryGirl.build(:granularity, type: Granularity::CLASS) }
-      context 'comparing to a greater one' do
-        let(:other_granularity) { FactoryGirl.build(:granularity, type: Granularity::SOFTWARE) }
-        it 'should return false' do
+        it 'should return true when checking for <=' do
+          expect(subject <= other_granularity).to be_truthy
+        end
+        it 'should return false when checking for >' do
           expect(subject > other_granularity).to be_falsey
+        end
+        it 'should return true when checking for >=' do
+          expect(subject >= other_granularity).to be_truthy
+        end
+      end
+
+      context 'comparing to a smaller one' do
+        let(:other_granularity) { FactoryGirl.build(:granularity, type: Granularity::METHOD) }
+        it 'should return false when checking for <' do
+          expect(subject < other_granularity).to be_falsey
+        end
+        it 'should return false when checking for <=' do
+          expect(subject <= other_granularity).to be_falsey
+        end
+        it 'should return true when checking for >' do
+          expect(subject > other_granularity).to be_truthy
+        end
+        it 'should return true when checking for >=' do
+          expect(subject >= other_granularity).to be_truthy
         end
       end
     end
