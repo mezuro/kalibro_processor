@@ -32,13 +32,13 @@ It was strongly based on the vintage Kalibro (https://github.com/mezuro/kalibro)
 
   This will create all the configuration files with defaults for Ubuntu and initialize your database.
 
-  ** Local environment
+  * Local environment
 
-    RAILS_ENV=local ./bin/setup
+    ```RAILS_ENV=local ./bin/setup```
 
-  This is a environment used when you want to use the server for acceptance tests from other services like Prezento. It uses a delayed_job queue for processings. So in order to process run:
+    This is a environment used when you want to use the server for acceptance tests from other services like Prezento. It uses a delayed_job queue for processings. So in order to process run:
 
-    RAILS_ENV=local rake jobs:work
+    ```RAILS_ENV=local rake jobs:work```
 
 * How to run the test suite
 
@@ -48,10 +48,10 @@ It was strongly based on the vintage Kalibro (https://github.com/mezuro/kalibro)
 
 * Services (job queues, cache servers, search engines, etc.)
 
-  Kalibro Gatekeeper v0.2.0 (https://github.com/mezuro/kalibro_gatekeeper/releases/tag/v0.2.0)
-  You can find a script to install it on any machine with Rails on https://gist.github.com/rafamanzo/9859244. After running this script, run ```unset BUNDLE_GEMFILE```.
-  By default Kalibro Processor will expect it to be running on port 8081 at localhost.
-  In order to run it as expected, run: ```RAILS_ENV=local rails s -p 8081```.
+  * Kalibro Gatekeeper v0.2.0 (https://github.com/mezuro/kalibro_gatekeeper/releases/tag/v0.2.0)
+    * You can find a script to install it on any machine with Rails on https://gist.github.com/rafamanzo/9859244. After running this script, run ```unset BUNDLE_GEMFILE```.
+    * By default Kalibro Processor will expect it to be running on port 8081 at localhost.
+    * In order to run it as expected, run: ```RAILS_ENV=local rails s -p 8081```.
 
 * Deployment instructions
 
