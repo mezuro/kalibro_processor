@@ -2,7 +2,7 @@
 
 {<img src="https://codeclimate.com/github/mezuro/kalibro_processor.png" />}[https://codeclimate.com/github/mezuro/kalibro_processor] {<img src="https://travis-ci.org/mezuro/kalibro_processor.png?branch=master" alt="Build Status" />}[https://travis-ci.org/mezuro/kalibro_processor]
 
-Kalibro Processor is a free source code analysis web service. Part of the Mezuro project.
+Kalibro Processor is a source code analysis web service. Part of the Mezuro project. It is free software under the AGPLv3 license.
 
 It was strongly based on the vintage Kalibro (https://github.com/mezuro/kalibro) written in Java mostly by Carlos Morais (carlos88morais at gmail dot com) on his MSc dissertation (in portuguese http://www.teses.usp.br/teses/disponiveis/45/45134/tde-25092013-142158/en.php)
 
