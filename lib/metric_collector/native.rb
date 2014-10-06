@@ -1,4 +1,5 @@
 require 'metric_collector/native/analizo'
+require 'metric_collector/native/metric_fu'
 
 module MetricCollector
   module Native
