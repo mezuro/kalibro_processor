@@ -13,6 +13,11 @@ FactoryGirl.define do
       error_message "ERROR message"
     end
 
+    trait :periodic do
+      repository { FactoryGirl.build(:repository, period: 2) }
+    end
+
     factory :processing_with_error, traits: [:error]
+    factory :periodic_processing, traits: [:periodic]
   end
 end
