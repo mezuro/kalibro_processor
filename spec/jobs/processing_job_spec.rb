@@ -8,14 +8,14 @@ describe ProcessingJob, :type => :job do
       context 'when the processing is successful' do
         let!(:periodic_processing) { FactoryGirl.build(:periodic_processing, id: 1) }
         let!(:new_periodic_processing) { FactoryGirl.build(:periodic_processing, state: 'PREPARING') }
-        let(:periodic_repository) { FactoryGirl.build(:repository, id: 2, period: 2) }
-        let(:context) { FactoryGirl.build(:context, repository: periodic_repository, processing: periodic_processing) }
+        let(:repository_with_period) { FactoryGirl.build(:repository, id: 2, period: 2) }
+        let(:context) { FactoryGirl.build(:context, repository: repository_with_period, processing: periodic_processing) }
         let(:periodic_job) { mock('active_job') }
 
         # GLobalID tries to serialize the objects and then find them.
         # This may get fixed on a new version of RSpec compatible with Rails 4.2
         before :each do
-          Repository.expects(:find).with(periodic_repository.id.to_s).returns(periodic_repository)
+          Repository.expects(:find).with(repository_with_period.id.to_s).returns(repository_with_period)
           Processing.expects(:find).with(periodic_processing.id.to_s).returns(periodic_processing)
         end
 
@@ -31,10 +31,10 @@ describe ProcessingJob, :type => :job do
           end
 
           it 'should process the repository periodically' do
-            Processing.expects(:create).with(repository: periodic_repository, state: "PREPARING").returns(new_periodic_processing)
+            Processing.expects(:create).with(repository: repository_with_period, state: "PREPARING").returns(new_periodic_processing)
             ProcessingJob.expects(:set).with(wait: 2.days).returns(periodic_job)
             periodic_job.expects(:perform_later).with(context.repository, new_periodic_processing)
-            ProcessingJob.perform_later(periodic_repository, periodic_processing)
+            ProcessingJob.perform_later(repository_with_period, periodic_processing)
           end
         end
       end
