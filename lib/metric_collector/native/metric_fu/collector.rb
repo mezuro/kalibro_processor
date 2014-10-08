@@ -11,7 +11,7 @@ module MetricCollector
           runner = Runner.new(repository_path: code_directory)
 
           runner.run
-          #FIXME: parse comes here
+          MetricCollector::Native::MetricFu::Parser.collected_results(runner.yaml_path, wanted_metrics)
           runner.clean_output
         end
 

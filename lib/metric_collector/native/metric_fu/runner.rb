@@ -4,19 +4,19 @@ module MetricCollector
       class Runner
         def initialize(attributes={repository_path: nil})
           @repository_path = attributes[:repository_path]
-          @output_path = generate_output_path
+          @yaml_path = generate_output_path
         end
 
         def run
-          Dir.chdir(@repository_path) { `metric_fu --format yaml --output #{@output_path}` }
+          Dir.chdir(@repository_path) { `metric_fu --format yaml --output #{@yaml_path}` }
         end
 
-        def output_path
-          @output_path
+        def yaml_path
+          @yaml_path
         end
 
         def clean_output
-          File.delete(@output_path) if File.exists?(@output_path)
+          File.delete(@yaml_path) if File.exists?(@yaml_path)
         end
 
         private
