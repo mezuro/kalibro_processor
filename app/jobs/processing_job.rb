@@ -8,6 +8,14 @@ class ProcessingJob < ActiveJob::Base
     @context = Processor::Context.new
   end
 
+  after_perform do |job|
+    period = @context.repository.period
+    if period > 0
+      new_processing = Processing.create(repository: @context.repository, state: "PREPARING")
+      ProcessingJob.set(wait: period.days).perform_later(@context.repository, new_processing)
+    end
+  end
+
   rescue_from(Errors::ProcessingCanceledError) do
     @context.processing.destroy
   end
