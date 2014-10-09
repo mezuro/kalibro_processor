@@ -7,11 +7,11 @@ module MetricCollector
       module Parser
         @parsers = { :flog => MetricCollector::Native::MetricFu::Parser::Flog }
 
-        def self.collected_results(yaml_file_path, wanted_metrics)
+        def self.parse_all(yaml_file_path, wanted_metric_configurations)
           parsed_result = YAML.load_file(yaml_file_path)
 
-          wanted_metrics.each do |metric|
-            @parsers[metric].parse(parsed_result[metric])
+          wanted_metric_configurations.each_key do |code|
+            @parsers[code].parse(parsed_result[code])
           end
         end
       end

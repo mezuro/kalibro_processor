@@ -45,4 +45,11 @@ FactoryGirl.define  do
     description nil
     languages { [:C] }
   end
+
+  factory :flog_metric, class: NativeMetric, parent: :metric do
+    languages { [:RUBY] }
+    scope { :METHOD }
+
+    initialize_with { NativeMetric.new(name, code, scope, languages) }
+  end
 end

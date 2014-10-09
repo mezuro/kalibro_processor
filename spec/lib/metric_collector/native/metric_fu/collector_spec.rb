@@ -14,7 +14,7 @@ describe MetricCollector::Native::MetricFu::Collector, :type => :model do
       MetricCollector::Native::MetricFu::Runner.expects(:new).with(repository_path: code_directory).returns(runner)
       runner.expects(:run)
       runner.expects(:yaml_path).returns(path)
-      MetricCollector::Native::MetricFu::Parser.expects(:collected_results).with(path, wanted_metrics)
+      MetricCollector::Native::MetricFu::Parser.expects(:parse_wanted).with(path, wanted_metrics)
       runner.expects(:clean_output)
       subject.collect_metrics(code_directory, wanted_metrics)
     end
