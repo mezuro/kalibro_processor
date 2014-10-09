@@ -61,6 +61,9 @@ group :test do
   # Test coverage
   gem 'simplecov', require: false
 
+  # Test Coverage monitoring
+  gem "codeclimate-test-reporter", require: nil
+
   # Simple Mocks
   gem 'mocha', :require => 'mocha/api'
 end
