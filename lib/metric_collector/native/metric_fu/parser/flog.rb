@@ -7,11 +7,11 @@ module MetricCollector
             flog_output[:method_containers].each do |method_container|
               name_prefix = module_name_prefix(method_container[:path])
               method_container[:methods].each do |name, result|
-                module_name = name_prefix << module_name_sufix(name)
+                module_name = name_prefix + module_name_sufix(name)
                 granularity = (module_name == name_prefix ? Granularity::CLASS : Granularity::METHOD)
+                module_result = module_result(module_name, granularity, processing)
               end
             end
-            module_result(module_name, granularity, processing)
           end
 
           private
@@ -27,11 +27,11 @@ module MetricCollector
             if sufix == "none"
               return ""
             else
-              return sufix
+              return "." + sufix
             end
           end
 
-          def module_result(module_name, granularity, processing)
+          def self.module_result(module_name, granularity, processing)
             kalibro_module = KalibroModule.new({long_name: module_name, granularity: granularity})
             module_result = ModuleResult.find_by_module_and_processing(kalibro_module, processing)
 
