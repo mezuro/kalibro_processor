@@ -11,7 +11,7 @@ module MetricCollector
           parsed_result = YAML.load_file(yaml_file_path)
 
           wanted_metric_configurations.each_key do |code|
-            @parsers[code].parse(parsed_result[code], processing)
+            @parsers[code].parse(parsed_result[code], processing, wanted_metric_configurations[code])
           end
         end
       end
