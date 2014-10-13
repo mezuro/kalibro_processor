@@ -16,6 +16,27 @@ Given(/^I have a sample kalibro configuration with native metrics$/) do
   compound_range.save
 end
 
+
+Given(/^I have a sample configuration with native metrics from metric fu$/) do
+  @configuration = FactoryGirl.create(:ruby_configuration, id: nil)
+  metric_configuration = FactoryGirl.create(:flog_metric_configuration,
+                                            {id: nil,
+                                             reading_group_id: @reading_group.id,
+                                             configuration_id: @configuration.id})
+  range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
+  range.save
+  compound_metric_configuration = FactoryGirl.create(:flog_compound_metric_configuration,
+                                                     code: 'two_loc',
+                                                     reading_group_id: @reading_group.id,
+                                                     configuration_id: @configuration.id)
+  compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: compound_metric_configuration.id})
+  compound_range.save
+end
+
+Given(/^I have a sample ruby repository within the sample project$/) do
+  @repository = FactoryGirl.create(:ruby_repository, configuration: @configuration)
+end
+
 Given(/^I have a sample repository within the sample project$/) do
   @repository = FactoryGirl.create(:sbking_repository, kalibro_configuration: @kalibro_configuration)
 end

@@ -4,7 +4,7 @@ require 'metric_collector'
 RSpec.describe MetricCollectorsController, :type => :controller do
   describe 'all_names' do
     context 'with an available collector' do
-      let(:names) { ["Analizo"] }
+      let(:names) { ["Analizo", "MetricFu"] }
       before :each do
         MetricCollector::Native::Analizo.expects(:available?).returns(true)
         get :all_names, format: :json
@@ -18,7 +18,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
     end
 
     context 'with an unavailable collector' do
-      let(:names) { [] }
+      let(:names) { ["MetricFu"] }
       before :each do
         MetricCollector::Native::Analizo.expects(:available?).returns(false)
         get :all_names, format: :json

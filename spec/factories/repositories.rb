@@ -17,6 +17,14 @@ FactoryGirl.define do
       description "SBKing"
     end
 
+    trait :ruby do
+      name "Koans"
+      scm_type "GIT"
+      address "https://github.com/neo/ruby_koans"
+      description "Ruby Koans"
+    end
+
     factory :sbking_repository, traits: [:sbking]
+    factory :ruby_repository, traits: [:ruby]
   end
 end

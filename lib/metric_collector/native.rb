@@ -4,7 +4,7 @@ require 'metric_collector/native/metric_fu'
 module MetricCollector
   module Native
     #TODO Add metric_fu to the list of native metric collectors
-    ALL = {"Analizo" => MetricCollector::Native::Analizo}
+    ALL = {"Analizo" => MetricCollector::Native::Analizo, "MetricFu" => MetricCollector::Native::MetricFu}
 
     def self.available
       ALL.select {|name, collector| collector.available?}

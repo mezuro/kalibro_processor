@@ -36,8 +36,21 @@ FactoryGirl.define do
 
     trait :flog do
       metric { FactoryGirl.build(:flog_metric) }
+      metric_collector_name "MetricFu"
+      code 'pain'
+    end
+
+    trait :flog_compound_metric_configuration do
+      id 2
+      code 'two_flog'
+      metric_collector_name "MetricFu"
+      weight 1
+      aggregation_form :AVERAGE
+      reading_group_id 1
+      configuration_id 1
     end
     factory :compound_metric_configuration, traits: [:compound_metric]
+    factory :flog_compound_metric_configuration, traits: [:flog]
     factory :flog_metric_configuration, traits: [:flog]
     factory :sum_metric_configuration, traits: [:sum_metric_configuration]
   end
