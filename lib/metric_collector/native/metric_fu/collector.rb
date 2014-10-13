@@ -3,7 +3,7 @@ module MetricCollector
     module MetricFu
       class Collector < MetricCollector::Base
         def initialize
-          description = "" #FIXME: YAML.load_file("#{Rails.root}/config/collectors_descriptions.yml")["metric_fu"]
+          description = YAML.load_file("#{Rails.root}/lib/metric_collector/native/descriptions.yml")["metric_fu"]
           super("MetricFu", description, {}) #FIXME: the last attribute should be a call to `parse_supported_metrics`
         end
 

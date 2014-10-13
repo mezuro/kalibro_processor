@@ -1,0 +1,9 @@
+analizo:
+  Analizo is a suite of source code analysis tools, aimed at being language-independent and extensible.
+  Analizo Metrics is one of those tools.
+  It analyzes source code in the directories passed as arguments and produces a metrics report written to the standard output in the YAML format.
+
+metric_fu:
+  MetricFu is an aggregator of several static code analysis tools for Ruby.
+  It displays code metrics from Flog, Flay, Saikuro, Churn, Reek, Roodi, Code Statistics, and Rails Best Practices (and optionally code coverage with RCov).
+  With MetricFu, you get a combined HTML report of all the metrics.
