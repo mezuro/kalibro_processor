@@ -56,7 +56,7 @@ gem 'exception_notification', '~> 4.0.1'
 
 group :test do
   # Easier test writing
-  gem "shoulda-matchers", '~>2.6.1'
+  gem "shoulda-matchers", '~>2.7.0'
 
   # Test coverage
   gem 'simplecov', require: false
