@@ -16,10 +16,13 @@ module CompoundResults
       end
 
       @compound_metric_configurations.each do |compound_metric_configuration|
-        MetricResult.create(metric: compound_metric_configuration.metric,
-                            module_result: @module_result,
-                            metric_configuration_id: compound_metric_configuration.id,
-                            value: evaluator.evaluate("#{compound_metric_configuration.code}"))
+        value = evaluator.evaluate("#{compound_metric_configuration.code}")
+        if value.to_s != "Infinity" && value.to_s != "-Infinity"
+          MetricResult.create(metric: compound_metric_configuration.metric,
+                              module_result: @module_result,
+                              metric_configuration_id: compound_metric_configuration.id,
+                              value: value)
+        end
       end
     end
   end
