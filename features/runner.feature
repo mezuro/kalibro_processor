@@ -7,6 +7,7 @@ Feature: Runner run
   Scenario: An existing repository with a configuration
     Given I have sample readings
     And I have a sample configuration with native metrics
+    And I have a compound metric with script "return 1.0/0.0;"
     And I have a sample repository within the sample project
     And I have a processing within the sample repository
     When I run for the given repository
@@ -14,6 +15,7 @@ Feature: Runner run
     And I should have a READY processing for the given repository
     And the processing retrieved should have a Root ModuleResult
     And the Root ModuleResult retrieved should have a list of MetricResults
+    And the Root ModuleResult retrieved should not have a MetricResult for the compound metric
 
   @clear_repository @kalibro_restart
   Scenario: A failing processing
