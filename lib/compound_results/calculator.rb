@@ -17,7 +17,7 @@ module CompoundResults
 
       @compound_metric_configurations.each do |compound_metric_configuration|
         value = evaluator.evaluate("#{compound_metric_configuration.code}")
-        if value.to_s != "Infinity" && value.to_s != "-Infinity"
+        if value.to_s != "Infinity" && value.to_s != "-Infinity" && value.to_s != "NaN"
           MetricResult.create(metric: compound_metric_configuration.metric,
                               module_result: @module_result,
                               metric_configuration_id: compound_metric_configuration.id,

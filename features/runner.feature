@@ -7,7 +7,7 @@ Feature: Runner run
   Scenario: An existing repository with a configuration
     Given I have sample readings
     And I have a sample configuration with native metrics
-    And I have a compound metric with script "return 1.0/0.0;"
+    And I have two compound metrics with script "return 1.0/0.0;" and "return Math.sqrt(-5);"
     And I have a sample repository within the sample project
     And I have a processing within the sample repository
     When I run for the given repository

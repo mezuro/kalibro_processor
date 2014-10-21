@@ -62,15 +62,23 @@ Given(/^I add the "(.*?)" analizo metric with scope "(.*?)" and code "(.*?)"$/) 
                                              configuration_id: @configuration.id})
 end
 
-Given(/^I have a compound metric with script "(.*?)"$/) do |script|
+Given(/^I have two compound metrics with script "(.*?)" and "(.*?)"$/) do |script1, script2|
   @compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
                                                         id: nil,
                                                         code: 'cmc',
-                                                        metric: FactoryGirl.build(:kalibro_gatekeeper_client_compound_metric, script: script),
+                                                        metric: FactoryGirl.build(:kalibro_gatekeeper_client_compound_metric, script: script1),
+                                                                                   reading_group_id: @reading_group.id,
+                                                                                   configuration_id: @configuration.id)
+  @other_compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
+                                                        id: nil,
+                                                        code: 'ocmc',
+                                                        metric: FactoryGirl.build(:kalibro_gatekeeper_client_compound_metric, script: script2),
                                                                                    reading_group_id: @reading_group.id,
                                                                                    configuration_id: @configuration.id)
   compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @compound_metric_configuration.id})
   compound_range.save
+  other_compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @other_compound_metric_configuration.id})
+  other_compound_range.save
 end
 
 When(/^I run for the given repository$/) do
@@ -120,6 +128,9 @@ Then(/^the processing retrieved should not have any ModuleResults$/) do
 end
 
 Then(/^the Root ModuleResult retrieved should not have a MetricResult for the compound metric$/) do
-  expect(@processing.root_module_result.metric_results.select {|metric_result| metric_result.metric_configuration_id == @compound_metric_configuration.id}).to be_empty
+  id1 = @compound_metric_configuration.id
+  id2 = @other_compound_metric_configuration.id
+  expect(@processing.root_module_result.metric_results.select {
+    |metric_result| metric_result.metric_configuration_id == id1 || metric_result.metric_configuration_id == id2 }).to be_empty
 end
 
