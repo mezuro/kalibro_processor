@@ -67,17 +67,11 @@ class RepositoriesController < ApplicationController
   end
 
   def has_processing
-    respond_to do |format|
-      format.json { render json: { has_processing: !@repository.processings.empty? } }
-    end
+    respond_with_json({ has_processing: !@repository.processings.empty? })
   end
 
   def has_ready_processing
-    ready_processings = @repository.find_ready_processing
-
-    respond_to do |format|
-      format.json { render json: { has_ready_processing: !ready_processings.empty? } }
-    end
+    respond_with_json({ has_ready_processing: !@repository.find_ready_processing.empty? })
   end
 
   def has_processing_in_time
@@ -85,53 +79,37 @@ class RepositoriesController < ApplicationController
 
     processings = @repository.find_processing_by_date(params[:date], order)
 
-    respond_to do |format|
-      format.json { render json: { has_processing_in_time: !processings.empty? } }
-    end
+    respond_with_json({ has_processing_in_time: !processings.empty? })
   end
 
   def last_ready_processing
-    ready_processings = @repository.find_ready_processing
-
-    respond_to do |format|
-      format.json { render json: { last_ready_processing: ready_processings.last } }
-    end
+    respond_with_json({ last_ready_processing: @repository.find_ready_processing.last })
   end
 
   def first_processing_in_time
-    respond_to do |format|
-      format.json { render json: { processing: processings_in_time.first } }
-    end
+    respond_with_json({ processing: processings_in_time.first })
   end
 
   def last_processing_in_time
-    respond_to do |format|
-      format.json { render json: { processing: processings_in_time.last } }
-    end
+    respond_with_json({ processing: processings_in_time.last })
   end
 
   def last_processing_state
-    respond_to do |format|
-      format.json { render json: { processing_state: @repository.processings.last.state } }
-    end
+    respond_with_json({ processing_state: @repository.processings.last.state })
   end
 
   def module_result_history_of
     module_name = KalibroModule.find(params[:module_id].to_i).long_name
     history = @repository.module_result_history_of(module_name)
 
-    respond_to do |format|
-      format.json { render json: {module_result_history_of: history} }
-    end
+    respond_with_json({module_result_history_of: history})
   end
 
   def metric_result_history_of
     module_name = KalibroModule.find(params[:module_id].to_i).long_name
     history = @repository.metric_result_history_of(module_name, params[:metric_name])
 
-    respond_to do |format|
-      format.json { render json: {metric_result_history_of: history} }
-    end
+    respond_with_json({metric_result_history_of: history})
   end
 
   def cancel_process
@@ -162,5 +140,11 @@ class RepositoriesController < ApplicationController
     end
 
     processings
+  end
+
+  def respond_with_json(json)
+    respond_to do |format|
+      format.json { render json: json }
+    end
   end
 end
