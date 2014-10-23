@@ -1,3 +1,5 @@
+require_relative "../../../lib/metric_aggregator"
+
 module Processor
   class Aggregator < ProcessingStep
     protected
@@ -24,7 +26,7 @@ module Processor
           if module_result_child.kalibro_module.granularity > Granularity.new(metric.scope.to_s.to_sym)
             unless already_calculated_metric_results.include?(metric) # FIXME: this probably is useless now with the above if
               metric_result = MetricResult.new(metric: metric, module_result: module_result_child, metric_configuration_id: metric_configuration(metric).id)
-              metric_result.value = metric_result.aggregated_value
+              metric_result.value = MetricAggregator.aggregated_value(metric_result)
               metric_result.save
             end
           end

@@ -31,4 +31,19 @@ FactoryGirl.define do
 
     factory :compound_metric_configuration, traits: [:compound_metric]
   end
+
+  factory :another_metric_configuration, class: KalibroGatekeeperClient::Entities::MetricConfiguration do
+    id 2
+    code 'another_code'
+    metric { FactoryGirl.build(:kalibro_gatekeeper_client_metric) }
+    base_tool_name "Analizo"
+    weight 1
+    aggregation_form :COUNT
+    reading_group_id 2
+    configuration_id 2
+
+    trait :compound_metric do
+      metric { FactoryGirl.build(:kalibro_gatekeeper_client_compound_metric) }
+    end
+  end
 end

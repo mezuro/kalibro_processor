@@ -2,21 +2,8 @@ class MetricResult < ActiveRecord::Base
   attr_accessor :metric
   belongs_to :module_result
 
-  def aggregated_value
-    values = self.descendant_values
-    if self.value.nil? && !values.empty?
-      # Fix for the period while we're using vintage Kalibro
-      form = self.metric_configuration.aggregation_form.to_s.downcase
-      form = "mean" if form == "average"
       form = "max" if form == "maximum"
       form = "min" if form == "minimum"
-
-      values.send( form )
-    else
-      self.value
-    end
-  end
-
   def range
     ranges = KalibroGatekeeperClient::Entities::Range.ranges_of(metric_configuration.id)
     ranges.select { |range| range.beginning.to_f <= self.value && self.value < range.end.to_f }.first
@@ -43,7 +30,6 @@ class MetricResult < ActiveRecord::Base
 
   def descendant_values
     results = module_result.children.map { |child| child.metric_result_for(self.metric).value }
-    DescriptiveStatistics::Stats.new(results)
   end
 
   def metric

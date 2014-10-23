@@ -8,38 +8,6 @@ describe MetricResult, :type => :model do
   describe 'method' do
     let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
 
-    describe 'aggregated_value' do
-      let!(:stats) { DescriptiveStatistics::Stats.new([1, 2, 3]) }
-
-      before :each do
-        subject.expects(:descendant_values).returns(stats)
-      end
-
-      context 'when value is nil and the values array is not empty' do
-        subject { FactoryGirl.build(:metric_result, module_result: FactoryGirl.build(:module_result)) }
-        before :each do
-          KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
-            with(subject.metric_configuration_id).returns(metric_configuration)
-        end
-
-        it 'should calculate the mean value of the values array' do
-          expect(subject.aggregated_value).to eq(2.0)
-        end
-
-        after :each do
-          Rails.cache.clear # This test depends on metric configuration
-        end
-      end
-
-      context 'when the metric_results are not from a leaf module' do
-        subject { FactoryGirl.build(:metric_result_with_value) }
-
-        it 'should return the value' do
-          expect(subject.aggregated_value).to eq(subject.value)
-        end
-      end
-    end
-
     describe 'range' do
       let!(:range) { FactoryGirl.build(:range) }
       let!(:yet_another_range) { FactoryGirl.build(:yet_another_range) }
@@ -131,8 +99,8 @@ describe MetricResult, :type => :model do
         expect(subject.descendant_values).to eq([2.0, 2.0])
       end
 
-      it "should be a DescriptiveStatistics array" do
-        expect(subject.descendant_values).to be_a(DescriptiveStatistics::Stats)
+      it "should be a float values array" do
+        expect(subject.descendant_values).to be_a(Array)
       end
     end
 
