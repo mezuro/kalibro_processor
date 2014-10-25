@@ -1,4 +1,4 @@
-require_relative "../../../lib/metric_aggregator"
+require 'metric_aggregator'
 
 module Processor
   class Aggregator < ProcessingStep
