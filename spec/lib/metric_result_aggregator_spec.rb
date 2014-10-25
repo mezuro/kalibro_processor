@@ -1,7 +1,7 @@
 require 'rails_helper'
-require_relative "../../lib/metric_aggregator"
+require "metric_result_aggregator"
 
-describe MetricAggregator, :type => :model do
+describe MetricResultAggregator, :type => :model do
   describe 'method' do
     let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
     let!(:another_metric_configuration) { FactoryGirl.build(:another_metric_configuration) }
@@ -22,13 +22,13 @@ describe MetricAggregator, :type => :model do
         it 'should calculate the mean value of the values array' do
           KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
             with(subject.metric_configuration_id).returns(metric_configuration)
-          expect(MetricAggregator.aggregated_value(subject)).to eq(4.0)
+          expect(MetricResultAggregator.aggregated_value(subject)).to eq(4.0)
         end
 
         it 'should count the values of array' do
           KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
             with(subject.metric_configuration_id).returns(another_metric_configuration)
-          expect(MetricAggregator.aggregated_value(subject)).to eq(3)
+          expect(MetricResultAggregator.aggregated_value(subject)).to eq(3)
         end
 
         after :each do
@@ -40,7 +40,7 @@ describe MetricAggregator, :type => :model do
         subject { FactoryGirl.build(:metric_result_with_value) }
 
         it 'should return the value' do
-          expect(MetricAggregator.aggregated_value(subject)).to eq(subject.value)
+          expect(MetricResultAggregator.aggregated_value(subject)).to eq(subject.value)
         end
       end
     end

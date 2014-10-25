@@ -1,4 +1,4 @@
-class MetricAggregator
+class MetricResultAggregator
   def self.aggregated_value(metric_result)
     values = DescriptiveStatistics::Stats.new(metric_result.descendant_values)
     if metric_result.value.nil? && !values.empty?
