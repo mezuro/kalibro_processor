@@ -1,5 +1,5 @@
 require 'rails_helper'
-require "metric_result_aggregator"
+require 'metric_result_aggregator'
 
 describe MetricResultAggregator, :type => :model do
   describe 'method' do
@@ -15,9 +15,6 @@ describe MetricResultAggregator, :type => :model do
 
       context 'when value is nil and the values array is not empty' do
         subject { FactoryGirl.build(:metric_result, module_result: FactoryGirl.build(:module_result)) }
-        before :each do
-          
-        end
 
         it 'should calculate the mean value of the values array' do
           KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
