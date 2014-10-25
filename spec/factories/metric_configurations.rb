@@ -41,9 +41,5 @@ FactoryGirl.define do
     aggregation_form :COUNT
     reading_group_id 2
     configuration_id 2
-
-    trait :compound_metric do
-      metric { FactoryGirl.build(:kalibro_gatekeeper_client_compound_metric) }
-    end
   end
 end
