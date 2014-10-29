@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.1.2
+  - 2.1.4
 
 before_script:
   - psql -c "create role kalibro_processor with createdb login password 'kalibro_processor'" -U postgres
