@@ -42,4 +42,15 @@ FactoryGirl.define do
     reading_group_id 2
     configuration_id 2
   end
+
+  factory :sum_metric_configuration, class: KalibroGatekeeperClient::Entities::MetricConfiguration do
+    id 2
+    code 'another_code'
+    metric { FactoryGirl.build(:kalibro_gatekeeper_client_metric) }
+    metric_collector_name "Analizo"
+    weight 1
+    aggregation_form :SUM
+    reading_group_id 2
+    configuration_id 2
+  end
 end

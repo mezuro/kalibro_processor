@@ -5,6 +5,7 @@ describe MetricResultAggregator, :type => :model do
   describe 'method' do
     let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
     let!(:another_metric_configuration) { FactoryGirl.build(:another_metric_configuration) }
+    let!(:sum_metric_configuration) { FactoryGirl.build(:sum_metric_configuration) }
 
     describe 'aggregated_value' do
       let!(:stats) { DescriptiveStatistics::Stats.new([2, 4, 6]) }
@@ -26,6 +27,12 @@ describe MetricResultAggregator, :type => :model do
           KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
             with(subject.metric_configuration_id).returns(another_metric_configuration)
           expect(MetricResultAggregator.aggregated_value(subject)).to eq(3)
+        end
+
+        it 'should sum the values of array' do
+          KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
+            with(subject.metric_configuration_id).returns(sum_metric_configuration)
+          expect(MetricResultAggregator.aggregated_value(subject)).to eq(12)
         end
 
         after :each do
