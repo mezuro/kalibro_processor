@@ -29,7 +29,13 @@ FactoryGirl.define do
       metric { FactoryGirl.build(:kalibro_gatekeeper_client_compound_metric) }
     end
 
+    trait :sum_metric_configuration do
+      aggregation_form :SUM
+    end
+
     factory :compound_metric_configuration, traits: [:compound_metric]
+
+    factory :sum_metric_configuration, traits: [:sum_metric_configuration]
   end
 
   factory :another_metric_configuration, class: KalibroGatekeeperClient::Entities::MetricConfiguration do
@@ -39,17 +45,6 @@ FactoryGirl.define do
     metric_collector_name "Analizo"
     weight 1
     aggregation_form :COUNT
-    reading_group_id 2
-    configuration_id 2
-  end
-
-  factory :sum_metric_configuration, class: KalibroGatekeeperClient::Entities::MetricConfiguration do
-    id 2
-    code 'another_code'
-    metric { FactoryGirl.build(:kalibro_gatekeeper_client_metric) }
-    metric_collector_name "Analizo"
-    weight 1
-    aggregation_form :SUM
     reading_group_id 2
     configuration_id 2
   end
