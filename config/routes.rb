@@ -41,6 +41,9 @@ Rails.application.routes.draw do
   get 'processings/:id/process_times' => 'processings#process_times'
   get 'processings/:id/error_message' => 'processings#error_message'
 
+  resources :process_times, except: [:new, :edit]
+  get 'process_times/:id/processing' => 'process_times#processing'
+
   post 'tests/clean_database' => 'tests#clean_database'
 
   # Example of regular route:
