@@ -53,7 +53,7 @@ class ProcessTimesController < ApplicationController
 
   def processing
     respond_to do |format|
-      format.json {render json: {process_time: @process_time.processing}}
+      format.json {render json: {processing: @process_time.processing}}
     end
   end
 
