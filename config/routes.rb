@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   get 'module_results/:id/children' => 'module_results#children'
   get 'module_results/:id/repository_id' => 'module_results#repository_id'
 
-  resources :kalibro_modules, except: [:new, :edit]
+  resources :kalibro_modules, only: [:index, :show]
   get 'kalibro_modules/:id/module_results' => 'kalibro_modules#module_results'
 
   resources :projects, except: [:index, :new, :edit]

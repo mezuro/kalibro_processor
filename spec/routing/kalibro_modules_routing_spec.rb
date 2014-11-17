@@ -20,15 +20,15 @@ RSpec.describe KalibroModulesController, :type => :routing do
     end
 
     it "routes to #create" do
-      expect(:post => "/kalibro_modules").to route_to("kalibro_modules#create")
+      expect(:post => "/kalibro_modules").to_not route_to("kalibro_modules#create")
     end
 
     it "routes to #update" do
-      expect(:put => "/kalibro_modules/1").to route_to("kalibro_modules#update", :id => "1")
+      expect(:put => "/kalibro_modules/1").to_not route_to("kalibro_modules#update", :id => "1")
     end
 
     it "routes to #destroy" do
-      expect(:delete => "/kalibro_modules/1").to route_to("kalibro_modules#destroy", :id => "1")
+      expect(:delete => "/kalibro_modules/1").to_not route_to("kalibro_modules#destroy", :id => "1")
     end
 
     it "routes to #module_results" do
