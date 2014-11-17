@@ -20,15 +20,15 @@ RSpec.describe ProcessTimesController, :type => :routing do
     end
 
     it "routes to #create" do
-      expect(:post => "/process_times").to route_to("process_times#create")
+      expect(:post => "/process_times").to_not route_to("process_times#create")
     end
 
     it "routes to #update" do
-      expect(:put => "/process_times/1").to route_to("process_times#update", :id => "1")
+      expect(:put => "/process_times/1").to_not route_to("process_times#update", :id => "1")
     end
 
     it "routes to #destroy" do
-      expect(:delete => "/process_times/1").to route_to("process_times#destroy", :id => "1")
+      expect(:delete => "/process_times/1").to_not route_to("process_times#destroy", :id => "1")
     end
 
     it "routes to #processing" do
