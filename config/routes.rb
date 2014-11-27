@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get 'metric_results/:id/descendant_values' => 'metric_results#descendant_values'
   get 'metric_results/:id/repository_id' => 'metric_results#repository_id'
 
-  get 'module_results/:id/get' => 'module_results#get'
+  get 'module_results/:id' => 'module_results#get'
   get 'module_results/:id/metric_results' => 'module_results#metric_results'
   get 'module_results/:id/children' => 'module_results#children'
   get 'module_results/:id/repository_id' => 'module_results#repository_id'
