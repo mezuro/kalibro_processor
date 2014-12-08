@@ -26,18 +26,18 @@ describe MetricCollector::Native::Analizo, :type => :model do
 
     describe 'collect_metrics' do
       include MockHelper
+      let!(:metric_collector_details) { FactoryGirl.build(:metric_collector_details) }
+      let!(:native_metric) { metric_collector_details.supported_metrics["acc"] }
       let!(:wanted_metric_configuration) { FactoryGirl.build(:metric_configuration, metric: native_metric, code: "acc") }
       let!(:wanted_metrics) { [wanted_metric_configuration] }
-      let!(:supported_metrics) { {"acc" => native_metric} }
       let!(:absolute_path) { "app/models/metric.rb" }
       let!(:module_result) { FactoryGirl.build(:module_result) }
-      let(:native_metric) { FactoryGirl.build(:analizo_native_metric) }
       let(:wanted_metrics_list) { [wanted_metric_configuration, FactoryGirl.build(:metric_configuration, code: "amloc")] }
       let(:processing) { FactoryGirl.build(:processing) }
 
       before :each do
         subject.expects(:`).with("analizo metrics #{absolute_path}").returns(analizo_metric_collector_list.raw_result)
-        MetricCollector::Native::Analizo.any_instance.expects(:supported_metrics).twice.returns(supported_metrics)
+        MetricCollector::Native::Analizo.any_instance.expects(:details).twice.returns(metric_collector_details)
         MetricResult.expects(:create).with(metric: native_metric,
                                            value: analizo_metric_collector_list.parsed_result[1]["acc"].to_f,
                                            module_result: module_result,

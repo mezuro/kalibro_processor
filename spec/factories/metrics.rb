@@ -1,10 +1,10 @@
 FactoryGirl.define  do
   factory :metric do
     compound false
-    name "Total Abstract Classes"
-    code "total_abstract_classes"
+    name "Afferent Connections per Class (used to calculate COF - Coupling Factor)"
+    code "acc"
     scope { :SOFTWARE }
-    description "Total Abstract Classes"
+    description "Afferent Connections per Class (used to calculate COF - Coupling Factor)"
 
     initialize_with { Metric.new(compound, name, code, scope) }
   end

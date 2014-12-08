@@ -14,8 +14,8 @@ module MetricCollector
       available.each do |name, collector|
         collector_instance = collector.new
         details << MetricCollector::Details.new(name: name,
-                                                description: collector_instance.description,
-                                                supported_metrics: collector_instance.supported_metrics)
+                                                description: collector_instance.details.description,
+                                                supported_metrics: collector_instance.details.supported_metrics)
       end
 
       return details

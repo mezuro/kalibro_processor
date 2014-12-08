@@ -35,14 +35,14 @@ describe MetricCollector::Native do
       let!(:metric_collector) { FactoryGirl.build(:native_metric_collector) }
 
       before :each do
-        MetricCollector::Native.expects(:available).returns({metric_collector.name => metric_collector.class})
+        MetricCollector::Native.expects(:available).returns({metric_collector.details.name => metric_collector.class})
       end
 
       it 'is expected to return the details from the given collector' do
         MetricCollector::Native.details.each do | collector |
-          expect(collector.name).to eq(metric_collector.name)
-          expect(collector.description).to eq(metric_collector.description)
-          expect(collector.supported_metrics.first.code).to eq(metric_collector.supported_metrics.first.code)
+          expect(collector.name).to eq(metric_collector.details.name)
+          expect(collector.description).to eq(metric_collector.details.description)
+          expect(collector.supported_metrics.first.code).to eq(metric_collector.details.supported_metrics.first.code)
         end
       end
     end
