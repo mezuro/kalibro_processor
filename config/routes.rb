@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   get 'metric_results/:id/descendant_values' => 'metric_results#descendant_values'
   get 'metric_results/:id/repository_id' => 'metric_results#repository_id'
+  get 'metric_results/:id/metric_configuration' => 'metric_results#metric_configuration'
 
   get 'module_results/:id' => 'module_results#get'
   get 'module_results/:id/metric_results' => 'module_results#metric_results'
