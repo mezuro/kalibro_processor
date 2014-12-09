@@ -4,6 +4,6 @@ FactoryGirl.define do
   factory :base_metric_collector, class: MetricCollector::Base do
     details { FactoryGirl.build(:metric_collector_details) }
 
-    initialize_with { MetricCollector::Base.new("Analizo", "C/C++ and Java metrics", [FactoryGirl.build(:analizo_native_metric)]) }
+    initialize_with { MetricCollector::Base.new(details.name, details.description, details.supported_metrics) }
   end
 end
