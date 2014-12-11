@@ -33,8 +33,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Rails Html Sanitizer for HTML sanitization
 gem 'rails-html-sanitizer', '~> 1.0'
 
-# Communication with other parts
-gem 'kalibro_gatekeeper_client', '~> 1.0.0'
+# Kalibro integration
+gem 'kalibro_client', git: 'https://github.com/mezuro/kalibro_client'
 
 # YAML parser required for properly compactibility between mri and rbx
 gem 'psych', '~>2.0.5'
