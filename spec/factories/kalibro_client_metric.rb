@@ -3,7 +3,10 @@ FactoryGirl.define  do
     compound false
     name "Total Abstract Classes"
     scope { FactoryGirl.build(:granularity) }
+    code "TAC"
     description "Total Abstract Classes"
+
+    initialize_with { new(compound, name, code, scope) }
 
     trait :compound do
       compound true
