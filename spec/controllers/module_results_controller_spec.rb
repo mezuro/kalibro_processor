@@ -1,145 +1,147 @@
 require 'rails_helper'
 
 describe ModuleResultsController do
-  describe 'method' do
-    describe 'get' do
-      let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
+  pending 'kalibro client integration' do
+    describe 'method' do
+      describe 'get' do
+        let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
 
-      context 'with valid ModuleResult instance' do
-        before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
+        context 'with valid ModuleResult instance' do
+          before :each do
+            ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
 
-          post :get, id: module_result.id, format: :json
+            post :get, id: module_result.id, format: :json
+          end
+
+          it { is_expected.to respond_with(:success) }
+
+          it 'should return the module_result' do
+            expect(JSON.parse(response.body)).to eq(JSON.parse(module_result.to_json))
+          end
         end
 
-        it { is_expected.to respond_with(:success) }
+        context 'with invalid ModuleResult instance' do
+          let(:error_hash) { {error: 'RecordNotFound'} }
 
-        it 'should return the module_result' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(module_result.to_json))
-        end
-      end
+          before :each do
+            ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
 
-      context 'with invalid ModuleResult instance' do
-        let(:error_hash) { {error: 'RecordNotFound'} }
+            post :get, id: module_result.id, format: :json
+          end
 
-        before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
+          it { is_expected.to respond_with(:unprocessable_entity) }
 
-          post :get, id: module_result.id, format: :json
-        end
-
-        it { is_expected.to respond_with(:unprocessable_entity) }
-
-        it 'should return the error_hash' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
-        end
-      end
-    end
-
-    describe 'metric_results' do
-      let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
-
-      context 'with valid ModuleResult instance' do
-        before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
-
-          post :metric_results, id: module_result.id, format: :json
-        end
-
-        it { is_expected.to respond_with(:success) }
-
-        it 'should return the metric_results' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(module_result.metric_results.to_json))
+          it 'should return the error_hash' do
+            expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
+          end
         end
       end
 
-      context 'with invalid ModuleResult instance' do
-        let(:error_hash) { {error: 'RecordNotFound'} }
+      describe 'metric_results' do
+        let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
 
-        before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
+        context 'with valid ModuleResult instance' do
+          before :each do
+            ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
 
-          post :metric_results, id: module_result.id, format: :json
+            post :metric_results, id: module_result.id, format: :json
+          end
+
+          it { is_expected.to respond_with(:success) }
+
+          it 'should return the metric_results' do
+            expect(JSON.parse(response.body)).to eq(JSON.parse(module_result.metric_results.to_json))
+          end
         end
 
-        it { is_expected.to respond_with(:unprocessable_entity) }
+        context 'with invalid ModuleResult instance' do
+          let(:error_hash) { {error: 'RecordNotFound'} }
 
-        it 'should return the error_hash' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
-        end
-      end
-    end
+          before :each do
+            ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
 
-    describe 'children' do
-      let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
-      let(:module_result_with_parent) { FactoryGirl.build(:module_result, id: 2) }
+            post :metric_results, id: module_result.id, format: :json
+          end
 
-      context 'with valid ModuleResult instance' do
-        before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
-          module_result_with_parent.parent = module_result
-          module_result.children << module_result_with_parent
+          it { is_expected.to respond_with(:unprocessable_entity) }
 
-          post :children, id: module_result.id, format: :json
-        end
-
-        it { is_expected.to respond_with(:success) }
-
-        it 'should return the children' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse([JSON.parse(module_result_with_parent.to_json)].to_json))
+          it 'should return the error_hash' do
+            expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
+          end
         end
       end
 
-      context 'with invalid ModuleResult instance' do
-        let(:error_hash) { {error: 'RecordNotFound'} }
+      describe 'children' do
+        let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
+        let(:module_result_with_parent) { FactoryGirl.build(:module_result, id: 2) }
 
-        before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
+        context 'with valid ModuleResult instance' do
+          before :each do
+            ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
+            module_result_with_parent.parent = module_result
+            module_result.children << module_result_with_parent
 
-          post :children, id: module_result.id, format: :json
+            post :children, id: module_result.id, format: :json
+          end
+
+          it { is_expected.to respond_with(:success) }
+
+          it 'should return the children' do
+            expect(JSON.parse(response.body)).to eq(JSON.parse([JSON.parse(module_result_with_parent.to_json)].to_json))
+          end
         end
 
-        it { is_expected.to respond_with(:unprocessable_entity) }
+        context 'with invalid ModuleResult instance' do
+          let(:error_hash) { {error: 'RecordNotFound'} }
 
-        it 'should return the error_hash' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
+          before :each do
+            ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
+
+            post :children, id: module_result.id, format: :json
+          end
+
+          it { is_expected.to respond_with(:unprocessable_entity) }
+
+          it 'should return the error_hash' do
+            expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
+          end
         end
       end
-    end
 
-    describe 'repository_id' do
-      let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
-      let(:processing) { FactoryGirl.build(:processing) }
-      let(:repository) { FactoryGirl.build(:repository, id: 2) }
+      describe 'repository_id' do
+        let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
+        let(:processing) { FactoryGirl.build(:processing) }
+        let(:repository) { FactoryGirl.build(:repository, id: 2) }
 
-      context 'with valid ModuleResult instance' do
-        before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
-          module_result.expects(:processing).returns(processing)
-          processing.expects(:repository).returns(repository)
-          post :repository_id, id: module_result.id, format: :json
+        context 'with valid ModuleResult instance' do
+          before :each do
+            ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
+            module_result.expects(:processing).returns(processing)
+            processing.expects(:repository).returns(repository)
+            post :repository_id, id: module_result.id, format: :json
+          end
+
+          it { is_expected.to respond_with(:success) }
+
+          it 'should return the repository_id' do
+            expect(JSON.parse(response.body)).to eq(JSON.parse({repository_id: repository.id}.to_json))
+          end
         end
 
-        it { is_expected.to respond_with(:success) }
+        context 'with invalid ModuleResult instance' do
+          let(:error_hash) { {error: 'RecordNotFound'} }
 
-        it 'should return the repository_id' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse({repository_id: repository.id}.to_json))
-        end
-      end
+          before :each do
+            ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
 
-      context 'with invalid ModuleResult instance' do
-        let(:error_hash) { {error: 'RecordNotFound'} }
+            post :repository_id, id: module_result.id, format: :json
+          end
 
-        before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
+          it { is_expected.to respond_with(:unprocessable_entity) }
 
-          post :repository_id, id: module_result.id, format: :json
-        end
-
-        it { is_expected.to respond_with(:unprocessable_entity) }
-
-        it 'should return the error_hash' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
+          it 'should return the error_hash' do
+            expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
+          end
         end
       end
     end

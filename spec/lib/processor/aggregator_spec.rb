@@ -12,7 +12,7 @@ describe Processor::Aggregator do
       let!(:child) { FactoryGirl.build(:module_result_class_granularity, parent: root_module_result) }
       let!(:native_metric_configurations) {
         [FactoryGirl.build(:metric_configuration, id: 1),
-          FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:kalibro_gatekeeper_client_loc), id: 2)]
+         FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:kalibro_gatekeeper_client_loc), id: 2)]
       }
       let!(:compound_metric_configurations) { [FactoryGirl.build(:compound_metric_configuration)] }
       let!(:native_metrics) { { "Analizo" => native_metric_configurations } }
@@ -24,14 +24,16 @@ describe Processor::Aggregator do
       end
 
       context 'when the module result tree has been well-built' do
+        pending 'kalibro client integration' do
 
-        before :each do
-          root_module_result.expects(:pre_order).returns([root_module_result, child])
-          MetricResult.any_instance.expects(:save)
-        end
+          before :each do
+            root_module_result.expects(:pre_order).returns([root_module_result, child])
+            MetricResult.any_instance.expects(:save)
+          end
 
-        it 'is expected to aggregate results' do
-          Processor::Aggregator.task(context)
+          it 'is expected to aggregate results' do
+            Processor::Aggregator.task(context)
+          end
         end
       end
     end
