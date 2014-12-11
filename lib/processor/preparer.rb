@@ -25,7 +25,7 @@ module Processor
     end
 
     def self.metrics_list(context)
-      metric_configurations = KalibroGatekeeperClient::Entities::MetricConfiguration.metric_configurations_of(context.repository.configuration.id)
+      metric_configurations = KalibroClient::Configurations::MetricConfiguration.metric_configurations_of(context.repository.configuration.id)
       metric_configurations.each do |metric_configuration|
         if metric_configuration.metric.compound
           context.compound_metrics << metric_configuration

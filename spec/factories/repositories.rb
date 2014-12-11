@@ -8,7 +8,6 @@ FactoryGirl.define do
     description "An easy calculator"
     license "None"
     period 0
-    configuration { FactoryGirl.build(:configuration) }
     project { FactoryGirl.build(:project) }
 
     trait :sbking do
