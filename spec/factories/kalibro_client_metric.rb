@@ -10,16 +10,18 @@ FactoryGirl.define  do
 
     trait :compound do
       compound true
+      script "return 2;"
     end
 
     trait :loc do
       name "Lines of Code"
       scope "CLASS"
       description nil
-      language ["C", "CPP", "JAVA"]
     end
 
-    factory :kalibro_client_compound_metric, traits: [:compound]
+    factory :kalibro_client_compound_metric, class: KalibroClient::Processor::CompoundMetric, traits: [:compound] do
+      initialize_with { new(name, code, scope, script) }
+    end
 
     factory :kalibro_client_loc, traits: [:loc]
   end
