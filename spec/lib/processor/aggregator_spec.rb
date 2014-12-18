@@ -12,7 +12,7 @@ describe Processor::Aggregator do
       let!(:child) { FactoryGirl.build(:module_result_class_granularity, parent: root_module_result) }
       let!(:native_metric_configurations) {
         [FactoryGirl.build(:metric_configuration, id: 1),
-         FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:kalibro_client_loc), id: 2)]
+         FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:loc), id: 2)]
       }
       let!(:compound_metric_configurations) { [FactoryGirl.build(:compound_metric_configuration)] }
       let!(:native_metrics) { { "Analizo" => native_metric_configurations } }

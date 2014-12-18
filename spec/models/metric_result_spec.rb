@@ -114,8 +114,8 @@ describe MetricResult, :type => :model do
           returns(metric_configuration)
       end
 
-      it 'is expected to be a KalibroClient::Processor::Metric' do
-        expect(subject.metric).to be_a(KalibroClient::Processor::Metric)
+      it 'is expected to be a KalibroClient::Miscellaneous::Metric' do
+        expect(subject.metric).to be_a(KalibroClient::Miscellaneous::Metric)
       end
 
       after :each do

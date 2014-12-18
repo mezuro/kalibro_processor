@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/mezuro/kalibro_client
-  revision: 2fdafc0578f7faf325b0b4dc89f07ddc1d84c541
+  revision: 0d008cb23d2a7132cd8a2f3cc32729d4f500d2e3
   specs:
     kalibro_client (0.0.1)
       activeresource (~> 4.0.0)
@@ -140,7 +140,7 @@ GEM
     metaclass (0.0.4)
     mime-types (2.4.3)
     mini_portile (0.6.1)
-    minitest (5.4.3)
+    minitest (5.5.0)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     multi_json (1.10.1)
