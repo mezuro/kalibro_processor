@@ -39,9 +39,9 @@ Rails.application.routes.draw do
   post 'repositories/:id/metric_result_history_of' => 'repositories#metric_result_history_of'
   resources :repositories , except: [:index, :new, :edit]
 
-  get 'metric_collectors' => 'metric_collectors#index'
-  post 'metric_collectors/find' => 'metric_collectors#find'
-  get 'metric_collectors/names' => 'metric_collectors#all_names'
+  get 'metric_collector_details' => 'metric_collectors#index'
+  post 'metric_collector_details/find' => 'metric_collectors#find'
+  get 'metric_collector_details/names' => 'metric_collectors#all_names'
 
   get 'processings/:id/process_times' => 'processings#process_times'
   get 'processings/:id/error_message' => 'processings#error_message'
