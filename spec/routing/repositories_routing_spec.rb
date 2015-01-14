@@ -11,6 +11,8 @@ describe RepositoriesController, :type => :routing do
                   to(controller: :repositories, action: :update, id: id) }
     it { is_expected.to route(:delete, "/repositories/#{id}").
                   to(controller: :repositories, action: :destroy, id: id) }
+    it { is_expected.to route(:get, "/repositories/#{id}/exists").
+                  to(controller: :repositories, action: :exists, id: id) }
     it { is_expected.to route(:get, "/repositories/types").
                   to(controller: :repositories, action: :types) }
     it { is_expected.to route(:get, "/repositories/#{id}/process").

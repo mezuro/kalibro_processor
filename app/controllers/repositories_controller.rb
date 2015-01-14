@@ -1,5 +1,5 @@
 class RepositoriesController < ApplicationController
-  before_action :set_repository, except: [:show, :create, :types]
+  before_action :set_repository, except: [:show, :create, :exists, :types]
 
   def show
     begin
@@ -42,6 +42,12 @@ class RepositoriesController < ApplicationController
     @repository.destroy
     respond_to do |format|
       format.json { render json: {}, status: :ok }
+    end
+  end
+
+  def exists
+    respond_to do |format|
+      format.json { render json: {exists: Repository.exists?(params[:id].to_i)} }
     end
   end
 

@@ -130,6 +130,36 @@ RSpec.describe RepositoriesController, :type => :controller do
     end
   end
 
+  describe 'exists' do
+    context 'when the repository exists' do
+      before :each do
+        Repository.expects(:exists?).with(repository.id).returns(true)
+
+        get :exists, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return true' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: true}.to_json))
+      end
+    end
+
+    context 'when the repository does not exist' do
+      before :each do
+        Repository.expects(:exists?).with(repository.id).returns(false)
+
+        get :exists, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: false}.to_json))
+      end
+    end
+  end
+
   describe 'process' do
     context 'with a successful processing' do
       let!(:processing) { FactoryGirl.build(:processing) }

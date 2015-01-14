@@ -131,7 +131,7 @@ RSpec.describe ProjectsController, :type => :controller do
 
       it { is_expected.to respond_with(:success) }
 
-      it 'should return the error description with the project' do
+      it 'should return true' do
         expect(JSON.parse(response.body)).to eq(JSON.parse({exists: true}.to_json))
       end
     end
@@ -145,7 +145,7 @@ RSpec.describe ProjectsController, :type => :controller do
 
       it { is_expected.to respond_with(:success) }
 
-      it 'should return the error description with the project' do
+      it 'should return false' do
         expect(JSON.parse(response.body)).to eq(JSON.parse({exists: false}.to_json))
       end
     end
