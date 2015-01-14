@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   resources :projects, except: [:index, :new, :edit]
   get 'projects/:id/exists' => 'projects#exists'
   get 'projects' => 'projects#all'
-  get 'projects/:id/repositories_of' => 'projects#repositories_of'
+  get 'projects/:id/repositories' => 'projects#repositories_of'
 
   get 'repositories/types' => 'repositories#types'
   get 'repositories/:id/exists' => 'repositories#exists'
