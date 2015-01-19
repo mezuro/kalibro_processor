@@ -15,15 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 FactoryGirl.define do
-  factory :metric_configuration, class: KalibroClient::Configurations::MetricConfiguration do
+  factory :metric_configuration, class: KalibroClient::Entities::Configurations::MetricConfiguration do
     id 1
-    code 'code'
     metric { FactoryGirl.build(:metric) }
-    metric_collector_name "Analizo"
     weight 1
-    aggregation_form :AVERAGE
+    aggregation_form "AVERAGE"
     reading_group_id 1
-    configuration_id 1
+    kalibro_configuration_id 1
 
     trait :compound_metric do
       metric { FactoryGirl.build(:compound_metric) }
@@ -38,14 +36,12 @@ FactoryGirl.define do
     factory :sum_metric_configuration, traits: [:sum_metric_configuration]
   end
 
-  factory :another_metric_configuration, class: KalibroClient::Configurations::MetricConfiguration do
+  factory :another_metric_configuration, class: KalibroClient::Entities::Configurations::MetricConfiguration do
     id 2
-    code 'another_code'
     metric { FactoryGirl.build(:metric) }
-    metric_collector_name "Analizo"
     weight 1
-    aggregation_form :COUNT
+    aggregation_form "COUNT"
     reading_group_id 2
-    configuration_id 2
+    kalibro_configuration_id 2
   end
 end

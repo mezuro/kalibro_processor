@@ -25,12 +25,12 @@ module Processor
     end
 
     def self.metrics_list(context)
-      metric_configurations = KalibroClient::Configurations::MetricConfiguration.metric_configurations_of(context.repository.configuration.id)
+      metric_configurations = KalibroClient::Entities::Configurations::MetricConfiguration.metric_configurations_of(context.repository.configuration.id)
       metric_configurations.each do |metric_configuration|
-        if metric_configuration.metric.compound
+        if metric_configuration.metric.is_a?(KalibroClient::Entities::Miscellaneous::CompoundMetric)
           context.compound_metrics << metric_configuration
         else
-          context.native_metrics[metric_configuration.metric_collector_name] << metric_configuration
+          context.native_metrics[metric_configuration.metric.metric_collector_name] << metric_configuration
         end
       end
     end

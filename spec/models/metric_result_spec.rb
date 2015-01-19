@@ -15,9 +15,9 @@ describe MetricResult, :type => :model do
       subject { FactoryGirl.build(:metric_result_with_value, module_result: FactoryGirl.build(:module_result)) }
 
       before :each do
-        KalibroClient::Configurations::MetricConfiguration.expects(:find).
+        KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
           returns(metric_configuration)
-        KalibroClient::Configurations::KalibroRange.expects(:ranges_of).
+        KalibroClient::Entities::Configurations::KalibroRange.expects(:ranges_of).
           with(subject.metric_configuration.id).returns([range, yet_another_range])
       end
 
@@ -109,13 +109,13 @@ describe MetricResult, :type => :model do
       subject { FactoryGirl.build(:metric_result, metric: nil, module_result: FactoryGirl.build(:module_result)) }
 
       before :each do
-        KalibroClient::Configurations::MetricConfiguration.expects(:find).
+        KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
           with(subject.metric_configuration_id).
           returns(metric_configuration)
       end
 
-      it 'is expected to be a KalibroClient::Miscellaneous::Metric' do
-        expect(subject.metric).to be_a(KalibroClient::Miscellaneous::Metric)
+      it 'is expected to be a KalibroClient::Entities::Miscellaneous::Metric' do
+        expect(subject.metric).to be_a(KalibroClient::Entities::Miscellaneous::Metric)
       end
 
       after :each do

@@ -8,7 +8,7 @@ describe Processor::Preparer do
     let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration) }
     let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
     let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
-    let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
+    let!(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:analizo_native_metric)) }
     let!(:compound_metric_configuration) { FactoryGirl.build(:compound_metric_configuration) }
     let!(:dir) { YAML.load_file("#{Rails.root}/config/repositories.yml")["repositories"]["path"] }
 
@@ -21,7 +21,7 @@ describe Processor::Preparer do
           Dir.expects(:exists?).with(dir).at_least_once.returns(true)
           Digest::MD5.expects(:hexdigest).returns("test")
           Dir.expects(:exists?).with(code_dir).returns(false)
-          KalibroClient::Configurations::MetricConfiguration.expects(:metric_configurations_of).
+          KalibroClient::Entities::Configurations::MetricConfiguration.expects(:metric_configurations_of).
             with(configuration.id).returns([metric_configuration, compound_metric_configuration])
         end
 

@@ -32,7 +32,7 @@ describe Repository, :type => :model do
       subject { FactoryGirl.build(:repository) }
 
       it 'should call the Kalibro Client Configuration' do
-        KalibroClient::Configurations::KalibroConfiguration.expects(:find).twice.with(subject.configuration_id).returns(subject.configuration)
+        KalibroClient::Entities::Configurations::KalibroConfiguration.expects(:find).twice.with(subject.configuration_id).returns(subject.configuration)
         subject.configuration
       end
     end

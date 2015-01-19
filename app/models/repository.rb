@@ -20,7 +20,7 @@ class Repository < ActiveRecord::Base
   end
 
   def configuration
-    KalibroClient::Configurations::KalibroConfiguration.find(self.configuration_id)
+    KalibroClient::Entities::Configurations::KalibroConfiguration.find(self.configuration_id)
   end
 
   def configuration=(conf)
