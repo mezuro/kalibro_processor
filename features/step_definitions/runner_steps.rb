@@ -2,19 +2,17 @@ Given(/^I have a sample configuration with native metrics$/) do
   @configuration = FactoryGirl.create(:configuration, id: nil)
   metric_configuration = FactoryGirl.create(:metric_configuration,
                                             {id: nil,
-                                             code: 'loc',
-                                             metric: FactoryGirl.build(:kalibro_gatekeeper_client_loc),
+                                             metric: FactoryGirl.build(:loc),
                                              reading_group_id: @reading_group.id,
-                                             configuration_id: @configuration.id})
+                                             kalibro_configuration_id: @configuration.id})
   range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
   range.save
   compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
                                                      id: nil,
-                                                     code: 'two_loc',
-                                                     metric: FactoryGirl.build(:kalibro_gatekeeper_client_compound_metric,
+                                                     metric: FactoryGirl.build(:compound_metric,
                                                                                script: "return loc() * 2;"),
                                                      reading_group_id: @reading_group.id,
-                                                     configuration_id: @configuration.id)
+                                                     kalibro_configuration_id: @configuration.id)
   compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: compound_metric_configuration.id})
   compound_range.save
 end
@@ -30,18 +28,17 @@ end
 Given(/^I have a compound metric with an invalid script$/) do
   invalid_compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
                                                              id: nil,
-                                                             code: 'cmc',
-                                                             metric: FactoryGirl.build(:kalibro_gatekeeper_client_compound_metric,
+                                                             metric: FactoryGirl.build(:compound_metric,
                                                                                        script: "rtrnaqdfwqefwqr213r2145211234ed a * 2;"),
                                                                                        reading_group_id: @reading_group.id,
-                                                                                       configuration_id: @configuration.id)
+                                                                                       kalibro_configuration_id: @configuration.id)
   compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: invalid_compound_metric_configuration.id})
   compound_range.save
 end
 
 Given(/^I have sample readings$/) do
   @reading_group = FactoryGirl.create(:reading_group, id: nil)
-  @reading = FactoryGirl.create(:reading, {id: nil, group_id: @reading_group.id})
+  @reading = FactoryGirl.create(:reading, {id: nil, reading_group_id: @reading_group.id})
 end
 
 Given(/^I have a sample configuration$/) do
@@ -57,24 +54,22 @@ Given(/^I add the "(.*?)" analizo metric with scope "(.*?)" and code "(.*?)"$/) 
   @metric_configuration = FactoryGirl.create(:metric_configuration,
                                              {id: nil,
                                              code: code,
-                                             metric: FactoryGirl.build(:kalibro_gatekeeper_client_metric, name: name, scope: scope),
+                                             metric: FactoryGirl.build(:metric, name: name, scope: scope),
                                              reading_group_id: @reading_group.id,
-                                             configuration_id: @configuration.id})
+                                             kalibro_configuration_id: @configuration.id})
 end
 
 Given(/^I have two compound metrics with script "(.*?)" and "(.*?)"$/) do |script1, script2|
   @compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
                                                         id: nil,
-                                                        code: 'cmc',
-                                                        metric: FactoryGirl.build(:kalibro_gatekeeper_client_compound_metric, script: script1),
+                                                        metric: FactoryGirl.build(:compound_metric, script: script1),
                                                                                    reading_group_id: @reading_group.id,
-                                                                                   configuration_id: @configuration.id)
+                                                                                   kalibro_configuration_id: @configuration.id)
   @other_compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
                                                         id: nil,
-                                                        code: 'ocmc',
-                                                        metric: FactoryGirl.build(:kalibro_gatekeeper_client_compound_metric, script: script2),
+                                                        metric: FactoryGirl.build(:compound_metric, script: script2),
                                                                                    reading_group_id: @reading_group.id,
-                                                                                   configuration_id: @configuration.id)
+                                                                                   kalibro_configuration_id: @configuration.id)
   compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @compound_metric_configuration.id})
   compound_range.save
   other_compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @other_compound_metric_configuration.id})
