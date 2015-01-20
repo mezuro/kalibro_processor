@@ -3,7 +3,7 @@ Feature: Runner run
   As a regular user
   I should be able to run it through all
 
-  @clear_repository @kalibro_configuration_restart @kalibro_processor_restart
+  @clear_repository @kalibro_configuration_restart
   Scenario: An existing repository with a configuration
     Given I have sample readings
     And I have a sample configuration with native metrics
@@ -17,7 +17,7 @@ Feature: Runner run
     And the Root ModuleResult retrieved should have a list of MetricResults
     And the Root ModuleResult retrieved should not have a MetricResult for the compound metric
 
-  @clear_repository @kalibro_configuration_restart @kalibro_processor_restart
+  @clear_repository @kalibro_configuration_restart
   Scenario: A failing processing
     Given I have sample readings
     And I have a sample configuration with native metrics
@@ -27,7 +27,7 @@ Feature: Runner run
     When I run for the given repository
     Then I should receive a processing error
 
-  @clear_repository @kalibro_configuration_restart @kalibro_processor_restart
+  @clear_repository @kalibro_configuration_restart
   Scenario: Aggregating some metric values
     Given I have sample readings
     And I have a sample configuration
@@ -45,7 +45,7 @@ Feature: Runner run
     And the processing retrieved should have a Root ModuleResult
     And the Root ModuleResult retrieved should have a list of MetricResults
 
-  @clear_repository @kalibro_configuration_restart @kalibro_processor_restart
+  @clear_repository @kalibro_configuration_restart
   Scenario: A processing with an empty configuration
     Given I have a sample configuration
     And I have a sample repository within the sample project
