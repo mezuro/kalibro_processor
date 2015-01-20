@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20140820161548) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "delayed_jobs", force: true do |t|
+  create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",               default: 0, null: false
     t.integer  "attempts",               default: 0, null: false
     t.text     "handler",                            null: false
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20140820161548) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
-  create_table "kalibro_modules", force: true do |t|
+  create_table "kalibro_modules", force: :cascade do |t|
     t.string   "long_name",        limit: 255
     t.string   "granlrty",         limit: 255
     t.datetime "created_at"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20140820161548) do
     t.integer  "module_result_id"
   end
 
-  create_table "metric_results", force: true do |t|
+  create_table "metric_results", force: :cascade do |t|
     t.integer  "module_result_id"
     t.integer  "metric_configuration_id"
     t.float    "value"
@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 20140820161548) do
     t.datetime "updated_at"
   end
 
-  create_table "module_results", force: true do |t|
+  create_table "module_results", force: :cascade do |t|
     t.float    "grade"
     t.integer  "parent_id"
     t.integer  "height"
@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20140820161548) do
 
   add_index "module_results", ["parent_id"], name: "index_module_results_on_parent_id", using: :btree
 
-  create_table "process_times", force: true do |t|
+  create_table "process_times", force: :cascade do |t|
     t.string   "state",         limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 20140820161548) do
     t.float    "time"
   end
 
-  create_table "processings", force: true do |t|
+  create_table "processings", force: :cascade do |t|
     t.string   "state",                 limit: 255
     t.integer  "repository_id"
     t.datetime "created_at"
@@ -76,14 +76,14 @@ ActiveRecord::Schema.define(version: 20140820161548) do
     t.text     "error_message"
   end
 
-  create_table "projects", force: true do |t|
+  create_table "projects", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.string   "description", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "repositories", force: true do |t|
+  create_table "repositories", force: :cascade do |t|
     t.string   "name",             limit: 255
     t.string   "scm_type",         limit: 255
     t.string   "address",          limit: 255

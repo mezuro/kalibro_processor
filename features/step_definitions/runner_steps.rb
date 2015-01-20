@@ -37,24 +37,22 @@ Given(/^I have a compound metric with an invalid script$/) do
 end
 
 Given(/^I have sample readings$/) do
-  @reading_group = FactoryGirl.create(:reading_group, id: nil)
-  @reading = FactoryGirl.create(:reading, {id: nil, reading_group_id: @reading_group.id})
+  @reading_group = FactoryGirl.create(:reading_group)
+  @reading = FactoryGirl.create(:reading, {reading_group_id: @reading_group.id})
 end
 
 Given(/^I have a sample configuration$/) do
-  @configuration = FactoryGirl.create(:configuration, name: "teste", id: nil)
+  @configuration = FactoryGirl.create(:configuration, name: "teste")
 end
 
 Given(/^I have a range for this metric configuration$/) do
-  range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @metric_configuration.id})
+  range = FactoryGirl.build(:range, {reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @metric_configuration.id})
   range.save
 end
 
 Given(/^I add the "(.*?)" analizo metric with scope "(.*?)" and code "(.*?)"$/) do |name, scope, code|
   @metric_configuration = FactoryGirl.create(:metric_configuration,
-                                             {id: nil,
-                                             code: code,
-                                             metric: FactoryGirl.build(:metric, name: name, scope: scope),
+                                             {metric: FactoryGirl.build(:analizo_native_metric, name: name, scope: scope, code: code),
                                              reading_group_id: @reading_group.id,
                                              kalibro_configuration_id: @configuration.id})
 end

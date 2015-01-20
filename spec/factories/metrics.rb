@@ -21,7 +21,7 @@ FactoryGirl.define  do
     code "CM"
     scope { :SOFTWARE }
     description "A compound metric"
-    type 'NativeMetricSnapshot'
+    type 'CompoundMetricSnapshot'
     
     initialize_with { KalibroClient::Entities::Miscellaneous::CompoundMetric.new(name, code, scope, script) }
   end

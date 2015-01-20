@@ -16,9 +16,14 @@
 
 FactoryGirl.define do
   factory :configuration, class: KalibroClient::Entities::Configurations::KalibroConfiguration do
-    id 1
     name "Java"
     description "Code metrics for Java."
+
+    trait :with_id do
+      id 1
+    end
+
+    factory :configuration_with_id, traits: [:with_id]
   end
 
   factory :another_configuration, class: KalibroClient::Entities::Configurations::KalibroConfiguration do
