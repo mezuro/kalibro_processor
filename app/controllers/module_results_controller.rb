@@ -12,7 +12,7 @@ class ModuleResultsController < ApplicationController
 
   def metric_results
     record = find_module_result
-    return_value = record.is_a?(ModuleResult) ? record.metric_results : record
+    return_value = record.is_a?(ModuleResult) ? { metric_results: record.metric_results } : record
     format_response(record, return_value)
   end
 

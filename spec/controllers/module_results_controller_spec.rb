@@ -49,7 +49,7 @@ describe ModuleResultsController do
         it { is_expected.to respond_with(:success) }
 
         it 'should return the metric_results' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(module_result.metric_results.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({ metric_results: module_result.metric_results }.to_json))
         end
       end
 

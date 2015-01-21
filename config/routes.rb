@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
   resources :kalibro_modules, only: [:index, :show]
   get 'kalibro_modules/:id/module_results' => 'kalibro_modules#module_results'
+  get 'kalibro_modules/:id/exists' => 'kalibro_modules#exists'
 
   resources :projects, except: [:index, :new, :edit]
   get 'projects/:id/exists' => 'projects#exists'
