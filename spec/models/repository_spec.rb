@@ -93,7 +93,7 @@ describe Repository, :type => :model do
           module_result.expects(:kalibro_module).twice.returns(kalibro_module)
           module_result.expects(:metric_results).twice.returns([metric_result])
         end
-        let(:response) { [[processing.updated_at, metric_result.value], [processing.updated_at, metric_result.value]] }
+        let(:response) { [{date: processing.updated_at, metric_result: metric_result}, {date: processing.updated_at, metric_result: metric_result}] }
         it 'is expected to return a list of all metric_results associated with the time when it was last updated' do
           expect(subject.metric_result_history_of(kalibro_module.long_name, metric_result.metric.name)).to eq(response)
         end

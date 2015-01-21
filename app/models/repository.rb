@@ -46,7 +46,7 @@ class Repository < ActiveRecord::Base
       module_result = processing.module_results.select { |module_result| module_result.kalibro_module.long_name == module_name }.first
       unless module_result.nil?
         module_result.metric_results.each do |metric_result|
-          history << [processing.updated_at, metric_result.value] if metric_result.metric.name == metric_name
+          history << {date: processing.updated_at, metric_result: metric_result} if metric_result.metric.name == metric_name
         end
       end
     end

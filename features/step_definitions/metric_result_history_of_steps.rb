@@ -8,6 +8,6 @@ When(/^I get the history for the first metric result of the root$/) do
 end
 
 Then(/^I should get a list of pairs date and value$/) do
-  expect(@history.first[0]).to be_a(ActiveSupport::TimeWithZone)
-  expect(@history.first[1]).to be_a(Float)
+  expect(@history.first[:date]).to be_a(ActiveSupport::TimeWithZone)
+  expect(@history.first[:metric_result]).to be_a(MetricResult)
 end
