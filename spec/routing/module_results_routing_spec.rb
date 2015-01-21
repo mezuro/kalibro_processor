@@ -4,6 +4,8 @@ describe ModuleResultsController, :type => :routing do
   describe "routing" do
     it { is_expected.to route(:get, '/module_results/1').
                   to(controller: :module_results, action: :get, id: 1) }
+    it { is_expected.to route(:get, '/module_results/1/exists').
+                  to(controller: :module_results, action: :exists, id: 1) }
     it { is_expected.to route(:get, '/module_results/1/metric_results').
                   to(controller: :module_results, action: :metric_results, id: 1) }
     it { is_expected.to route(:get, '/module_results/1/children').

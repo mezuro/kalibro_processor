@@ -15,7 +15,7 @@ describe ModuleResultsController do
         it { is_expected.to respond_with(:success) }
 
         it 'should return the module_result' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(module_result.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({ module_result: module_result}.to_json))
         end
       end
 
@@ -31,7 +31,7 @@ describe ModuleResultsController do
         it { is_expected.to respond_with(:unprocessable_entity) }
 
         it 'should return the error_hash' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({module_result: error_hash}.to_json))
         end
       end
     end
@@ -141,6 +141,38 @@ describe ModuleResultsController do
         it 'should return the error_hash' do
           expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
         end
+      end
+    end
+  end
+
+  describe 'exists' do
+    let(:module_result) { FactoryGirl.build(:module_result_with_id) }
+
+    context 'when the module result exists' do
+      before :each do
+        ModuleResult.expects(:exists?).with(module_result.id).returns(true)
+
+        get :exists, id: module_result.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return true' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: true}.to_json))
+      end
+    end
+
+    context 'when the module_result does not exist' do
+      before :each do
+        ModuleResult.expects(:exists?).with(module_result.id).returns(false)
+
+        get :exists, id: module_result.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: false}.to_json))
       end
     end
   end

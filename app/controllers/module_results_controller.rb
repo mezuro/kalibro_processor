@@ -1,7 +1,13 @@
 class ModuleResultsController < ApplicationController
   def get
     record = find_module_result
-    format_response(record, record)
+    format_response(record, { module_result: record })
+  end
+
+  def exists
+    respond_to do |format|
+      format.json { render json: {exists: ModuleResult.exists?(params[:id].to_i)} }
+    end
   end
 
   def metric_results

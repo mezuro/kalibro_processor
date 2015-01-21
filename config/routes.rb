@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get 'metric_results/:id/metric_configuration' => 'metric_results#metric_configuration'
 
   get 'module_results/:id' => 'module_results#get'
+  get 'module_results/:id/exists' => 'module_results#exists'
   get 'module_results/:id/metric_results' => 'module_results#metric_results'
   get 'module_results/:id/children' => 'module_results#children'
   get 'module_results/:id/repository_id' => 'module_results#repository_id'
