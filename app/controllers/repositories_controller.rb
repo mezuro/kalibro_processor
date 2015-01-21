@@ -105,14 +105,14 @@ class RepositoriesController < ApplicationController
   end
 
   def module_result_history_of
-    module_name = KalibroModule.find(params[:module_id].to_i).long_name
+    module_name = KalibroModule.find(params[:kalibro_module_id].to_i).long_name
     history = @repository.module_result_history_of(module_name)
 
     respond_with_json({module_result_history_of: history})
   end
 
   def metric_result_history_of
-    module_name = KalibroModule.find(params[:module_id].to_i).long_name
+    module_name = KalibroModule.find(params[:kalibro_module_id].to_i).long_name
     history = @repository.metric_result_history_of(module_name, params[:metric_name])
 
     respond_with_json({metric_result_history_of: history})

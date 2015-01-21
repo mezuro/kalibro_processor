@@ -447,7 +447,7 @@ RSpec.describe RepositoriesController, :type => :controller do
       kalibro_module.expects(:long_name).at_least_once.returns(kalibro_module.long_name)
       repository.expects(:module_result_history_of).with(kalibro_module.long_name).returns(module_result_history_of_a_module)
 
-      post :module_result_history_of, id: repository.id, module_id: kalibro_module.id, format: :json
+      post :module_result_history_of, id: repository.id, kalibro_module_id: kalibro_module.id, format: :json
     end
 
     it { is_expected.to respond_with(:success) }
@@ -468,7 +468,7 @@ RSpec.describe RepositoriesController, :type => :controller do
       KalibroModule.expects(:find).with(kalibro_module.id).returns(kalibro_module)
       repository.expects(:metric_result_history_of).with(kalibro_module.long_name, metric_result.metric.name).returns(metric_result_history_of_a_metric)
 
-      post :metric_result_history_of, id: repository.id, module_id: kalibro_module.id, metric_name: metric_result.metric.name, format: :json
+      post :metric_result_history_of, id: repository.id, kalibro_module_id: kalibro_module.id, metric_name: metric_result.metric.name, format: :json
     end
 
     it { is_expected.to respond_with(:success) }
