@@ -1,10 +1,9 @@
 require 'rails_helper'
 
 describe ModuleResultsController do
+  let!(:module_result) { FactoryGirl.build(:module_result_with_id) }
   describe 'method' do
     describe 'get' do
-      let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
-
       context 'with valid ModuleResult instance' do
         before :each do
           ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
@@ -36,9 +35,34 @@ describe ModuleResultsController do
       end
     end
 
-    describe 'metric_results' do
-      let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
+    describe 'kalibro_module' do
+      context 'when there is a kalibro module' do
+        before :each do
+          ModuleResult.expects(:find).with(module_result.id).returns(module_result)
 
+          get :kalibro_module, id: module_result.id, format: :json
+        end
+
+        it 'is expected to return a kalibro module' do
+          expect(JSON.parse(response.body)).to eq(JSON.parse({ kalibro_module: module_result.kalibro_module}.to_json))
+        end
+      end
+
+      context 'when there is no kalibro module' do
+        before :each do
+          module_result.kalibro_module = nil
+          ModuleResult.expects(:find).with(module_result.id).returns(module_result)
+
+          get :kalibro_module, id: module_result.id, format: :json
+        end
+
+        it 'is expected to return nil' do
+          expect(JSON.parse(response.body)).to eq(JSON.parse({ kalibro_module: module_result.kalibro_module}.to_json))
+        end
+      end
+    end
+
+    describe 'metric_results' do
       context 'with valid ModuleResult instance' do
         before :each do
           ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
@@ -71,7 +95,6 @@ describe ModuleResultsController do
     end
 
     describe 'children' do
-      let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
       let(:module_result_with_parent) { FactoryGirl.build(:module_result, id: 2, kalibro_module: FactoryGirl.build(:kalibro_module)) }
 
       context 'with valid ModuleResult instance' do
@@ -108,7 +131,6 @@ describe ModuleResultsController do
     end
 
     describe 'repository_id' do
-      let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
       let(:processing) { FactoryGirl.build(:processing) }
       let(:repository) { FactoryGirl.build(:repository, id: 2) }
 
@@ -146,8 +168,6 @@ describe ModuleResultsController do
   end
 
   describe 'exists' do
-    let(:module_result) { FactoryGirl.build(:module_result_with_id) }
-
     context 'when the module result exists' do
       before :each do
         ModuleResult.expects(:exists?).with(module_result.id).returns(true)

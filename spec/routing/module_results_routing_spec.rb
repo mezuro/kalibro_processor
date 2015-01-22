@@ -12,5 +12,7 @@ describe ModuleResultsController, :type => :routing do
                   to(controller: :module_results, action: :children, id: 1) }
     it { is_expected.to route(:get, '/module_results/1/repository_id').
                   to(controller: :module_results, action: :repository_id, id: 1) }
+    it { is_expected.to route(:get, '/module_results/1/kalibro_module').
+                  to(controller: :module_results, action: :kalibro_module, id: 1) }
   end
 end
