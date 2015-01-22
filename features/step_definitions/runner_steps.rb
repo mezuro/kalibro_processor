@@ -8,12 +8,11 @@ Given(/^I have a sample configuration with native metrics$/) do
   range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
   range.save
   compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
-                                                     id: nil,
                                                      metric: FactoryGirl.build(:compound_metric,
                                                                                script: "return loc() * 2;"),
                                                      reading_group_id: @reading_group.id,
                                                      kalibro_configuration_id: @configuration.id)
-  compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: compound_metric_configuration.id})
+  compound_range = FactoryGirl.build(:range, {reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: compound_metric_configuration.id})
   compound_range.save
 end
 
@@ -27,12 +26,11 @@ end
 
 Given(/^I have a compound metric with an invalid script$/) do
   invalid_compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
-                                                             id: nil,
                                                              metric: FactoryGirl.build(:compound_metric,
                                                                                        script: "rtrnaqdfwqefwqr213r2145211234ed a * 2;"),
                                                                                        reading_group_id: @reading_group.id,
                                                                                        kalibro_configuration_id: @configuration.id)
-  compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: invalid_compound_metric_configuration.id})
+  compound_range = FactoryGirl.build(:range, {reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: invalid_compound_metric_configuration.id})
   compound_range.save
 end
 
@@ -59,18 +57,16 @@ end
 
 Given(/^I have two compound metrics with script "(.*?)" and "(.*?)"$/) do |script1, script2|
   @compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
-                                                        id: nil,
                                                         metric: FactoryGirl.build(:compound_metric, script: script1),
                                                                                    reading_group_id: @reading_group.id,
                                                                                    kalibro_configuration_id: @configuration.id)
   @other_compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
-                                                        id: nil,
                                                         metric: FactoryGirl.build(:compound_metric, script: script2),
                                                                                    reading_group_id: @reading_group.id,
                                                                                    kalibro_configuration_id: @configuration.id)
-  compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @compound_metric_configuration.id})
+  compound_range = FactoryGirl.build(:range, {reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @compound_metric_configuration.id})
   compound_range.save
-  other_compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @other_compound_metric_configuration.id})
+  other_compound_range = FactoryGirl.build(:range, {reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @other_compound_metric_configuration.id})
   other_compound_range.save
 end
 
