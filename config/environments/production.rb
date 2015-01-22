@@ -63,7 +63,7 @@ Rails.application.configure do
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
-  config.i18n.fallbacks = true
+config.i18n.fallbacks = true
 
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
@@ -76,4 +76,22 @@ Rails.application.configure do
 
   # use delayed jobs as the queue
   config.active_job.queue_adapter = :delayed_job
-end
+
+  # ActionMailer SMTP
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 587,
+    domain:               'mezuro.org',
+    user_name:            "<%= ENV['SMTP_USERNAME'] %>", # Configure these as a environment vars on the production server
+    password:             "<%= ENV['SMTP_PASSWORD'] %>",
+    authentication:       'plain',
+    enable_starttls_auto: true  }
+
+  # Exception Notification
+  config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :email_prefix => "[KalibroProcessor Error] ",
+    :sender_address => %{"mezurometrics" <mezurometrics@gmail.com>},
+    :exception_recipients => %w{mezuro-core@lists.ime.usp.br} }
+ end
