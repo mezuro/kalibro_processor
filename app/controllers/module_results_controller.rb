@@ -4,6 +4,12 @@ class ModuleResultsController < ApplicationController
     format_response(record, { module_result: record })
   end
 
+  def kalibro_module
+    respond_to do |format|
+      format.json { render json: {kalibro_module: ModuleResult.find(params[:id].to_i).kalibro_module} }
+    end
+  end
+
   def exists
     respond_to do |format|
       format.json { render json: {exists: ModuleResult.exists?(params[:id].to_i)} }

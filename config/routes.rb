@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get 'module_results/:id/metric_results' => 'module_results#metric_results'
   get 'module_results/:id/children' => 'module_results#children'
   get 'module_results/:id/repository_id' => 'module_results#repository_id'
+  get 'module_results/:id/kalibro_module' => 'module_results#kalibro_module'
 
   resources :kalibro_modules, only: [:index, :show]
   get 'kalibro_modules/:id/module_results' => 'kalibro_modules#module_results'
