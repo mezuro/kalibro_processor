@@ -72,7 +72,7 @@ describe ModuleResultsController do
 
     describe 'children' do
       let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
-      let(:module_result_with_parent) { FactoryGirl.build(:module_result, id: 2) }
+      let(:module_result_with_parent) { FactoryGirl.build(:module_result, id: 2, kalibro_module: FactoryGirl.build(:kalibro_module)) }
 
       context 'with valid ModuleResult instance' do
         before :each do
@@ -86,7 +86,7 @@ describe ModuleResultsController do
         it { is_expected.to respond_with(:success) }
 
         it 'should return the children' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse([JSON.parse(module_result_with_parent.to_json)].to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({module_results: [module_result_with_parent]}.to_json))
         end
       end
 

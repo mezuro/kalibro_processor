@@ -19,7 +19,7 @@ class ModuleResultsController < ApplicationController
   def children
     record = find_module_result
     if record.is_a?(ModuleResult)
-      return_value = record.children.map { |child| JSON.parse(child.to_json) }
+      return_value = { module_results: record.children }
     else
       return_value = record
     end
