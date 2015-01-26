@@ -34,7 +34,7 @@ RSpec.describe RepositoriesController, :type => :controller do
   end
 
   describe 'create' do
-    let(:repository_params) { Hash[FactoryGirl.attributes_for(:repository, configuration_id: repository.configuration_id, project_id: repository.project_id)] }
+    let(:repository_params) { Hash[FactoryGirl.attributes_for(:repository, kalibro_configuration_id: repository.kalibro_configuration_id, project_id: repository.project_id)] }
 
     context 'with valid attributes' do
       before :each do
@@ -68,7 +68,7 @@ RSpec.describe RepositoriesController, :type => :controller do
   end
 
   describe 'update' do
-    let!(:repository_params) { Hash[FactoryGirl.attributes_for(:repository, configuration_id: repository.configuration_id, project_id: repository.project_id)] }
+    let!(:repository_params) { Hash[FactoryGirl.attributes_for(:repository, kalibro_configuration_id: repository.kalibro_configuration_id, project_id: repository.project_id)] }
 
     before :each do
       Repository.expects(:find).with(repository.id).returns(repository)

@@ -4,9 +4,9 @@ Feature: Runner run
   I should be able to run it through all
 
   @clear_repository @kalibro_configuration_restart
-  Scenario: An existing repository with a configuration
+  Scenario: An existing repository with a kalibro configuration
     Given I have sample readings
-    And I have a sample configuration with native metrics
+    And I have a sample kalibro configuration with native metrics
     And I have two compound metrics with script "return 1.0/0.0;" and "return Math.sqrt(-5);"
     And I have a sample repository within the sample project
     And I have a processing within the sample repository
@@ -20,7 +20,7 @@ Feature: Runner run
   @clear_repository @kalibro_configuration_restart
   Scenario: A failing processing
     Given I have sample readings
-    And I have a sample configuration with native metrics
+    And I have a sample kalibro configuration with native metrics
     And I have a compound metric with an invalid script
     And I have a sample repository within the sample project
     And I have a processing within the sample repository
@@ -30,7 +30,7 @@ Feature: Runner run
   @clear_repository @kalibro_configuration_restart
   Scenario: Aggregating some metric values
     Given I have sample readings
-    And I have a sample configuration
+    And I have a sample kalibro configuration
     And I add the "Number of Attributes" analizo metric with scope "CLASS" and code "noa"
     And I have a range for this metric configuration
     And I add the "Number of Public Attributes" analizo metric with scope "CLASS" and code "npa"
@@ -46,8 +46,8 @@ Feature: Runner run
     And the Root ModuleResult retrieved should have a list of MetricResults
 
   @clear_repository @kalibro_configuration_restart
-  Scenario: A processing with an empty configuration
-    Given I have a sample configuration
+  Scenario: A processing with an empty kalibro configuration
+    Given I have a sample kalibro configuration
     And I have a sample repository within the sample project
     And I have a processing within the sample repository
     When I run for the given repository

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140820161548) do
+ActiveRecord::Schema.define(version: 20150126173351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,17 +84,17 @@ ActiveRecord::Schema.define(version: 20140820161548) do
   end
 
   create_table "repositories", force: :cascade do |t|
-    t.string   "name",             limit: 255
-    t.string   "scm_type",         limit: 255
-    t.string   "address",          limit: 255
-    t.string   "description",      limit: 255, default: ""
-    t.string   "license",          limit: 255, default: ""
-    t.integer  "period",                       default: 0
+    t.string   "name",                     limit: 255
+    t.string   "scm_type",                 limit: 255
+    t.string   "address",                  limit: 255
+    t.string   "description",              limit: 255, default: ""
+    t.string   "license",                  limit: 255, default: ""
+    t.integer  "period",                               default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "configuration_id"
+    t.integer  "kalibro_configuration_id"
     t.integer  "project_id"
-    t.string   "code_directory",   limit: 255
+    t.string   "code_directory",           limit: 255
   end
 
 end

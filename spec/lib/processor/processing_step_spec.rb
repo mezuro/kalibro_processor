@@ -3,8 +3,8 @@ require 'processor'
 
 describe Processor::ProcessingStep do
   describe 'methods' do
-    let!(:configuration) { FactoryGirl.build(:configuration) }
-    let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration) }
+    let!(:kalibro_configuration) { FactoryGirl.build(:kalibro_configuration) }
+    let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration) }
     let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
     let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 
@@ -36,6 +36,5 @@ describe Processor::ProcessingStep do
         end
       end
     end
-
   end
 end

@@ -6,9 +6,9 @@ describe Processor::Downloader do
   describe 'methods' do
     describe 'task' do
       context 'from GIT' do
-        let(:configuration) { FactoryGirl.build(:configuration) }
+        let(:kalibro_configuration) { FactoryGirl.build(:kalibro_configuration) }
         let!(:code_dir) { "/tmp/test" }
-        let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration, code_directory: code_dir) }
+        let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir) }
         let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
         let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 
@@ -34,9 +34,9 @@ describe Processor::Downloader do
       end
 
       context 'from SVN' do
-        let(:configuration) { FactoryGirl.build(:configuration) }
+        let(:kalibro_configuration) { FactoryGirl.build(:kalibro_configuration) }
         let!(:code_dir) { "/tmp/test" }
-        let!(:repository) { FactoryGirl.build(:repository, scm_type: "SVN", configuration: configuration, code_directory: code_dir) }
+        let!(:repository) { FactoryGirl.build(:repository, scm_type: "SVN", kalibro_configuration: kalibro_configuration, code_directory: code_dir) }
         let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
         let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 

@@ -5,7 +5,7 @@ describe Repository, :type => :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:address) }
-    it { is_expected.to validate_presence_of(:configuration_id) }
+    it { is_expected.to validate_presence_of(:kalibro_configuration_id) }
     it { is_expected.to validate_presence_of(:project_id) }
     it { is_expected.to validate_uniqueness_of(:name).scoped_to(:project_id).with_message(/should be unique within project/) }
   end
@@ -28,22 +28,22 @@ describe Repository, :type => :model do
       end
     end
 
-    describe 'configuration' do
+    describe 'kalibro_configuration' do
       subject { FactoryGirl.build(:repository) }
 
       it 'should call the Kalibro Client Configuration' do
-        KalibroClient::Entities::Configurations::KalibroConfiguration.expects(:find).twice.with(subject.configuration_id).returns(subject.configuration)
-        subject.configuration
+        KalibroClient::Entities::Configurations::KalibroConfiguration.expects(:find).twice.with(subject.kalibro_configuration_id).returns(subject.kalibro_configuration)
+        subject.kalibro_configuration
       end
     end
 
-    describe 'configuration=' do
+    describe 'kalibro_configuration=' do
       subject { FactoryGirl.build(:repository) }
-      let(:configuration) { FactoryGirl.build(:another_configuration) }
+      let(:kalibro_configuration) { FactoryGirl.build(:another_kalibro_configuration) }
 
       it 'should call the Kalibro Client Configuration' do
-        subject.configuration = configuration
-        expect(subject.configuration_id).to eq(configuration.id)
+        subject.kalibro_configuration = kalibro_configuration
+        expect(subject.kalibro_configuration_id).to eq(kalibro_configuration.id)
       end
     end
 
@@ -136,6 +136,5 @@ describe Repository, :type => :model do
       end
     end
   end
-
 end
 
