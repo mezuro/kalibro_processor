@@ -60,7 +60,7 @@ class RepositoriesController < ApplicationController
     end
   end
 
-  def process_repository #FIXME Naming this method process is causing conflicts. Fix them.
+  def process_repository
     begin
       @repository.process(Processing.create(repository: @repository, state: "PREPARING"))
       status = :ok
