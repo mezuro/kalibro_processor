@@ -28,15 +28,15 @@ Please, have a look at the wiki pages about development workflow and code standa
 
   * postgresql-server-dev-9.1
 
-  *NOTE:* The version of postgresql may vary accordingly with your system version
+  *NOTE:* The version of postgresql may vary according to your system version
 
 * Ruby version
 
-  2.1.2
+  2.2.0
 
   You can easily install it through the Ruby Version Manager - RVM. Instructions on how to do it can be found at http://rvm.io
 
-  *NOTE:* If you are using the gnome-shell, or any derivate like terminator, you have to mark on your profile the option to use a "login bash".
+  *NOTE:* If you are using the gnome-shell, or any derivative like terminator, you have to mark on your profile the option to use a "login bash".
 
 
 * Configuration
@@ -49,7 +49,7 @@ Please, have a look at the wiki pages about development workflow and code standa
 
       RAILS_ENV=local ./bin/setup
 
-    This is a environment used when you want to use the server for acceptance tests from other services like Prezento. It uses a delayed_job queue for processings. So in order to process run:
+    This is an environment used when you want to run the server for acceptance tests from other services like Prezento. It uses a delayed_job queue for processings. So in order to process, run:
 
       RAILS_ENV=local rake jobs:work
 
@@ -61,16 +61,11 @@ Please, have a look at the wiki pages about development workflow and code standa
 
 * Services (job queues, cache servers, search engines, etc.)
 
-  * Kalibro Gatekeeper v0.2.0 (https://github.com/mezuro/kalibro_gatekeeper/releases/tag/v0.2.0)
-    * You can find a script to install it on any machine with Rails on https://gist.github.com/rafamanzo/9859244. After running this script, run:
-        unset BUNDLE_GEMFILE
-    * By default Kalibro Processor will expect it to be running on port 8081 at localhost.
-      * In order to run it as expected, run:
-          RAILS_ENV=local rails s -p 8081
+  * Kalibro Client v0.0.1 (https://github.com/mezuro/kalibro_client/releases/tag/v0.0.1)
 
 * Deployment instructions
 
-  Deployment is made through Capistano (https://github.com/capistrano/capistrano)
+  Deployment is made through Capistrano (https://github.com/capistrano/capistrano)
 
     cap production deploy
 
@@ -84,8 +79,8 @@ Please, have a look at the wiki pages about development workflow and code standa
 
 * First Deploy
 
-  1. Make sure that the deployment files (<tt>config/deploy.rb</tt> <tt>config/deploy/production.rb</tt> are correctly configured to the installation server;
-  2. Also, make sure that the installation server already has rvm installed;
+  1. Make sure that the deployment files (<tt>config/deploy.rb</tt> <tt>config/deploy/production.rb</tt> are correctly configured at the server;
+  2. Also, make sure that your server already has rvm installed;
     * It should already have the ruby version installed with the gemset created as well
   3. Check if everything is OK for deploy:
       cap production deploy:check
@@ -121,7 +116,7 @@ Please see the humans.txt (at the `public` folder) file with the authors
 
 === Acknowledgments
 
-The authors have been supported by organizations:
+The authors have been supported by the following organizations:
 
 University of São Paulo (USP)
 FLOSS Competence Center
