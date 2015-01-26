@@ -134,7 +134,7 @@ class RepositoriesController < ApplicationController
   end
 
   def repository_params
-    params.require(:repository).permit(:name, :address, :license, :scm_type, :description, :period, :configuration_id, :project_id)
+    params.require(:repository).permit(:name, :address, :license, :scm_type, :description, :period, :kalibro_configuration_id, :project_id)
   end
 
   def processings_in_time
