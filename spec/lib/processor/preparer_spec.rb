@@ -16,7 +16,6 @@ describe Processor::Preparer do
       context 'when the base directory exists' do
         before :each do
           repository.expects(:update).with(code_directory: code_dir)
-          # FIXME: the factory should do it instead of calling the client.
           repository.expects(:configuration).returns(configuration)
           Dir.expects(:exists?).with(dir).at_least_once.returns(true)
           Digest::MD5.expects(:hexdigest).returns("test")
