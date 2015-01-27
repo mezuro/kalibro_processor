@@ -4,15 +4,15 @@ require 'processor'
 describe Processor::Aggregator do
   describe 'methods' do
     describe 'task' do
-      let(:configuration) { FactoryGirl.build(:configuration) }
+      let(:kalibro_configuration) { FactoryGirl.build(:kalibro_configuration) }
       let!(:code_dir) { "/tmp/test" }
-      let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration, code_directory: code_dir) }
+      let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir) }
       let!(:root_module_result) { FactoryGirl.build(:module_result) }
       let!(:processing) { FactoryGirl.build(:processing, repository: repository, root_module_result: root_module_result) }
       let!(:child) { FactoryGirl.build(:module_result_class_granularity, parent: root_module_result) }
       let!(:native_metric_configurations) {
         [FactoryGirl.build(:metric_configuration, id: 1),
-          FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:kalibro_gatekeeper_client_loc), id: 2)]
+         FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:loc), id: 2)]
       }
       let!(:compound_metric_configurations) { [FactoryGirl.build(:compound_metric_configuration)] }
       let!(:native_metrics) { { "Analizo" => native_metric_configurations } }

@@ -1,10 +1,9 @@
 require 'rails_helper'
 
 describe ModuleResultsController do
+  let!(:module_result) { FactoryGirl.build(:module_result_with_id) }
   describe 'method' do
     describe 'get' do
-      let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
-
       context 'with valid ModuleResult instance' do
         before :each do
           ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
@@ -15,7 +14,7 @@ describe ModuleResultsController do
         it { is_expected.to respond_with(:success) }
 
         it 'should return the module_result' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(module_result.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({ module_result: module_result}.to_json))
         end
       end
 
@@ -31,14 +30,39 @@ describe ModuleResultsController do
         it { is_expected.to respond_with(:unprocessable_entity) }
 
         it 'should return the error_hash' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({module_result: error_hash}.to_json))
+        end
+      end
+    end
+
+    describe 'kalibro_module' do
+      context 'when there is a kalibro module' do
+        before :each do
+          ModuleResult.expects(:find).with(module_result.id).returns(module_result)
+
+          get :kalibro_module, id: module_result.id, format: :json
+        end
+
+        it 'is expected to return a kalibro module' do
+          expect(JSON.parse(response.body)).to eq(JSON.parse({ kalibro_module: module_result.kalibro_module}.to_json))
+        end
+      end
+
+      context 'when there is no kalibro module' do
+        before :each do
+          module_result.kalibro_module = nil
+          ModuleResult.expects(:find).with(module_result.id).returns(module_result)
+
+          get :kalibro_module, id: module_result.id, format: :json
+        end
+
+        it 'is expected to return nil' do
+          expect(JSON.parse(response.body)).to eq(JSON.parse({ kalibro_module: module_result.kalibro_module}.to_json))
         end
       end
     end
 
     describe 'metric_results' do
-      let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
-
       context 'with valid ModuleResult instance' do
         before :each do
           ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
@@ -49,7 +73,7 @@ describe ModuleResultsController do
         it { is_expected.to respond_with(:success) }
 
         it 'should return the metric_results' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(module_result.metric_results.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({ metric_results: module_result.metric_results }.to_json))
         end
       end
 
@@ -71,8 +95,7 @@ describe ModuleResultsController do
     end
 
     describe 'children' do
-      let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
-      let(:module_result_with_parent) { FactoryGirl.build(:module_result, id: 2) }
+      let(:module_result_with_parent) { FactoryGirl.build(:module_result, id: 2, kalibro_module: FactoryGirl.build(:kalibro_module)) }
 
       context 'with valid ModuleResult instance' do
         before :each do
@@ -86,7 +109,7 @@ describe ModuleResultsController do
         it { is_expected.to respond_with(:success) }
 
         it 'should return the children' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse([JSON.parse(module_result_with_parent.to_json)].to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({module_results: [module_result_with_parent]}.to_json))
         end
       end
 
@@ -108,7 +131,6 @@ describe ModuleResultsController do
     end
 
     describe 'repository_id' do
-      let(:module_result) { FactoryGirl.build(:module_result, id: 1) }
       let(:processing) { FactoryGirl.build(:processing) }
       let(:repository) { FactoryGirl.build(:repository, id: 2) }
 
@@ -141,6 +163,36 @@ describe ModuleResultsController do
         it 'should return the error_hash' do
           expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
         end
+      end
+    end
+  end
+
+  describe 'exists' do
+    context 'when the module result exists' do
+      before :each do
+        ModuleResult.expects(:exists?).with(module_result.id).returns(true)
+
+        get :exists, id: module_result.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return true' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: true}.to_json))
+      end
+    end
+
+    context 'when the module_result does not exist' do
+      before :each do
+        ModuleResult.expects(:exists?).with(module_result.id).returns(false)
+
+        get :exists, id: module_result.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: false}.to_json))
       end
     end
   end

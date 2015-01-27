@@ -8,7 +8,7 @@ class Repository < ActiveRecord::Base
   validates :name, uniqueness: { scope: :project_id ,
     message: "should be unique within project" }
   validates :address, presence: true
-  validates :configuration_id, presence: true
+  validates :kalibro_configuration_id, presence: true
   validates :project_id, presence: true
 
   TYPES = {"GIT" => Downloaders::GitDownloader, "SVN" => Downloaders::SvnDownloader}
@@ -19,12 +19,12 @@ class Repository < ActiveRecord::Base
     return supported_types
   end
 
-  def configuration
-    KalibroGatekeeperClient::Entities::Configuration.find(self.configuration_id)
+  def kalibro_configuration
+    KalibroClient::Entities::Configurations::KalibroConfiguration.find(self.kalibro_configuration_id)
   end
 
-  def configuration=(conf)
-    self.configuration_id = conf.id
+  def kalibro_configuration=(conf)
+    self.kalibro_configuration_id = conf.id
   end
 
   def process(processing)
@@ -46,7 +46,7 @@ class Repository < ActiveRecord::Base
       module_result = processing.module_results.select { |module_result| module_result.kalibro_module.long_name == module_name }.first
       unless module_result.nil?
         module_result.metric_results.each do |metric_result|
-          history << [processing.updated_at, metric_result.value] if metric_result.metric.name == metric_name
+          history << {date: processing.updated_at, metric_result: metric_result} if metric_result.metric.name == metric_name
         end
       end
     end

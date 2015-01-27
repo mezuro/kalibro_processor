@@ -34,7 +34,8 @@ RSpec.describe RepositoriesController, :type => :controller do
   end
 
   describe 'create' do
-    let(:repository_params) { Hash[FactoryGirl.attributes_for(:repository, configuration_id: repository.configuration_id, project_id: repository.project_id).map { |k,v| [k.to_s, v.to_s] }] } #FIXME: Mocha is creating the expectations with strings, but FactoryGirl returns everything with sybols and integers
+    let(:repository_params) { Hash[FactoryGirl.attributes_for(:repository, kalibro_configuration_id: repository.kalibro_configuration_id, project_id: repository.project_id)] }
+
     context 'with valid attributes' do
       before :each do
         Repository.any_instance.expects(:save).returns(true)
@@ -67,7 +68,7 @@ RSpec.describe RepositoriesController, :type => :controller do
   end
 
   describe 'update' do
-    let!(:repository_params) { Hash[FactoryGirl.attributes_for(:repository, configuration_id: repository.configuration_id, project_id: repository.project_id).map { |k,v| [k.to_s, v.to_s] }] } #FIXME: Mocha is creating the expectations with strings, but FactoryGirl returns everything with sybols and integers
+    let!(:repository_params) { Hash[FactoryGirl.attributes_for(:repository, kalibro_configuration_id: repository.kalibro_configuration_id, project_id: repository.project_id)] }
 
     before :each do
       Repository.expects(:find).with(repository.id).returns(repository)
@@ -76,7 +77,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     context 'with valid attributes' do
       before :each do
         repository_params.delete('id')
-        Repository.any_instance.expects(:update).with(repository_params).returns(true)
+        Repository.any_instance.expects(:update).returns(true)
 
         put :update, repository: repository_params, id: repository.id, format: :json
       end
@@ -91,7 +92,7 @@ RSpec.describe RepositoriesController, :type => :controller do
     context 'with invalid attributes' do
       before :each do
         repository_params.delete('id')
-        Repository.any_instance.expects(:update).with(repository_params).returns(false)
+        Repository.any_instance.expects(:update).returns(false)
 
         put :update, repository: repository_params, id: repository.id, format: :json
       end
@@ -127,6 +128,36 @@ RSpec.describe RepositoriesController, :type => :controller do
 
     it 'should return the supported types' do
       expect(JSON.parse(response.body)).to eq(JSON.parse({types: supported_types.map{|x| x.to_s}}.to_json))
+    end
+  end
+
+  describe 'exists' do
+    context 'when the repository exists' do
+      before :each do
+        Repository.expects(:exists?).with(repository.id).returns(true)
+
+        get :exists, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return true' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: true}.to_json))
+      end
+    end
+
+    context 'when the repository does not exist' do
+      before :each do
+        Repository.expects(:exists?).with(repository.id).returns(false)
+
+        get :exists, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: false}.to_json))
+      end
     end
   end
 
@@ -417,7 +448,7 @@ RSpec.describe RepositoriesController, :type => :controller do
       kalibro_module.expects(:long_name).at_least_once.returns(kalibro_module.long_name)
       repository.expects(:module_result_history_of).with(kalibro_module.long_name).returns(module_result_history_of_a_module)
 
-      post :module_result_history_of, id: repository.id, module_id: kalibro_module.id, format: :json
+      post :module_result_history_of, id: repository.id, kalibro_module_id: kalibro_module.id, format: :json
     end
 
     it { is_expected.to respond_with(:success) }
@@ -438,7 +469,7 @@ RSpec.describe RepositoriesController, :type => :controller do
       KalibroModule.expects(:find).with(kalibro_module.id).returns(kalibro_module)
       repository.expects(:metric_result_history_of).with(kalibro_module.long_name, metric_result.metric.name).returns(metric_result_history_of_a_metric)
 
-      post :metric_result_history_of, id: repository.id, module_id: kalibro_module.id, metric_name: metric_result.metric.name, format: :json
+      post :metric_result_history_of, id: repository.id, kalibro_module_id: kalibro_module.id, metric_name: metric_result.metric.name, format: :json
     end
 
     it { is_expected.to respond_with(:success) }

@@ -9,12 +9,18 @@ class MetricCollectorsController < ApplicationController
     end
   end
 
+  def index
+    respond_to do |format|
+      format.json { render json: MetricCollector::Native.details}
+    end
+  end
+
   def find
-    metric_collector = MetricCollector::Native.available.values_at(params[:name]).first
-    if metric_collector.nil?
+    details = MetricCollector::Native.details.bsearch{|d| d.name == params[:name]}
+    if details.nil?
       return_value = {error: Errors::NotFoundError.new("Metric Collector #{params[:name]} not found.")}
     else
-      return_value = {metric_collector: metric_collector.new}
+      return_value = {metric_collector_details: details}
     end
 
     respond_to do |format|

@@ -15,37 +15,36 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 FactoryGirl.define do
-  factory :metric_configuration, class: KalibroGatekeeperClient::Entities::MetricConfiguration do
-    id 1
-    code 'code'
-    metric { FactoryGirl.build(:kalibro_gatekeeper_client_metric) }
-    metric_collector_name "Analizo"
+  factory :metric_configuration, class: KalibroClient::Entities::Configurations::MetricConfiguration do
+    metric { FactoryGirl.build(:metric) }
     weight 1
-    aggregation_form :AVERAGE
+    aggregation_form "AVERAGE"
     reading_group_id 1
-    configuration_id 1
+    kalibro_configuration_id 1
+
+    trait :with_id do
+      id 1
+    end
 
     trait :compound_metric do
-      metric { FactoryGirl.build(:kalibro_gatekeeper_client_compound_metric) }
+      metric { FactoryGirl.build(:compound_metric) }
     end
 
     trait :sum_metric_configuration do
       aggregation_form :SUM
     end
 
+    factory :metric_configuration_with_id, traits: [:with_id]
     factory :compound_metric_configuration, traits: [:compound_metric]
-
     factory :sum_metric_configuration, traits: [:sum_metric_configuration]
   end
 
-  factory :another_metric_configuration, class: KalibroGatekeeperClient::Entities::MetricConfiguration do
+  factory :another_metric_configuration, class: KalibroClient::Entities::Configurations::MetricConfiguration do
     id 2
-    code 'another_code'
-    metric { FactoryGirl.build(:kalibro_gatekeeper_client_metric) }
-    metric_collector_name "Analizo"
+    metric { FactoryGirl.build(:metric) }
     weight 1
-    aggregation_form :COUNT
+    aggregation_form "COUNT"
     reading_group_id 2
-    configuration_id 2
+    kalibro_configuration_id 2
   end
 end

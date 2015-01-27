@@ -5,7 +5,7 @@ describe Repository, :type => :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:address) }
-    it { is_expected.to validate_presence_of(:configuration_id) }
+    it { is_expected.to validate_presence_of(:kalibro_configuration_id) }
     it { is_expected.to validate_presence_of(:project_id) }
     it { is_expected.to validate_uniqueness_of(:name).scoped_to(:project_id).with_message(/should be unique within project/) }
   end
@@ -28,22 +28,22 @@ describe Repository, :type => :model do
       end
     end
 
-    describe 'configuration' do
+    describe 'kalibro_configuration' do
       subject { FactoryGirl.build(:repository) }
 
-      it 'should call the Gatekeeper Configuration' do
-        KalibroGatekeeperClient::Entities::Configuration.expects(:find).twice.with(subject.configuration_id).returns(subject.configuration)
-        subject.configuration
+      it 'should call the Kalibro Client Configuration' do
+        KalibroClient::Entities::Configurations::KalibroConfiguration.expects(:find).twice.with(subject.kalibro_configuration_id).returns(subject.kalibro_configuration)
+        subject.kalibro_configuration
       end
     end
 
-    describe 'configuration=' do
+    describe 'kalibro_configuration=' do
       subject { FactoryGirl.build(:repository) }
-      let(:configuration) { FactoryGirl.build(:another_configuration) }
+      let(:kalibro_configuration) { FactoryGirl.build(:another_kalibro_configuration) }
 
-      it 'should call the Gatekeeper Configuration' do
-        subject.configuration = configuration
-        expect(subject.configuration_id).to eq(configuration.id)
+      it 'should call the Kalibro Client Configuration' do
+        subject.kalibro_configuration = kalibro_configuration
+        expect(subject.kalibro_configuration_id).to eq(kalibro_configuration.id)
       end
     end
 
@@ -87,13 +87,13 @@ describe Repository, :type => :model do
       let!(:processing) { FactoryGirl.build(:processing) }
 
       context 'when the metric result exists' do
-       before :each do
+        before :each do
           subject.expects(:processings).returns([processing, processing])
           processing.expects(:module_results).twice.returns([module_result])
           module_result.expects(:kalibro_module).twice.returns(kalibro_module)
           module_result.expects(:metric_results).twice.returns([metric_result])
         end
-        let(:response) { [[processing.updated_at, metric_result.value], [processing.updated_at, metric_result.value]] }
+        let(:response) { [{date: processing.updated_at, metric_result: metric_result}, {date: processing.updated_at, metric_result: metric_result}] }
         it 'is expected to return a list of all metric_results associated with the time when it was last updated' do
           expect(subject.metric_result_history_of(kalibro_module.long_name, metric_result.metric.name)).to eq(response)
         end
@@ -136,6 +136,5 @@ describe Repository, :type => :model do
       end
     end
   end
-
-
 end
+

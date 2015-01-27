@@ -15,12 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 FactoryGirl.define do
-  factory :range, class: KalibroGatekeeperClient::Entities::Range do
-    id 1
+  factory :range, class: KalibroClient::Entities::Configurations::KalibroRange do
     beginning 1.1
     self.end 5.1
     reading_id 3
     comments "Comment"
+
+    trait :with_id do
+      id 1
+    end
 
     trait :another_comment do
       comments "Another Comment"
@@ -38,6 +41,7 @@ FactoryGirl.define do
       self.end 10.0
     end
 
+    factory :range_with_id, traits: [:with_id]
     factory :another_range, traits: [:another_comment, :another_id]
     factory :yet_another_range, traits: [:another_beginning, :another_end]
   end

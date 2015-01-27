@@ -11,6 +11,10 @@ RSpec.describe KalibroModulesController, :type => :routing do
       expect(:get => "/kalibro_modules/new").to_not route_to("kalibro_modules#new")
     end
 
+    it "routes to #exists" do
+      expect(:get => "/kalibro_modules/1/exists").to route_to("kalibro_modules#exists", :id => "1")
+    end
+
     it "routes to #show" do
       expect(:get => "/kalibro_modules/1").to route_to("kalibro_modules#show", :id => "1")
     end

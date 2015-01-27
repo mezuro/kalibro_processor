@@ -7,6 +7,12 @@ class KalibroModulesController < ApplicationController
     end
   end
 
+  def exists
+    respond_to do |format|
+      format.json {render json: {exists: KalibroModule.exists?(params[:id].to_i)}}
+    end
+  end
+
   def show
     begin
       set_kalibro_module

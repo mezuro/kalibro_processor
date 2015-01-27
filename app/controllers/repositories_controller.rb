@@ -1,5 +1,5 @@
 class RepositoriesController < ApplicationController
-  before_action :set_repository, except: [:show, :create, :types]
+  before_action :set_repository, except: [:show, :create, :exists, :types]
 
   def show
     begin
@@ -45,6 +45,12 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  def exists
+    respond_to do |format|
+      format.json { render json: {exists: Repository.exists?(params[:id].to_i)} }
+    end
+  end
+
   def types
     supported_types = []
     supported_types = Repository.supported_types
@@ -54,7 +60,7 @@ class RepositoriesController < ApplicationController
     end
   end
 
-  def process_repository #FIXME Naming this method process is causing conflicts. Fix them.
+  def process_repository
     begin
       @repository.process(Processing.create(repository: @repository, state: "PREPARING"))
       status = :ok
@@ -99,14 +105,14 @@ class RepositoriesController < ApplicationController
   end
 
   def module_result_history_of
-    module_name = KalibroModule.find(params[:module_id].to_i).long_name
+    module_name = KalibroModule.find(params[:kalibro_module_id].to_i).long_name
     history = @repository.module_result_history_of(module_name)
 
     respond_with_json({module_result_history_of: history})
   end
 
   def metric_result_history_of
-    module_name = KalibroModule.find(params[:module_id].to_i).long_name
+    module_name = KalibroModule.find(params[:kalibro_module_id].to_i).long_name
     history = @repository.metric_result_history_of(module_name, params[:metric_name])
 
     respond_with_json({metric_result_history_of: history})
@@ -128,7 +134,7 @@ class RepositoriesController < ApplicationController
   end
 
   def repository_params
-    params.require(:repository).permit(:name, :address, :license, :scm_type, :description, :period, :configuration_id, :project_id)
+    params.require(:repository).permit(:name, :address, :license, :scm_type, :description, :period, :kalibro_configuration_id, :project_id)
   end
 
   def processings_in_time

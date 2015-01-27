@@ -63,5 +63,38 @@ RSpec.describe KalibroModulesController, :type => :controller do
       expect(JSON.parse(response.body)).to eq(JSON.parse({module_results: [module_result]}.to_json))
     end
   end
+
+
+  describe 'exists' do
+    let(:kalibro_module) { FactoryGirl.build(:kalibro_module_with_id) }
+
+    context 'when the kalibro module exists' do
+      before :each do
+        KalibroModule.expects(:exists?).with(kalibro_module.id).returns(true)
+
+        get :exists, id: kalibro_module.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return true' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: true}.to_json))
+      end
+    end
+
+    context 'when the kalibro module does not exist' do
+      before :each do
+        KalibroModule.expects(:exists?).with(kalibro_module.id).returns(false)
+
+        get :exists, id: kalibro_module.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: false}.to_json))
+      end
+    end
+  end
 end
 

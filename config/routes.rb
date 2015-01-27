@@ -9,21 +9,26 @@ Rails.application.routes.draw do
 
   get 'metric_results/:id/descendant_values' => 'metric_results#descendant_values'
   get 'metric_results/:id/repository_id' => 'metric_results#repository_id'
+  get 'metric_results/:id/metric_configuration' => 'metric_results#metric_configuration'
 
-  get 'module_results/:id/get' => 'module_results#get'
+  get 'module_results/:id' => 'module_results#get'
+  get 'module_results/:id/exists' => 'module_results#exists'
   get 'module_results/:id/metric_results' => 'module_results#metric_results'
   get 'module_results/:id/children' => 'module_results#children'
   get 'module_results/:id/repository_id' => 'module_results#repository_id'
+  get 'module_results/:id/kalibro_module' => 'module_results#kalibro_module'
 
   resources :kalibro_modules, only: [:index, :show]
   get 'kalibro_modules/:id/module_results' => 'kalibro_modules#module_results'
+  get 'kalibro_modules/:id/exists' => 'kalibro_modules#exists'
 
   resources :projects, except: [:index, :new, :edit]
   get 'projects/:id/exists' => 'projects#exists'
   get 'projects' => 'projects#all'
-  get 'projects/:id/repositories_of' => 'projects#repositories_of'
+  get 'projects/:id/repositories' => 'projects#repositories_of'
 
   get 'repositories/types' => 'repositories#types'
+  get 'repositories/:id/exists' => 'repositories#exists'
   get 'repositories/:id/process' => 'repositories#process_repository'
   get 'repositories/:id/cancel_process' => 'repositories#cancel_process'
   get 'repositories/:id/has_processing' => 'repositories#has_processing'
@@ -38,8 +43,9 @@ Rails.application.routes.draw do
   post 'repositories/:id/metric_result_history_of' => 'repositories#metric_result_history_of'
   resources :repositories , except: [:index, :new, :edit]
 
-  get 'metric_collectors' => 'metric_collectors#all_names'
-  get 'metric_collectors/:name/find' => 'metric_collectors#find'
+  get 'metric_collector_details' => 'metric_collectors#index'
+  post 'metric_collector_details/find' => 'metric_collectors#find'
+  get 'metric_collector_details/names' => 'metric_collectors#all_names'
 
   get 'processings/:id/process_times' => 'processings#process_times'
   get 'processings/:id/error_message' => 'processings#error_message'

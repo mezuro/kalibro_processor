@@ -3,8 +3,8 @@ require 'processor'
 
 describe Processor::TreeBuilder do
   describe 'methods' do
-    let!(:configuration) { FactoryGirl.build(:configuration) }
-    let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration) }
+    let!(:kalibro_configuration) { FactoryGirl.build(:kalibro_configuration) }
+    let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration) }
     let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
     let!(:root_module_result) { FactoryGirl.build(:module_result) }
     let!(:module_result) { FactoryGirl.build(:module_result_class_granularity) }

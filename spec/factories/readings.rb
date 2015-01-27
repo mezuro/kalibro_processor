@@ -15,11 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 FactoryGirl.define do
-  factory :reading, class: KalibroGatekeeperClient::Entities::Reading do
-    id 42
+  factory :reading, class: KalibroClient::Entities::Configurations::Reading do
     label "Good"
     grade 10.5
     color "33DD33"
-    group_id 31
+    reading_group_id 31
+
+    trait :with_id do
+      id 42
+    end
+
+    factory :reading_with_id, traits: [:with_id]
   end
 end

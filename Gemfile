@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.0.rc2'
+gem 'rails', '4.2.0'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
@@ -33,8 +33,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Rails Html Sanitizer for HTML sanitization
 gem 'rails-html-sanitizer', '~> 1.0'
 
-# Communication with other parts
-gem 'kalibro_gatekeeper_client', '~> 1.0.0'
+# Kalibro integration
+gem 'kalibro_client'
 
 # YAML parser required for properly compactibility between mri and rbx
 gem 'psych', '~>2.0.5'

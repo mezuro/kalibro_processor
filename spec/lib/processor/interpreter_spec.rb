@@ -5,9 +5,9 @@ describe Processor::Interpreter do
   describe 'methods' do
     describe 'task' do
       context 'when the module result tree has been well-built' do
-        let(:configuration) { FactoryGirl.build(:configuration) }
+        let(:kalibro_configuration) { FactoryGirl.build(:kalibro_configuration) }
         let!(:code_dir) { "/tmp/test" }
-        let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", configuration: configuration, code_directory: code_dir) }
+        let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir) }
         let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
         let!(:metric_result) { FactoryGirl.build(:metric_result,
                                                  metric_configuration: metric_configuration) }

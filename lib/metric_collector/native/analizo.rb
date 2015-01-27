@@ -41,7 +41,7 @@ module MetricCollector
             code = line[/^[^ ]*/] # From the beginning of line to the first space
             name = line[/- .*$/].slice(2..-1) # After the "- " to the end of line
             scope = global ? :SOFTWARE : :CLASS
-            supported_metrics[code] = NativeMetric.new(name, code, scope, [:C, :CPP, :JAVA])
+            supported_metrics[code] = KalibroClient::Entities::Miscellaneous::NativeMetric.new(name, code, scope, [:C, :CPP, :JAVA], "Analizo")
           elsif line.include?("Module Metrics:")
             global = false
           end

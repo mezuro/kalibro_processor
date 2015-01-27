@@ -33,20 +33,19 @@ RSpec.describe MetricCollectorsController, :type => :controller do
   end
 
   describe 'find' do
+    let(:metric_collector_details) { FactoryGirl.build(:metric_collector_details) }
+    
     context 'with an available collector' do
-      let!(:base_metric_collector) { FactoryGirl.build(:base_metric_collector) }
       before :each do
-        MetricCollector::Native::Analizo.expects(:available?).returns(true)
-        YAML.expects(:load_file).with("#{Rails.root}/config/collectors_descriptions.yml").returns({"analizo" => base_metric_collector.description})
-        MetricCollector::Native::Analizo.any_instance.expects(:parse_supported_metrics).returns(base_metric_collector.supported_metrics)
+        MetricCollector::Native.expects(:details).returns([metric_collector_details])
 
-        get :find, name: base_metric_collector.name, format: :json
+        post :find, name: metric_collector_details.name, format: :json
       end
 
       it { is_expected.to respond_with(:success) }
 
-      it 'should return the module_result' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse({metric_collector: base_metric_collector}.to_json))
+      it 'should return the details of the metric collector' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({metric_collector_details: metric_collector_details}.to_json))
       end
     end
 
@@ -55,14 +54,43 @@ RSpec.describe MetricCollectorsController, :type => :controller do
       let(:error_hash) { {error: Errors::NotFoundError.new("Metric collector #{metric_collector_name} not found.")} }
 
       before :each do
-        MetricCollector::Native::Analizo.expects(:available?).returns(false)
-        get :find, name: metric_collector_name, format: :json
+        MetricCollector::Native.expects(:details).returns([metric_collector_details])
+        post :find, name: metric_collector_name, format: :json
       end
 
       it { is_expected.to respond_with(:unprocessable_entity) }
 
       it 'is expected to return the error_hash' do
         expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
+      end
+    end
+  end
+
+  describe 'index' do
+    context 'with an available collector' do
+      let!(:metric_collector_details) { FactoryGirl.build(:metric_collector_details) }
+      before :each do
+        MetricCollector::Native.expects(:details).returns([metric_collector_details])
+        get :index, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return the details of the metric collector' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse([metric_collector_details].to_json))
+      end
+    end
+    
+    context 'without available collectors' do
+      before :each do
+        MetricCollector::Native.expects(:details).returns([])
+        get :index, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return the details of the metric collector' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse([].to_json))
       end
     end
   end

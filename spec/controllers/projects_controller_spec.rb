@@ -50,7 +50,7 @@ RSpec.describe ProjectsController, :type => :controller do
   end
 
   describe 'create' do
-    let(:project_params) { Hash[FactoryGirl.attributes_for(:project).map { |k,v| [k.to_s, v.to_s] }] } #FIXME: Mocha is creating the expectations with strings, but FactoryGirl returns everything with sybols and integers
+    let(:project_params) { Hash[FactoryGirl.attributes_for(:project)] }
 
     context 'with valid attributes' do
       before :each do
@@ -84,7 +84,7 @@ RSpec.describe ProjectsController, :type => :controller do
   end
 
   describe 'update' do
-    let(:project_params) { Hash[FactoryGirl.attributes_for(:project).map { |k,v| [k.to_s, v.to_s] }] } #FIXME: Mocha is creating the expectations with strings, but FactoryGirl returns everything with sybols and integers
+    let(:project_params) { Hash[FactoryGirl.attributes_for(:project)] }
 
     before :each do
       Project.expects(:find).with(project.id).returns(project)
@@ -93,7 +93,7 @@ RSpec.describe ProjectsController, :type => :controller do
     context 'with valid attributes' do
       before :each do
         project_params.delete('id')
-        Project.any_instance.expects(:update).with(project_params).returns(true)
+        Project.any_instance.expects(:update).returns(true)
 
         put :update, project: project_params, id: project.id, format: :json
       end
@@ -108,7 +108,7 @@ RSpec.describe ProjectsController, :type => :controller do
     context 'with invalid attributes' do
       before :each do
         project_params.delete('id')
-        Project.any_instance.expects(:update).with(project_params).returns(false)
+        Project.any_instance.expects(:update).returns(false)
 
         put :update, project: project_params, id: project.id, format: :json
       end
@@ -131,7 +131,7 @@ RSpec.describe ProjectsController, :type => :controller do
 
       it { is_expected.to respond_with(:success) }
 
-      it 'should return the error description with the project' do
+      it 'should return true' do
         expect(JSON.parse(response.body)).to eq(JSON.parse({exists: true}.to_json))
       end
     end
@@ -145,7 +145,7 @@ RSpec.describe ProjectsController, :type => :controller do
 
       it { is_expected.to respond_with(:success) }
 
-      it 'should return the error description with the project' do
+      it 'should return false' do
         expect(JSON.parse(response.body)).to eq(JSON.parse({exists: false}.to_json))
       end
     end

@@ -15,13 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 FactoryGirl.define do
-  factory :configuration, class: KalibroGatekeeperClient::Entities::Configuration do
-    id 1
+  factory :kalibro_configuration, class: KalibroClient::Entities::Configurations::KalibroConfiguration do
     name "Java"
     description "Code metrics for Java."
+
+    trait :with_id do
+      id 1
+    end
+
+    factory :kalibro_configuration_with_id, traits: [:with_id]
   end
 
-  factory :another_configuration, class: KalibroGatekeeperClient::Entities::Configuration do
+  factory :another_kalibro_configuration, class: KalibroClient::Entities::Configurations::KalibroConfiguration do
     id 12
     name "Perl"
     description "Code metrics for Perl."

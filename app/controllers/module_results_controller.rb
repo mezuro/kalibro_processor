@@ -1,19 +1,31 @@
 class ModuleResultsController < ApplicationController
   def get
     record = find_module_result
-    format_response(record, record)
+    format_response(record, { module_result: record })
+  end
+
+  def kalibro_module
+    respond_to do |format|
+      format.json { render json: {kalibro_module: ModuleResult.find(params[:id].to_i).kalibro_module} }
+    end
+  end
+
+  def exists
+    respond_to do |format|
+      format.json { render json: {exists: ModuleResult.exists?(params[:id].to_i)} }
+    end
   end
 
   def metric_results
     record = find_module_result
-    return_value = record.is_a?(ModuleResult) ? record.metric_results : record
+    return_value = record.is_a?(ModuleResult) ? { metric_results: record.metric_results } : record
     format_response(record, return_value)
   end
 
   def children
     record = find_module_result
     if record.is_a?(ModuleResult)
-      return_value = record.children.map { |child| JSON.parse(child.to_json) }
+      return_value = { module_results: record.children }
     else
       return_value = record
     end

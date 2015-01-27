@@ -18,19 +18,19 @@ describe MetricResultAggregator, :type => :model do
         subject { FactoryGirl.build(:metric_result, module_result: FactoryGirl.build(:module_result)) }
 
         it 'should calculate the mean value of the values array' do
-          KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
+          KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
             with(subject.metric_configuration_id).returns(metric_configuration)
           expect(MetricResultAggregator.aggregated_value(subject)).to eq(4.0)
         end
 
         it 'should count the values of array' do
-          KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
+          KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
             with(subject.metric_configuration_id).returns(another_metric_configuration)
           expect(MetricResultAggregator.aggregated_value(subject)).to eq(3)
         end
 
         it 'should sum the values of array' do
-          KalibroGatekeeperClient::Entities::MetricConfiguration.expects(:find).
+          KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
             with(subject.metric_configuration_id).returns(sum_metric_configuration)
           expect(MetricResultAggregator.aggregated_value(subject)).to eq(12)
         end
