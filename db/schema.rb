@@ -13,9 +13,6 @@
 
 ActiveRecord::Schema.define(version: 20150126173351) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",               default: 0, null: false
     t.integer  "attempts",               default: 0, null: false
@@ -30,7 +27,7 @@ ActiveRecord::Schema.define(version: 20150126173351) do
     t.datetime "updated_at"
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
   create_table "kalibro_modules", force: :cascade do |t|
     t.string   "long_name",        limit: 255
@@ -57,7 +54,7 @@ ActiveRecord::Schema.define(version: 20150126173351) do
     t.integer  "processing_id"
   end
 
-  add_index "module_results", ["parent_id"], name: "index_module_results_on_parent_id", using: :btree
+  add_index "module_results", ["parent_id"], name: "index_module_results_on_parent_id"
 
   create_table "process_times", force: :cascade do |t|
     t.string   "state",         limit: 255
