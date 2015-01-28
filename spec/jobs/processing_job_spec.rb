@@ -31,9 +31,8 @@ describe ProcessingJob, :type => :job do
           end
 
           it 'should process the repository periodically' do
-            Processing.expects(:create).with(repository: repository_with_period, state: "PREPARING").returns(new_periodic_processing)
-            ProcessingJob.expects(:set).with(wait: 2.days).returns(periodic_job)
-            periodic_job.expects(:perform_later).with(context.repository, new_periodic_processing)
+            ScheduledProcessingJob.expects(:set).with(wait: 2.days).returns(periodic_job)
+            periodic_job.expects(:perform_later).with(context.repository)
             ProcessingJob.perform_later(repository_with_period, periodic_processing)
           end
         end
