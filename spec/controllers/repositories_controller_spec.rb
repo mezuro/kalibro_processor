@@ -28,7 +28,7 @@ RSpec.describe RepositoriesController, :type => :controller do
       it { is_expected.to respond_with(:unprocessable_entity) }
 
       it 'should return the error description' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse({error: 'RecordNotFound'}.to_json))
+        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ['ActiveRecord::RecordNotFound']}.to_json))
       end
     end
   end
@@ -61,8 +61,7 @@ RSpec.describe RepositoriesController, :type => :controller do
       it { is_expected.to respond_with(:unprocessable_entity) }
 
       it 'should return the error description with the repository' do
-        repository.id = nil
-        expect(JSON.parse(response.body)).to eq(JSON.parse({repository: repository}.to_json))
+        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: []}.to_json))
       end
     end
   end
@@ -76,7 +75,6 @@ RSpec.describe RepositoriesController, :type => :controller do
 
     context 'with valid attributes' do
       before :each do
-        repository_params.delete('id')
         Repository.any_instance.expects(:update).returns(true)
 
         put :update, repository: repository_params, id: repository.id, format: :json
@@ -91,7 +89,6 @@ RSpec.describe RepositoriesController, :type => :controller do
 
     context 'with invalid attributes' do
       before :each do
-        repository_params.delete('id')
         Repository.any_instance.expects(:update).returns(false)
 
         put :update, repository: repository_params, id: repository.id, format: :json
@@ -100,7 +97,7 @@ RSpec.describe RepositoriesController, :type => :controller do
       it { is_expected.to respond_with(:unprocessable_entity) }
 
       it 'should return the error description with the repository' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse({repository: repository}.to_json))
+        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: []}.to_json))
       end
     end
   end
@@ -442,19 +439,37 @@ RSpec.describe RepositoriesController, :type => :controller do
     let(:module_result) { FactoryGirl.build(:module_result) }
     let(:processing) { FactoryGirl.build(:processing) }
     let(:module_result_history_of_a_module) { [[processing.updated_at, module_result], [processing.updated_at, module_result]] }
-    before :each do
-      Repository.expects(:find).with(repository.id).returns(repository)
-      KalibroModule.expects(:find).with(kalibro_module.id).returns(kalibro_module)
-      kalibro_module.expects(:long_name).at_least_once.returns(kalibro_module.long_name)
-      repository.expects(:module_result_history_of).with(kalibro_module.long_name).returns(module_result_history_of_a_module)
 
-      post :module_result_history_of, id: repository.id, kalibro_module_id: kalibro_module.id, format: :json
+    context 'when there is a KalibroModule' do
+      before :each do
+        Repository.expects(:find).with(repository.id).returns(repository)
+        KalibroModule.expects(:find).with(kalibro_module.id).returns(kalibro_module)
+        kalibro_module.expects(:long_name).at_least_once.returns(kalibro_module.long_name)
+        repository.expects(:module_result_history_of).with(kalibro_module.long_name).returns(module_result_history_of_a_module)
+
+        post :module_result_history_of, id: repository.id, kalibro_module_id: kalibro_module.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return the module_result_history_of a module' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({module_result_history_of: module_result_history_of_a_module}.to_json))
+      end
     end
 
-    it { is_expected.to respond_with(:success) }
+    context 'when there is no KalibroModule' do
+      before :each do
+        Repository.expects(:find).with(repository.id).returns(repository)
+        KalibroModule.expects(:find).with(kalibro_module.id).raises(ActiveRecord::RecordNotFound)
 
-    it 'should return the module_result_history_of a module' do
-      expect(JSON.parse(response.body)).to eq(JSON.parse({module_result_history_of: module_result_history_of_a_module}.to_json))
+        post :module_result_history_of, id: repository.id, kalibro_module_id: kalibro_module.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:unprocessable_entity) }
+
+      it 'should return an error' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ['ActiveRecord::RecordNotFound']}.to_json))
+      end
     end
   end
 
@@ -464,18 +479,36 @@ RSpec.describe RepositoriesController, :type => :controller do
     let(:module_result) { FactoryGirl.build(:module_result) }
     let(:processing) { FactoryGirl.build(:processing) }
     let(:metric_result_history_of_a_metric) { [[processing.updated_at, metric_result.value], [processing.updated_at, metric_result.value]] }
-    before :each do
-      Repository.expects(:find).with(repository.id).returns(repository)
-      KalibroModule.expects(:find).with(kalibro_module.id).returns(kalibro_module)
-      repository.expects(:metric_result_history_of).with(kalibro_module.long_name, metric_result.metric.name).returns(metric_result_history_of_a_metric)
 
-      post :metric_result_history_of, id: repository.id, kalibro_module_id: kalibro_module.id, metric_name: metric_result.metric.name, format: :json
+    context 'when there is a KalibroModule' do
+      before :each do
+        Repository.expects(:find).with(repository.id).returns(repository)
+        KalibroModule.expects(:find).with(kalibro_module.id).returns(kalibro_module)
+        repository.expects(:metric_result_history_of).with(kalibro_module.long_name, metric_result.metric.name).returns(metric_result_history_of_a_metric)
+
+        post :metric_result_history_of, id: repository.id, kalibro_module_id: kalibro_module.id, metric_name: metric_result.metric.name, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return the metric_result_history_of a metric' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({metric_result_history_of: metric_result_history_of_a_metric}.to_json))
+      end
     end
 
-    it { is_expected.to respond_with(:success) }
+    context 'when there is no KalibroModule' do
+      before :each do
+        Repository.expects(:find).with(repository.id).returns(repository)
+        KalibroModule.expects(:find).with(kalibro_module.id).raises(ActiveRecord::RecordNotFound)
 
-    it 'should return the metric_result_history_of a metric' do
-      expect(JSON.parse(response.body)).to eq(JSON.parse({metric_result_history_of: metric_result_history_of_a_metric}.to_json))
+        post :metric_result_history_of, id: repository.id, kalibro_module_id: kalibro_module.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:unprocessable_entity) }
+
+      it 'should return an error' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ['ActiveRecord::RecordNotFound']}.to_json))
+      end
     end
   end
 
