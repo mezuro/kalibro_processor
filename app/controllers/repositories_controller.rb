@@ -1,18 +1,7 @@
 class RepositoriesController < ApplicationController
-  before_action :set_repository, except: [:show, :create, :exists, :types]
-
   def show
-    begin
-      set_repository
-      response = {repository: @repository}
-      status = :ok
-    rescue ActiveRecord::RecordNotFound
-      response = {error: 'RecordNotFound'}
-      status = :unprocessable_entity
-    end
-
-    respond_to do |format|
-      format.json { render json: response, status: status }
+    if set_repository
+      respond_with_json({repository: @repository})
     end
   end
 
@@ -21,116 +10,132 @@ class RepositoriesController < ApplicationController
 
     respond_to do |format|
       if repository.save
-        format.json { render json: {repository: repository} , status: :created }
+        format.json { render json: {repository: repository}, status: :created }
       else
-        format.json { render json: {repository: repository} , status: :unprocessable_entity }
+        format.json { render json: {errors: repository.errors.full_messages}, status: :unprocessable_entity }
       end
     end
   end
 
   def update
-    respond_to do |format|
-      if @repository.update(repository_params)
-        format.json { render json: {repository: @repository} , status: :created }
-      else
-        format.json { render json: {repository: @repository} , status: :unprocessable_entity }
+    if set_repository
+      respond_to do |format|
+        if @repository.update(repository_params)
+          format.json { render json: {repository: @repository}, status: :created }
+        else
+          format.json { render json: {errors: @repository.errors.full_messages}, status: :unprocessable_entity }
+        end
       end
     end
   end
 
   def destroy
-    @repository.destroy
-    respond_to do |format|
-      format.json { render json: {}, status: :ok }
+    if set_repository
+      @repository.destroy
+      respond_with_json({})
     end
   end
 
   def exists
-    respond_to do |format|
-      format.json { render json: {exists: Repository.exists?(params[:id].to_i)} }
-    end
+    respond_with_json({exists: Repository.exists?(params[:id].to_i)})
   end
 
   def types
-    supported_types = []
-    supported_types = Repository.supported_types
-
-    respond_to do |format|
-      format.json { render json: {types: supported_types}, status: :ok }
-    end
+    respond_with_json({types: Repository.supported_types})
   end
 
   def process_repository
-    begin
-      @repository.process(Processing.create(repository: @repository, state: "PREPARING"))
-      status = :ok
-    rescue Errors::ProcessingError
-      status = :internal_server_error
-    end
-    respond_to do |format|
-      format.json { render json: {}, status: status }
+    if set_repository
+      begin
+        @repository.process(Processing.create(repository: @repository, state: "PREPARING"))
+        status = :ok
+        response = {}
+      rescue Errors::ProcessingError => exception
+        status = :internal_server_error
+        response = {errors: [exception.message]}
+      end
+      respond_with_json(response, status)
     end
   end
 
   def has_processing
-    respond_with_json({ has_processing: !@repository.processings.empty? })
+    respond_with_json({ has_processing: !@repository.processings.empty? }) if set_repository
   end
 
   def has_ready_processing
-    respond_with_json({ has_ready_processing: !@repository.find_ready_processing.empty? })
+    respond_with_json({ has_ready_processing: !@repository.find_ready_processing.empty? }) if set_repository
   end
 
   def has_processing_in_time
-    order = params[:after_or_before] == "after" ? ">=" : "<="
+    if set_repository
+      order = params[:after_or_before] == "after" ? ">=" : "<="
+      processings = @repository.find_processing_by_date(params[:date], order)
 
-    processings = @repository.find_processing_by_date(params[:date], order)
-
-    respond_with_json({ has_processing_in_time: !processings.empty? })
+      respond_with_json({ has_processing_in_time: !processings.empty? })
+    end
   end
 
   def last_ready_processing
-    respond_with_json({ last_ready_processing: @repository.find_ready_processing.last })
+    respond_with_json({ last_ready_processing: @repository.find_ready_processing.last }) if set_repository
   end
 
   def first_processing_in_time
-    respond_with_json({ processing: processings_in_time.first })
+    respond_with_json({ processing: processings_in_time.first }) if set_repository
   end
 
   def last_processing_in_time
-    respond_with_json({ processing: processings_in_time.last })
+    respond_with_json({ processing: processings_in_time.last }) if set_repository
   end
 
   def last_processing_state
-    respond_with_json({ processing_state: @repository.processings.last.state })
+    respond_with_json({ processing_state: @repository.processings.last.state }) if set_repository
   end
 
   def module_result_history_of
-    module_name = KalibroModule.find(params[:kalibro_module_id].to_i).long_name
-    history = @repository.module_result_history_of(module_name)
+    if set_repository && set_kalibro_module_name
+      history = @repository.module_result_history_of(@kalibro_module_name)
 
-    respond_with_json({module_result_history_of: history})
+      respond_with_json({module_result_history_of: history})
+    end
   end
 
   def metric_result_history_of
-    module_name = KalibroModule.find(params[:kalibro_module_id].to_i).long_name
-    history = @repository.metric_result_history_of(module_name, params[:metric_name])
+    if set_repository && set_kalibro_module_name
+      history = @repository.metric_result_history_of(@kalibro_module_name, params[:metric_name])
 
-    respond_with_json({metric_result_history_of: history})
+      respond_with_json({metric_result_history_of: history})
+    end
   end
 
   def cancel_process
-    processing = @repository.processings.last
-    processing.update(state: "CANCELED") unless processing.state == "READY"
+    if set_repository
+      processing = @repository.processings.last
+      processing.update(state: "CANCELED") unless processing.state == "READY"
 
-    respond_to do |format|
-      format.json { render json: {}, status: :ok }
+      respond_with_json({})
     end
   end
 
   private
 
   def set_repository
-    @repository = Repository.find(params[:id].to_i)
+    begin
+      @repository = Repository.find(params[:id].to_i)
+      true
+    rescue ActiveRecord::RecordNotFound => exception
+      respond_with_json({errors: [exception.message]}, :unprocessable_entity)
+      false
+    end
+  end
+
+  def set_kalibro_module_name
+    begin
+      @kalibro_module_name = KalibroModule.find(params[:kalibro_module_id].to_i).long_name
+      true
+    rescue ActiveRecord::RecordNotFound => exception
+      respond_with_json({errors: [exception.message]}, :unprocessable_entity)
+      false
+    end
   end
 
   def repository_params
@@ -148,9 +153,9 @@ class RepositoriesController < ApplicationController
     processings
   end
 
-  def respond_with_json(json)
+  def respond_with_json(json, status=:ok)
     respond_to do |format|
-      format.json { render json: json }
+      format.json { render json: json, status: status }
     end
   end
 end
