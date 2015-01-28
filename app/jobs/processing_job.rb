@@ -10,10 +10,7 @@ class ProcessingJob < ActiveJob::Base
 
   after_perform do |job|
     period = @context.repository.period
-    if period > 0
-      new_processing = Processing.create(repository: @context.repository, state: "PREPARING")
-      ProcessingJob.set(wait: period.days).perform_later(@context.repository, new_processing)
-    end
+    ScheduledProcessingJob.set(wait: period.days).perform_later(@context.repository) if period > 0
   end
 
   rescue_from(Errors::ProcessingCanceledError) do
