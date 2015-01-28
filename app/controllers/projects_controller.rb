@@ -1,6 +1,4 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, except: [:all, :show, :create, :exists]
-
   def all
     projects = {projects: Project.all}
 
@@ -10,17 +8,10 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    begin
-      set_project
-      response = {project: @project}
-      status = :ok
-    rescue ActiveRecord::RecordNotFound
-      response = {error: 'RecordNotFound'}
-      status = :unprocessable_entity
-    end
-
-    respond_to do |format|
-      format.json { render json: response, status: status }
+    if set_project
+      respond_to do |format|
+        format.json { render json: {project: @project}, status: :ok }
+      end
     end
   end
 
@@ -29,19 +20,21 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if project.save
-        format.json { render json: {project: project} , status: :created }
+        format.json { render json: {project: project}, status: :created }
       else
-        format.json { render json: {project: project} , status: :unprocessable_entity }
+        format.json { render json: {errors: project.errors.full_messages}, status: :unprocessable_entity }
       end
     end
   end
 
   def update
-    respond_to do |format|
-      if @project.update(project_params)
-        format.json { render json: {project: @project} , status: :created }
-      else
-        format.json { render json: {project: @project} , status: :unprocessable_entity }
+    if set_project
+      respond_to do |format|
+        if @project.update(project_params)
+          format.json { render json: {project: @project}, status: :created }
+        else
+          format.json { render json: {errors: @project.errors.full_messages}, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -53,22 +46,34 @@ class ProjectsController < ApplicationController
   end
 
   def repositories_of
-    respond_to do |format|
-      format.json { render json: {repositories: @project.repositories} }
+    if set_project
+      respond_to do |format|
+        format.json { render json: {repositories: @project.repositories} }
+      end
     end
   end
 
   def destroy
-    @project.destroy
-    respond_to do |format|
-      format.json { render json: {}, status: :ok }
+    if set_project
+      @project.destroy
+      respond_to do |format|
+        format.json { render json: {}, status: :ok }
+      end
     end
   end
 
   private
 
   def set_project
-    @project = Project.find(params[:id].to_i)
+    begin
+      @project = Project.find(params[:id].to_i)
+      true
+    rescue ActiveRecord::RecordNotFound => exception
+      respond_to do |format|
+        format.json { render json: {errors: [exception.message]}, status: :unprocessable_entity }
+      end
+      false
+    end
   end
 
   def project_params
