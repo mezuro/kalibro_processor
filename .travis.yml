@@ -1,34 +1,42 @@
 language: ruby
 rvm:
-  - 2.1.5
+  - 2.2.0
+
+addons:
+  postgresql: "9.3"
 
 before_script:
-  - psql -c "create role kalibro_processor with createdb login password 'kalibro_processor'" -U postgres
-  - "cp config/database.yml.postgresql_sample config/database.yml"
-  - "bundle exec rake db:setup db:migrate RAILS_ENV=test"
-  - bundle exec rake tmp:create
-  - git clone https://gist.github.com/0c4ad3b5700c6364abf1.git -b v1.0 kalibro_install
-  - pushd kalibro_install
-    # Remove bugged libzmq3 package, see https://github.com/travis-ci/travis-ci/issues/982 and https://github.com/travis-ci/travis-ci/issues/1715 for details
+  # Set script configuration
+  - export ANALIZO_VERSION='1.17.0' # Version >1.17.0 needs Ubuntu 13.10/Debian 7
+  # Kalibro dependencies (including Analizo)
+  # Remove bugged libzmq3 package, see https://github.com/travis-ci/travis-ci/issues/982 and https://github.com/travis-ci/travis-ci/issues/1715 for details
   - sudo apt-get remove libzmq3
-  - bash install.sh
-  - popd
-  - cp features/support/kalibro_cucumber_helpers.yml.sample features/support/kalibro_cucumber_helpers.yml
-  - cp config/repositories.yml.sample config/repositories.yml
-  - git clone https://github.com/mezuro/kalibro_gatekeeper.git -b v0.2.0 kalibro_gatekeeper
-  - pushd kalibro_gatekeeper
+  - sudo bash -c "echo \"deb http://analizo.org/download/ ./\" > /etc/apt/sources.list.d/analizo.list"
+  - sudo bash -c "echo \"deb-src http://analizo.org/download/ ./\" >> /etc/apt/sources.list.d/analizo.list"
+  - wget -O - http://analizo.org/download/signing-key.asc | sudo apt-key add -
+  - sudo apt-get update -qq
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get install -y analizo=${ANALIZO_VERSION} subversion git
+  # Kalibro Configurations
+  - git clone https://github.com/mezuro/kalibro_configurations.git -b v0.0.1.rc1 kalibro_configurations
+  - pushd kalibro_configurations
   - cp config/database.yml.sample config/database.yml
   - export BUNDLE_GEMFILE=$PWD/Gemfile
   - bundle install
-  - bundle exec rails s -p 8081 -d
+  - bundle exec rake db:setup db:migrate
   - popd
   - export BUNDLE_GEMFILE=$PWD/Gemfile
+  - psql -c "create role kalibro_processor with createdb login password 'kalibro_processor'" -U postgres
+  - cp config/database.yml.postgresql_sample config/database.yml
+  - cp config/repositories.yml.sample config/repositories.yml
+  - bundle exec rake db:setup db:migrate
   - export CODECLIMATE_REPO_TOKEN=71b13a8a121d095ab8f5884e532874909b42124f7488bc9c2b4613f70da64d8d
 
 script:
-  - sudo service tomcat6 stop
   - bundle exec rake spec
-  - sudo service tomcat6 start
+  # Starting kalibro_configurations here ensures that the unit tests are properly mocked
+  - pushd kalibro_configurations
+  - bundle exec rails s -p 8083 -d
+  - popd
   - bundle exec rake cucumber
 
 notifications:
