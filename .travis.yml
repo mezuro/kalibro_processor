@@ -29,6 +29,7 @@ before_script:
   - cp config/database.yml.postgresql_sample config/database.yml
   - cp config/repositories.yml.sample config/repositories.yml
   - bundle exec rake db:setup db:migrate
+  - bundle exec rake tmp:create
   - export CODECLIMATE_REPO_TOKEN=71b13a8a121d095ab8f5884e532874909b42124f7488bc9c2b4613f70da64d8d
 
 script:
