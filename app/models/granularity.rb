@@ -32,8 +32,7 @@ class Granularity
   def ==(other_granularity)
     self.type == other_granularity.type
   end
-  
-  
+
   def <=(other_granularity)
     (self < other_granularity) || (self == other_granularity)
   end

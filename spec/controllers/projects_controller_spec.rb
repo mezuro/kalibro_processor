@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ProjectsController, :type => :controller do
-  let(:project) { FactoryGirl.build(:project) }
+  let(:project) { FactoryGirl.build(:project_with_id) }
 
   describe 'all' do
     let!(:projects) { [project] }
@@ -34,7 +34,7 @@ RSpec.describe ProjectsController, :type => :controller do
       end
     end
 
-    context 'when the Project exists' do
+    context 'when the Project does not exist' do
       before :each do
         Project.expects(:find).with(project.id).raises(ActiveRecord::RecordNotFound)
 
@@ -43,8 +43,8 @@ RSpec.describe ProjectsController, :type => :controller do
 
       it { is_expected.to respond_with(:unprocessable_entity) }
 
-      it 'should return the error description' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse({error: 'RecordNotFound'}.to_json))
+      it 'should return the errors description' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ['ActiveRecord::RecordNotFound']}.to_json))
       end
     end
   end
@@ -76,9 +76,8 @@ RSpec.describe ProjectsController, :type => :controller do
 
       it { is_expected.to respond_with(:unprocessable_entity) }
 
-      it 'should return the error description with the project' do
-        project.id = nil
-        expect(JSON.parse(response.body)).to eq(JSON.parse({project: project}.to_json))
+      it 'should return the errors description with the project' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: []}.to_json))
       end
     end
   end
@@ -92,7 +91,6 @@ RSpec.describe ProjectsController, :type => :controller do
 
     context 'with valid attributes' do
       before :each do
-        project_params.delete('id')
         Project.any_instance.expects(:update).returns(true)
 
         put :update, project: project_params, id: project.id, format: :json
@@ -107,7 +105,6 @@ RSpec.describe ProjectsController, :type => :controller do
 
     context 'with invalid attributes' do
       before :each do
-        project_params.delete('id')
         Project.any_instance.expects(:update).returns(false)
 
         put :update, project: project_params, id: project.id, format: :json
@@ -115,8 +112,8 @@ RSpec.describe ProjectsController, :type => :controller do
 
       it { is_expected.to respond_with(:unprocessable_entity) }
 
-      it 'should return the error description with the project' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse({project: project}.to_json))
+      it 'should return the errors description with the project' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: []}.to_json))
       end
     end
   end

@@ -8,7 +8,7 @@ FactoryGirl.define do
     description "An easy calculator"
     license "None"
     period 0
-    project { FactoryGirl.build(:project) }
+    project { FactoryGirl.build(:project_with_id) }
 
     trait :sbking do
       name "SBKing"
