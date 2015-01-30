@@ -13,25 +13,28 @@
 
 ActiveRecord::Schema.define(version: 20150126173351) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",               default: 0, null: false
-    t.integer  "attempts",               default: 0, null: false
-    t.text     "handler",                            null: false
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
     t.text     "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
     t.datetime "failed_at"
-    t.string   "locked_by",  limit: 255
-    t.string   "queue",      limit: 255
+    t.string   "locked_by"
+    t.string   "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "kalibro_modules", force: :cascade do |t|
-    t.string   "long_name",        limit: 255
-    t.string   "granlrty",         limit: 255
+    t.string   "long_name"
+    t.string   "granlrty"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "module_result_id"
@@ -54,10 +57,10 @@ ActiveRecord::Schema.define(version: 20150126173351) do
     t.integer  "processing_id"
   end
 
-  add_index "module_results", ["parent_id"], name: "index_module_results_on_parent_id"
+  add_index "module_results", ["parent_id"], name: "index_module_results_on_parent_id", using: :btree
 
   create_table "process_times", force: :cascade do |t|
-    t.string   "state",         limit: 255
+    t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "processing_id"
@@ -65,7 +68,7 @@ ActiveRecord::Schema.define(version: 20150126173351) do
   end
 
   create_table "processings", force: :cascade do |t|
-    t.string   "state",                 limit: 255
+    t.string   "state"
     t.integer  "repository_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -74,24 +77,24 @@ ActiveRecord::Schema.define(version: 20150126173351) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.string   "description", limit: 255
+    t.string   "name"
+    t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "repositories", force: :cascade do |t|
-    t.string   "name",                     limit: 255
-    t.string   "scm_type",                 limit: 255
-    t.string   "address",                  limit: 255
-    t.string   "description",              limit: 255, default: ""
-    t.string   "license",                  limit: 255, default: ""
-    t.integer  "period",                               default: 0
+    t.string   "name"
+    t.string   "scm_type"
+    t.string   "address"
+    t.string   "description",              default: ""
+    t.string   "license",                  default: ""
+    t.integer  "period",                   default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "kalibro_configuration_id"
     t.integer  "project_id"
-    t.string   "code_directory",           limit: 255
+    t.string   "code_directory"
   end
 
 end
