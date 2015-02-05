@@ -30,7 +30,65 @@ RSpec.describe ProcessingsController, :type => :controller do
     it 'is expected to return the error message converted to JSON' do
       expect(JSON.parse(response.body)).to eq(JSON.parse({error_message: processing_with_error.error_message}.to_json))
     end
+  end
 
+  describe 'show' do
+    context 'when the Processing exists' do
+      before :each do
+        Processing.expects(:find).with(processing.id).returns(processing)
 
+        get :show, id: processing.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'is expected to return the list of repositories converted to JSON' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({processing: processing}.to_json))
+      end
+    end
+
+    context 'when the Processing exists' do
+      before :each do
+        Processing.expects(:find).with(processing.id).raises(ActiveRecord::RecordNotFound)
+
+        get :show, id: processing.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:unprocessable_entity) }
+
+      it 'should return the error description' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ['ActiveRecord::RecordNotFound']}.to_json))
+      end
+    end
+  end
+
+  describe 'exists' do
+    context 'when the processing exists' do
+      before :each do
+        Processing.expects(:exists?).with(processing.id).returns(true)
+
+        get :exists, id: processing.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return true' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: true}.to_json))
+      end
+    end
+
+    context 'when the processing does not exist' do
+      before :each do
+        Processing.expects(:exists?).with(processing.id).returns(false)
+
+        get :exists, id: processing.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+
+      it 'should return false' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({exists: false}.to_json))
+      end
+    end
   end
 end
