@@ -49,6 +49,8 @@ Rails.application.routes.draw do
 
   get 'processings/:id/process_times' => 'processings#process_times'
   get 'processings/:id/error_message' => 'processings#error_message'
+  get 'processings/:id' => 'processings#show'
+  get 'processings/:id/exists' => 'processings#exists'
 
   resources :process_times, only: [:index, :show]
   get 'process_times/:id/processing' => 'process_times#processing'
