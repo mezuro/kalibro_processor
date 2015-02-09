@@ -37,7 +37,7 @@ FactoryGirl.define do
     trait :flog do
       metric_collector_name "MetricFu"
       code 'pain'
-      metric { FactoryGirl.build(:kalibro_gatekeeper_client_flog_metric) }
+      metric { FactoryGirl.build(:flog_metric) }
     end
 
     trait :flog_compound_metric_configuration do
