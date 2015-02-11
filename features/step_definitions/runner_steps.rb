@@ -27,9 +27,10 @@ end
 Given(/^I have a compound metric with an invalid script$/) do
   invalid_compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
                                                              metric: FactoryGirl.build(:compound_metric,
-                                                                                       script: "rtrnaqdfwqefwqr213r2145211234ed a * 2;"),
-                                                                                       reading_group_id: @reading_group.id,
-                                                                                       kalibro_configuration_id: @kalibro_configuration.id)
+                                                                                       script: "rtrnaqdfwqefwqr213r2145211234ed a = b=2",
+                                                                                       code: "ACM"),
+                                                             reading_group_id: @reading_group.id,
+                                                             kalibro_configuration_id: @kalibro_configuration.id)
   compound_range = FactoryGirl.build(:range, {reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: invalid_compound_metric_configuration.id})
   compound_range.save
 end
@@ -57,11 +58,13 @@ end
 
 Given(/^I have two compound metrics with script "(.*?)" and "(.*?)"$/) do |script1, script2|
   @compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
-                                                        metric: FactoryGirl.build(:compound_metric, script: script1),
+                                                        metric: FactoryGirl.build(:compound_metric, script: script1,
+                                                                                   code: "compound_metric"),
                                                                                    reading_group_id: @reading_group.id,
                                                                                    kalibro_configuration_id: @kalibro_configuration.id)
   @other_compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
-                                                        metric: FactoryGirl.build(:compound_metric, script: script2),
+                                                        metric: FactoryGirl.build(:compound_metric, script: script2,
+                                                                                   code: "ACM"),
                                                                                    reading_group_id: @reading_group.id,
                                                                                    kalibro_configuration_id: @kalibro_configuration.id)
   compound_range = FactoryGirl.build(:range, {reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @compound_metric_configuration.id})
