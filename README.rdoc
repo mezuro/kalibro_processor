@@ -61,7 +61,7 @@ Please, have a look at the wiki pages about development workflow and code standa
 
 * Services (job queues, cache servers, search engines, etc.)
 
-  * Kalibro Client v0.0.1 (https://github.com/mezuro/kalibro_client/releases/tag/v0.0.1)
+  * Kalibro Client v0.0.2 (https://github.com/mezuro/kalibro_client/releases/tag/v0.0.2)
 
 * Deployment instructions
 
@@ -91,7 +91,7 @@ Please, have a look at the wiki pages about development workflow and code standa
 
 === License
 
-Copyright (c) 2013-2014 The Authors.
+Copyright (c) 2013-2015 The Authors.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
