@@ -3,16 +3,14 @@
 
 # TEAM
 
-    Copyright 2014
+    Copyright 2013-2015
     --------------
 
-      Alessandro Palmeira (alessandro.palmeira at gmail.com)
       Daniel Paulino Alves (danpaulalves at gmail.com)
       Diego de Araújo Martinez Camarinha (diegoamc90 at gmail.com)
       Heitor Reis Ribeiro (marcheing at gmail.com)
       Paulo Meirelles (paulo at softwarelivre.org)
       Rafael Reggiani Manzo (rr.manzo at gmail.com)
-      Renan Fichberg (rfichberg at gmail.com)
 
 # THANKSs
 
@@ -20,6 +18,8 @@
     ---------------------------------------------------------
 
       Fellipe Souto Sampaio (fllsouto at gmail.com)
+      Alessandro Palmeira (alessandro.palmeira at gmail.com)
+      Renan Fichberg (rfichberg at gmail.com)
 
 # TECHNOLOGY COLOPHON
 
