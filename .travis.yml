@@ -22,7 +22,7 @@ before_script:
   - cp config/database.yml.postgresql_sample config/database.yml
   - psql -c "create role kalibro_configurations with createdb login password 'kalibro_configurations'" -U postgres
   - export BUNDLE_GEMFILE=$PWD/Gemfile
-  - bundle install
+  - bundle install --retry=3
   - bundle exec rake db:setup db:migrate
   - popd
   - export BUNDLE_GEMFILE=$PWD/Gemfile
