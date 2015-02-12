@@ -37,7 +37,7 @@ gem 'rails-html-sanitizer', '~> 1.0'
 gem 'kalibro_client'
 
 # YAML parser required for properly compactibility between mri and rbx
-gem 'psych', '~>2.0.5'
+gem 'psych', '~>2.0.12'
 
 # Repository cloning
 gem 'git', '~> 1.2.7'
@@ -58,7 +58,7 @@ gem 'exception_notification', '~> 4.0.1'
 
 group :test do
   # Easier test writing
-  gem "shoulda-matchers", '~>2.7.0'
+  gem "shoulda-matchers", '~>2.8.0'
 
   # Test coverage
   gem 'simplecov', require: false
@@ -81,7 +81,7 @@ group :development, :test do
   gem 'spring', group: :development
 
   # Test framework
-  gem 'rspec-rails', '~> 3.1.0'
+  gem 'rspec-rails', '~> 3.2.0'
 
   # Fixtures made easy
   gem 'factory_girl_rails', '~> 4.5.0'
