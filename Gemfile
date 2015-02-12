@@ -37,7 +37,7 @@ gem 'rails-html-sanitizer', '~> 1.0'
 gem 'kalibro_client'
 
 # YAML parser required for properly compactibility between mri and rbx
-gem 'psych', '~>2.0.5'
+gem 'psych', '~>2.0.12'
 
 # Repository cloning
 gem 'git', '~> 1.2.7'
