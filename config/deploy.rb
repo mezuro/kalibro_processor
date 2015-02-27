@@ -6,6 +6,7 @@ set :repo_url, 'https://github.com/mezuro/kalibro_processor.git'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+set :branch, 'stable'
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/home/kalibro_processor/app'
