@@ -63,6 +63,11 @@ Please, have a look at the wiki pages about development workflow and code standa
 
   * Kalibro Client v0.0.2 (https://github.com/mezuro/kalibro_client/releases/tag/v0.0.2)
 
+  * Kalibro Configurations
+    * You can find it at https://github.com/mezuro/kalibro_configurations
+    * By default Mezuro will expect it to be running on port 8083 at localhost.
+    * In order to run it as expected, run on two different terminal instances: ```rails s -p 8083```.
+
 * Deployment instructions
 
   Deployment is made through Capistrano (https://github.com/capistrano/capistrano)
