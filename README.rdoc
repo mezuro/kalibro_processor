@@ -1,6 +1,6 @@
 == README - Kalibro Processor
 
-{<img src="https://codeclimate.com/github/mezuro/kalibro_processor.png" />}[https://codeclimate.com/github/mezuro/kalibro_processor] {<img src="https://travis-ci.org/mezuro/kalibro_processor.png?branch=master" alt="Build Status" />}[https://travis-ci.org/mezuro/kalibro_processor]
+{<img src="https://codeclimate.com/github/mezuro/kalibro_processor.png" />}[https://codeclimate.com/github/mezuro/kalibro_processor] {<img src="https://travis-ci.org/mezuro/kalibro_processor.png?branch=master" alt="Build Status" />}[https://travis-ci.org/mezuro/kalibro_processor] {<img src="https://codeclimate.com/github/mezuro/kalibro_processor/badges/coverage.svg" />}[https://codeclimate.com/github/mezuro/kalibro_processor]
 
 Kalibro Processor is a source code analysis web service which is also part of the Mezuro project. It is free software under the AGPLv3 license.
 
@@ -62,6 +62,11 @@ Please, have a look at the wiki pages about development workflow and code standa
 * Services (job queues, cache servers, search engines, etc.)
 
   * Kalibro Client v0.0.2 (https://github.com/mezuro/kalibro_client/releases/tag/v0.0.2)
+
+  * Kalibro Configurations
+    * You can find it at https://github.com/mezuro/kalibro_configurations
+    * By default Mezuro will expect it to be running on port 8083 at localhost.
+    * In order to run it as expected, run on two different terminal instances: ```rails s -p 8083```.
 
 * Deployment instructions
 

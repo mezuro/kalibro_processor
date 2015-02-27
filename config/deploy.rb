@@ -1,11 +1,12 @@
 # config valid only for Capistrano 3.1
-lock '3.2.1'
+lock '3.3.5'
 
 set :application, 'kalibro_processor'
 set :repo_url, 'https://github.com/mezuro/kalibro_processor.git'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+set :branch, 'stable'
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/home/kalibro_processor/app'
