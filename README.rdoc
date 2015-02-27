@@ -1,6 +1,6 @@
 == README - Kalibro Processor
 
-{<img src="https://codeclimate.com/github/mezuro/kalibro_processor.png" />}[https://codeclimate.com/github/mezuro/kalibro_processor] {<img src="https://travis-ci.org/mezuro/kalibro_processor.png?branch=master" alt="Build Status" />}[https://travis-ci.org/mezuro/kalibro_processor]
+{<img src="https://codeclimate.com/github/mezuro/kalibro_processor.png" />}[https://codeclimate.com/github/mezuro/kalibro_processor] {<img src="https://travis-ci.org/mezuro/kalibro_processor.png?branch=master" alt="Build Status" />}[https://travis-ci.org/mezuro/kalibro_processor] {<img src="https://codeclimate.com/github/mezuro/kalibro_processor/badges/coverage.svg" />}[https://codeclimate.com/github/mezuro/kalibro_processor]
 
 Kalibro Processor is a source code analysis web service which is also part of the Mezuro project. It is free software under the AGPLv3 license.
 
