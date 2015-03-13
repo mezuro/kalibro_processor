@@ -175,7 +175,6 @@ GEM
     rake (10.4.2)
     rb-readline (0.5.2)
     rdoc (4.2.0)
-      json (~> 1.4)
     ref (1.0.5)
     rspec-core (3.2.2)
       rspec-support (~> 3.2.0)
