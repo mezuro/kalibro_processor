@@ -43,9 +43,9 @@ gem 'psych', '~>2.0.12'
 gem 'git', '~> 1.2.7'
 
 # Clean the database for acceptance test
-# Version fixed at 1.3. See:
+# Version should be greater than 1.4.1. See:
 # https://github.com/DatabaseCleaner/database_cleaner/issues/317
-gem 'database_cleaner', '~> 1.3.0', require: false
+gem 'database_cleaner', '>= 1.4.1', require: false
 
 # Create a processing queue
 gem 'delayed_job_active_record', '~> 4.0.1'
@@ -87,7 +87,7 @@ group :development, :test do
   gem 'factory_girl_rails', '~> 4.5.0'
 
   # Deployment
-  gem 'capistrano', "~>3.3.3", require: false
+  gem 'capistrano', "~>3.4.0", require: false
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'capistrano-rvm', "~>0.1.0"
