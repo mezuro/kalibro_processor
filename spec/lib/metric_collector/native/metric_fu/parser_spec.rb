@@ -11,11 +11,9 @@ describe MetricCollector::Native::MetricFu::Parser do
         YAML.expects(:load_file).returns(metric_fu_results.flog_results)
       end
 
-      pending 'Needs metric factories review' do
-        it 'is expected to call all parsers' do
-          MetricCollector::Native::MetricFu::Parser::Flog.expects(:parse)
-          MetricCollector::Native::MetricFu::Parser.parse_all("/test/test", wanted_metric_configurations, processing)
-        end
+      it 'is expected to call all parsers' do
+        MetricCollector::Native::MetricFu::Parser::Flog.expects(:parse)
+        MetricCollector::Native::MetricFu::Parser.parse_all("/test/test", wanted_metric_configurations, processing)
       end
     end
   end

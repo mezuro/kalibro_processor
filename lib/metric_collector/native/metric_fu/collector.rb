@@ -20,7 +20,7 @@ module MetricCollector
         def parse_supported_metrics
           supported_metrics = {}
           YAML.load_file("#{Rails.root}/lib/metric_collector/native/metric_fu/metrics.yml")[:metrics].each do | key, value |
-            supported_metrics[key] = NativeMetric.new(value[:name], key, value[:scope], [:RUBY])
+            supported_metrics[key] = KalibroClient::Entities::Miscellaneous::NativeMetric.new(value[:name], key, value[:scope], [:RUBY], "MetricFu")
           end
           supported_metrics
         end
