@@ -8,7 +8,7 @@ module MetricCollector
         end
 
         def run
-          Dir.chdir(@repository_path) { `metric_fu --format yaml --output #{@yaml_path}` }
+          Dir.chdir(@repository_path) { `metric_fu --format yaml --out #{@yaml_path}` }
         end
 
         def yaml_path

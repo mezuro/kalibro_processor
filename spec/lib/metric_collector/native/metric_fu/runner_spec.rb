@@ -18,7 +18,7 @@ describe MetricCollector::Native::MetricFu::Runner, :type => :model do
   end
 
   describe 'run' do
-    let(:metric_fu_command) { "metric_fu --format yaml --output #{subject.yaml_path}" }
+    let(:metric_fu_command) { "metric_fu --format yaml --out #{subject.yaml_path}" }
 
     it 'is expected to call the metric_fu command' do
       MetricCollector::Native::MetricFu::Runner.any_instance.expects(:`).with(metric_fu_command).returns(nil)

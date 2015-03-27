@@ -10,6 +10,8 @@ module MetricCollector
 
     def collect_metrics(code_directory, wanted_metrics); raise NotImplementedError; end
 
+    def self.available?; raise NotImplementedError; end
+
     protected
 
     def processing=(processing)

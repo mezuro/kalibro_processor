@@ -24,6 +24,10 @@ module MetricCollector
           end
           supported_metrics
         end
+
+        def self.available?
+          not `metric_fu --version`.nil?
+        end
       end
     end
   end

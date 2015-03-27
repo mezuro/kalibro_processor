@@ -18,10 +18,10 @@ FactoryGirl.define do
     end
 
     trait :ruby do
-      name "Koans"
+      name "KalibroProcessor"
       scm_type "GIT"
-      address "https://github.com/neo/ruby_koans"
-      description "Ruby Koans"
+      address "https://github.com/mezuro/kalibro_processor"
+      description "Kalibro Processor"
     end
 
     factory :sbking_repository, traits: [:sbking]

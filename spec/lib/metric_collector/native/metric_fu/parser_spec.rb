@@ -3,7 +3,7 @@ require 'metric_collector'
 
 describe MetricCollector::Native::MetricFu::Parser do
   describe 'methods' do
-    let(:wanted_metric_configurations) { {:flog => FactoryGirl.build(:flog_metric_configuration)} }
+    let(:wanted_metric_configurations) { [FactoryGirl.build(:flog_metric_configuration)] }
     let(:metric_fu_results) { FactoryGirl.build(:metric_fu_metric_collector_lists) }
     let(:processing) { FactoryGirl.build(:processing) }
     describe 'parse_all' do

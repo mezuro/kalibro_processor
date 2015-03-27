@@ -21,25 +21,22 @@ Given(/^I have a sample configuration with native metrics from metric fu$/) do
   @configuration = FactoryGirl.create(:ruby_configuration, id: nil)
   metric_configuration = FactoryGirl.create(:flog_metric_configuration,
                                             {id: 4,
-                                             code: 'pain',
-                                             metric: FactoryGirl.build(:kalibro_gatekeeper_client_flog_metric),
+                                             metric: FactoryGirl.build(:flog_metric),
                                              reading_group_id: @reading_group.id,
-                                             configuration_id: @configuration.id})
+                                             kalibro_configuration_id: @configuration.id})
   range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
   range.save
   compound_metric_configuration = FactoryGirl.create(:flog_compound_metric_configuration,
                                                      id: 5,
-                                                     code: 'two_pain',
-                                                     metric: FactoryGirl.build(:kalibro_gatekeeper_client_compound_flog_metric,
-                                                                               script: "return pain() * 2;"),
+                                                     metric: FactoryGirl.build(:compound_flog_metric, code: 'two_pain'),
                                                      reading_group_id: @reading_group.id,
-                                                     configuration_id: @configuration.id)
+                                                     kalibro_configuration_id: @configuration.id)
   compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: compound_metric_configuration.id})
   compound_range.save
 end
 
 Given(/^I have a sample ruby repository within the sample project$/) do
-  @repository = FactoryGirl.create(:ruby_repository, configuration: @configuration)
+  @repository = FactoryGirl.create(:ruby_repository, kalibro_configuration: @configuration)
 end
 
 Given(/^I have a sample repository within the sample project$/) do
