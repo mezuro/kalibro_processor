@@ -12,7 +12,7 @@
   :flog:
     :name: Pain
     :description: Measures how hard (painful) it is to test the code
-    :scope: CLASS
+    :scope: METHOD
 
   #:cyclomatic_complexity:
   #  :name: Cyclomatic Complexity
