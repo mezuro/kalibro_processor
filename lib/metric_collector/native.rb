@@ -3,7 +3,6 @@ require 'metric_collector/native/metric_fu'
 
 module MetricCollector
   module Native
-    #TODO Add metric_fu to the list of native metric collectors
     ALL = {"Analizo" => MetricCollector::Native::Analizo, "MetricFu" => MetricCollector::Native::MetricFu::Collector}
 
     def self.available

@@ -11,18 +11,17 @@ describe MetricCollector::Native::MetricFu::Parser::Flog do
     let!(:metric_configuration) { FactoryGirl.build(:flog_metric_configuration) }
 
     context 'when there are no ModuleResults with the same module and processing' do
-      before :each do
-        KalibroModule.expects(:new).with(long_name: "app.models.repository.process", granularity: Granularity::METHOD).returns(kalibro_module_method_process)
-        KalibroModule.expects(:new).with(long_name: "app.models.repository.reprocess", granularity: Granularity::METHOD).returns(kalibro_module_method_reprocess)
+      it 'is expected to parse the results into a module result' do
+        KalibroModule.expects(:new).with(long_name: "app.models.repository.Repository.process", granularity: Granularity::METHOD).returns(kalibro_module_method_process)
+        KalibroModule.expects(:new).with(long_name: "app.models.repository.Repository.reprocess", granularity: Granularity::METHOD).returns(kalibro_module_method_reprocess)
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_method_process, processing).returns(nil)
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_method_reprocess, processing).returns(module_result)
         kalibro_module_method_process.expects(:save)
         ModuleResult.expects(:create).with(kalibro_module: kalibro_module_method_process, processing: processing).returns(module_result)
         MetricResult.expects(:create).with(metric: metric_configuration.metric, value: 1.1, module_result: module_result, metric_configuration_id: metric_configuration.id)
         MetricResult.expects(:create).with(metric: metric_configuration.metric, value: 2.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
-      end
 
-      it 'is expected to parse the results into a module result' do
+      
         MetricCollector::Native::MetricFu::Parser::Flog.parse(flog_results, processing, metric_configuration)
       end
     end

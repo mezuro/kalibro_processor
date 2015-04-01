@@ -9,10 +9,10 @@ module MetricCollector
                 name_prefix = module_name_prefix(method_container[:path])
                 method_container[:methods].each do |name, result|
                   value = result[:score]
-                  name_sufix = module_name_sufix(name)
-                  unless name_sufix.blank?
-                    module_name = name_prefix + name_sufix
-                    granularity = (module_name == name_prefix ? Granularity::CLASS : Granularity::METHOD)
+                  name_suffix = module_name_suffix(name)
+                  unless name_suffix.blank?
+                    module_name = name_prefix + name_suffix
+                    granularity = Granularity::METHOD
                     module_result = module_result(module_name, granularity, processing)
                     MetricResult.create(metric: metric_configuration.metric, value: value.to_f, module_result: module_result, metric_configuration_id: metric_configuration.id)
                   end
@@ -24,18 +24,14 @@ module MetricCollector
           private
 
           def self.module_name_prefix(file_name)
-            without_extension = file_name.split('.')[0].to_s
-            without_extension.gsub('/', '.')
+            # Generates a module name by removing the file extension, replacing slashes with dots, and internal dots with underscores
+            without_extension = file_name.rpartition('.').first
+            without_extension.gsub('.', '_').gsub('/', '.')
           end
 
-          def self.module_name_sufix(module_name)
-            sufix = module_name.gsub(/(#)|(::)/, ".").split('.')[-1]
-
-            if sufix == "none"
-              return ""
-            else
-              return "." + sufix
-            end
+          def self.module_name_suffix(module_name)
+            return nil if module_name.end_with?("#none")
+            return "." + module_name.gsub(/#|::/, ".")
           end
 
           def self.module_result(module_name, granularity, processing)
