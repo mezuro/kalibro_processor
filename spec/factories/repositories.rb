@@ -13,7 +13,7 @@ FactoryGirl.define do
     trait :sbking do
       name "SBKing"
       scm_type "GIT"
-      address "https://git.gitorious.org/sbking/sbking.git"
+      address "https://github.com/rafamanzo/runge-kutta-vtk.git"
       description "SBKing"
     end
 
