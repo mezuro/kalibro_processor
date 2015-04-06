@@ -103,6 +103,9 @@ end
 # Some statistics
 gem 'descriptive-statistics', '~> 2.1.2'
 
+# Ruby Collector
+gem 'metric_fu', '~> 4.11.1'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

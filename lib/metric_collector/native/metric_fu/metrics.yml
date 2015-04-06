@@ -1,0 +1,21 @@
+:metrics:
+  #:abc:
+  #  :name: ABC complexity
+  #  :description: The ABC metric measures size/complexity by counting the number of Assignments (A), Branches (B) and Conditions (C) and assigns a single numerical score
+  #  :scope: METHOD
+
+  #:churn:
+  #  :name: Code churn
+  #  :description: Code churn is how often code is changing over time
+  #  :scope: CLASS
+
+  :flog:
+    :name: Pain
+    :description: Measures how hard (painful) it is to test the code
+    :scope: METHOD
+
+  #:cyclomatic_complexity:
+  #  :name: Cyclomatic Complexity
+  #  :description: Cyclomatic complexity is a graphical measurement of the number of possible paths through the normal flow of a program
+  #  :scope: METHOD
+

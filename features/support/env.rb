@@ -79,7 +79,7 @@ Cucumber::Rails::Database.javascript_strategy = :truncation
 
 require "#{File.dirname(__FILE__)}/hooks"
 
-# KalibroGatekeeper hooks
+# Kalibro hooks
 require 'kalibro_client/kalibro_cucumber_helpers/hooks.rb'
 
 # Some steps access this module directly. Require it here so we don't need this line in every step definition that uses some class on this module.

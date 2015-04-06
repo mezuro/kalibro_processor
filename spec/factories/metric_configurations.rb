@@ -34,8 +34,21 @@ FactoryGirl.define do
       aggregation_form :SUM
     end
 
-    factory :metric_configuration_with_id, traits: [:with_id]
+    trait :flog do
+      metric { FactoryGirl.build(:flog_metric) }
+    end
+
+    trait :flog_compound_metric_configuration do
+      metric { FactoryGirl.build(:kalibro_gatekeeper_client_compound_flog_metric) }
+      weight 1
+      aggregation_form :AVERAGE
+      reading_group_id 1
+      kalibro_configuration_id 1
+    end
+
     factory :compound_metric_configuration, traits: [:compound_metric]
+    factory :flog_compound_metric_configuration, traits: [:flog_compound_metric_configuration]
+    factory :flog_metric_configuration, traits: [:flog]
     factory :sum_metric_configuration, traits: [:sum_metric_configuration]
   end
 

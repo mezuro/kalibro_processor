@@ -16,7 +16,8 @@ class MetricCollectorsController < ApplicationController
   end
 
   def find
-    details = MetricCollector::Native.details.bsearch{|d| d.name == params[:name]}
+    details = MetricCollector::Native.details.select{ |d| d.name == params[:name] }.first
+
     if details.nil?
       return_value = {error: Errors::NotFoundError.new("Metric Collector #{params[:name]} not found.")}
     else

@@ -31,4 +31,10 @@ FactoryGirl.define do
     name "Perl"
     description "Code metrics for Perl."
   end
+
+  factory :ruby_configuration, class: KalibroClient::Entities::Configurations::KalibroConfiguration do
+    id 13
+    name "Ruby"
+    description "Code metrics for Ruby."
+  end
 end

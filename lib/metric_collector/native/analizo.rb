@@ -3,7 +3,7 @@ module MetricCollector
     class Analizo < MetricCollector::Base
       def initialize
         super("Analizo",
-              YAML.load_file("#{Rails.root}/config/collectors_descriptions.yml")["analizo"],
+              YAML.load_file("#{Rails.root}/lib/metric_collector/native/descriptions.yml")["analizo"],
               parse_supported_metrics)
       end
 
