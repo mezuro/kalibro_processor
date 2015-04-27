@@ -1,5 +1,5 @@
 class KalibroModule < ActiveRecord::Base
-  has_many :module_results # one for each MetricCollector
+  belongs_to :module_result # one for each MetricCollector
 
   def name=(value)
     self.long_name = value

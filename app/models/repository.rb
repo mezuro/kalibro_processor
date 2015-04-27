@@ -2,7 +2,7 @@ require 'downloaders'
 
 class Repository < ActiveRecord::Base
   belongs_to :project
-  has_many :processings
+  has_many :processings, dependent: :destroy
 
   validates :name, presence: true
   validates :name, uniqueness: { scope: :project_id ,
