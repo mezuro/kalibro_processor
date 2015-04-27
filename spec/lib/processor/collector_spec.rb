@@ -15,7 +15,7 @@ describe Processor::Collector do
       before :each do
         context.processing.expects(:reload)
         context.expects(:native_metrics).returns({metric_configuration.metric.metric_collector_name => [metric_configuration]})
-        MetricCollector::Native::Analizo.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
+        MetricCollector::Native::Analizo::Collector.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
       end
 
       context 'without producing module_results' do
