@@ -7,6 +7,6 @@ describe Project, :type => :model do
   end
 
   describe 'associations' do
-    it { is_expected.to have_many(:repositories)}
+    it { is_expected.to have_many(:repositories).dependent(:destroy) }
   end
 end

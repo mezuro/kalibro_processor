@@ -1,6 +1,11 @@
 require 'rails_helper'
 
-describe Module, :type => :model do
+describe KalibroModule, :type => :model do
+
+  describe 'associations' do
+    it { is_expected.to belong_to(:module_result) }
+  end
+
   describe 'method' do
     describe 'short_name' do
       subject { FactoryGirl.build(:kalibro_module) }
