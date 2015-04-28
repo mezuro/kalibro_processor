@@ -11,10 +11,12 @@ describe Processor::Collector do
       let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
       let!(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:analizo_native_metric)) }
       let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
+      let!(:analizo_metric_collector_list) { FactoryGirl.build(:analizo_metric_collector_list) }
 
       before :each do
         context.processing.expects(:reload)
         context.expects(:native_metrics).returns({metric_configuration.metric.metric_collector_name => [metric_configuration]})
+        MetricCollector::Native::Analizo::Collector.any_instance.expects(:parse_supported_metrics).returns(analizo_metric_collector_list.parsed)
         MetricCollector::Native::Analizo::Collector.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
       end
 
