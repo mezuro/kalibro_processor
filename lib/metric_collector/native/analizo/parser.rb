@@ -31,6 +31,14 @@ module MetricCollector
           file_name_tokenized.join(".")
         end
 
+        def parse_class_name(analizo_module_name)
+          analizo_module_name.split('::').last
+        end
+
+        def module_name(file_name, analizo_module_name)
+          "#{parse_file_name(file_name)}.#{parse_class_name(analizo_module_name)}"
+        end
+
         def new_metric_result(module_result, code, value)
           MetricResult.create(metric: self.wanted_metrics[code].metric, value: value.to_f, module_result: module_result, metric_configuration_id: self.wanted_metrics[code].id)
         end
@@ -51,7 +59,7 @@ module MetricCollector
           if result_map['_filename'].nil?
             module_result = module_result("", Granularity::SOFTWARE)
           else
-            module_result = module_result(parse_file_name(result_map['_filename'].last), Granularity::CLASS)
+            module_result = module_result(module_name(result_map['_filename'].last, result_map['_module']), Granularity::CLASS)
           end
 
           result_map.each do |code, value|

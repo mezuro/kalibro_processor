@@ -20,7 +20,7 @@ describe MetricCollector::Native::Analizo::Parser, :type => :model do
       it 'is expected to parse the raw results into ModuleResults and MetricResults' do
         YAML.expects(:load_documents).with(analizo_metric_collector_list.raw_result).returns(analizo_metric_collector_list.parsed_result)
         KalibroModule.expects(:new).with(long_name: "", granularity: Granularity::SOFTWARE).returns(root_kalibro_module)
-        KalibroModule.expects(:new).with(long_name: "Class", granularity: Granularity::CLASS).returns(class_kalibro_module)
+        KalibroModule.expects(:new).with(long_name: "Class.Module", granularity: Granularity::CLASS).returns(class_kalibro_module)
         ModuleResult.expects(:find_by_module_and_processing).with(root_kalibro_module, processing).returns(nil)
         ModuleResult.expects(:find_by_module_and_processing).with(class_kalibro_module, processing).returns(module_result)
         root_kalibro_module.expects(:save)
