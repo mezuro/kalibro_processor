@@ -17,18 +17,9 @@ module MetricCollector
 
         private
 
-        def remove_extension(name)
-          list = name.split(".")
-          if (list.size > 1)
-            list.delete_at(list.size - 1)
-          end
-          list.join(".")
-        end
-
         def parse_file_name(file_name)
-          file_name_tokenized = file_name.to_s.split("/")
-          file_name_tokenized[file_name_tokenized.size - 1] = remove_extension(file_name_tokenized.last)
-          file_name_tokenized.join(".")
+          without_extension = file_name.rpartition('.').first
+          without_extension.gsub('.', '_').gsub('/', '.')
         end
 
         def parse_class_name(analizo_module_name)
