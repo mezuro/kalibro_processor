@@ -6,7 +6,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
     context 'with an available collector' do
       let(:names) { ["Analizo", "MetricFu"] }
       before :each do
-        MetricCollector::Native::Analizo.expects(:available?).returns(true)
+        MetricCollector::Native::Analizo::Collector.expects(:available?).returns(true)
         get :all_names, format: :json
       end
 
@@ -20,7 +20,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
     context 'with an unavailable collector' do
       let(:names) { ["MetricFu"] }
       before :each do
-        MetricCollector::Native::Analizo.expects(:available?).returns(false)
+        MetricCollector::Native::Analizo::Collector.expects(:available?).returns(false)
         get :all_names, format: :json
       end
 

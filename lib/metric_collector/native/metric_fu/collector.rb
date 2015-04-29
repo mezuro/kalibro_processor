@@ -16,7 +16,6 @@ module MetricCollector
           runner.clean_output
         end
 
-
         def parse_supported_metrics
           supported_metrics = {}
           YAML.load_file("#{Rails.root}/lib/metric_collector/native/metric_fu/metrics.yml")[:metrics].each do | key, value |

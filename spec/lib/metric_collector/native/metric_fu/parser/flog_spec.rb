@@ -21,7 +21,6 @@ describe MetricCollector::Native::MetricFu::Parser::Flog do
         MetricResult.expects(:create).with(metric: metric_configuration.metric, value: 1.1, module_result: module_result, metric_configuration_id: metric_configuration.id)
         MetricResult.expects(:create).with(metric: metric_configuration.metric, value: 2.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
 
-      
         MetricCollector::Native::MetricFu::Parser::Flog.parse(flog_results, processing, metric_configuration)
       end
     end
