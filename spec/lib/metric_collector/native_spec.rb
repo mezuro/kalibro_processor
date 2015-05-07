@@ -45,6 +45,10 @@ describe MetricCollector::Native do
           expect(collector.supported_metrics.first.code).to eq(metric_collector.details.supported_metrics.first.code)
         end
       end
+
+      after :each do
+        Rails.cache.clear
+      end
     end
   end
 end
