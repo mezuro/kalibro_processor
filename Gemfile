@@ -54,7 +54,7 @@ gem 'delayed_job_active_record', '~> 4.0.1'
 gem 'daemons', '~> 1.1.9'
 
 # Sends a email whenever there is a unexpected exception
-gem 'exception_notification', '~> 4.0.1'
+gem 'exception_notification', '~> 4.1.0'
 
 group :test do
   # Easier test writing
