@@ -51,7 +51,7 @@ gem 'database_cleaner', '>= 1.4.1', require: false
 gem 'delayed_job_active_record', '~> 4.0.1'
 
 # Required for workers creation
-gem 'daemons', '~> 1.1.9'
+gem 'daemons', '~> 1.2.2'
 
 # Sends a email whenever there is a unexpected exception
 gem 'exception_notification', '~> 4.1.0'
