@@ -61,7 +61,7 @@ Please, have a look at the wiki pages about development workflow and code standa
 
 * Services (job queues, cache servers, search engines, etc.)
 
-  * Kalibro Client v0.0.2 (https://github.com/mezuro/kalibro_client/releases/tag/v0.0.2)
+  * Kalibro Client v0.1.1 (https://github.com/mezuro/kalibro_client/releases/tag/v0.1.1)
 
   * Kalibro Configurations
     * You can find it at https://github.com/mezuro/kalibro_configurations
