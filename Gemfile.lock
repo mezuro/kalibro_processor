@@ -214,7 +214,7 @@ GEM
     pg (0.18.1)
     procto (0.0.2)
     psych (2.0.13)
-    rack (1.6.0)
+    rack (1.6.1)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.1)
