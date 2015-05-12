@@ -66,4 +66,8 @@ FactoryGirl.define  do
   factory :compound_flog_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :compound_metric do
     script "return flog() * 2;"
   end
+
+  factory :compound_saikuro_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :compound_metric do
+    script "return saikuro() * Math.sqrt(2);"
+  end
 end

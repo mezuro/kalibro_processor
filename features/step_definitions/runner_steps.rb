@@ -16,19 +16,20 @@ Given(/^I have a sample kalibro configuration with native metrics$/) do
   compound_range.save
 end
 
-
-Given(/^I have a sample configuration with native metrics from metric fu$/) do
+Given(/^I have a sample configuration with the (\w+) native metric$/) do |metric|
+  metric_configuration_factory = (metric + "_metric_configuration").downcase
+  metric_factory = (metric + "_metric").downcase
   @configuration = FactoryGirl.create(:ruby_configuration, id: nil)
-  metric_configuration = FactoryGirl.create(:flog_metric_configuration,
+  metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
                                             {id: 4,
-                                             metric: FactoryGirl.build(:flog_metric),
+                                             metric: FactoryGirl.build(metric_factory.to_sym),
                                              reading_group_id: @reading_group.id,
                                              kalibro_configuration_id: @configuration.id})
   range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
   range.save
-  compound_metric_configuration = FactoryGirl.create(:flog_compound_metric_configuration,
+  compound_metric_configuration = FactoryGirl.create(metric_configuration_factory.sub("_", "_compound_").to_sym,
                                                      id: 5,
-                                                     metric: FactoryGirl.build(:compound_flog_metric, code: 'two_pain'),
+                                             metric: FactoryGirl.build(("compound_" + metric_factory).to_sym),
                                                      reading_group_id: @reading_group.id,
                                                      kalibro_configuration_id: @configuration.id)
   compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: compound_metric_configuration.id})
