@@ -38,6 +38,10 @@ FactoryGirl.define do
       metric { FactoryGirl.build(:flog_metric) }
     end
 
+    trait :saikuro do
+      metric { FactoryGirl.build(:saikuro_metric) }
+    end
+
     trait :flog_compound_metric_configuration do
       metric { FactoryGirl.build(:kalibro_gatekeeper_client_compound_flog_metric) }
       weight 1
@@ -49,6 +53,7 @@ FactoryGirl.define do
     factory :compound_metric_configuration, traits: [:compound_metric]
     factory :flog_compound_metric_configuration, traits: [:flog_compound_metric_configuration]
     factory :flog_metric_configuration, traits: [:flog]
+    factory :saikuro_metric_configuration, traits: [:saikuro]
     factory :sum_metric_configuration, traits: [:sum_metric_configuration]
   end
 

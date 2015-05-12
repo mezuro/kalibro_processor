@@ -8,7 +8,7 @@ describe MetricCollector::Native::MetricFu::Parser do
     let(:processing) { FactoryGirl.build(:processing) }
     describe 'parse_all' do
       before :each do
-        YAML.expects(:load_file).returns(metric_fu_results.flog_results)
+        YAML.expects(:load_file).returns(metric_fu_results.results)
       end
 
       it 'is expected to call all parsers' do
