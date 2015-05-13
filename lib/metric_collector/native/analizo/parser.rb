@@ -15,6 +15,10 @@ module MetricCollector
           end
         end
 
+        def self.default_value_from(metric_code)
+          0.0
+        end
+
         private
 
         def parse_file_name(file_name)

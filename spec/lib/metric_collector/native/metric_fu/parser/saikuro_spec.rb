@@ -24,5 +24,11 @@ describe MetricCollector::Native::MetricFu::Parser::Saikuro do
       end
     end
   end
+
+  describe 'default_value' do
+    it 'is expected to return 1.0' do
+      expect(MetricCollector::Native::MetricFu::Parser::Saikuro.default_value).to eq(1.0)
+    end
+  end
 end
 

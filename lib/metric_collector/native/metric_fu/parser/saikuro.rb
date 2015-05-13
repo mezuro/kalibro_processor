@@ -18,6 +18,10 @@ module MetricCollector
               end
             end
           end
+
+          def self.default_value
+            1.0 # Just one branch
+          end
         end
       end
     end

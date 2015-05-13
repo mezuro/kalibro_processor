@@ -16,6 +16,10 @@ module MetricCollector
             @parsers[code].parse(parsed_result[code.to_sym], processing, metric_configuration)
           end
         end
+
+        def self.default_value_from(metric_code)
+          @parsers[metric_code].default_value
+        end
       end
     end
   end

@@ -25,4 +25,10 @@ describe MetricCollector::Native::MetricFu::Parser::Flog do
       end
     end
   end
+
+  describe 'default_value' do
+    it 'is expected to return 0.0' do
+      expect(MetricCollector::Native::MetricFu::Parser::Flog.default_value).to eq(0.0)
+    end
+  end
 end

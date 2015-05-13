@@ -20,6 +20,10 @@ module MetricCollector
               end
             end
           end
+
+          def self.default_value
+            0.0 # No pain, no gain
+          end
         end
       end
     end
