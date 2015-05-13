@@ -86,43 +86,22 @@ describe MetricResult, :type => :model do
 
     describe 'descendant_values' do
       subject { FactoryGirl.build(:metric_result) }
+      let(:son) { FactoryGirl.build(:metric_result_with_value) }
       let!(:module_result) { FactoryGirl.build(:module_result) }
 
       before :each do
         subject.expects(:module_result).returns(module_result)
         module_result.expects(:children).returns([module_result, module_result])
+        module_result.expects(:metric_result_for).at_least_once.
+          with(subject.metric).returns(son)
       end
 
-      context "when the descendants are for the subject's metric" do
-        let!(:son) { FactoryGirl.build(:metric_result_with_value) }
-
-        before :each do
-          module_result.expects(:metric_result_for).at_least_once.
-            with(subject.metric).returns(son)
-        end
-
-        it "should return an array with all its children's values" do
-          expect(subject.descendant_values).to eq([2.0, 2.0])
-        end
-
-        it "should be a float values array" do
-          expect(subject.descendant_values).to be_a(Array)
-        end
+      it "should return an array with all its children's values" do
+        expect(subject.descendant_values).to eq([2.0, 2.0])
       end
 
-      context "when the descendants are for a different metric from the subject's one" do
-        before :each do
-          module_result.expects(:metric_result_for).at_least_once.
-            with(subject.metric).returns(nil)
-        end
-
-        it 'is expected to return a array' do
-          expect(subject.descendant_values).to be_a(Array)
-        end
-
-        it 'is expected to be empty' do
-          expect(subject.descendant_values).to be_empty
-        end
+      it "should be a float values array" do
+        expect(subject.descendant_values).to be_a(Array)
       end
     end
 

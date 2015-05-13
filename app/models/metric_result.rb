@@ -29,14 +29,7 @@ class MetricResult < ActiveRecord::Base
   end
 
   def descendant_values
-    descendant_values = []
-
-    module_result.children.each do |child|
-      metric_result = child.metric_result_for(self.metric)
-      descendant_values << metric_result.value unless metric_result.nil?
-    end
-
-    descendant_values
+    module_result.children.map { |child| child.metric_result_for(self.metric).value }
   end
 
   def metric
