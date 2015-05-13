@@ -41,7 +41,7 @@ Feature: Runner run
     And the processing retrieved should have a Root ModuleResult
     And the Root ModuleResult retrieved should have a list of MetricResults
 
-  @clear_repository @kalibro_configuration_restart @wip
+  @clear_repository @kalibro_configuration_restart
   Scenario: An existing ruby repository with a configuration with Saikuro and Flog
     Given I have sample readings
     And I have a sample configuration with the Saikuro native metric

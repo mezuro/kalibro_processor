@@ -32,6 +32,7 @@ class ProcessingJob < ActiveJob::Base
     Processor::Preparer.perform(@context)
     Processor::Downloader.perform(@context)
     Processor::Collector.perform(@context)
+    Processor::MetricResultsChecker.perform(@context)
     Processor::TreeBuilder.perform(@context)
     Processor::Aggregator.perform(@context)
     Processor::CompoundResultCalculator.perform(@context)
