@@ -34,6 +34,14 @@ FactoryGirl.define do
       aggregation_form :SUM
     end
 
+    trait :maximum_metric_configuration do
+      aggregation_form :MAXIMUM
+    end
+
+    trait :minimum_metric_configuration do
+      aggregation_form :MINIMUM
+    end
+
     trait :flog do
       metric { FactoryGirl.build(:flog_metric) }
     end
@@ -64,6 +72,8 @@ FactoryGirl.define do
     factory :saikuro_metric_configuration, traits: [:saikuro]
     factory :saikuro_compound_metric_configuration, traits: [:saikuro_compound_metric_configuration]
     factory :sum_metric_configuration, traits: [:sum_metric_configuration]
+    factory :maximum_metric_configuration, traits: [:maximum_metric_configuration]
+    factory :minimum_metric_configuration, traits: [:minimum_metric_configuration]
   end
 
   factory :another_metric_configuration, class: KalibroClient::Entities::Configurations::MetricConfiguration do

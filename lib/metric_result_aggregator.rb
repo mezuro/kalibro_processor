@@ -5,7 +5,21 @@ class MetricResultAggregator
       # descriptive-statistics gem uses the method 'mean' whereas we call 'average'
       # the method that calculates the arithmetic mean of the values
       form = metric_result.metric_configuration.aggregation_form.to_s.downcase
-      form = "mean" if form == "average"
+
+      if form == "average"
+        form = "mean"
+        puts "DEPRECATED: use mean instead of average for aggregation form"
+      end
+
+      if form == "maximum"
+        form = "max"
+        puts "DEPRECATED: use max instead of maximum for aggregation form"
+      end
+
+      if form == "minimum"
+        form = "min"
+        puts "DEPRECATED: use min instead of minimum for aggregation form"
+      end
 
       values.send( form )
     else

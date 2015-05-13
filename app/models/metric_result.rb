@@ -2,8 +2,6 @@ class MetricResult < ActiveRecord::Base
   attr_accessor :metric
   belongs_to :module_result
 
-      form = "max" if form == "maximum"
-      form = "min" if form == "minimum"
   def range
     ranges = KalibroClient::Entities::Configurations::KalibroRange.ranges_of(metric_configuration.id)
     ranges.select { |range| range.beginning.to_f <= self.value && self.value < range.end.to_f }.first

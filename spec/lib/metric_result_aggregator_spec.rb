@@ -6,6 +6,8 @@ describe MetricResultAggregator, :type => :model do
     let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
     let!(:another_metric_configuration) { FactoryGirl.build(:another_metric_configuration) }
     let!(:sum_metric_configuration) { FactoryGirl.build(:sum_metric_configuration) }
+    let!(:maximum_metric_configuration) { FactoryGirl.build(:maximum_metric_configuration) }
+    let!(:minimum_metric_configuration) { FactoryGirl.build(:minimum_metric_configuration) }
 
     describe 'aggregated_value' do
       let!(:stats) { DescriptiveStatistics::Stats.new([2, 4, 6]) }
@@ -33,6 +35,18 @@ describe MetricResultAggregator, :type => :model do
           KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
             with(subject.metric_configuration_id).returns(sum_metric_configuration)
           expect(MetricResultAggregator.aggregated_value(subject)).to eq(12)
+        end
+
+        it 'should minimize the values of array' do
+          KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
+            with(subject.metric_configuration_id).returns(minimum_metric_configuration)
+          expect(MetricResultAggregator.aggregated_value(subject)).to eq(2)
+        end
+
+        it 'should maximize the values of array' do
+          KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
+            with(subject.metric_configuration_id).returns(maximum_metric_configuration)
+          expect(MetricResultAggregator.aggregated_value(subject)).to eq(6)
         end
 
         after :each do
