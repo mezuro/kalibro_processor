@@ -2,8 +2,13 @@ module MetricCollector
   module Native
     module MetricFu
       module Parser
-        class Interface
-          def parse(collected_metrics_hash); raise NotImplementedError; end
+        class Interface #FIXME: if you have method implementations it is not a interface!
+          def self.parse(collected_metrics_hash); raise NotImplementedError; end
+
+          # Sometimes the parser does not generate results for some Module that
+          # other may generate. In this we case need a default value to fulfill
+          # it.
+          def self.default_value; raise NotImplementedError; end
 
           private
 
