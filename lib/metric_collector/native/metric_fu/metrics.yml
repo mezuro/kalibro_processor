@@ -14,8 +14,8 @@
     :description: Measures how hard (painful) it is to test the code
     :scope: METHOD
 
-  #:cyclomatic_complexity:
-  #  :name: Cyclomatic Complexity
-  #  :description: Cyclomatic complexity is a graphical measurement of the number of possible paths through the normal flow of a program
-  #  :scope: METHOD
+  :saikuro:
+    :name: Cyclomatic Complexity
+    :description: Cyclomatic complexity is a graphical measurement of the number of possible paths through the normal flow of a program
+    :scope: METHOD
 
