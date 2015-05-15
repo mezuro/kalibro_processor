@@ -2,7 +2,7 @@ module MetricCollector
   module Native
     module MetricFu
       module Parser
-        class Saikuro < MetricCollector::Native::MetricFu::Parser::Interface
+        class Saikuro < MetricCollector::Native::MetricFu::Parser::Base
           def self.parse(saikuro_output, processing, metric_configuration)
             saikuro_output[:files].each do |file|
               name_prefix = module_name_prefix(file[:filename])

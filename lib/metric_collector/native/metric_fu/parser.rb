@@ -1,4 +1,4 @@
-require 'metric_collector/native/metric_fu/parser/interface'
+require 'metric_collector/native/metric_fu/parser/base'
 require 'metric_collector/native/metric_fu/parser/flog'
 require 'metric_collector/native/metric_fu/parser/saikuro'
 

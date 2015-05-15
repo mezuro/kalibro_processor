@@ -2,7 +2,7 @@ module MetricCollector
   module Native
     module MetricFu
       module Parser
-        class Flog < MetricCollector::Native::MetricFu::Parser::Interface
+        class Flog < MetricCollector::Native::MetricFu::Parser::Base
           def self.parse(flog_output, processing, metric_configuration)
             flog_output[:method_containers].each do |method_container|
               unless method_container[:path].blank?
