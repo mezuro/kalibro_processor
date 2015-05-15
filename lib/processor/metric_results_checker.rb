@@ -2,10 +2,6 @@ module Processor
   class MetricResultsChecker < ProcessingStep
     protected
 
-    def metric_key(metric)
-      metric.metric_collector_name.to_s + "#" + metric.code.to_s + "#" + metric.scope.to_s
-    end
-
     def self.task(context)
       wanted_metrics = {}
 
@@ -22,8 +18,8 @@ module Processor
           metrics_check_list.delete(metric_key(metric_result.metric))
         }
 
-        metrics_check_list.each do |metric, metric_configuration|
-          MetricResult.create(value: default_value_from(metric),
+        metrics_check_list.each do |metric_key, metric_configuration|
+          MetricResult.create(value: default_value_from(metric_configuration),
                               module_result: module_result,
                               metric_configuration_id: metric_configuration.id)
         end
@@ -36,8 +32,12 @@ module Processor
 
     private
 
-    def self.default_value_from(metric)
-      "MetricCollector::Native::#{metric.metric_collector_name}::Parser".constantize.default_value_from(metric.code)
+    def self.metric_key(metric)
+      metric.metric_collector_name.to_s + "#" + metric.code.to_s + "#" + metric.scope.to_s
+    end
+
+    def self.default_value_from(metric_configuration)
+      "MetricCollector::Native::#{metric_configuration.metric.metric_collector_name}::Parser".constantize.default_value_from(metric_configuration.metric.code)
     end
   end
 end

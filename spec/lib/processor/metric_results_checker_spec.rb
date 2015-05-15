@@ -27,7 +27,7 @@ describe Processor::MetricResultsChecker do
         end
 
         it 'is expected to create a MetricResult with the default value for this metric' do
-          MetricResult.expects(:create).with(metric: flog_metric_configuration.metric, value: default_value, module_result: module_result, metric_configuration_id: flog_metric_configuration.id)
+          MetricResult.expects(:create).with(value: default_value, module_result: module_result, metric_configuration_id: flog_metric_configuration.id)
 
           Processor::MetricResultsChecker.task(context)
         end
