@@ -21,7 +21,7 @@ describe Processor::MetricResultsChecker do
         before :each do
           context.native_metrics['MetricFu'] << flog_metric_configuration
           context.native_metrics['MetricFu'] << saikuro_metric_configuration
-          metric_result.expects(:metric).returns(saikuro_metric_configuration.metric)
+          metric_result.expects(:metric).returns(FactoryGirl.build(:saikuro_metric))
           module_result.stubs(:metric_results).returns([metric_result])
           MetricCollector::Native::MetricFu::Parser.expects(:default_value_from).with(flog_metric_configuration.metric.code).returns(default_value)
         end
