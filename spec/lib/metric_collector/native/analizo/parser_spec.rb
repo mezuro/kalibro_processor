@@ -30,5 +30,11 @@ describe MetricCollector::Native::Analizo::Parser, :type => :model do
         subject.parse_all(analizo_metric_collector_list.raw_result)
       end
     end
+
+    describe 'default_value_from' do
+      it 'is expected to ignore the code and return 0' do
+        expect(MetricCollector::Native::Analizo::Parser.default_value_from('anything')).to eq(0.0)
+      end
+    end
   end
 end

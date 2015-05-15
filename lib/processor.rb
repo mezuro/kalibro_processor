@@ -6,6 +6,7 @@ require 'processor/downloader'
 require 'processor/interpreter'
 require 'processor/preparer'
 require 'processor/tree_builder'
+require 'processor/metric_results_checker'
 
 module Processor; end
 

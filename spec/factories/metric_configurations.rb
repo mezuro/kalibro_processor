@@ -18,7 +18,7 @@ FactoryGirl.define do
   factory :metric_configuration, class: KalibroClient::Entities::Configurations::MetricConfiguration do
     metric { FactoryGirl.build(:metric) }
     weight 1
-    aggregation_form "AVERAGE"
+    aggregation_form "mean"
     reading_group_id 1
     kalibro_configuration_id 1
 
@@ -34,8 +34,20 @@ FactoryGirl.define do
       aggregation_form :SUM
     end
 
+    trait :maximum_metric_configuration do
+      aggregation_form :MAX
+    end
+
+    trait :minimum_metric_configuration do
+      aggregation_form :MIN
+    end
+
     trait :flog do
       metric { FactoryGirl.build(:flog_metric) }
+    end
+
+    trait :saikuro do
+      metric { FactoryGirl.build(:saikuro_metric) }
     end
 
     trait :flog_compound_metric_configuration do
@@ -46,10 +58,22 @@ FactoryGirl.define do
       kalibro_configuration_id 1
     end
 
+    trait :saikuro_compound_metric_configuration do
+      metric { FactoryGirl.build(:compound_saikuro_metric) }
+      weight 0.1
+      aggregation_form :AVERAGE
+      reading_group_id 1
+      kalibro_configuration_id 1
+    end
+
     factory :compound_metric_configuration, traits: [:compound_metric]
-    factory :flog_compound_metric_configuration, traits: [:flog_compound_metric_configuration]
     factory :flog_metric_configuration, traits: [:flog]
+    factory :flog_compound_metric_configuration, traits: [:flog_compound_metric_configuration]
+    factory :saikuro_metric_configuration, traits: [:saikuro]
+    factory :saikuro_compound_metric_configuration, traits: [:saikuro_compound_metric_configuration]
     factory :sum_metric_configuration, traits: [:sum_metric_configuration]
+    factory :maximum_metric_configuration, traits: [:maximum_metric_configuration]
+    factory :minimum_metric_configuration, traits: [:minimum_metric_configuration]
   end
 
   factory :another_metric_configuration, class: KalibroClient::Entities::Configurations::MetricConfiguration do

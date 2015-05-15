@@ -18,9 +18,10 @@ Feature: Runner run
     And the Root ModuleResult retrieved should not have a MetricResult for the compound metric
 
   @clear_repository @kalibro_configuration_restart
-  Scenario: An existing ruby repository with a configuration
+  Scenario: An existing ruby repository with a configuration with Saikuro and Flog
     Given I have sample readings
-    And I have a sample configuration with native metrics from metric fu
+    And I have a sample configuration with the Saikuro native metric
+    And I add the "Flog" native metric to the sample configuration
     And I have a sample ruby repository within the sample project
     And I have a processing within the sample repository
     When I run for the given repository

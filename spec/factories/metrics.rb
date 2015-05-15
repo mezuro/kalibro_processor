@@ -53,7 +53,21 @@ FactoryGirl.define  do
     initialize_with { KalibroClient::Entities::Miscellaneous::NativeMetric.new(name, code, scope, languages, metric_collector_name) }
   end
 
+  factory :saikuro_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :metric do
+    name "Cyclomatic Complexity"
+    languages { [:RUBY] }
+    scope { :METHOD }
+    metric_collector_name "MetricFu"
+    code 'saikuro'
+
+    initialize_with { KalibroClient::Entities::Miscellaneous::NativeMetric.new(name, code, scope, languages, metric_collector_name) }
+  end
+
   factory :compound_flog_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :compound_metric do
     script "return flog() * 2;"
+  end
+
+  factory :compound_saikuro_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :compound_metric do
+    script "return saikuro() * Math.sqrt(2);"
   end
 end

@@ -24,6 +24,7 @@ describe ProcessingJob, :type => :job do
             Processor::Preparer.expects(:perform)
             Processor::Downloader.expects(:perform)
             Processor::Collector.expects(:perform)
+            Processor::MetricResultsChecker.expects(:perform)
             Processor::TreeBuilder.expects(:perform)
             Processor::Aggregator.expects(:perform)
             Processor::CompoundResultCalculator.expects(:perform)
