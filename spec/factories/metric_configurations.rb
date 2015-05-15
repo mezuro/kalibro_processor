@@ -18,7 +18,7 @@ FactoryGirl.define do
   factory :metric_configuration, class: KalibroClient::Entities::Configurations::MetricConfiguration do
     metric { FactoryGirl.build(:metric) }
     weight 1
-    aggregation_form "AVERAGE"
+    aggregation_form "mean"
     reading_group_id 1
     kalibro_configuration_id 1
 
@@ -35,11 +35,11 @@ FactoryGirl.define do
     end
 
     trait :maximum_metric_configuration do
-      aggregation_form :MAXIMUM
+      aggregation_form :MAX
     end
 
     trait :minimum_metric_configuration do
-      aggregation_form :MINIMUM
+      aggregation_form :MIN
     end
 
     trait :flog do
