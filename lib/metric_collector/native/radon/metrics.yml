@@ -4,3 +4,13 @@
     :name: Cyclomatic Complexity
     :description: Cyclomatic complexity is a graphical measurement of the number of possible paths through the normal flow of a program
     :scope: METHOD
+
+  :mi:
+    :name: Maintainability Index
+    :description: Measures how easy it is to maintain the code.
+    :scope: METHOD
+
+  :raw:
+    :name: Raw metrics
+    :description: Some simple metrics like line of codes.
+    :scope: METHOD
