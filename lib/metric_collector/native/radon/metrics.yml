@@ -1,0 +1,6 @@
+:metrics:
+
+  :cc:
+    :name: Cyclomatic Complexity
+    :description: Cyclomatic complexity is a graphical measurement of the number of possible paths through the normal flow of a program
+    :scope: METHOD
