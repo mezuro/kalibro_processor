@@ -12,7 +12,7 @@ module MetricCollector
           runner = Runner.new(repository_path: code_directory)
 
           runner.run
-          MetricCollector::Native::Radon::Parser.parse_all(runner.yaml_path, wanted_metric_configurations, processing)
+          MetricCollector::Native::Radon::Parser.parse_all(runner.repository_path, wanted_metric_configurations, processing)
           runner.clean_output
         end
 
