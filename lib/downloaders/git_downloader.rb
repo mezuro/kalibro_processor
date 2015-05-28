@@ -14,11 +14,11 @@ module Downloaders
 
     def self.updatable?; true; end
 
-    def self.get(address, directory)
+    def self.get(address, directory, branch)
       if Dir.exists?(directory) and is_git?(directory) 
-        reset(directory)
+        reset(directory, branch)
       else
-        clone(address, directory)
+        clone(address, directory, branch)
       end
     end
 
@@ -28,17 +28,20 @@ module Downloaders
       Dir.exists?("#{directory}/.git")
     end
 
-    def self.clone(address, directory)
+    def self.reset(directory, branch)
+      g = Git.open(directory)
+      g.fetch
+      reset_branch = "#{g.remote.name}"
+      reset_branch += "/#{branch}" unless branch.nil? || branch.empty?
+      g.reset(reset_branch, hard: true)
+    end
+
+    def self.clone(address, directory, branch)
       # if directory is "/tmp/test", name is "test" and path is "/tmp"
       name = directory.split('/').last
       path = (directory.split('/') - [name]).join('/')
-      Git.clone(address, name, path: path)
-    end
-
-    def self.reset(directory)
-      g = Git.open(directory)
-      g.fetch
-      g.reset("#{g.remote.name}/#{g.branch.name}", hard: true)
+      branch = nil if !branch.nil? && branch.empty? # If no branch is specified, clone from the default branch
+      Git.clone(address, name, path: path, branch: branch)
     end
   end
 end

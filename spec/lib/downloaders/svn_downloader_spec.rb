@@ -42,14 +42,14 @@ describe Downloaders::SvnDownloader do
           it 'is expected to checkout the repository' do
             subject.class.expects(:`).with(command).returns(svn_checkout)
 
-            subject.class.retrieve!(address, directory)
+            subject.class.retrieve!(address, directory, nil)
           end
         end
 
         context 'failling to checkout' do
           it 'should raise an error' do
             subject.class.expects(:`).with(command).returns(nil)
-            expect {subject.class.get(address, directory)}.to raise_error(Errors::SvnExecuteError)
+            expect {subject.class.get(address, directory, nil)}.to raise_error(Errors::SvnExecuteError)
           end
         end
       end
@@ -66,7 +66,7 @@ describe Downloaders::SvnDownloader do
           end
 
           it 'should revert the directory changes and update it to the last version (reset)' do
-             expect(subject.class.get(address, directory)).to eq(nil)
+             expect(subject.class.get(address, directory, nil)).to eq(nil)
           end
         end
 
@@ -78,7 +78,7 @@ describe Downloaders::SvnDownloader do
           end
 
           it 'it should raise an error' do
-             expect {subject.class.get(address, directory)}.to raise_error(Errors::SvnExecuteError)
+             expect {subject.class.get(address, directory, nil)}.to raise_error(Errors::SvnExecuteError)
           end
         end
       end

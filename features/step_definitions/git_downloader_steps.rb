@@ -3,7 +3,7 @@ When(/^I call the available\? method for git$/) do
 end
 
 When(/^I call retrieve! from git with "(.*?)" and "(.*?)"$/) do |address, directory|
-  Downloaders::GitDownloader.retrieve!(address, directory)
+  Downloaders::GitDownloader.retrieve!(address, directory, nil)
 end
 
 Then(/^"(.*?)" should be a git repository$/) do |directory|

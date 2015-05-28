@@ -28,6 +28,7 @@ describe Downloaders::GitDownloader do
     describe 'retrieve! (get)' do
       let(:directory) { "/tmp/test" }
       let(:address) { "http://test.test" }
+      let(:branch_name) { 'test' }
 
       context 'when the directory exists' do
         before :each do
@@ -40,13 +41,8 @@ describe Downloaders::GitDownloader do
             remote_name = 'test'
             remote.expects(:name).returns(remote_name)
 
-            branch = Object.new
-            branch_name = 'test'
-            branch.expects(:name).returns(branch_name)
-
             git = Object.new
             git.expects(:remote).returns(remote)
-            git.expects(:branch).returns(branch)
             git.expects(:fetch).returns(true)
             git.expects(:reset).with("#{remote_name}/#{branch_name}", hard: true).returns(true)
 
@@ -54,7 +50,7 @@ describe Downloaders::GitDownloader do
 
             Git.expects(:open).with(directory).returns(git)
 
-            subject.class.retrieve!(address, directory)
+            subject.class.retrieve!(address, directory, branch_name)
           end
         end
 
@@ -64,10 +60,10 @@ describe Downloaders::GitDownloader do
             name = directory.split('/').last
             path = (directory.split('/') - [name]).join('/')
 
-            Git.expects(:clone).with(address, name, path: path).returns(true)
+            Git.expects(:clone).with(address, name, path: path, branch: branch_name).returns(true)
             Dir.expects(:exists?).with("#{directory}/.git").returns(false)
 
-            subject.class.retrieve!(address, directory)
+            subject.class.retrieve!(address, directory, branch_name)
           end
         end
 
@@ -82,9 +78,9 @@ describe Downloaders::GitDownloader do
           name = directory.split('/').last
           path = (directory.split('/') - [name]).join('/')
 
-          Git.expects(:clone).with(address, name, path: path).returns(true)
+          Git.expects(:clone).with(address, name, path: path, branch: branch_name).returns(true)
 
-          subject.class.retrieve!(address, directory)
+          subject.class.retrieve!(address, directory, branch_name)
         end
       end
     end

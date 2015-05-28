@@ -14,7 +14,7 @@ describe Processor::Downloader do
 
         context 'successfully downloading' do
           before :each do
-            Downloaders::GitDownloader.expects(:retrieve!).with(repository.address, code_dir).returns(true)
+            Downloaders::GitDownloader.expects(:retrieve!).with(repository.address, code_dir, repository.branch).returns(true)
           end
 
           it 'is expected to download' do
@@ -24,7 +24,7 @@ describe Processor::Downloader do
 
         context 'with error when downloading' do
           before :each do
-            Downloaders::GitDownloader.expects(:retrieve!).with(repository.address, code_dir).raises(Git::GitExecuteError)
+            Downloaders::GitDownloader.expects(:retrieve!).with(repository.address, code_dir, repository.branch).raises(Git::GitExecuteError)
           end
 
           it 'is expected to raise a processing error' do
@@ -42,7 +42,7 @@ describe Processor::Downloader do
 
         context 'successfully downloading' do
           before :each do
-            Downloaders::SvnDownloader.expects(:retrieve!).with(repository.address, code_dir).returns(true)
+            Downloaders::SvnDownloader.expects(:retrieve!).with(repository.address, code_dir, repository.branch).returns(true)
           end
 
           it 'is expected to download' do
@@ -52,7 +52,7 @@ describe Processor::Downloader do
 
         context 'with error when downloading' do
           before :each do
-            Downloaders::SvnDownloader.expects(:retrieve!).with(repository.address, code_dir).raises(Errors::SvnExecuteError)
+            Downloaders::SvnDownloader.expects(:retrieve!).with(repository.address, code_dir, repository.branch).raises(Errors::SvnExecuteError)
           end
 
           it 'is expected to raise a processing error' do

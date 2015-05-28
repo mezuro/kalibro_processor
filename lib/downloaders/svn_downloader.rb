@@ -13,7 +13,7 @@ module Downloaders
 
     def self.updatable?; true; end
 
-    def self.get(address, directory)
+    def self.get(address, directory, branch)
       if Dir.exist?(directory)
         update(directory)
       else
