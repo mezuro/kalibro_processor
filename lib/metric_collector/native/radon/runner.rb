@@ -2,7 +2,6 @@ module MetricCollector
   module Native
     module Radon
       class Runner
-
         def initialize(attributes={repository_path: nil, chosen_metrics:["raw", "cc", "mi"]})
           @repository_path = repository_path
           @chosen_metrics = chosen_metrics
@@ -11,8 +10,9 @@ module MetricCollector
 
         def repository_path
           @repository_path
-        end
 
+        end
+       
         def run
           for metric in chosen_metrics do
             collect_metric(metric)
@@ -39,7 +39,6 @@ module MetricCollector
             end
           end
           @output_paths
-
         end
 
         private
