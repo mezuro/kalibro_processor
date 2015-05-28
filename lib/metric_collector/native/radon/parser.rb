@@ -11,12 +11,17 @@ module MetricCollector
           "raw" => MetricCollector::Native::Radon::Parser::Raw, 
           "mi" => MetricCollector::Native::Radon::Parser::Maintainability}
 
-        def parse_all(file_path, wanted_metric_configurations, processing)
+        def self.parse_all(file_path, wanted_metric_configurations, processing)
           wanted_metric_configurations.each do |metric_configuration|
             code = metric_configuration.metric.code
             @parsers[code].parse(file_path, processing, metric_configuration)
           end
         end
+
+        def self.default_value_from(metric_code)
+          @parsers[metric_code].default_value
+        end
+
       end
     end
   end

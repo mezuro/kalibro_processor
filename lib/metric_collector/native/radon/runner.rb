@@ -9,6 +9,10 @@ module MetricCollector
 
         end
 
+        def repository_path
+          @repository_path
+        end
+
         def run
           for metric in chosen_metrics do
             collect_metric(metric)

@@ -7,7 +7,7 @@ module MetricCollector
           super("Radon", description, parse_supported_metrics)
         end
 
-        def collect_metrics(code_directory, wanted_metrics)
+        def collect_metrics(code_directory, wanted_metric_configurations, processing)
           self.wanted_metrics = wanted_metric_configurations
           runner = Runner.new(repository_path: code_directory)
 
