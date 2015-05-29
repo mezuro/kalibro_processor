@@ -36,7 +36,7 @@ describe Downloaders::GitDownloader do
         end
         context 'and it is a git repository' do
 
-          it 'is expected to open, fetch and reset the repository' do
+          it 'is expected to open, fetch and checkout the repository' do
             remote = Object.new
             remote_name = 'test'
             remote.expects(:name).returns(remote_name)
@@ -44,7 +44,7 @@ describe Downloaders::GitDownloader do
             git = Object.new
             git.expects(:remote).returns(remote)
             git.expects(:fetch).returns(true)
-            git.expects(:reset).with("#{remote_name}/#{branch_name}", hard: true).returns(true)
+            git.expects(:checkout).with("#{remote_name}/#{branch_name}").returns("")
 
             Dir.expects(:exists?).with("#{directory}/.git").returns(true)
 
