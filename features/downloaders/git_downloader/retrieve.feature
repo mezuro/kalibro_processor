@@ -3,13 +3,13 @@ Feature: GitDownloader retrieve
   As a regular user
   I should be able to retrieve them
 
-  @clear_test_dir @wip
+  @clear_test_dir
   Scenario: cloning and updating
-  When I call retrieve! from git with "https://github.com/mezuro/kalibro_client" and "/tmp/test"
-  Then "/tmp/test" should be a git repository on my default branch
-  When I call retrieve! from git with "https://github.com/mezuro/kalibro_client" and "/tmp/test"
-  Then "/tmp/test" should be a git repository on my default branch
+  When I call retrieve! from git with "https://github.com/mezuro/kalibro_client" and "/tmp/test" and "master"
+  Then "/tmp/test" should be a git repository at the HEAD of the remote default branch
+  When I call retrieve! from git with "https://github.com/mezuro/kalibro_client" and "/tmp/test" and "master"
+  Then "/tmp/test" should be a git repository at the HEAD of the remote default branch
   When I call retrieve! from git with "https://github.com/mezuro/kalibro_client" and "/tmp/test" and "stable"
-  Then "/tmp/test" should be a git repository on my "stable" branch
+  Then "/tmp/test" should be a git repository at the HEAD of the remote "stable" branch
   When I call retrieve! from git with "https://github.com/mezuro/kalibro_client" and "/tmp/test" and "stable"
-  Then "/tmp/test" should be a git repository on my "stable" branch
+  Then "/tmp/test" should be a git repository at the HEAD of the remote "stable" branch

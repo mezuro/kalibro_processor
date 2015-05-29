@@ -15,7 +15,7 @@ module Downloaders
     def self.updatable?; true; end
 
     def self.get(address, directory, branch)
-      if Dir.exists?(directory) and is_git?(directory) 
+      if Dir.exists?(directory) and is_git?(directory)
         checkout(directory, branch)
       else
         clone(address, directory, branch)
@@ -24,15 +24,15 @@ module Downloaders
 
     private
 
-    def self.is_git?(directory) 
+    def self.is_git?(directory)
       Dir.exists?("#{directory}/.git")
     end
 
     def self.checkout(directory, branch)
       g = Git.open(directory)
       g.fetch
-      checkout_branch = "#{g.remote.name}/#{branch}"
-      g.checkout(checkout_branch)
+      g.checkout(branch)
+      g.pull
     end
 
     def self.clone(address, directory, branch)
