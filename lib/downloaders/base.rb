@@ -1,5 +1,9 @@
 module Downloaders
   class Base
+    require 'downloaders/git_downloader'
+    require 'downloaders/svn_downloader'
+
+    ALL = {"GIT" => Downloaders::GitDownloader, "SVN" => Downloaders::SvnDownloader}
     def self.available?; raise NotImplementedError; end
 
     def self.retrieve!(address, directory, branch)
@@ -8,6 +12,8 @@ module Downloaders
     end
 
     protected
+
+    def self.branches(url); raise NotImplementedError; end
 
     def self.updatable?; raise NotImplementedError; end
 

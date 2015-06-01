@@ -22,6 +22,10 @@ module Downloaders
       end
     end
 
+    def self.branches(url)
+      Git::Lib.new.ls_remote(url)["branches"].keys
+    end
+
     private
 
     def self.is_git?(directory)

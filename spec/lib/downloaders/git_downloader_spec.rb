@@ -80,5 +80,28 @@ describe Downloaders::GitDownloader do
         end
       end
     end
+
+    describe "branches" do
+      let!(:url) { "dummy-url" }
+      context "invalid url" do
+        before :each do
+          Git::Lib.any_instance.expects(:ls_remote).with(url).raises(Git::GitExecuteError)
+        end
+
+        it 'is expected to raise a GitExecuteError' do
+          expect{ subject.class.branches(url) }.to raise_error(Git::GitExecuteError)
+        end
+      end
+
+      context "valid url" do
+        before :each do
+          Git::Lib.any_instance.expects(:ls_remote).with(url).returns({"branches" => {"branch1" => {}, "branch2" => {}}})
+        end
+
+        it 'is expected to return a list with all branches' do
+          expect(subject.class.branches(url)).to eq(["branch1", "branch2"])
+        end
+      end
+    end
   end
 end
