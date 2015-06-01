@@ -525,4 +525,66 @@ RSpec.describe RepositoriesController, :type => :controller do
 
     it { is_expected.to respond_with(:success) }
   end
+
+  describe 'branches' do
+    let(:url) { "dummy-url" }
+
+    context 'invalid scm type' do
+      let!(:scm_type) { "DUMMY" }
+
+      before :each do
+        post :branches, url: url, scm_type: scm_type, format: :json
+      end
+
+      it { is_expected.to respond_with(:not_found) }
+
+      it 'should return an error hash' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ["#{scm_type}: Unknown SCM type"]}.to_json))
+      end
+    end
+
+    context 'git scm type' do
+      let!(:scm_type) { "GIT" }
+
+      context 'valid repository' do
+        before :each do
+          Downloaders::GitDownloader.expects(:branches).with(url).returns(["branch1", "branch2"])
+          post :branches, url: url, scm_type: scm_type, format: :json
+        end
+
+        it { is_expected.to respond_with(:success) }
+
+        it 'should return a list of remote branches' do
+          expect(JSON.parse(response.body)).to eq(JSON.parse({branches: ["branch1", "branch2"]}.to_json))
+        end
+      end
+
+      context 'invalid repository' do
+        before :each do
+          Downloaders::GitDownloader.expects(:branches).with(url).raises(Git::GitExecuteError)
+          post :branches, url: url, scm_type: scm_type, format: :json
+        end
+
+        it { is_expected.to respond_with(:unprocessable_entity) }
+
+        it 'should return an error hash' do
+          expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ["#{scm_type}ExecuteError: Invalid url"]}.to_json))
+        end
+      end
+    end
+
+    context 'svn scm type' do
+      let!(:scm_type) { "SVN" }
+      before :each do
+        Downloaders::SvnDownloader.expects(:branches).with(url).raises(NotImplementedError)
+        post :branches, url: url, scm_type: scm_type, format: :json
+      end
+
+      it { is_expected.to respond_with(:not_found) }
+
+      it 'should return an error hash' do
+        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ["#{scm_type}: Not implemented for this SCM type"]}.to_json))
+      end
+    end
+  end
 end

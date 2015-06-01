@@ -1,4 +1,21 @@
 class RepositoriesController < ApplicationController
+
+  def branches
+    scm_type = params[:scm_type]
+    begin
+      downloader = Downloaders::Base::ALL[scm_type]
+      if downloader
+        respond_with_json({branches: downloader.branches(params[:url])})
+      else
+        respond_with_json({errors: ["#{scm_type}: Unknown SCM type"]}, :not_found)
+      end
+    rescue Git::GitExecuteError
+      respond_with_json({errors: ["#{scm_type}ExecuteError: Invalid url"]}, :unprocessable_entity)
+    rescue NotImplementedError
+      respond_with_json({errors: ["#{scm_type}: Not implemented for this SCM type"]}, :not_found)
+    end
+  end
+
   def show
     if set_repository
       respond_with_json({repository: @repository})
