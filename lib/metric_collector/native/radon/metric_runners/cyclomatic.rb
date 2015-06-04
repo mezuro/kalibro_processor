@@ -4,7 +4,6 @@ module MetricCollector
     	module MetricRunners
     		class Cyclomatic
           def self.run(repository_path)
-            puts "Cyclomatic runner"
             Dir.chdir(repository_path) { `radon cc -s --json . > radon_cc_output.json` }
           end
 

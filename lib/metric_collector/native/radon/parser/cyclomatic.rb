@@ -18,7 +18,6 @@ module MetricCollector
                 MetricResult.create(metric: metric_configuration.metric, value: value.to_f, module_result: module_result, metric_configuration_id: metric_configuration.id)
               end
             end
-            0
     		  end
 
           def self.default_value

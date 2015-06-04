@@ -16,11 +16,12 @@ module MetricCollector
                 module_result = module_result(module_name, granularity, processing)
                 MetricResult.create(metric: metric_configuration.metric, value: value.to_f, module_result: module_result, metric_configuration_id: metric_configuration.id)
               end
+          end
 
-              def self.default_value
-                0.1
-              end
-           end
+          def self.default_value
+            0.1
+          end
+          
         end
       end
     end

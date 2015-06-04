@@ -4,7 +4,6 @@ module MetricCollector
     	module MetricRunners
     		class Maintainability
           def self.run(repository_path)
-            puts "Maintainability runner"
             Dir.chdir(repository_path) { `radon mi -s --json . > radon_mi_output.json` }
           end
 
