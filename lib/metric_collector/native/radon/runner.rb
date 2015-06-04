@@ -2,43 +2,32 @@ module MetricCollector
   module Native
     module Radon
       class Runner
-        def initialize(attributes={repository_path: nil, chosen_metrics:["raw", "cc", "mi"]})
-          @repository_path = repository_path
-          @chosen_metrics = chosen_metrics
+        def initialize(attributes={repository_path: nil, wanted_metric_configurations: {}})
+          @repository_path = attributes[:repository_path]
+          @wanted_metric_configurations = attributes[:wanted_metric_configurations]
+
+          @runners = {"cc" => MetricCollector::Native::Radon::MetricRunners::Cyclomatic, 
+          "raw" => MetricCollector::Native::Radon::MetricRunners::Raw, 
+          "mi" => MetricCollector::Native::Radon::MetricRunners::Maintainability}
         end
 
         def repository_path
           @repository_path
         end
 
-        end
-       
-        def run
-          run_cyclomatic_complexity
-          run_maintainability
-          run_raw
+        def run_wanted_metrics
+          @wanted_metric_configurations.each do |metric_configuration|
+            code = metric_configuration.metric.code
+            @runners[code].run(@repository_path)
+          end
         end
 
         def clean_output
-          File.delete('radon_cc_output.json') if File.exists?('radon_cc_output.json')
-          File.delete('radon_mi_output.json') if File.exists?('radon_mi_output.json')
-          File.delete('radon_raw_output.json') if File.exists?('radon_raw_output.json')
+          @wanted_metric_configurations.each do |metric_configuration|
+            code = metric_configuration.metric.code
+            @runners[code].clean_output
+          end
         end
-
-        private
-
-        def run_cyclomatic_complexity
-          Dir.chdir(@repository_path) { `radon cc -s --json . > radon_cc_output.json` }
-        end
-
-        def run_maintainability
-          Dir.chdir(@repository_path) { `radon mi -s --json . > radon_mi_output.json` }
-        end
-
-        def run_raw
-          Dir.chdir(@repository_path) { `radon raw -s --json . > radon_raw_output.json` }
-        end
-
       end
     end
   end
