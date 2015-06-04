@@ -8,8 +8,13 @@ module MetricCollector
     module Radon
       module Parser
         @parsers = {"cc" => MetricCollector::Native::Radon::Parser::Cyclomatic, 
-          "raw" => MetricCollector::Native::Radon::Parser::Raw, 
-          "mi" => MetricCollector::Native::Radon::Parser::Maintainability}
+          "mi" => MetricCollector::Native::Radon::Parser::Maintainability,
+          "loc" => MetricCollector::Native::Radon::Parser::Raw,
+          "lloc" => MetricCollector::Native::Radon::Parser::Raw,
+          "sloc" => MetricCollector::Native::Radon::Parser::Raw,
+          "comments" => MetricCollector::Native::Radon::Parser::Raw,
+          "multi" => MetricCollector::Native::Radon::Parser::Raw,
+          "blank" => MetricCollector::Native::Radon::Parser::Raw}
 
         def self.parse_all(file_path, wanted_metric_configurations, processing)
           wanted_metric_configurations.each do |metric_configuration|

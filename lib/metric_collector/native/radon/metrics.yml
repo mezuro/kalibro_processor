@@ -10,7 +10,33 @@
     :description: Measures how easy it is to maintain the code.
     :scope: METHOD
 
-  :raw:
-    :name: Raw metrics
-    :description: Some simple metrics like line of codes.
+  :loc:
+    :name: Lines of code
+    :description: The total number of lines of code.
     :scope: METHOD
+
+  :lloc:
+    :name: Logical Lines of code
+    :description: The number of logical lines of code Every logical line of code contains exactly one statement.
+    :scope: METHOD
+
+  :sloc:
+    :name: Source Lines of code
+    :description: The number of source lines of code not necessarily corresponding to the LLOC.
+    :scope: METHOD
+
+  :comments:
+    :name: Number of comment lines
+    :description: The number of comment lines Multiline strings are not counted as comment since to the Python interpreters they are just strings.
+    :scope: METHOD
+
+  :multi:
+    :name: Multi-line strings
+    :description: The number of lines which represent multi line strings.
+    :scope: METHOD
+
+  :blank:
+    :name: Number of blank lines
+    :description: The number of blank lines or whitespace only ones.
+    :scope: METHOD
+
