@@ -63,6 +63,36 @@ FactoryGirl.define  do
     initialize_with { KalibroClient::Entities::Miscellaneous::NativeMetric.new(name, code, scope, languages, metric_collector_name) }
   end
 
+  factory :cyclomatic_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :metric do
+    name "Cyclomatic Complexity"
+    languages { [:PYTHON] }
+    scope { :METHOD }
+    metric_collector_name "Radon"
+    code 'cc'
+
+    initialize_with { KalibroClient::Entities::Miscellaneous::NativeMetric.new(name, code, scope, languages, metric_collector_name) }
+  end
+
+  factory :maintainability_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :metric do
+    name "Maintainability Index"
+    languages { [:PYTHON] }
+    scope { :METHOD }
+    metric_collector_name "Radon"
+    code 'mi'
+
+    initialize_with { KalibroClient::Entities::Miscellaneous::NativeMetric.new(name, code, scope, languages, metric_collector_name) }
+  end
+
+  factory :lines_of_code_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :metric do
+    name "Lines of code"
+    languages { [:PYTHON] }
+    scope { :METHOD }
+    metric_collector_name "Radon"
+    code 'loc'    
+
+    initialize_with { KalibroClient::Entities::Miscellaneous::NativeMetric.new(name, code, scope, languages, metric_collector_name) }
+  end    
+
   factory :compound_flog_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :compound_metric do
     script "return flog() * 2;"
   end

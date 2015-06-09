@@ -50,6 +50,18 @@ FactoryGirl.define do
       metric { FactoryGirl.build(:saikuro_metric) }
     end
 
+    trait :cyclomatic do
+      metric { FactoryGirl.build(:cyclomatic_metric) }
+    end
+
+    trait :maintainability do
+      metric { FactoryGirl.build(:maintainability_metric) }
+    end
+
+    trait :lines_of_code do
+      metric {FactoryGirl.build(:lines_of_code_metric) }
+    end  
+
     trait :flog_compound_metric_configuration do
       metric { FactoryGirl.build(:kalibro_gatekeeper_client_compound_flog_metric) }
       weight 1
@@ -70,8 +82,11 @@ FactoryGirl.define do
     factory :flog_metric_configuration, traits: [:flog]
     factory :flog_compound_metric_configuration, traits: [:flog_compound_metric_configuration]
     factory :saikuro_metric_configuration, traits: [:saikuro]
+    factory :maintainability_metric_configuration, traits: [:maintainability]
+    factory :cyclomatic_metric_configuration, traits: [:cyclomatic]
     factory :saikuro_compound_metric_configuration, traits: [:saikuro_compound_metric_configuration]
     factory :sum_metric_configuration, traits: [:sum_metric_configuration]
+    factory :radon_configuration, traits: [:lines_of_code]
     factory :maximum_metric_configuration, traits: [:maximum_metric_configuration]
     factory :minimum_metric_configuration, traits: [:minimum_metric_configuration]
   end
