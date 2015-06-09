@@ -23,7 +23,13 @@ module Downloaders
     end
 
     def self.branches(url)
-      Git::Lib.new.ls_remote(url)["branches"].keys
+      # Some domains will ask for username and password
+      # Avoid hanging on those cases by setting the ASK_PASS program to do nothing
+      old_askpass = ENV['GIT_ASKPASS']
+      ENV['GIT_ASKPASS'] = '/bin/true'
+      branches = Git::Lib.new.ls_remote(url)["branches"].keys
+      ENV['GIT_ASKPASS'] = old_askpass
+      branches
     end
 
     private
