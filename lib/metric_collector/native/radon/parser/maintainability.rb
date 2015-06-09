@@ -3,12 +3,9 @@ module MetricCollector
     module Radon
       module Parser
         class Maintainability < MetricCollector::Native::Radon::Parser::Base
-          def self.parse(output_path, processing = nil, metric_configuration = nil)
+          def self.parse(maintainability_output, processing = nil, metric_configuration = nil)
 
-             output_file = File.read("#{output_path}/radon_mi_output.json")
-             data_hash = JSON.parse(output_file)
-
-              data_hash.each do |file_name, result_hash|
+              maintainability_output.each do |file_name, result_hash|
                 file_name = module_name_prefix(file_name)
                 value =  result_hash["mi"]
                 module_name = file_name

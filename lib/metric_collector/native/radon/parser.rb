@@ -19,7 +19,12 @@ module MetricCollector
         def self.parse_all(file_path, wanted_metric_configurations, processing)
           wanted_metric_configurations.each do |metric_configuration|
             code = metric_configuration.metric.code
-            @parsers[code].parse(file_path, processing, metric_configuration)
+            
+            file_path = "#{file_path}/radon_#{code}_output.json"
+            output_file = File.read(file_path)
+            data_hash = JSON.parse(output_file)
+
+            @parsers[code].parse(data_hash, processing, metric_configuration)
           end
         end
 

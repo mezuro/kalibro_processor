@@ -4,11 +4,8 @@ module MetricCollector
       module Parser
         class Raw < MetricCollector::Native::Radon::Parser::Base
 
-        	def self.parse(output_path, processing = nil, metric_configuration = nil)
-            output_file = File.read("#{output_path}/radon_raw_output.json")
-            data_hash = JSON.parse(output_file)
-
-            data_hash.each do |file_name, result_hash|
+        	def self.parse(raw_output, processing = nil, metric_configuration = nil)
+            raw_output.each do |file_name, result_hash|
                 file_name = module_name_prefix(file_name)
                 value =  result_hash[metric_configuration.metric.code]
                 module_name = file_name

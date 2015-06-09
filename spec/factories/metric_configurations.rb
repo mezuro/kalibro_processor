@@ -86,7 +86,7 @@ FactoryGirl.define do
     factory :cyclomatic_metric_configuration, traits: [:cyclomatic]
     factory :saikuro_compound_metric_configuration, traits: [:saikuro_compound_metric_configuration]
     factory :sum_metric_configuration, traits: [:sum_metric_configuration]
-    factory :radon_configuration, traits: [:lines_of_code]
+    factory :radon_configuration, traits: [:cyclomatic]
     factory :maximum_metric_configuration, traits: [:maximum_metric_configuration]
     factory :minimum_metric_configuration, traits: [:minimum_metric_configuration]
   end

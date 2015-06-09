@@ -3,8 +3,8 @@ require 'metric_collector'
 
 describe MetricCollector::Native::Radon::Runner, :type => :model do
   let!(:repository_path) { Dir.pwd }
-  #let(:wanted_metrics) { MetricConfigurations }
-  subject { MetricCollector::Native::Radon::Runner.new(repository_path: repository_path, wanted_metric_configurations: {}) }
+  let(:wanted_metrics) { FactoryGirl.build(:radon_configuration) }
+  subject { MetricCollector::Native::Radon::Runner.new(repository_path: repository_path, wanted_metric_configurations: [wanted_metrics]) }
 
   describe 'initialize' do
     it 'is expected to have a repository_path' do
