@@ -21,9 +21,11 @@ module MetricCollector
             code = metric_configuration.metric.code
             command = @parsers[code].command
             file_path = "#{directory_path}/radon_#{command}_output.json"
-            output_file = File.read(file_path)
-            data_hash = JSON.parse(output_file)
-
+            data_hash = {}
+            if File.exist?(file_path)
+              output_file = File.read(file_path)
+              data_hash = JSON.parse(output_file)
+            end  
             @parsers[code].parse(data_hash, processing, metric_configuration)
           end
         end

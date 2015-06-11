@@ -20,7 +20,7 @@ module MetricCollector
           end
 
           def self.default_value
-            0.1
+            0.0
           end
           
         end
