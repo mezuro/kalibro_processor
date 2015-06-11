@@ -13,8 +13,8 @@ module Downloaders
 
     def self.updatable?; true; end
 
-    def self.get(address, directory)
-      if Dir.exist?(directory)
+    def self.get(address, directory, branch)
+      if Dir.exist?(directory) and is_svn?(directory)
         update(directory)
       else
         checkout(address,directory)
@@ -22,6 +22,10 @@ module Downloaders
     end
 
     private
+
+    def self.is_svn?(directory)
+      Dir.exists?("#{directory}/.svn")
+    end
 
     def self.update(directory)
       # Recursively revert the directory and its contents and then update it to the latest version
@@ -32,8 +36,6 @@ module Downloaders
 
     def self.checkout(address, directory)
       # Copy contents of address to a new directory
-      name = directory.split('/').last
-      path = (directory.split('/') - [name]).join('/')
       checkout = `svn checkout #{address} #{directory}`
       raise Errors::SvnExecuteError.new('Failed to checkout to svn repository') if checkout.nil?
     end

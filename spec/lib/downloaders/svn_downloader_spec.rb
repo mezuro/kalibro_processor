@@ -42,44 +42,61 @@ describe Downloaders::SvnDownloader do
           it 'is expected to checkout the repository' do
             subject.class.expects(:`).with(command).returns(svn_checkout)
 
-            subject.class.retrieve!(address, directory)
+            subject.class.retrieve!(address, directory, nil)
           end
         end
 
         context 'failling to checkout' do
           it 'should raise an error' do
             subject.class.expects(:`).with(command).returns(nil)
-            expect {subject.class.get(address, directory)}.to raise_error(Errors::SvnExecuteError)
+            expect {subject.class.get(address, directory, nil)}.to raise_error(Errors::SvnExecuteError)
           end
         end
       end
 
       context "when the directory exists" do
-        let!(:svn_revert_command) { "svn revert -R #{directory}" }
-        let!(:svn_update_command) { "svn update #{directory}" }
+        context "and it is a svn repository" do
+          let!(:svn_revert_command) { "svn revert -R #{directory}" }
+          let!(:svn_update_command) { "svn update #{directory}" }
 
-        context "updating sucessfully" do
-          before :each do
-             Dir.expects(:exist?).with(directory).at_least_once.returns(true)
-             subject.class.expects(:`).with(svn_revert_command).returns("")
-             subject.class.expects(:`).with(svn_update_command).returns("")
+          context "updating sucessfully" do
+            before :each do
+               Dir.expects(:exist?).with(directory).returns(true)
+               Dir.expects(:exists?).with("#{directory}/.svn").returns(true)
+               subject.class.expects(:`).with(svn_revert_command).returns("")
+               subject.class.expects(:`).with(svn_update_command).returns("")
+            end
+
+            it 'should revert the directory changes and update it to the last version (reset)' do
+               expect(subject.class.get(address, directory, nil)).to eq(nil)
+            end
           end
 
-          it 'should revert the directory changes and update it to the last version (reset)' do
-             expect(subject.class.get(address, directory)).to eq(nil)
+          context "failing to update" do
+            before :each do
+               Dir.expects(:exist?).with(directory).returns(true)
+               Dir.expects(:exists?).with("#{directory}/.svn").returns(true)
+               subject.class.expects(:`).with(svn_revert_command).returns(nil)
+               subject.class.expects(:`).with(svn_update_command).returns(nil)
+            end
+
+            it 'it should raise an error' do
+               expect {subject.class.get(address, directory, nil)}.to raise_error(Errors::SvnExecuteError)
+            end
           end
         end
+      end
 
-        context "failing to update" do
-          before :each do
-             Dir.expects(:exist?).with(directory).at_least_once.returns(true)
-             subject.class.expects(:`).with(svn_revert_command).returns(nil)
-             subject.class.expects(:`).with(svn_update_command).returns(nil)
-          end
+      context 'and it is not a svn repository' do
+        let!(:svn_checkout) { YAML.load_file('spec/factories/svn_downloader.yml')["svn_checkout"] }
+        let!(:command) { "svn checkout #{address} #{directory}" }
 
-          it 'it should raise an error' do
-             expect {subject.class.get(address, directory)}.to raise_error(Errors::SvnExecuteError)
-          end
+        it 'is expected to checkout the repository' do
+          subject.class.expects(:`).with(command).returns(svn_checkout)
+          Dir.expects(:exist?).with(directory).twice.returns(true)
+          Dir.expects(:exists?).with("#{directory}/.svn").returns(false)
+
+          subject.class.retrieve!(address, directory, nil)
         end
       end
     end

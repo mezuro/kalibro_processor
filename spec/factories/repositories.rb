@@ -5,6 +5,7 @@ FactoryGirl.define do
     name "QtCalculator"
     scm_type "SUBVERSION"
     address "svn://svn.code.sf.net/p/qt-calculator/code/trunk"
+    branch "master"
     description "An easy calculator"
     license "None"
     period 0
@@ -24,7 +25,12 @@ FactoryGirl.define do
       description "Kalibro Processor"
     end
 
+    trait :another_branch do
+      branch "dev"
+    end
+
     factory :sbking_repository, traits: [:sbking]
     factory :ruby_repository, traits: [:ruby]
+    factory :custom_branch, traits: [:another_branch]
   end
 end

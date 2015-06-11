@@ -19,7 +19,7 @@ describe Downloaders::Base do
         end
 
         it 'is expected to raise a NotImplementedYetError' do
-          expect{ subject.class.retrieve!(address, directory) }.to raise_error(NotImplementedError)
+          expect{ subject.class.retrieve!(address, directory, nil) }.to raise_error(NotImplementedError)
         end
 
         context "and it isn't updatable" do
@@ -30,7 +30,7 @@ describe Downloaders::Base do
           it 'is expected to delete the directory and get (so raising a error)' do
             Dir.expects(:delete).with(directory).returns(0)
 
-            expect{ subject.class.retrieve!(address, directory) }.to raise_error(NotImplementedError)
+            expect{ subject.class.retrieve!(address, directory, nil) }.to raise_error(NotImplementedError)
           end
         end
 
@@ -40,7 +40,7 @@ describe Downloaders::Base do
           end
 
           it 'is expected to raise a NotImplementedYetError' do
-            expect{ subject.class.retrieve!(address, directory) }.to raise_error(NotImplementedError)
+            expect{ subject.class.retrieve!(address, directory, nil) }.to raise_error(NotImplementedError)
           end
         end
       end
@@ -51,7 +51,7 @@ describe Downloaders::Base do
         end
 
         it 'is expected to raise a NotImplementedYetError' do
-          expect{ subject.class.retrieve!(address, directory) }.to raise_error(NotImplementedError)
+          expect{ subject.class.retrieve!(address, directory, nil) }.to raise_error(NotImplementedError)
         end
       end
     end

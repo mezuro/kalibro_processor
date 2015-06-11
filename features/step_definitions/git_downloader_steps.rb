@@ -2,10 +2,14 @@ When(/^I call the available\? method for git$/) do
   @availability = Downloaders::GitDownloader.available?
 end
 
-When(/^I call retrieve! from git with "(.*?)" and "(.*?)"$/) do |address, directory|
-  Downloaders::GitDownloader.retrieve!(address, directory)
+When(/^I call retrieve! from git with "(.*?)" and "(.*?)" and "(.*)"$/) do |address, directory, branch|
+  Downloaders::GitDownloader.retrieve!(address, directory, branch)
 end
 
-Then(/^"(.*?)" should be a git repository$/) do |directory|
+# receives either default or the custom branch name
+Then(/^"(.*?)" should be a git repository at the HEAD of the remote (?:default|"(.*?)") branch$/) do |directory, branch|
   expect(Dir.exists?("#{directory}/.git")).to be_truthy
+  git = Git.open(directory)
+  branch ||= "master"
+  expect(git.object('HEAD').sha).to eq(git.object("#{git.remote.name}/#{branch}").sha)
 end

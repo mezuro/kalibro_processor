@@ -28,6 +28,7 @@ describe Downloaders::GitDownloader do
     describe 'retrieve! (get)' do
       let(:directory) { "/tmp/test" }
       let(:address) { "http://test.test" }
+      let(:branch_name) { 'test' }
 
       context 'when the directory exists' do
         before :each do
@@ -35,26 +36,20 @@ describe Downloaders::GitDownloader do
         end
         context 'and it is a git repository' do
 
-          it 'is expected to open, fetch and reset the repository' do
-            remote = Object.new
-            remote_name = 'test'
-            remote.expects(:name).returns(remote_name)
-
-            branch = Object.new
-            branch_name = 'test'
-            branch.expects(:name).returns(branch_name)
-
+          it 'is expected to open, fetch and checkout the repository' do
             git = Object.new
-            git.expects(:remote).returns(remote)
-            git.expects(:branch).returns(branch)
+            remote = mock()
             git.expects(:fetch).returns(true)
-            git.expects(:reset).with("#{remote_name}/#{branch_name}", hard: true).returns(true)
+            git.expects(:checkout).with("#{branch_name}").returns("")
+            git.expects(:remote).returns(remote)
+            remote.expects(:name).returns("name")
+            git.expects(:reset_hard).with("name" + "/#{branch_name}")
 
             Dir.expects(:exists?).with("#{directory}/.git").returns(true)
 
             Git.expects(:open).with(directory).returns(git)
 
-            subject.class.retrieve!(address, directory)
+            subject.class.retrieve!(address, directory, branch_name)
           end
         end
 
@@ -64,10 +59,10 @@ describe Downloaders::GitDownloader do
             name = directory.split('/').last
             path = (directory.split('/') - [name]).join('/')
 
-            Git.expects(:clone).with(address, name, path: path).returns(true)
+            Git.expects(:clone).with(address, name, path: path, branch: branch_name).returns(true)
             Dir.expects(:exists?).with("#{directory}/.git").returns(false)
 
-            subject.class.retrieve!(address, directory)
+            subject.class.retrieve!(address, directory, branch_name)
           end
         end
 
@@ -82,9 +77,32 @@ describe Downloaders::GitDownloader do
           name = directory.split('/').last
           path = (directory.split('/') - [name]).join('/')
 
-          Git.expects(:clone).with(address, name, path: path).returns(true)
+          Git.expects(:clone).with(address, name, path: path, branch: branch_name).returns(true)
 
-          subject.class.retrieve!(address, directory)
+          subject.class.retrieve!(address, directory, branch_name)
+        end
+      end
+    end
+
+    describe "branches" do
+      let!(:url) { "dummy-url" }
+      context "invalid url" do
+        before :each do
+          Git::Lib.any_instance.expects(:ls_remote).with(url).raises(Git::GitExecuteError)
+        end
+
+        it 'is expected to raise a GitExecuteError' do
+          expect{ subject.class.branches(url) }.to raise_error(Git::GitExecuteError)
+        end
+      end
+
+      context "valid url" do
+        before :each do
+          Git::Lib.any_instance.expects(:ls_remote).with(url).returns({"branches" => {"branch1" => {}, "branch2" => {}}})
+        end
+
+        it 'is expected to return a list with all branches' do
+          expect(subject.class.branches(url)).to eq(["branch1", "branch2"])
         end
       end
     end

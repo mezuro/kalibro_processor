@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150427163755) do
+ActiveRecord::Schema.define(version: 20150527165919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 20150427163755) do
     t.integer  "kalibro_configuration_id"
     t.integer  "project_id"
     t.string   "code_directory"
+    t.string   "branch"
   end
 
 end

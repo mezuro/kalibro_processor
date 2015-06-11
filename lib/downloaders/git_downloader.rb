@@ -14,31 +14,43 @@ module Downloaders
 
     def self.updatable?; true; end
 
-    def self.get(address, directory)
-      if Dir.exists?(directory) and is_git?(directory) 
-        reset(directory)
+    def self.get(address, directory, branch)
+      if Dir.exists?(directory) and is_git?(directory)
+        checkout(directory, branch)
       else
-        clone(address, directory)
+        clone(address, directory, branch)
       end
+    end
+
+    def self.branches(url)
+      # Some domains will ask for username and password
+      # Avoid hanging on those cases by setting the ASK_PASS program to do nothing
+      old_askpass = ENV['GIT_ASKPASS']
+      ENV['GIT_ASKPASS'] = '/bin/true'
+      branches = Git::Lib.new.ls_remote(url)["branches"].keys
+      ENV['GIT_ASKPASS'] = old_askpass
+      branches
     end
 
     private
 
-    def self.is_git?(directory) 
+    def self.is_git?(directory)
       Dir.exists?("#{directory}/.git")
     end
 
-    def self.clone(address, directory)
+    def self.checkout(directory, branch)
+      g = Git.open(directory)
+      g.fetch
+      g.checkout(branch)
+      g.reset_hard("#{g.remote.name}/#{branch}")
+    end
+
+    def self.clone(address, directory, branch)
       # if directory is "/tmp/test", name is "test" and path is "/tmp"
       name = directory.split('/').last
       path = (directory.split('/') - [name]).join('/')
-      Git.clone(address, name, path: path)
-    end
-
-    def self.reset(directory)
-      g = Git.open(directory)
-      g.fetch
-      g.reset("#{g.remote.name}/#{g.branch.name}", hard: true)
+      branch = nil if !branch.nil? && branch.empty? # If no branch is specified, clone from the default branch
+      Git.clone(address, name, path: path, branch: branch)
     end
   end
 end
