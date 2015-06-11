@@ -42,7 +42,7 @@ module Downloaders
       g = Git.open(directory)
       g.fetch
       g.checkout(branch)
-      g.pull
+      g.reset_hard("#{g.remote.name}/#{branch}")
     end
 
     def self.clone(address, directory, branch)

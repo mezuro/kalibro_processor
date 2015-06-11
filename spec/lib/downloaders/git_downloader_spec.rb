@@ -38,9 +38,12 @@ describe Downloaders::GitDownloader do
 
           it 'is expected to open, fetch and checkout the repository' do
             git = Object.new
+            remote = mock()
             git.expects(:fetch).returns(true)
             git.expects(:checkout).with("#{branch_name}").returns("")
-            git.expects(:pull)
+            git.expects(:remote).returns(remote)
+            remote.expects(:name).returns("name")
+            git.expects(:reset_hard).with("name" + "/#{branch_name}")
 
             Dir.expects(:exists?).with("#{directory}/.git").returns(true)
 
