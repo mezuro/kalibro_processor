@@ -3,6 +3,9 @@ module MetricCollector
     module Radon
       module Parser
         class Raw < MetricCollector::Native::Radon::Parser::Base
+          def self.command
+            'raw'
+          end
 
         	def self.parse(raw_output, processing = nil, metric_configuration = nil)
             raw_output.each do |file_name, result_hash|

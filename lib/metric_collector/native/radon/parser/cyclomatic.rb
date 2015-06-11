@@ -3,7 +3,10 @@ module MetricCollector
     module Radon
       module Parser
         class Cyclomatic < MetricCollector::Native::Radon::Parser::Base
-
+          def self.command
+            'cc'
+          end
+          
           def self.parse(cyclomatic_output, processing = nil, metric_configuration = nil)
 
             cyclomatic_output.each do |file_name, result_hash|

@@ -16,11 +16,11 @@ module MetricCollector
           "multi" => MetricCollector::Native::Radon::Parser::Raw,
           "blank" => MetricCollector::Native::Radon::Parser::Raw}
 
-        def self.parse_all(file_path, wanted_metric_configurations, processing)
+        def self.parse_all(directory_path, wanted_metric_configurations, processing)
           wanted_metric_configurations.each do |metric_configuration|
             code = metric_configuration.metric.code
-            
-            file_path = "#{file_path}/radon_#{code}_output.json"
+            command = @parsers[code].command
+            file_path = "#{directory_path}/radon_#{command}_output.json"
             output_file = File.read(file_path)
             data_hash = JSON.parse(output_file)
 

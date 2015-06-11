@@ -3,6 +3,10 @@ module MetricCollector
     module Radon
       module Parser
         class Maintainability < MetricCollector::Native::Radon::Parser::Base
+          def self.command
+            'mi'
+          end
+
           def self.parse(maintainability_output, processing = nil, metric_configuration = nil)
 
               maintainability_output.each do |file_name, result_hash|
