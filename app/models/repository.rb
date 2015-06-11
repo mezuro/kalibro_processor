@@ -11,11 +11,9 @@ class Repository < ActiveRecord::Base
   validates :kalibro_configuration_id, presence: true
   validates :project_id, presence: true
 
-  TYPES = {"GIT" => Downloaders::GitDownloader, "SVN" => Downloaders::SvnDownloader}
-
   def self.supported_types
     supported_types = []
-    TYPES.select {|type, klass| supported_types << type if klass.available? }
+    Downloaders::ALL.select {|type, klass| supported_types << type if klass.available? }
     return supported_types
   end
 

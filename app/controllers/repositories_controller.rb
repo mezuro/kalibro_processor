@@ -3,7 +3,7 @@ class RepositoriesController < ApplicationController
   def branches
     scm_type = params[:scm_type]
     begin
-      downloader = Downloaders::Base::ALL[scm_type]
+      downloader = Downloaders::ALL[scm_type]
       if downloader
         respond_with_json({branches: downloader.branches(params[:url])})
       else
