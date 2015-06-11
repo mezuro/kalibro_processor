@@ -3,11 +3,10 @@ require 'metric_collector'
 
 describe MetricCollector::Native::Radon::Parser do
   describe 'methods' do
-    let!(:metric_configuration) { FactoryGirl.build(:radon_configuration) }
+    let!(:metric_configuration) { FactoryGirl.build(:cyclomatic_configuration) }
     let(:wanted_metric_configurations) { [metric_configuration] }
     let(:radon_results) { FactoryGirl.build(:radon_collector_lists) }
     let(:processing) { FactoryGirl.build(:processing) }
-    let(:path) { "/test/test" }
     describe 'parse_all' do
       it 'is expected to call all parsers' do
         MetricCollector::Native::Radon::Parser.parse_all("/test/test", wanted_metric_configurations, processing)

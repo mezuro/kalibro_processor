@@ -3,8 +3,8 @@ require 'metric_collector'
 
 describe MetricCollector::Native::Radon::Runner, :type => :model do
   let!(:repository_path) { Dir.pwd }
-  let(:wanted_metrics) { FactoryGirl.build(:radon_configuration) }
-  subject { MetricCollector::Native::Radon::Runner.new(repository_path: repository_path, wanted_metric_configurations: [wanted_metrics]) }
+  let(:wanted_metrics) { [FactoryGirl.build(:cyclomatic_configuration),FactoryGirl.build(:maintainability_configuration),FactoryGirl.build(:lines_of_code_configuration)] }
+  subject { MetricCollector::Native::Radon::Runner.new(repository_path: repository_path, wanted_metric_configurations: wanted_metrics) }
 
   describe 'initialize' do
     it 'is expected to have a repository_path' do
@@ -27,14 +27,8 @@ describe MetricCollector::Native::Radon::Runner, :type => :model do
 
   describe 'clean_output' do
     context 'when the file exists' do
-      before :each do
-        subject.clean_output
-      end
-
       it 'is expected to delete files on repository_path' do
-        expect(File.exists?("#{subject.repository_path}/radon_cc_output.json")).to be_falsy
-      	expect(File.exists?("#{subject.repository_path}/radon_mi_output.json")).to be_falsy
-        expect(File.exists?("#{subject.repository_path}/radon_raw_output.json")).to be_falsy
+          subject.clean_output
       end
     end
   end
