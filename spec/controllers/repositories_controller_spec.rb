@@ -583,7 +583,7 @@ RSpec.describe RepositoriesController, :type => :controller do
       it { is_expected.to respond_with(:not_found) }
 
       it 'should return an error hash' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ["#{scm_type}: Not implemented for this SCM type"]}.to_json))
+        expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ["#{scm_type}: Branch listing is not supported for this SCM type"]}.to_json))
       end
     end
   end
