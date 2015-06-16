@@ -9,7 +9,6 @@ class Repository < ActiveRecord::Base
     message: "should be unique within project" }
   validates :address, presence: true
   validates :kalibro_configuration_id, presence: true
-  validates :project_id, presence: true
 
   def self.supported_types
     supported_types = []
