@@ -36,12 +36,20 @@ Given(/^I have a sample configuration with the (\w+) native metric$/) do |metric
   compound_range.save
 end
 
-Given(/^I have a sample ruby repository within the sample project$/) do
+Given(/^I have a sample repository$/) do
+  @repository = FactoryGirl.create(:sbking_repository, kalibro_configuration: @kalibro_configuration)
+end
+
+Given(/^I have a sample ruby repository$/) do
   @repository = FactoryGirl.create(:ruby_repository, kalibro_configuration: @configuration)
 end
 
+Given(/^I have a sample ruby repository within the sample project$/) do
+  @repository = FactoryGirl.create(:ruby_repository, :with_project_id, kalibro_configuration: @configuration)
+end
+
 Given(/^I have a sample repository within the sample project$/) do
-  @repository = FactoryGirl.create(:sbking_repository, kalibro_configuration: @kalibro_configuration)
+  @repository = FactoryGirl.create(:sbking_repository, :with_project_id, kalibro_configuration: @kalibro_configuration)
 end
 
 Given(/^I have a processing within the sample repository$/) do

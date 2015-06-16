@@ -6,7 +6,6 @@ describe Repository, :type => :model do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:address) }
     it { is_expected.to validate_presence_of(:kalibro_configuration_id) }
-    it { is_expected.to validate_presence_of(:project_id) }
     it { is_expected.to validate_uniqueness_of(:name).scoped_to(:project_id).with_message(/should be unique within project/) }
   end
 

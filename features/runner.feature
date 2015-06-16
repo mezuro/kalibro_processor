@@ -8,7 +8,7 @@ Feature: Runner run
     Given I have sample readings
     And I have a sample kalibro configuration with native metrics
     And I have two compound metrics with script "return 1.0/0.0;" and "return Math.sqrt(-5);"
-    And I have a sample repository within the sample project
+    And I have a sample repository
     And I have a processing within the sample repository
     When I run for the given repository
     Then the repository code_directory should exist
@@ -22,7 +22,7 @@ Feature: Runner run
     Given I have sample readings
     And I have a sample configuration with the Saikuro native metric
     And I add the "Flog" native metric to the sample configuration
-    And I have a sample ruby repository within the sample project
+    And I have a sample ruby repository
     And I have a processing within the sample repository
     When I run for the given repository
     Then the repository code_directory should exist
@@ -34,7 +34,7 @@ Feature: Runner run
     Given I have sample readings
     And I have a sample kalibro configuration with native metrics
     And I have a compound metric with an invalid script
-    And I have a sample repository within the sample project
+    And I have a sample repository
     And I have a processing within the sample repository
     When I run for the given repository
     Then I should receive a processing error
@@ -49,7 +49,7 @@ Feature: Runner run
     And I have a range for this metric configuration
     And I add the "Total Lines of Code" analizo metric with scope "SOFTWARE" and code "total_loc"
     And I have a range for this metric configuration
-    And I have a sample repository within the sample project
+    And I have a sample repository
     And I have a processing within the sample repository
     When I run for the given repository
     Then the repository code_directory should exist
@@ -60,7 +60,7 @@ Feature: Runner run
   @clear_repository @kalibro_configuration_restart
   Scenario: A processing with an empty kalibro configuration
     Given I have a sample kalibro configuration
-    And I have a sample repository within the sample project
+    And I have a sample repository
     And I have a processing within the sample repository
     When I run for the given repository
     Then the repository code_directory should exist

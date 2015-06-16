@@ -9,7 +9,6 @@ FactoryGirl.define do
     description "An easy calculator"
     license "None"
     period 0
-    project { FactoryGirl.build(:project_with_id) }
 
     trait :sbking do
       name "SBKing"
@@ -27,6 +26,10 @@ FactoryGirl.define do
 
     trait :another_branch do
       branch "dev"
+    end
+
+    trait :with_project_id do
+      project { FactoryGirl.build(:project_with_id) }
     end
 
     factory :sbking_repository, traits: [:sbking]
