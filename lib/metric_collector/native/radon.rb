@@ -6,7 +6,7 @@ require 'metric_collector/native/radon/metric_runners/maintainability'
 require 'metric_collector/native/radon/metric_runners/raw'
 
 module MetricCollector
-    module Native
-      module Radon; end
+  module Native
+    module Radon; end
   end
 end

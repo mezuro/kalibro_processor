@@ -48,6 +48,23 @@ Given(/^I have a sample ruby repository within the sample project$/) do
   @repository = FactoryGirl.create(:ruby_repository, :with_project_id, kalibro_configuration: @configuration)
 end
 
+Given(/^I have a sample configuration with the (\w+) python native metric$/) do |metric|
+  metric_configuration_factory = (metric + "_metric_configuration").downcase
+  metric_factory = (metric + "_metric").downcase
+  @configuration = FactoryGirl.create(:python_configuration, id: nil)
+  metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
+                                            {id: 4,
+                                             metric: FactoryGirl.build(metric_factory.to_sym),
+                                             reading_group_id: @reading_group.id,
+                                             kalibro_configuration_id: @configuration.id})
+  range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
+  range.save
+end
+
+Given(/^I have a sample python repository within the sample project$/) do
+  @repository = FactoryGirl.create(:python_repository, kalibro_configuration: @configuration)
+end
+
 Given(/^I have a sample repository within the sample project$/) do
   @repository = FactoryGirl.create(:sbking_repository, :with_project_id, kalibro_configuration: @kalibro_configuration)
 end
