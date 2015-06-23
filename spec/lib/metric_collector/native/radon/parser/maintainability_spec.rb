@@ -5,19 +5,17 @@ describe MetricCollector::Native::Radon::Parser::Maintainability do
   describe 'parse' do
     let!(:radon_results) { FactoryGirl.build(:radon_collector_lists).results[:mi] }
     let!(:processing) { FactoryGirl.build(:processing) }
-    let!(:metric_configuration) { FactoryGirl.build(:maintainability_configuration) }
+    let!(:metric_configuration) { FactoryGirl.build(:maintainability_metric_configuration) }
 
     context 'when there is a valid json input for maintainability parse' do
       before :each do
         @result = MetricCollector::Native::Radon::Parser::Maintainability.parse(radon_results, processing, metric_configuration)
       end
 
-      it 'is expected to parse the results into a module result' do
-      
+      it 'is expected to parse the results into a module result' do  
         expect(@result['mi']).to eq(radon_results['mi'])
         expect(@result['rank']).to eq(radon_results['rank'])
-
-        end
+      end
     end
   end
 

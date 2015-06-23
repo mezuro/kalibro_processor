@@ -6,12 +6,13 @@ module MetricCollector
           def self.command
             'cc'
           end
-          
-          def self.parse(cyclomatic_output, processing = nil, metric_configuration = nil)
 
-            cyclomatic_output.each do |file_name, result_hash|
+          def self.parse(cyclomatic_output, processing = nil, metric_configuration = nil)
+            cyclomatic_output.each do |file_name, result|
+              return self.default_value if result.class != Array
               name_prefix = module_name_prefix(file_name)
-              result_hash.each do |key|
+              result.each do |key|
+                return self.default_value if key.class != Hash
                 name_suffix = module_name_suffix(key['name'])
                 value = key['complexity']
                 module_name = name_prefix + name_suffix
@@ -23,9 +24,8 @@ module MetricCollector
           end
 
           def self.default_value
-            0.0
+            1.0
           end
-
         end
       end
     end

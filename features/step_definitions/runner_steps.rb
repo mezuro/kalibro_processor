@@ -151,7 +151,6 @@ When(/^I wait for the "(.*?)" state$/) do |state|
   end
 end
 
-
 Then(/^the repository code_directory should exist$/) do
   @repository.reload
   expect(Dir.exists?(@repository.code_directory)).to be_truthy

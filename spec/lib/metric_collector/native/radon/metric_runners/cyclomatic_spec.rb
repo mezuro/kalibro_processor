@@ -6,24 +6,19 @@ describe MetricCollector::Native::Radon::MetricRunners::Cyclomatic, :type => :mo
   subject { MetricCollector::Native::Radon::MetricRunners::Cyclomatic}
 
   describe 'run' do
-    before :each do
-      subject.run(repository_path)
-    end
+    it 'is expected to run cyclomatic radon metric collector' do
+      Dir.expects(:chdir).with(repository_path).returns(0)
 
-    it 'is expected to create cc json file' do
-      expect(File.exists?("#{repository_path}/radon_cc_output.json")).to be_truthy
+      expect(subject.run(repository_path)).to eql(0)
     end
   end
 
   describe 'clean_output' do
-    context 'when the file exists' do
-      before :each do
-        subject.clean_output
-      end
+    it 'is expected to delete cyclomatic files on repository_path' do
+      File.expects(:exists?).returns(true)
+      File.expects(:delete).returns(1)
 
-      it 'is expected to delete files on repository_path' do
-        expect(File.exists?("#{repository_path}/radon_cc_output.json")).to be_falsy
-      end
+      expect(subject.clean_output).to eql(1)
     end
   end
 end
