@@ -104,7 +104,7 @@ end
 gem 'descriptive-statistics', '~> 2.1.2'
 
 # Ruby Collector
-gem 'metric_fu', '~> 4.11.1'
+gem 'metric_fu', '~> 4.12.0'
 gem 'debug_inspector' # this is a dependency after updating metric_fu to 4.11.4
 
 # Use ActiveModel has_secure_password
