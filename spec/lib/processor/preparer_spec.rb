@@ -6,13 +6,17 @@ describe Processor::Preparer do
     let!(:code_dir) { "/tmp/test" }
     let!(:kalibro_configuration) { FactoryGirl.build(:kalibro_configuration) }
     let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration) }
-    let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
+    let!(:processing) { FactoryGirl.build(:processing, repository: repository, process_times: FactoryGirl.build_stubbed_list(:process_time, 1)) }
     let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
     let!(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:analizo_native_metric)) }
     let!(:compound_metric_configuration) { FactoryGirl.build(:compound_metric_configuration) }
     let!(:dir) { YAML.load_file("#{Rails.root}/config/repositories.yml")["repositories"]["path"] }
 
     describe 'task' do
+      before :each do
+        processing.process_times.expects(:destroy_all).once
+      end
+
       context 'when the base directory exists' do
         before :each do
           repository.expects(:update).with(code_directory: code_dir)
