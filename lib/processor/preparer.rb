@@ -4,6 +4,10 @@ module Processor
     protected
 
     def self.task(context)
+      # Make sure no pre-existing processing times exist. This ensure a failed
+      # processing does not leave leftovers.
+      context.processing.process_times.destroy_all
+
       context.repository.update(code_directory: generate_dir_name)
       metrics_list(context)
     end
