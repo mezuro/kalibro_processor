@@ -3,6 +3,20 @@ require 'rails_helper'
 RSpec.describe RepositoriesController, :type => :controller do
   let!(:repository) { FactoryGirl.build(:repository, id: 1) }
 
+  describe 'index' do
+    before :each do
+      Repository.expects(:all).returns([repository])
+
+      get :index, format: :json
+    end
+
+    it { is_expected.to respond_with(:success) }
+
+    it 'is expected to return the list of repositories converted to JSON' do
+      expect(JSON.parse(response.body)).to eq(JSON.parse({repositories: [repository]}.to_json))
+    end
+  end
+
   describe 'show' do
     context 'when the Repository exists' do
       before :each do
@@ -13,12 +27,12 @@ RSpec.describe RepositoriesController, :type => :controller do
 
       it { is_expected.to respond_with(:success) }
 
-      it 'is expected to return the list of repositories converted to JSON' do
+      it 'is expected to return the repository converted to JSON' do
         expect(JSON.parse(response.body)).to eq(JSON.parse({repository: repository}.to_json))
       end
     end
 
-    context 'when the Repository exists' do
+    context 'when the Repository does not exist' do
       before :each do
         Repository.expects(:find).with(repository.id).raises(ActiveRecord::RecordNotFound)
 
