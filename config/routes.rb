@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   post 'repositories/:id/module_result_history_of' => 'repositories#module_result_history_of'
   post 'repositories/:id/metric_result_history_of' => 'repositories#metric_result_history_of'
   post 'repositories/branches' => 'repositories#branches'
-  resources :repositories , except: [:index, :new, :edit]
+  resources :repositories , except: [:new, :edit]
 
   get 'metric_collector_details' => 'metric_collectors#index'
   post 'metric_collector_details/find' => 'metric_collectors#find'

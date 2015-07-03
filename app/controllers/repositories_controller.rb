@@ -16,6 +16,10 @@ class RepositoriesController < ApplicationController
     end
   end
 
+  def index
+    respond_with_json({repositories: Repository.all})
+  end
+
   def show
     if set_repository
       respond_with_json({repository: @repository})

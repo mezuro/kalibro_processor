@@ -3,6 +3,8 @@ require "rails_helper"
 describe RepositoriesController, :type => :routing do
   describe "routing" do
     let (:id) { 1 }
+    it { is_expected.to route(:get, "/repositories").
+                  to(controller: :repositories, action: :index) }
     it { is_expected.to route(:get, "/repositories/#{id}").
                   to(controller: :repositories, action: :show, id: id) }
     it { is_expected.to route(:post, "/repositories").
