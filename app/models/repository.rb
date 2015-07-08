@@ -5,8 +5,7 @@ class Repository < ActiveRecord::Base
   has_many :processings, dependent: :destroy
 
   validates :name, presence: true
-  validates :name, uniqueness: { scope: :project_id ,
-    message: "should be unique within project" }
+  validates :name, uniqueness: true
   validates :address, presence: true
   validates :kalibro_configuration_id, presence: true
 
