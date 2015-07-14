@@ -136,7 +136,7 @@ GEM
       railties (>= 3.0.0)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
-    faraday_middleware (0.9.1)
+    faraday_middleware (0.9.2)
       faraday (>= 0.7.4, < 0.10)
     fattr (2.2.2)
     flay (2.6.1)
@@ -160,7 +160,7 @@ GEM
       multi_json (~> 1.2)
     json (1.8.3)
     json_pure (1.8.2)
-    kalibro_client (0.3.0)
+    kalibro_client (1.1.0)
       activesupport (>= 2.2.1)
       faraday_middleware (~> 0.9.0)
     launchy (2.4.3)
@@ -370,7 +370,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.5.0)
   git (~> 1.2.7)
   jbuilder (~> 2.0)
-  kalibro_client
+  kalibro_client (~> 1.1)
   metric_fu (~> 4.12.0)
   mocha
   pg
