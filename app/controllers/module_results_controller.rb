@@ -1,7 +1,9 @@
 class ModuleResultsController < ApplicationController
   def get
     record = find_module_result
-    format_response(record, { module_result: record })
+    # The method find_module_result returns a hash if the record is not found. Otherwise, it returns a ModuleResult's instance
+    response = record.is_a?(ModuleResult) ? { module_result: record } : record
+    format_response(record, response)
   end
 
   def kalibro_module
@@ -51,7 +53,7 @@ class ModuleResultsController < ApplicationController
     begin
       ModuleResult.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      {error: 'RecordNotFound'}
+      {errors: 'RecordNotFound'}
     end
   end
 

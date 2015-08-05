@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 describe ModuleResultsController do
-  let!(:module_result) { FactoryGirl.build(:module_result_with_id) }
+  let(:module_result) { FactoryGirl.build(:module_result_with_id) }
+  let(:error_hash) { {errors: 'RecordNotFound'} }
+
   describe 'method' do
     describe 'get' do
       context 'with valid ModuleResult instance' do
@@ -19,8 +21,6 @@ describe ModuleResultsController do
       end
 
       context 'with invalid ModuleResult instance' do
-        let(:error_hash) { {error: 'RecordNotFound'} }
-
         before :each do
           ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
 
@@ -30,7 +30,7 @@ describe ModuleResultsController do
         it { is_expected.to respond_with(:unprocessable_entity) }
 
         it 'should return the error_hash' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse({module_result: error_hash}.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
         end
       end
     end
@@ -78,8 +78,6 @@ describe ModuleResultsController do
       end
 
       context 'with invalid ModuleResult instance' do
-        let(:error_hash) { {error: 'RecordNotFound'} }
-
         before :each do
           ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
 
@@ -114,8 +112,6 @@ describe ModuleResultsController do
       end
 
       context 'with invalid ModuleResult instance' do
-        let(:error_hash) { {error: 'RecordNotFound'} }
-
         before :each do
           ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
 
@@ -150,8 +146,6 @@ describe ModuleResultsController do
       end
 
       context 'with invalid ModuleResult instance' do
-        let(:error_hash) { {error: 'RecordNotFound'} }
-
         before :each do
           ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
 
