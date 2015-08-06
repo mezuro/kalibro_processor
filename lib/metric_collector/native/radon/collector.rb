@@ -17,7 +17,7 @@ module MetricCollector
         end
 
         def self.available?
-          !'radon --version'.nil?
+          ! self.run_if_available('radon --version').nil?
         end
 
         def parse_supported_metrics

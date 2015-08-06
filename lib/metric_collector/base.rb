@@ -2,6 +2,14 @@ module MetricCollector
   class Base
     attr_reader :details
 
+    def self.run_if_available(command)
+      begin
+        `#{command}`
+      rescue SystemCallError
+        nil
+      end
+    end
+
     def initialize(name, description, supported_metrics)
       @details = MetricCollector::Details.new(name: name, description: description, supported_metrics: supported_metrics)
       @wanted_metrics = {}
