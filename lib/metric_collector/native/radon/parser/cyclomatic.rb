@@ -9,13 +9,17 @@ module MetricCollector
 
           def self.parse(cyclomatic_output, processing = nil, metric_configuration = nil)
             cyclomatic_output.each do |file_name, result|
-              return self.default_value if result.class != Array
+              return self.default_value if result.is_a?(Array)
+
               name_prefix = module_name_prefix(file_name)
+
               result.each do |key|
-                return self.default_value if key.class != Hash
+                return self.default_value if key.is_a?(Hash)
+
                 name_suffix = module_name_suffix(key['name'])
                 value = key['complexity']
                 module_name = name_prefix + name_suffix
+
                 granularity = Granularity::METHOD
                 module_result = module_result(module_name, granularity, processing)
                 MetricResult.create(metric: metric_configuration.metric, value: value.to_f, module_result: module_result, metric_configuration_id: metric_configuration.id)
