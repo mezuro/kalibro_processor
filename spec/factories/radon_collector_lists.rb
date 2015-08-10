@@ -3,11 +3,11 @@ class RadonMetricCollectorLists
 end
 
 FactoryGirl.define do
-  factory :radon_collector_lists, class: MetricFuMetricCollectorLists do
+  factory :radon_collector_lists, class: RadonMetricCollectorLists do
     results {
       {
         :mi => {
-        "app/models/repository.py" => {"mi" => 100.0, "rank" => "A"}
+          "app/models/repository.py" => {"mi" => 100.0, "rank" => "A"}
         },
         :raw => {
           "app/models/repository.py" => {
@@ -20,8 +20,14 @@ FactoryGirl.define do
           }
         },
         :cc => {
-          "app/models/repository.py" => [{"name"=> "Client","complexity" => 1}],
-          "app/models/class.py" => [{"name"=> "Class","complexity" => 1}]
+          "app/models/repository.py" => [{
+            "name" => "Client",
+            "type" => "class",
+            "methods" => [
+              {"name" => "method1", "complexity" => 1.0},
+              {"name" => "method2", "complexity" => 5.0}
+            ]
+          }]
         }
       }
     }
