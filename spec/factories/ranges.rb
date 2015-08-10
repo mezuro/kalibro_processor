@@ -41,6 +41,11 @@ FactoryGirl.define do
       self.end 10.0
     end
 
+    trait :infinite do
+      beginning "-INF"
+      self.end "INF"
+    end
+
     factory :range_with_id, traits: [:with_id]
     factory :another_range, traits: [:another_comment, :another_id]
     factory :yet_another_range, traits: [:another_beginning, :another_end]
