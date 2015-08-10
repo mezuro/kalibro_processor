@@ -3,7 +3,9 @@ module MetricCollector
     module Radon
       module Parser
         class Base
-          def self.parse(collected_metrics_hash,processing, metric_configuration); raise NotImplementedError; end
+          def self.parse(collected_metrics_hash, processing, metric_configuration)
+            raise NotImplementedError
+          end
 
           # Sometimes the parser does not generate results for some Module that
           # other may generate. In this we case need a default value to fulfill
@@ -16,12 +18,6 @@ module MetricCollector
             # Generates a module name by removing the file extension, replacing slashes with dots, and internal dots with underscores
             without_extension = file_name.rpartition('.').first
             without_extension.gsub('.', '_').gsub('/', '.')
-          end
-
-          def self.module_name_suffix(module_name)
-            return nil if module_name.end_with?("#none")
-            # Removing the self part of a static method to conform to flog's standard
-            return "." + module_name.gsub(/self\./, "").gsub(/#|::/, ".")
           end
 
           def self.module_result(module_name, granularity, processing)
