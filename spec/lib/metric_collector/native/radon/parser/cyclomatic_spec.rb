@@ -3,30 +3,29 @@ require 'metric_collector'
 
 describe MetricCollector::Native::Radon::Parser::Cyclomatic do
   describe 'parse' do
-    let!(:radon_results) { FactoryGirl.build(:radon_collector_lists).results[:cc] }
-    let!(:processing) { FactoryGirl.build(:processing) }
-    let!(:metric_configuration) { FactoryGirl.build(:cyclomatic_metric_configuration) }
-    let!(:secondary_metric_configuration) { FactoryGirl.build(:cyclomatic_metric_configuration) }
-
-    context 'when there is a valid json input for cyclomatic parse' do
-      before :each do
-        @result = MetricCollector::Native::Radon::Parser::Cyclomatic.parse(radon_results, processing, metric_configuration)
-      end
-
+    let(:cc_results) { FactoryGirl.build(:radon_collector_lists).results[:cc] }
+    let(:processing) { FactoryGirl.build(:processing) }
+    let(:metric_configuration) { FactoryGirl.build(:cyclomatic_metric_configuration) }
+    let(:secondary_metric_configuration) { FactoryGirl.build(:cyclomatic_metric_configuration) }
+    let!(:kalibro_module_method1) { FactoryGirl.build(:kalibro_module_with_method_granularity) }
+    let!(:kalibro_module_method2) { FactoryGirl.build(:kalibro_module_with_method_granularity) }
+    let!(:module_result) { FactoryGirl.build(:module_result) }
+    context 'when there are no ModuleResults with the same module and processing' do
       it 'is expected to parse the results into a module result' do
-        expect(@result['complexity']).to eq(radon_results['complexity'])
-        expect(@result['name']).to eq(radon_results['name'])
-      end
-    end
+        KalibroModule.expects(:new).with(long_name: "app.models.repository.Client.method1", granularity: Granularity::METHOD)
+          .returns(kalibro_module_method1)
+        KalibroModule.expects(:new).with(long_name: "app.models.repository.Client.method2", granularity: Granularity::METHOD)
+          .returns(kalibro_module_method2)
 
-    context 'when there are ModuleResults with the same module and processing' do
-      before :each do
-        @result = MetricCollector::Native::Radon::Parser::Cyclomatic.parse(radon_results, processing, metric_configuration)
-      end
+        ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_method1, processing).returns(nil)
+        ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_method2, processing).returns(module_result)
+        kalibro_module_method1.expects(:save)
 
-      it 'is expected to parse the results into a module result' do
-        expect(MetricCollector::Native::Radon::Parser::Cyclomatic.parse(radon_results, processing, metric_configuration)).to eql(@result)
-        expect(MetricCollector::Native::Radon::Parser::Cyclomatic.parse(radon_results, processing, secondary_metric_configuration)).to eql(@result)
+        ModuleResult.expects(:create).with(kalibro_module: kalibro_module_method1, processing: processing).returns(module_result)
+        MetricResult.expects(:create).with(metric: metric_configuration.metric, value: 1.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
+        MetricResult.expects(:create).with(metric: metric_configuration.metric, value: 5.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
+
+        MetricCollector::Native::Radon::Parser::Cyclomatic.parse(cc_results, processing, metric_configuration)
       end
     end
   end
@@ -43,3 +42,4 @@ describe MetricCollector::Native::Radon::Parser::Cyclomatic do
     end
   end
 end
+
