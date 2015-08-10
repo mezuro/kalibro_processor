@@ -7,28 +7,50 @@ module MetricCollector
             'cc'
           end
 
-          def self.parse(cyclomatic_output, processing = nil, metric_configuration = nil)
-            cyclomatic_output.each do |file_name, result|
-              return self.default_value if result.is_a?(Array)
+          def self.default_value
+            1.0
+          end
 
-              name_prefix = module_name_prefix(file_name)
+          def self.parse(collected_metrics_hash, processing, metric_configuration)
+            self.methods(collected_metrics_hash).each do |module_name, method|
+              module_name = module_name + '.' + method['name']
+              module_result = module_result(module_name, Granularity::METHOD, processing)
+              value = extract_value(method)
+              MetricResult.create(metric: metric_configuration.metric, value: value, module_result: module_result,
+                                  metric_configuration_id: metric_configuration.id)
+            end
+          end
 
-              result.each do |key|
-                return self.default_value if key.is_a?(Hash)
+          private
 
-                name_suffix = module_name_suffix(key['name'])
-                value = key['complexity']
-                module_name = name_prefix + name_suffix
+          def self.methods(collected_metrics_hash)
+            Enumerator.new do |y|
+              collected_metrics_hash.each do |file_name, results|
+                file_module_name = module_name_prefix(file_name)
 
-                granularity = Granularity::METHOD
-                module_result = module_result(module_name, granularity, processing)
-                MetricResult.create(metric: metric_configuration.metric, value: value.to_f, module_result: module_result, metric_configuration_id: metric_configuration.id)
+                results.each do |result|
+                  if result['type'] == 'class'
+                    class_name = result['name']
+
+                    result['methods'].each do |method|
+                      y << ["#{file_module_name}.#{class_name}", method]
+                    end
+                  else
+                    module_name = if result['type'] == 'method'
+                      "#{file_module_name}.#{result['classname']}"
+                    elsif result['type'] == 'function'
+                      file_module_name
+                    end
+
+                    y << [module_name, result]
+                  end
+                end
               end
             end
           end
 
-          def self.default_value
-            1.0
+          def self.extract_value(method_metrics_hash)
+            method_metrics_hash['complexity'].to_f
           end
         end
       end
