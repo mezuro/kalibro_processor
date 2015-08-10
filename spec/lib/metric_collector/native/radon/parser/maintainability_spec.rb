@@ -20,8 +20,8 @@ describe MetricCollector::Native::Radon::Parser::Maintainability do
   end
 
   describe 'default_value' do
-    it 'is expected to return 0.0' do
-      expect(MetricCollector::Native::Radon::Parser::Maintainability.default_value).to eq(0.0)
+    it 'is expected to return 100.0' do
+      expect(MetricCollector::Native::Radon::Parser::Maintainability.default_value).to eq(100.0)
     end
   end
 
