@@ -59,7 +59,7 @@ FactoryGirl.define do
     end
 
     trait :lines_of_code do
-      metric {FactoryGirl.build(:lines_of_code_metric) }
+      metric { FactoryGirl.build(:lines_of_code_metric) }
     end  
 
     trait :flog_compound_metric_configuration do
