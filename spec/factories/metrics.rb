@@ -76,7 +76,7 @@ FactoryGirl.define  do
   factory :maintainability_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :metric do
     name "Maintainability Index"
     languages { [:PYTHON] }
-    scope { :METHOD }
+    scope { :PACKAGE }
     metric_collector_name "Radon"
     code 'mi'
 
@@ -86,7 +86,7 @@ FactoryGirl.define  do
   factory :lines_of_code_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :metric do
     name "Lines of code"
     languages { [:PYTHON] }
-    scope { :METHOD }
+    scope { :PACKAGE }
     metric_collector_name "Radon"
     code 'loc'    
 

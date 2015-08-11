@@ -8,35 +8,35 @@
   :mi:
     :name: Maintainability Index
     :description: Measures how easy it is to maintain the code.
-    :scope: METHOD
+    :scope: PACKAGE
 
   :loc:
     :name: Lines of code
     :description: The total number of lines of code.
-    :scope: METHOD
+    :scope: PACKAGE
 
   :lloc:
     :name: Logical Lines of code
     :description: The number of logical lines of code. Every logical line of code contains exactly one statement.
-    :scope: METHOD
+    :scope: PACKAGE
 
   :sloc:
     :name: Source Lines of code
     :description: The number of source lines of code not necessarily corresponding to the logical one.
-    :scope: METHOD
+    :scope: PACKAGE
 
   :comments:
     :name: Number of comment lines
     :description: The number of comment lines. Multiline strings are not counted as comment since to the Python interpreters they are just strings.
-    :scope: METHOD
+    :scope: PACKAGE
 
   :multi:
     :name: Multi-line strings
     :description: The number of lines which represent multi-line strings.
-    :scope: METHOD
+    :scope: PACKAGE
 
   :blank:
     :name: Number of blank lines
     :description: The number of blank lines containing just white spaces.
-    :scope: METHOD
+    :scope: PACKAGE
 
