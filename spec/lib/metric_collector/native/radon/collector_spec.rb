@@ -19,4 +19,27 @@ describe MetricCollector::Native::Radon::Collector, :type => :model do
       subject.collect_metrics(code_directory, wanted_metrics, processing)
     end
   end
+
+  describe 'available?' do
+
+    context 'when the radon command is available' do
+
+      before do
+        MetricCollector::Native::Radon::Collector.expects(:`).with('radon --version').returns("")
+      end
+
+      it 'is expected to return true' do
+        expect(MetricCollector::Native::Radon::Collector.available?).to be true
+      end
+    end
+
+    context 'when the radon command is not available' do
+      before do
+        MetricCollector::Native::Radon::Collector.expects(:`).with('radon --version').raises(SystemCallError, "command not found: radon")
+      end
+      it 'is expected to return false' do
+        expect(MetricCollector::Native::Radon::Collector.available?).to be false
+      end
+    end
+  end
 end
