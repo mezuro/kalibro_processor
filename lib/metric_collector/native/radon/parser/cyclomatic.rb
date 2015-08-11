@@ -26,9 +26,18 @@ module MetricCollector
           def self.methods(collected_metrics_hash)
             Enumerator.new do |y|
               collected_metrics_hash.each do |file_name, results|
+                unless results.is_a?(Array)
+                  error = results['error'] if results.is_a?(Hash)
+                  error ||= 'Unknown error'
+                  Rails.logger.debug("Radon: error parsing file #{file_name}: #{error}")
+
+                  next
+                end
+
                 file_module_name = module_name_prefix(file_name)
 
                 results.each do |result|
+                  byebug unless result.is_a?(Hash)
                   if result['type'] == 'class'
                     class_name = result['name']
 
