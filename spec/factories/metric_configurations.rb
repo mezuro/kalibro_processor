@@ -60,7 +60,11 @@ FactoryGirl.define do
 
     trait :lines_of_code do
       metric { FactoryGirl.build(:lines_of_code_metric) }
-    end  
+    end
+
+    trait :logical_lines_of_code do
+      metric { FactoryGirl.build(:logical_lines_of_code_metric) }
+    end
 
     trait :flog_compound_metric_configuration do
       metric { FactoryGirl.build(:kalibro_gatekeeper_client_compound_flog_metric) }
@@ -87,6 +91,7 @@ FactoryGirl.define do
     factory :cyclomatic_metric_configuration, traits: [:cyclomatic]
     factory :maintainability_metric_configuration, traits: [:maintainability]
     factory :lines_of_code_configuration, traits: [:lines_of_code]
+    factory :logical_lines_of_code_configuration, traits: [:logical_lines_of_code]
     factory :maximum_metric_configuration, traits: [:maximum_metric_configuration]
     factory :minimum_metric_configuration, traits: [:minimum_metric_configuration]
   end

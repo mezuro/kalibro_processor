@@ -91,7 +91,17 @@ FactoryGirl.define  do
     code 'loc'    
 
     initialize_with { KalibroClient::Entities::Miscellaneous::NativeMetric.new(name, code, scope, languages, metric_collector_name) }
-  end    
+  end
+
+  factory :logical_lines_of_code_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :metric do
+    name "Logical lines of code"
+    languages { [:PYTHON] }
+    scope { :PACKAGE }
+    metric_collector_name "Radon"
+    code 'lloc'
+
+    initialize_with { KalibroClient::Entities::Miscellaneous::NativeMetric.new(name, code, scope, languages, metric_collector_name) }
+  end
 
   factory :compound_flog_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :compound_metric do
     script "return flog() * 2;"
