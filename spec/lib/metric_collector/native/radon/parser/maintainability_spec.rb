@@ -3,18 +3,24 @@ require 'metric_collector'
 
 describe MetricCollector::Native::Radon::Parser::Maintainability do
   describe 'parse' do
-    let!(:radon_results) { FactoryGirl.build(:radon_collector_lists).results[:mi] }
-    let!(:processing) { FactoryGirl.build(:processing) }
-    let!(:metric_configuration) { FactoryGirl.build(:maintainability_metric_configuration) }
+    let(:mi_results) { FactoryGirl.build(:radon_collector_lists).results[:mi] }
+    let(:processing) { FactoryGirl.build(:processing) }
+    let(:mi_configuration) { FactoryGirl.build(:maintainability_metric_configuration) }
+    let!(:kalibro_module_package) { FactoryGirl.build(:kalibro_module_with_package_granularity) }
+    let!(:module_result) { FactoryGirl.build(:module_result) }
 
-    context 'when there is a valid json input for maintainability parse' do
-      before :each do
-        @result = MetricCollector::Native::Radon::Parser::Maintainability.parse(radon_results, processing, metric_configuration)
-      end
+    context 'when there are no ModuleResults with the same module and processing' do
+      it 'is expected to parse the results into a module result' do
+        KalibroModule.expects(:new).with(long_name: "app.models.repository", granularity: Granularity::PACKAGE)
+            .returns(kalibro_module_package)
+        ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_package, processing).returns(nil)
+        kalibro_module_package.expects(:save)
 
-      it 'is expected to parse the results into a module result' do  
-        expect(@result['mi']).to eq(radon_results['mi'])
-        expect(@result['rank']).to eq(radon_results['rank'])
+        ModuleResult.expects(:create).with(kalibro_module: kalibro_module_package, processing: processing).returns(module_result)
+
+        MetricResult.expects(:create).with(metric: mi_configuration.metric, value: 100.0, module_result: module_result, metric_configuration_id: mi_configuration.id)
+
+        MetricCollector::Native::Radon::Parser::Maintainability.parse(mi_results, processing, mi_configuration)
       end
     end
   end
