@@ -27,6 +27,17 @@ FactoryGirl.define do
               {"name" => "method1", "complexity" => 1.0},
               {"name" => "method2", "complexity" => 5.0}
             ]
+          },
+          {
+            "name" => "setUp",
+            "type" => "method",
+            "classname" => "Class",
+            "complexity" => 2
+          },
+          {
+            "name" => "callFunction",
+            "type" => "function",
+            "complexity" => 3
           }]
         }
       }
