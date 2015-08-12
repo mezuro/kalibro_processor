@@ -186,3 +186,6 @@ Then(/^the Root ModuleResult retrieved should not have a MetricResult for the co
     |metric_result| metric_result.metric_configuration_id == id1 || metric_result.metric_configuration_id == id2 }).to be_empty
 end
 
+Then(/^the Root ModuleResult retrieved should have exactly "(.*?)" MetricResults$/) do |count|
+  expect(@processing.root_module_result.metric_results.count).to be_eq(count.to_i)
+end

@@ -39,7 +39,7 @@ Feature: Runner run
     When I run for the given repository
     Then I should receive a processing error
 
-  @clear_repository @kalibro_configuration_restart
+  @clear_repository @kalibro_configuration_restart @wip
   Scenario: Aggregating some metric values
     Given I have sample readings
     And I have a sample kalibro configuration
@@ -55,6 +55,7 @@ Feature: Runner run
     Then the repository code_directory should exist
     And I should have a READY processing for the given repository
     And the processing retrieved should have a Root ModuleResult
+    And the Root ModuleResult retrieved should have exactly "3" MetricResults
     And the Root ModuleResult retrieved should have a list of MetricResults
 
   @clear_repository @kalibro_configuration_restart
@@ -67,7 +68,7 @@ Feature: Runner run
     And I should have a READY processing for the given repository
     And the processing retrieved should not have any ModuleResults
 
-  @clear_repository @kalibro_configuration_restart
+  @clear_repository @kalibro_configuration_restart @wip
     Scenario: An existing python repository with a configuration with Cyclomatic Complexity
       Given I have sample readings
       And I have a sample configuration with the Cyclomatic python native metric
