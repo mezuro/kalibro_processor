@@ -11,7 +11,7 @@ describe MetricCollector::Native::Radon::Parser::Raw do
     let!(:module_result) { FactoryGirl.build(:module_result) }
     context 'when there are no ModuleResults with the same module and processing' do
       it 'is expected to parse the results into a module result' do
-        KalibroModule.expects(:new).twice.with(long_name: "app.models.repository", granularity: Granularity::PACKAGE)
+        KalibroModule.expects(:new).twice.with(long_name: "app.models.repository", granularity: KalibroClient::Entities::Miscellaneous::Granularity::PACKAGE)
             .returns(kalibro_module_package)
         ModuleResult.expects(:find_by_module_and_processing).times(2).with(kalibro_module_package, processing)
             .returns(nil)

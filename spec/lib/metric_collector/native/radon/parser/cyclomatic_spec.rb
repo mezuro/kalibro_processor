@@ -14,13 +14,13 @@ describe MetricCollector::Native::Radon::Parser::Cyclomatic do
     let!(:module_result) { FactoryGirl.build(:module_result) }
     context 'when there are no ModuleResults with the same module and processing' do
       it 'is expected to parse the results into a module result' do
-        KalibroModule.expects(:new).with(long_name: "app.models.repository.Client.method1", granularity: Granularity::METHOD)
+        KalibroModule.expects(:new).with(long_name: "app.models.repository.Client.method1", granularity: KalibroClient::Entities::Miscellaneous::Granularity::METHOD)
           .returns(kalibro_module_method1)
-        KalibroModule.expects(:new).with(long_name: "app.models.repository.Client.method2", granularity: Granularity::METHOD)
+        KalibroModule.expects(:new).with(long_name: "app.models.repository.Client.method2", granularity: KalibroClient::Entities::Miscellaneous::Granularity::METHOD)
           .returns(kalibro_module_method2)
-        KalibroModule.expects(:new).with(long_name: "app.models.repository.Class.setUp", granularity: Granularity::METHOD)
+        KalibroModule.expects(:new).with(long_name: "app.models.repository.Class.setUp", granularity: KalibroClient::Entities::Miscellaneous::Granularity::METHOD)
           .returns(kalibro_module_method3)
-        KalibroModule.expects(:new).with(long_name: "app.models.repository.callFunction", granularity: Granularity::METHOD)
+        KalibroModule.expects(:new).with(long_name: "app.models.repository.callFunction", granularity: KalibroClient::Entities::Miscellaneous::Granularity::METHOD)
           .returns(kalibro_module_function)
 
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_method1, processing).returns(nil)

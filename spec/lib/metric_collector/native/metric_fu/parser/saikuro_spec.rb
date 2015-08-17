@@ -12,8 +12,8 @@ describe MetricCollector::Native::MetricFu::Parser::Saikuro do
 
     context 'when there are no ModuleResults with the same module and processing' do
       it 'is expected to parse the results into a module result' do
-        KalibroModule.expects(:new).with(long_name: "app.models.repository.Repository.process", granularity: Granularity::METHOD).returns(kalibro_module_method_process)
-        KalibroModule.expects(:new).with(long_name: "app.models.repository.Repository.reprocess", granularity: Granularity::METHOD).returns(kalibro_module_method_reprocess)
+        KalibroModule.expects(:new).with(long_name: "app.models.repository.Repository.process", granularity: KalibroClient::Entities::Miscellaneous::Granularity::METHOD).returns(kalibro_module_method_process)
+        KalibroModule.expects(:new).with(long_name: "app.models.repository.Repository.reprocess", granularity: KalibroClient::Entities::Miscellaneous::Granularity::METHOD).returns(kalibro_module_method_reprocess)
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_method_process, processing).returns(nil)
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_method_reprocess, processing).returns(module_result)
         kalibro_module_method_process.expects(:save)

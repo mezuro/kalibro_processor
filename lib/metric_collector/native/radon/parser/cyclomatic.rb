@@ -14,7 +14,7 @@ module MetricCollector
           def self.parse(collected_metrics_hash, processing, metric_configuration)
             self.methods(collected_metrics_hash).each do |module_name, method|
               module_name = module_name + '.' + method['name']
-              module_result = module_result(module_name, Granularity::METHOD, processing)
+              module_result = module_result(module_name, KalibroClient::Entities::Miscellaneous::Granularity::METHOD, processing)
               value = extract_value(method)
               MetricResult.create(metric: metric_configuration.metric, value: value, module_result: module_result,
                                   metric_configuration_id: metric_configuration.id)

@@ -13,7 +13,7 @@ module MetricCollector
               value = result_hash[metric_configuration.metric.code] unless result_hash.key?('error')
               value ||= self.default_value
 
-              module_result = module_result(module_name, Granularity::PACKAGE, processing)
+              module_result = module_result(module_name, KalibroClient::Entities::Miscellaneous::Granularity::PACKAGE, processing)
               MetricResult.create(metric: metric_configuration.metric, value: value,
                                   module_result: module_result,
                                   metric_configuration_id: metric_configuration.id)

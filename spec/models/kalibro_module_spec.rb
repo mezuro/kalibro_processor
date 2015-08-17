@@ -43,7 +43,7 @@ describe KalibroModule, :type => :model do
       end
 
       context 'with CLASS granularity' do
-        let(:granularity) { FactoryGirl.build(:granularity, type: Granularity::CLASS) }
+        let(:granularity) { FactoryGirl.build(:granularity, type: KalibroClient::Entities::Miscellaneous::Granularity::CLASS) }
 
         context 'with just one element on name' do
           subject { FactoryGirl.build(:kalibro_module, {granularity: granularity, name: ['name']}) }
@@ -51,14 +51,14 @@ describe KalibroModule, :type => :model do
           it 'should return a new Module with granularity SOFTWARE and name ROOT' do
             parent = subject.parent
 
-            expect(parent.granularity.type).to eq(Granularity::SOFTWARE)
+            expect(parent.granularity.type).to eq(KalibroClient::Entities::Miscellaneous::Granularity::SOFTWARE)
             expect(parent.name).to eq(["ROOT"])
           end
         end
 
         context 'with just more than one element on name' do
           before :each do
-            Granularity.any_instance.expects(:parent).returns(FactoryGirl.build(:granularity, type: Granularity::PACKAGE))
+            KalibroClient::Entities::Miscellaneous::Granularity.any_instance.expects(:parent).returns(FactoryGirl.build(:granularity, type: KalibroClient::Entities::Miscellaneous::Granularity::PACKAGE))
           end
 
           subject { FactoryGirl.build(:kalibro_module, {granularity: granularity, name: ['pre_name', 'name']}) }
@@ -66,7 +66,7 @@ describe KalibroModule, :type => :model do
           it 'should return a new Module with granularity PACKAGE and name pre_name' do
             parent = subject.parent
 
-            expect(parent.granularity.type).to eq(Granularity::PACKAGE)
+            expect(parent.granularity.type).to eq(KalibroClient::Entities::Miscellaneous::Granularity::PACKAGE)
             expect(parent.name).to eq(['pre_name'])
           end
         end
