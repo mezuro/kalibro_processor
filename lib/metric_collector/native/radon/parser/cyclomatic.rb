@@ -12,10 +12,10 @@ module MetricCollector
           end
 
           def self.parse(collected_metrics_hash, processing, metric_configuration)
-            self.methods(collected_metrics_hash).each do |module_name, method|
-              module_name = module_name + '.' + method['name']
-              module_result = module_result(module_name, KalibroClient::Entities::Miscellaneous::Granularity::METHOD, processing)
-              value = extract_value(method)
+            self.results_enumerator(collected_metrics_hash).each do |module_name, result, granularity|
+              module_name = module_name + '.' + result['name']
+              module_result = module_result(module_name, granularity, processing)
+              value = result['complexity'].to_f
               MetricResult.create(metric: metric_configuration.metric, value: value, module_result: module_result,
                                   metric_configuration_id: metric_configuration.id)
             end
@@ -23,7 +23,7 @@ module MetricCollector
 
           private
 
-          def self.methods(collected_metrics_hash)
+          def self.results_enumerator(collected_metrics_hash)
             Enumerator.new do |y|
               collected_metrics_hash.each do |file_name, results|
                 unless results.is_a?(Array)
@@ -37,29 +37,23 @@ module MetricCollector
                 file_module_name = module_name_prefix(file_name)
 
                 results.each do |result|
-                  byebug unless result.is_a?(Hash)
                   if result['type'] == 'class'
+                    granularity = KalibroClient::Entities::Miscellaneous::Granularity::METHOD
                     class_name = result['name']
 
                     result['methods'].each do |method|
-                      y << ["#{file_module_name}.#{class_name}", method]
+                      y << ["#{file_module_name}.#{class_name}", method, granularity]
                     end
                   else
-                    module_name = if result['type'] == 'method'
-                      "#{file_module_name}.#{result['classname']}"
-                    elsif result['type'] == 'function'
-                      file_module_name
+                    if result['type'] == 'method'
+                      next
                     end
-
-                    y << [module_name, result]
+                    granularity = KalibroClient::Entities::Miscellaneous::Granularity::FUNCTION
+                    y << [file_module_name, result, granularity]
                   end
                 end
               end
             end
-          end
-
-          def self.extract_value(method_metrics_hash)
-            method_metrics_hash['complexity'].to_f
           end
         end
       end
