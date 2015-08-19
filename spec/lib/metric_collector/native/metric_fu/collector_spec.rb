@@ -21,4 +21,26 @@ describe MetricCollector::Native::MetricFu::Collector, :type => :model do
       subject.collect_metrics(code_directory, wanted_metrics, processing)
     end
   end
+
+  describe 'available?' do
+    context 'when MetricFu is installed' do
+      before :each do
+        MetricCollector::Native::MetricFu::Collector.expects(:`).with("metric_fu --version").returns("")
+      end
+
+      it 'is expected to be truthy' do
+        expect(MetricCollector::Native::MetricFu::Collector.available?).to be_truthy
+      end
+    end
+
+    context 'when analizo is not installed' do
+      before :each do
+        MetricCollector::Native::MetricFu::Collector.expects(:`).with("metric_fu --version").raises(SystemCallError, "command not found: metric_fu")
+      end
+
+      it 'is expected to be falsey' do
+        expect(MetricCollector::Native::MetricFu::Collector.available?).to be_falsey
+      end
+    end
+  end
 end

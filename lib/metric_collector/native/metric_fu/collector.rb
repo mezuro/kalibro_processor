@@ -25,7 +25,7 @@ module MetricCollector
         end
 
         def self.available?
-          not `metric_fu --version`.nil?
+          not self.run_if_available('metric_fu --version').nil?
         end
       end
     end
