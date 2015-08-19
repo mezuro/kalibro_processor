@@ -38,7 +38,10 @@ FactoryGirl.define do
             "name" => "callFunction",
             "type" => "function",
             "complexity" => 3
-          }]
+          }],
+          "Rakefile" => {
+            "error" => "invalid syntax (<unknown>, line 4)"
+          }
         }
       }
     }
