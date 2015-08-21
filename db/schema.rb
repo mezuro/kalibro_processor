@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150613123922) do
+ActiveRecord::Schema.define(version: 20150821193815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,9 @@ ActiveRecord::Schema.define(version: 20150613123922) do
     t.float    "value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "type",                    default: "MetricResult", null: false
+    t.integer  "line_number"
+    t.text     "message"
   end
 
   create_table "module_results", force: :cascade do |t|
@@ -82,6 +85,14 @@ ActiveRecord::Schema.define(version: 20150613123922) do
     t.datetime "updated_at"
   end
 
+  create_table "related_hotspot_results", force: :cascade do |t|
+    t.integer "hotspot_result_id"
+    t.integer "other_hotspot_result_id"
+  end
+
+  add_index "related_hotspot_results", ["hotspot_result_id", "other_hotspot_result_id"], name: "related_hotspot_unique", unique: true, using: :btree
+  add_index "related_hotspot_results", ["other_hotspot_result_id"], name: "index_related_hotspot_results_on_other_hotspot_result_id", using: :btree
+
   create_table "repositories", force: :cascade do |t|
     t.string   "name",                     limit: 255
     t.string   "scm_type",                 limit: 255
@@ -97,4 +108,6 @@ ActiveRecord::Schema.define(version: 20150613123922) do
     t.string   "branch",                               default: "master", null: false
   end
 
+  add_foreign_key "related_hotspot_results", "metric_results", column: "hotspot_result_id"
+  add_foreign_key "related_hotspot_results", "metric_results", column: "other_hotspot_result_id"
 end
