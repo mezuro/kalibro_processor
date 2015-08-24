@@ -25,10 +25,10 @@ FactoryGirl.define do
     end
 
     trait :python do
-      name "Busineme"
+      name "KalibroClient"
       scm_type "GIT"
-      address "https://github.com/Busineme/BusinemeWeb"
-      description "BusinemeWeb"
+      address "https://github.com/mezuro/kalibro_client_py"
+      description "Python version for KalibroClient"
     end
 
     trait :another_branch do
