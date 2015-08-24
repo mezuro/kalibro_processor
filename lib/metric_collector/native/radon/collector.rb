@@ -11,9 +11,12 @@ module MetricCollector
           self.wanted_metrics = wanted_metric_configurations
           runner = Runner.new(repository_path: code_directory, wanted_metric_configurations: wanted_metric_configurations)
 
-          runner.run_wanted_metrics
-          MetricCollector::Native::Radon::Parser.parse_all(code_directory, wanted_metric_configurations, processing)
-          runner.clean_output
+          begin
+            runner.run_wanted_metrics
+            MetricCollector::Native::Radon::Parser.parse_all(code_directory, wanted_metric_configurations, processing)
+          ensure
+            runner.clean_output
+          end
         end
 
         def self.available?
