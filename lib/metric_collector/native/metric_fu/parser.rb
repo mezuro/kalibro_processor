@@ -1,12 +1,15 @@
 require 'metric_collector/native/metric_fu/parser/base'
 require 'metric_collector/native/metric_fu/parser/flog'
 require 'metric_collector/native/metric_fu/parser/saikuro'
+require 'metric_collector/native/metric_fu/parser/flay'
 
 module MetricCollector
   module Native
     module MetricFu
       module Parser
-        @parsers = { 'flog' => MetricCollector::Native::MetricFu::Parser::Flog, 'saikuro' => MetricCollector::Native::MetricFu::Parser::Saikuro }
+        @parsers = { 'flog' => MetricCollector::Native::MetricFu::Parser::Flog,
+                     'saikuro' => MetricCollector::Native::MetricFu::Parser::Saikuro,
+                     'flay' => MetricCollector::Native::MetricFu::Parser::Flay}
 
         def self.parse_all(yaml_file_path, wanted_metric_configurations, processing)
           parsed_result = YAML.load_file(yaml_file_path)

@@ -36,6 +36,16 @@ Given(/^I have a sample configuration with the (\w+) native metric$/) do |metric
   compound_range.save
 end
 
+Given(/^I have a sample configuration with the (\w+) hotspot metric$/) do |metric|
+  metric_configuration_factory = (metric + "_metric_configuration").downcase
+  metric_factory = (metric + "_metric").downcase
+  @configuration = FactoryGirl.create(:ruby_configuration, id: nil)
+  metric = FactoryGirl.build(metric_factory.to_sym)
+  @metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
+                                             metric: metric,
+                                             kalibro_configuration_id: @configuration.id)
+end
+
 Given(/^I have a sample repository$/) do
   @repository = FactoryGirl.create(:sbking_repository, kalibro_configuration: @kalibro_configuration)
 end
@@ -185,6 +195,29 @@ Then(/^the Root ModuleResult retrieved should not have a MetricResult for the co
   expect(@processing.root_module_result.metric_results.select {
     |metric_result| metric_result.metric_configuration_id == id1 || metric_result.metric_configuration_id == id2 }).to be_empty
 end
+
+Then(/^I should have some ModuleResults$/) do
+  expect(@processing.module_results).not_to be_empty
+end
+
+Then(/^the ModuleResults should have HotspotResults for the (\w+) metric$/) do |metric_code|
+  @hotspot_results = @processing.module_results.map { |module_result|
+    module_result.hotspot_results
+  }.flatten
+
+  expect(@hotspot_results).no_to be_empty
+
+  @hotspot_results.each do |hotspot_result|
+    expect(hotspot_result.metric.code).to eq(metric_code)
+  end
+end
+
+Then(/^the HotspotResults should have other related results indicating the duplication$/) do
+  @hotspot_results.each do |hotspot_result|
+    expect(hotspot_results.related_results).not_to be_empty
+  end
+end
+
 
 Then(/^the Root ModuleResult retrieved should have exactly "(.*?)" MetricResults$/) do |count|
   expect(@processing.root_module_result.metric_results.count).to be_eq(count.to_i)
