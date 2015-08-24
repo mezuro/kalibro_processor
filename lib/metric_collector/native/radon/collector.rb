@@ -22,8 +22,8 @@ module MetricCollector
 
         def parse_supported_metrics
           supported_metrics = {}
-          YAML.load_file("#{Rails.root}/lib/metric_collector/native/radon/metrics.yml")[:metrics].each do | key, value |
-            supported_metrics[key] = KalibroClient::Entities::Miscellaneous::NativeMetric.new(value[:name], key, value[:scope], [:PYTHON], "Radon")
+          YAML.load_file("#{Rails.root}/lib/metric_collector/native/radon/metrics.yml")[:metrics].each do | code, details |
+            supported_metrics[code] = KalibroClient::Entities::Miscellaneous::NativeMetric.new(details[:name], code, details[:scope], [:PYTHON], "Radon")
           end
           supported_metrics
         end
