@@ -214,7 +214,7 @@ end
 
 Then(/^the HotspotResults should have other related results indicating the duplication$/) do
   @hotspot_results.each do |hotspot_result|
-    expect(hotspot_results.related_results).not_to be_empty
+    expect(hotspot_result.related_results).not_to be_empty
   end
 end
 
