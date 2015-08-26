@@ -1,9 +1,10 @@
 require 'metric_collector/native/analizo'
 require 'metric_collector/native/metric_fu'
+require 'metric_collector/native/radon'
 
 module MetricCollector
   module Native
-    ALL = {"Analizo" => MetricCollector::Native::Analizo::Collector, "MetricFu" => MetricCollector::Native::MetricFu::Collector}
+    ALL = {"Analizo" => MetricCollector::Native::Analizo::Collector, "MetricFu" => MetricCollector::Native::MetricFu::Collector, "Radon" => MetricCollector::Native::Radon::Collector}
 
     def self.available
       ALL.select {|name, collector| collector.available?}

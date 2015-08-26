@@ -11,9 +11,12 @@ module MetricCollector
           self.wanted_metrics = wanted_metric_configurations
           runner = Runner.new(repository_path: code_directory)
 
-          runner.run
-          MetricCollector::Native::MetricFu::Parser.parse_all(runner.yaml_path, wanted_metric_configurations, processing)
-          runner.clean_output
+          begin
+            runner.run
+            MetricCollector::Native::MetricFu::Parser.parse_all(runner.yaml_path, wanted_metric_configurations, processing)
+          ensure
+            runner.clean_output
+          end
         end
 
         def parse_supported_metrics
@@ -25,7 +28,7 @@ module MetricCollector
         end
 
         def self.available?
-          not `metric_fu --version`.nil?
+          not self.run_if_available('metric_fu --version').nil?
         end
       end
     end

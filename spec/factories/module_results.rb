@@ -9,6 +9,10 @@ FactoryGirl.define do
       kalibro_module { FactoryGirl.build(:kalibro_module, granularity: FactoryGirl.build(:class_granularity)) }
     end
 
+    trait :package do
+      kalibro_module { FactoryGirl.build(:kalibro_module, granularity: FactoryGirl.build(:package_granularity)) }
+    end
+
     trait :with_id do
       id 14
     end

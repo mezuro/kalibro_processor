@@ -22,8 +22,10 @@ module Processor
 
         already_calculated_metrics = module_result_child.metric_results.map { |metric_result| metric_result.metric}
 
-        (@all_metrics - already_calculated_metrics).each do |metric|
-          if module_result_child.kalibro_module.granularity > Granularity.new(metric.scope.to_s.to_sym)
+        remaining_metrics = @all_metrics.reject { |metric| already_calculated_metrics.include?(metric) }
+
+        remaining_metrics.each do |metric|
+          if module_result_child.kalibro_module.granularity >= KalibroClient::Entities::Miscellaneous::Granularity.new(metric.scope.to_s.to_sym)
             metric_result = MetricResult.new(metric: metric, module_result: module_result_child, metric_configuration_id: metric_configuration(metric).id)
             metric_result.value = MetricResultAggregator.aggregated_value(metric_result)
             metric_result.save

@@ -37,4 +37,10 @@ FactoryGirl.define do
     name "Ruby"
     description "Code metrics for Ruby."
   end
+
+  factory :python_configuration, class: KalibroClient::Entities::Configurations::KalibroConfiguration do
+    id 14
+    name "Python"
+    description "Code metrics for Python."
+  end
 end

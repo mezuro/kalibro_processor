@@ -10,23 +10,46 @@ describe MetricResult, :type => :model do
     let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
 
     describe 'range' do
-      let!(:range) { FactoryGirl.build(:range) }
-      let!(:yet_another_range) { FactoryGirl.build(:yet_another_range) }
       subject { FactoryGirl.build(:metric_result_with_value, module_result: FactoryGirl.build(:module_result)) }
 
-      before :each do
-        KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
-          returns(metric_configuration)
-        KalibroClient::Entities::Configurations::KalibroRange.expects(:ranges_of).
-          with(subject.metric_configuration.id).returns([range, yet_another_range])
+      context 'with finite ranges' do
+        let!(:range) { FactoryGirl.build(:range) }
+        let!(:yet_another_range) { FactoryGirl.build(:yet_another_range) }
+
+        before :each do
+          KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
+            returns(metric_configuration)
+          KalibroClient::Entities::Configurations::KalibroRange.expects(:ranges_of).
+            with(subject.metric_configuration.id).returns([range, yet_another_range])
+        end
+
+        it 'should return the range that contains the aggregated value of the metric result' do
+          expect(subject.range).to eq(range)
+        end
+
+        after :each do
+          Rails.cache.clear # This test depends on metric configuration
+        end
       end
 
-      it 'should return the range that contains the aggregated value of the metric result' do
-        expect(subject.range).to eq(range)
-      end
+      context 'with infinite range' do
+        let!(:infinite_range) { FactoryGirl.build(:range, :infinite) }
 
-      after :each do
-        Rails.cache.clear # This test depends on metric configuration
+        before :each do
+          KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
+            returns(metric_configuration)
+          KalibroClient::Entities::Configurations::KalibroRange.expects(:ranges_of).
+            with(subject.metric_configuration.id).returns([infinite_range])
+        end
+
+        it 'should return the range that contains the aggregated value of the metric result' do
+          pending "We should handle conversions from string to Float on KalibroClient"
+          expect(subject.range).to eq(infinite_range)
+        end
+
+        after :each do
+          Rails.cache.clear # This test depends on metric configuration
+        end
       end
     end
 

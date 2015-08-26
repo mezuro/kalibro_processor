@@ -1,0 +1,42 @@
+:metrics:
+
+  :cc:
+    :name: Cyclomatic Complexity
+    :description: Cyclomatic complexity is a quantitative measure of the number of linearly independent paths through a program's source code.
+    :scope: METHOD
+
+  :mi:
+    :name: Maintainability Index
+    :description: Measures how easy it is to maintain the code.
+    :scope: PACKAGE
+
+  :loc:
+    :name: Lines of code
+    :description: The total number of lines of code.
+    :scope: PACKAGE
+
+  :lloc:
+    :name: Logical Lines of code
+    :description: The number of logical lines of code. Every logical line of code contains exactly one statement.
+    :scope: PACKAGE
+
+  :sloc:
+    :name: Source Lines of code
+    :description: The number of source lines of code not necessarily corresponding to the logical one.
+    :scope: PACKAGE
+
+  :comments:
+    :name: Number of comment lines
+    :description: The number of comment lines. Multiline strings are not counted as comment since to the Python interpreters they are just strings.
+    :scope: PACKAGE
+
+  :multi:
+    :name: Multi-line strings
+    :description: The number of lines which represent multi-line strings.
+    :scope: PACKAGE
+
+  :blank:
+    :name: Number of blank lines
+    :description: The number of blank lines containing just white spaces.
+    :scope: PACKAGE
+

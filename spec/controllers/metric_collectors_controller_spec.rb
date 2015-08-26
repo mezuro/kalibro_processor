@@ -4,9 +4,12 @@ require 'metric_collector'
 RSpec.describe MetricCollectorsController, :type => :controller do
   describe 'all_names' do
     context 'with an available collector' do
-      let(:names) { ["Analizo", "MetricFu"] }
+      let(:names) { ["Analizo", "MetricFu","Radon"] }
       before :each do
         MetricCollector::Native::Analizo::Collector.expects(:available?).returns(true)
+        MetricCollector::Native::MetricFu::Collector.expects(:available?).returns(true)
+        MetricCollector::Native::Radon::Collector.expects(:available?).returns(true)
+
         get :all_names, format: :json
       end
 
@@ -18,9 +21,12 @@ RSpec.describe MetricCollectorsController, :type => :controller do
     end
 
     context 'with an unavailable collector' do
-      let(:names) { ["MetricFu"] }
+      let(:names) { ["MetricFu","Radon"] }
       before :each do
         MetricCollector::Native::Analizo::Collector.expects(:available?).returns(false)
+        MetricCollector::Native::MetricFu::Collector.expects(:available?).returns(true)
+        MetricCollector::Native::Radon::Collector.expects(:available?).returns(true)
+
         get :all_names, format: :json
       end
 
@@ -34,7 +40,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
 
   describe 'find' do
     let(:metric_collector_details) { FactoryGirl.build(:metric_collector_details) }
-    
+
     context 'with an available collector' do
       before :each do
         MetricCollector::Native.expects(:details).returns([metric_collector_details])
@@ -80,7 +86,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
         expect(JSON.parse(response.body)).to eq(JSON.parse([metric_collector_details].to_json))
       end
     end
-    
+
     context 'without available collectors' do
       before :each do
         MetricCollector::Native.expects(:details).returns([])

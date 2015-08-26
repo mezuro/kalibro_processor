@@ -24,6 +24,13 @@ FactoryGirl.define do
       description "Kalibro Processor"
     end
 
+    trait :python do
+      name "KalibroClient"
+      scm_type "GIT"
+      address "https://github.com/mezuro/kalibro_client_py"
+      description "Python version for KalibroClient"
+    end
+
     trait :another_branch do
       branch "dev"
     end
@@ -34,6 +41,7 @@ FactoryGirl.define do
 
     factory :sbking_repository, traits: [:sbking]
     factory :ruby_repository, traits: [:ruby]
+    factory :python_repository, traits: [:python]
     factory :custom_branch, traits: [:another_branch]
   end
 end

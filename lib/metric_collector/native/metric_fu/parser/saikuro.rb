@@ -11,7 +11,7 @@ module MetricCollector
                   value = method[:complexity]
                   name_suffix = module_name_suffix(method[:name])
                   module_name = name_prefix + name_suffix
-                  granularity = Granularity::METHOD
+                  granularity = KalibroClient::Entities::Miscellaneous::Granularity::METHOD
                   module_result = module_result(module_name, granularity, processing)
                   MetricResult.create(metric: metric_configuration.metric, value: value.to_f, module_result: module_result, metric_configuration_id: metric_configuration.id)
                 end

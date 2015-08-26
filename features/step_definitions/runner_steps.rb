@@ -48,6 +48,23 @@ Given(/^I have a sample ruby repository within the sample project$/) do
   @repository = FactoryGirl.create(:ruby_repository, :with_project_id, kalibro_configuration: @configuration)
 end
 
+Given(/^I have a sample configuration with the (\w+) python native metric$/) do |metric|
+  metric_configuration_factory = (metric + "_metric_configuration").downcase
+  metric_factory = (metric + "_metric").downcase
+  @configuration = FactoryGirl.create(:python_configuration, id: nil)
+  metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
+                                            {id: 4,
+                                             metric: FactoryGirl.build(metric_factory.to_sym),
+                                             reading_group_id: @reading_group.id,
+                                             kalibro_configuration_id: @configuration.id})
+  range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
+  range.save
+end
+
+Given(/^I have a sample python repository within the sample project$/) do
+  @repository = FactoryGirl.create(:python_repository, kalibro_configuration: @configuration)
+end
+
 Given(/^I have a sample repository within the sample project$/) do
   @repository = FactoryGirl.create(:sbking_repository, :with_project_id, kalibro_configuration: @kalibro_configuration)
 end
@@ -134,7 +151,6 @@ When(/^I wait for the "(.*?)" state$/) do |state|
   end
 end
 
-
 Then(/^the repository code_directory should exist$/) do
   @repository.reload
   expect(Dir.exists?(@repository.code_directory)).to be_truthy
@@ -170,3 +186,6 @@ Then(/^the Root ModuleResult retrieved should not have a MetricResult for the co
     |metric_result| metric_result.metric_configuration_id == id1 || metric_result.metric_configuration_id == id2 }).to be_empty
 end
 
+Then(/^the Root ModuleResult retrieved should have exactly "(.*?)" MetricResults$/) do |count|
+  expect(@processing.root_module_result.metric_results.count).to be_eq(count.to_i)
+end
