@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'metric_collector'
 
-describe MetricCollector::Native::Radon::Collector, :type => :model do
+describe MetricCollector::Native::Radon::Collector do
 
   describe 'collect_metrics' do
     let(:code_directory) { Dir.pwd }

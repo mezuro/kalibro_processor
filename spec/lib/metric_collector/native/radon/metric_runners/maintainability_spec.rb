@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'metric_collector'
 
-describe MetricCollector::Native::Radon::MetricRunners::Maintainability, :type => :model do
+describe MetricCollector::Native::Radon::MetricRunners::Maintainability do
   let!(:repository_path) { Dir.pwd }
   subject { MetricCollector::Native::Radon::MetricRunners::Maintainability}
 

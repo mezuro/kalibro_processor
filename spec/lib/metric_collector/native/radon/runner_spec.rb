@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'metric_collector'
 
-describe MetricCollector::Native::Radon::Runner, :type => :model do
+describe MetricCollector::Native::Radon::Runner do
   let!(:repository_path) { Dir.pwd }
   let(:wanted_metrics) { [FactoryGirl.build(:cyclomatic_metric_configuration),FactoryGirl.build(:maintainability_metric_configuration),FactoryGirl.build(:lines_of_code_configuration)] }
   subject { MetricCollector::Native::Radon::Runner.new(repository_path: repository_path, wanted_metric_configurations: wanted_metrics) }
