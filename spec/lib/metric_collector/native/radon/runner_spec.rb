@@ -14,9 +14,9 @@ describe MetricCollector::Native::Radon::Runner do
 
   describe 'run_wanted_metrics' do
     it 'is expected to run wanted metrics' do
-      MetricCollector::Native::Radon::MetricRunners::Cyclomatic.expects(:run).returns(0)
-      MetricCollector::Native::Radon::MetricRunners::Maintainability.expects(:run).returns(0)
-      MetricCollector::Native::Radon::MetricRunners::Raw.expects(:run).returns(0)
+      MetricCollector::Native::Radon::MetricRunners::Cyclomatic.expects(:run)
+      MetricCollector::Native::Radon::MetricRunners::Maintainability.expects(:run)
+      MetricCollector::Native::Radon::MetricRunners::Raw.expects(:run)
 
       expect(subject.run_wanted_metrics).to eql(wanted_metrics)
     end
@@ -24,6 +24,10 @@ describe MetricCollector::Native::Radon::Runner do
 
   describe 'clean_output' do
     it 'is expected to delete files on repository_path' do
+      MetricCollector::Native::Radon::MetricRunners::Cyclomatic.expects(:clean_output)
+      MetricCollector::Native::Radon::MetricRunners::Maintainability.expects(:clean_output)
+      MetricCollector::Native::Radon::MetricRunners::Raw.expects(:clean_output)
+      
       expect(subject.clean_output).to eql(wanted_metrics)
     end
   end
