@@ -11,7 +11,7 @@ module MetricCollector
                 module_name = module_name_prefix(line_match[:name])
                 granularity = Granularity::PACKAGE
                 module_result = module_result(module_name, granularity, processing)
-                HotspotResult.create(metric: metric_configuration.metric,
+                HotspotResult.create!(metric: metric_configuration.metric,
                                      module_result: module_result,
                                      metric_configuration_id: metric_configuration.id,
                                      line_number: line_number, message: reason)

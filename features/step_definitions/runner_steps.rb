@@ -205,7 +205,7 @@ Then(/^the ModuleResults should have HotspotResults for the (\w+) metric$/) do |
     module_result.hotspot_results
   }.flatten
 
-  expect(@hotspot_results).no_to be_empty
+  expect(@hotspot_results).not_to be_empty
 
   @hotspot_results.each do |hotspot_result|
     expect(hotspot_result.metric.code).to eq(metric_code)

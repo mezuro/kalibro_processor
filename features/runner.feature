@@ -68,7 +68,7 @@ Feature: Runner run
     And I should have a READY processing for the given repository
     And the processing retrieved should not have any ModuleResults
 
-  @clear_repository @kalibro_configuration_restart @wip
+  @clear_repository @kalibro_configuration_restart
   Scenario: An existing ruby repository with a configuration with Flay (Hotspot Metrics)
     Given I have a sample configuration with the Flay hotspot metric
     And I have a sample ruby repository
@@ -77,7 +77,7 @@ Feature: Runner run
     Then the repository code_directory should exist
     And I should have a READY processing for the given repository
     And I should have some ModuleResults
-    And the ModuleResults should have HotspotResults for the Flay metric
+    And the ModuleResults should have HotspotResults for the flay metric
     And the HotspotResults should have other related results indicating the duplication
 
   @clear_repository @kalibro_configuration_restart
