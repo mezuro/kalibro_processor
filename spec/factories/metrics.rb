@@ -73,14 +73,13 @@ FactoryGirl.define  do
     initialize_with { KalibroClient::Entities::Miscellaneous::NativeMetric.new(name, code, scope, languages, metric_collector_name) }
   end
 
-  factory :flay_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :metric do
+  factory :flay_metric, class: KalibroClient::Entities::Miscellaneous::HotspotMetric, parent: :metric do
     name "Duplicate Code"
     languages { [:RUBY] }
-    scope { :PACKAGE }
     metric_collector_name "MetricFu"
     code 'flay'
 
-    initialize_with { KalibroClient::Entities::Miscellaneous::NativeMetric.new(name, code, scope, languages, metric_collector_name) }
+    initialize_with { KalibroClient::Entities::Miscellaneous::HotspotMetric.new(name, code, languages, metric_collector_name) }
   end
 
   factory :maintainability_metric, class: KalibroClient::Entities::Miscellaneous::NativeMetric, parent: :metric do
