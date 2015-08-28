@@ -78,6 +78,7 @@ FactoryGirl.define  do
     languages { [:RUBY] }
     metric_collector_name "MetricFu"
     code 'flay'
+    type 'HotspotMetricSnapshot'
 
     initialize_with { KalibroClient::Entities::Miscellaneous::HotspotMetric.new(name, code, languages, metric_collector_name) }
   end
@@ -97,7 +98,7 @@ FactoryGirl.define  do
     languages { [:PYTHON] }
     scope { :PACKAGE }
     metric_collector_name "Radon"
-    code 'loc'    
+    code 'loc'
 
     initialize_with { KalibroClient::Entities::Miscellaneous::NativeMetric.new(name, code, scope, languages, metric_collector_name) }
   end
