@@ -9,7 +9,7 @@ module MetricCollector
               hotspot_results = match[:matches].map do |line_match|
                 line_number = line_match[:line].to_i
                 module_name = module_name_prefix(line_match[:name])
-                granularity = Granularity::PACKAGE
+                granularity = KalibroClient::Entities::Miscellaneous::Granularity::PACKAGE
                 module_result = module_result(module_name, granularity, processing)
                 HotspotResult.create!(metric: metric_configuration.metric,
                                      module_result: module_result,
