@@ -49,15 +49,15 @@ FactoryGirl.define do
         :matches => [
           { :reason => "1) Similar code found in :module (mass = 154)",
             :matches => [
-              { :name => "lib/metric_collector/native/metric_fu/parser/flay.rb", :line => '2' },
-              { :name => "lib/metric_collector/native/metric_fu/parser/flog.rb", :line => '2' }
+              { :name => "lib/metric_collector/native/metric_fu/parser/flay.rb", :line => '38' },
+              { :name => "lib/metric_collector/native/metric_fu/parser/flog.rb", :line => '38' }
             ]
           },
           { :reason => "6) IDENTICAL code found in :defn (mass*2 = 64)",
             :matches => [
-              { :name => "app/controllers/processings_controller.rb", :line => '41' },
-              { :name => "app/controllers/repositories_controller.rb", :line => '177' },
-              { :name => "lib/metric_collector/native/metric_fu/parser/saikuro.rb", :line => '2' }
+              { :name => "app/controllers/processings_controller.rb", :line => '63' },
+              { :name => "app/controllers/repositories_controller.rb", :line => '63' },
+              { :name => "lib/metric_collector/native/metric_fu/parser/saikuro.rb", :line => '63' }
             ]
           }
         ]
