@@ -12,6 +12,9 @@ class MetricResult < BaseMetricResult
   def grade; self.range.grade; end
 
   def descendant_values
-    module_result.children.map { |child| child.metric_result_for(self.metric).value }
+    module_result.children.map { |child|
+      metric_result = child.metric_result_for(self.metric)
+      metric_result.value if metric_result
+    }.compact
   end
 end
