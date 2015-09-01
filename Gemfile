@@ -56,6 +56,16 @@ gem 'daemons', '~> 1.2.2'
 # Sends a email whenever there is a unexpected exception
 gem 'exception_notification', '~> 4.1.0'
 
+#
+# Enables to export the delayed_job queue to system's task manager
+#
+# For usage instructions see the commit message at:
+# https://github.com/ddollar/foreman/commit/67ffbe2aa29cdb04335e5f7d30fe874c1ddf26e0
+#
+# foreman export systemd /usr/lib/systemd/system -a kalibro_processor -c worker=10
+#
+gem 'foreman', '~> 0.78.0'
+
 group :test do
   # Easier test writing
   gem "shoulda-matchers", '~>2.8.0'
