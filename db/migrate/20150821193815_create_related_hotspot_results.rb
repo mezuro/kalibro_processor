@@ -1,13 +1,10 @@
 class CreateRelatedHotspotResults < ActiveRecord::Migration
   def change
-    create_table :related_hotspot_results do |t|
-      t.references :hotspot_result, references: :metric_results, foreign_key: false
-      t.references :other_hotspot_result, references: :metric_results, index: true, foreign_key: false
-    end
+    # This table only has an id
+    create_table :related_hotspot_results
 
-    add_foreign_key :related_hotspot_results, :metric_results, column: :hotspot_result_id, primary_key: :id
-    add_foreign_key :related_hotspot_results, :metric_results, column: :other_hotspot_result_id, primary_key: :id
-
-    add_index :related_hotspot_results, [:hotspot_result_id, :other_hotspot_result_id], name: 'related_hotspot_unique', unique: true
+    add_column :metric_results, :related_hotspot_results_id, :integer
+    add_index :metric_results, :related_hotspot_results_id
+    add_foreign_key :metric_results, :related_hotspot_results, column: :related_hotspot_results_id
   end
 end

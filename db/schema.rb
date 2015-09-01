@@ -17,15 +17,15 @@ ActiveRecord::Schema.define(version: 20150821193815) do
   enable_extension "plpgsql"
 
   create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",               default: 0, null: false
-    t.integer  "attempts",               default: 0, null: false
-    t.text     "handler",                            null: false
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
     t.text     "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
     t.datetime "failed_at"
-    t.string   "locked_by",  limit: 255
-    t.string   "queue",      limit: 255
+    t.string   "locked_by"
+    t.string   "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -33,8 +33,8 @@ ActiveRecord::Schema.define(version: 20150821193815) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "kalibro_modules", force: :cascade do |t|
-    t.string   "long_name",        limit: 255
-    t.string   "granlrty",         limit: 255
+    t.string   "long_name"
+    t.string   "granlrty"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "module_result_id"
@@ -46,10 +46,13 @@ ActiveRecord::Schema.define(version: 20150821193815) do
     t.float    "value"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "type",                    default: "MetricResult", null: false
+    t.string   "type",                       default: "MetricResult", null: false
     t.integer  "line_number"
     t.text     "message"
+    t.integer  "related_hotspot_results_id"
   end
+
+  add_index "metric_results", ["related_hotspot_results_id"], name: "index_metric_results_on_related_hotspot_results_id", using: :btree
 
   create_table "module_results", force: :cascade do |t|
     t.float    "grade"
@@ -62,7 +65,7 @@ ActiveRecord::Schema.define(version: 20150821193815) do
   add_index "module_results", ["parent_id"], name: "index_module_results_on_parent_id", using: :btree
 
   create_table "process_times", force: :cascade do |t|
-    t.string   "state",         limit: 255
+    t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "processing_id"
@@ -70,7 +73,7 @@ ActiveRecord::Schema.define(version: 20150821193815) do
   end
 
   create_table "processings", force: :cascade do |t|
-    t.string   "state",                 limit: 255
+    t.string   "state"
     t.integer  "repository_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -79,35 +82,29 @@ ActiveRecord::Schema.define(version: 20150821193815) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.string   "description", limit: 255
+    t.string   "name"
+    t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "related_hotspot_results", force: :cascade do |t|
-    t.integer "hotspot_result_id"
-    t.integer "other_hotspot_result_id"
   end
 
-  add_index "related_hotspot_results", ["hotspot_result_id", "other_hotspot_result_id"], name: "related_hotspot_unique", unique: true, using: :btree
-  add_index "related_hotspot_results", ["other_hotspot_result_id"], name: "index_related_hotspot_results_on_other_hotspot_result_id", using: :btree
-
   create_table "repositories", force: :cascade do |t|
-    t.string   "name",                     limit: 255
-    t.string   "scm_type",                 limit: 255
-    t.string   "address",                  limit: 255
-    t.string   "description",              limit: 255, default: ""
-    t.string   "license",                  limit: 255, default: ""
-    t.integer  "period",                               default: 0
+    t.string   "name"
+    t.string   "scm_type"
+    t.string   "address"
+    t.string   "description",              default: ""
+    t.string   "license",                  default: ""
+    t.integer  "period",                   default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "kalibro_configuration_id"
     t.integer  "project_id"
-    t.string   "code_directory",           limit: 255
-    t.string   "branch",                               default: "master", null: false
+    t.string   "code_directory"
+    t.string   "branch",                   default: "master", null: false
   end
 
-  add_foreign_key "related_hotspot_results", "metric_results", column: "hotspot_result_id"
-  add_foreign_key "related_hotspot_results", "metric_results", column: "other_hotspot_result_id"
+  add_foreign_key "metric_results", "related_hotspot_results", column: "related_hotspot_results_id"
 end
