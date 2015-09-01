@@ -3,7 +3,7 @@ require 'rails_helper'
 describe MetricResultsController do
   describe 'method' do
     describe 'descendant_values' do
-      let!(:metric_result) { FactoryGirl.build(:metric_result, id: 1) }
+      let!(:metric_result) { FactoryGirl.build(:metric_result, :with_value, id: 1) }
       let!(:module_result) { FactoryGirl.build(:module_result) }
 
       before :each do
