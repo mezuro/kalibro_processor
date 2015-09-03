@@ -1,4 +1,4 @@
-class HotspotMetricResult < BaseMetricResult
+class HotspotMetricResult < MetricResult
   belongs_to :related_hotspot_metric_results
   has_many :related_results, class_name: 'HotspotMetricResult',
            through: :related_hotspot_metric_results,
