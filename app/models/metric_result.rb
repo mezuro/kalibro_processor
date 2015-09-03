@@ -2,9 +2,6 @@ class MetricResult < ActiveRecord::Base
   attr_writer :metric
   belongs_to :module_result
 
-  scope :tree_results, -> { where(type: 'TreeMetricResult') }
-  scope :hotspot_metric_results, -> { where(type: 'HotspotMetricResult') }
-
   def metric_configuration=(value)
     self.metric_configuration_id = value.id
   end
