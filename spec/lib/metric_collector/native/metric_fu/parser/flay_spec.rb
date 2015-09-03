@@ -42,7 +42,7 @@ describe MetricCollector::Native::MetricFu::Parser::Flay do
 
         similar_results = similar_module_results.map do |module_name, module_result|
           result = mock
-          HotspotResult.expects(:create!)
+          HotspotMetricResult.expects(:create!)
             .with(metric: metric_configuration.metric,
                   module_result: module_result,
                   metric_configuration_id: metric_configuration.id,
@@ -53,7 +53,7 @@ describe MetricCollector::Native::MetricFu::Parser::Flay do
 
         identical_results = identical_module_results.map do |module_name, module_result|
           result = mock
-          HotspotResult.expects(:create!)
+          HotspotMetricResult.expects(:create!)
             .with(metric: metric_configuration.metric,
                   module_result: module_result,
                   metric_configuration_id: metric_configuration.id,
@@ -62,8 +62,8 @@ describe MetricCollector::Native::MetricFu::Parser::Flay do
           result
         end
 
-        RelatedHotspotResults.expects(:create!).with(hotspot_results: similar_results)
-        RelatedHotspotResults.expects(:create!).with(hotspot_results: identical_results)
+        RelatedHotspotMetricResults.expects(:create!).with(hotspot_metric_results: similar_results)
+        RelatedHotspotMetricResults.expects(:create!).with(hotspot_metric_results: identical_results)
 
         MetricCollector::Native::MetricFu::Parser::Flay.parse(flay_results, processing, metric_configuration)
       end

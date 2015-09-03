@@ -7,18 +7,18 @@ module MetricCollector
 
             flay_output[:matches].each do |match|
               reason = match[:reason]
-              hotspot_results = match[:matches].map do |line_match|
+              hotspot_metric_results = match[:matches].map do |line_match|
                 line_number = line_match[:line].to_i
                 module_name = module_name_prefix(line_match[:name])
                 granularity = KalibroClient::Entities::Miscellaneous::Granularity::PACKAGE
                 module_result = module_result(module_name, granularity, processing)
-                HotspotResult.create!(metric: metric_configuration.metric,
+                HotspotMetricResult.create!(metric: metric_configuration.metric,
                                       module_result: module_result,
                                       metric_configuration_id: metric_configuration.id,
                                       line_number: line_number, message: reason)
               end
 
-              RelatedHotspotResults.create!(hotspot_results: hotspot_results)
+              RelatedHotspotMetricResults.create!(hotspot_metric_results: hotspot_metric_results)
             end
           end
         end

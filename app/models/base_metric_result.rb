@@ -3,7 +3,7 @@ class BaseMetricResult < ActiveRecord::Base
   belongs_to :module_result
 
   scope :tree_results, -> { where(type: 'MetricResult') }
-  scope :hotspot_results, -> { where(type: 'HotspotResult') }
+  scope :hotspot_metric_results, -> { where(type: 'HotspotMetricResult') }
 
   self.table_name = "metric_results"
 
@@ -24,6 +24,6 @@ class BaseMetricResult < ActiveRecord::Base
   end
 
   def types
-    %w(MetricResult HotspotResult)
+    %w(MetricResult HotspotMetricResult)
   end
 end

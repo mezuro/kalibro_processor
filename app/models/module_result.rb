@@ -2,7 +2,7 @@ class ModuleResult < ActiveRecord::Base
   has_one :kalibro_module, dependent: :destroy #It can go wrong if someday we want to destroy only module results and not the whole processing
   has_many :children, foreign_key: 'parent_id', class_name: 'ModuleResult', dependent: :destroy
   has_many :metric_results, dependent: :destroy
-  has_many :hotspot_results, class_name: 'HotspotResult', dependent: :destroy
+  has_many :hotspot_metric_results, class_name: 'HotspotMetricResult', dependent: :destroy
 
   belongs_to :parent, class_name: 'ModuleResult'
   belongs_to :processing
