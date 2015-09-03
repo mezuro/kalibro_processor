@@ -23,7 +23,7 @@ module Processor
         end
 
         native_metrics.each do |metric_key, metric_configuration|
-          MetricResult.create(value: default_value_from(metric_configuration),
+          TreeMetricResult.create(value: default_value_from(metric_configuration),
                               module_result: module_result,
                               metric_configuration_id: metric_configuration.id)
         end

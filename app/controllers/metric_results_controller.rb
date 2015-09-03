@@ -1,6 +1,6 @@
 class MetricResultsController < ApplicationController
   def descendant_values
-    metric_result = MetricResult.find(params[:id])
+    metric_result = TreeMetricResult.find(params[:id])
     descendant_values = { descendant_values: metric_result.descendant_values }
 
     respond_to do |format|
@@ -12,7 +12,7 @@ class MetricResultsController < ApplicationController
     record = find_metric_result
 
     respond_to do |format|
-      if record.is_a?(MetricResult)
+      if record.is_a?(TreeMetricResult)
         format.json { render json: { repository_id: record.processing.repository.id } }
       else
         format.json { render json: record, status: :unprocessable_entity }
@@ -24,7 +24,7 @@ class MetricResultsController < ApplicationController
     metric_result = find_metric_result
 
     respond_to do |format|
-      if metric_result.is_a?(MetricResult)
+      if metric_result.is_a?(TreeMetricResult)
         format.json { render json: { metric_configuration: metric_result.metric_configuration } }
       else
         format.json { render json: metric_result, status: :unprocessable_entity }
@@ -36,7 +36,7 @@ class MetricResultsController < ApplicationController
 
   def find_metric_result
     begin
-      MetricResult.find(params[:id])
+      TreeMetricResult.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       { error: 'RecordNotFound' }
     end

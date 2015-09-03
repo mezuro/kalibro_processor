@@ -26,8 +26,8 @@ describe Processor::MetricResultsChecker do
           MetricCollector::Native::MetricFu::Parser.expects(:default_value_from).with(flog_metric_configuration.metric.code).returns(default_value)
         end
 
-        it 'is expected to create a MetricResult with the default value for this metric' do
-          MetricResult.expects(:create).with(value: default_value, module_result: module_result, metric_configuration_id: flog_metric_configuration.id)
+        it 'is expected to create a TreeMetricResult with the default value for this metric' do
+          TreeMetricResult.expects(:create).with(value: default_value, module_result: module_result, metric_configuration_id: flog_metric_configuration.id)
 
           Processor::MetricResultsChecker.task(context)
         end

@@ -1,4 +1,4 @@
-class MetricResult < BaseMetricResult
+class TreeMetricResult < BaseMetricResult
   def range
     ranges = KalibroClient::Entities::Configurations::KalibroRange.ranges_of(metric_configuration.id)
     ranges.detect { |range| range.range === self.value }

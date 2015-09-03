@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe MetricResult, :type => :model do
+describe TreeMetricResult, :type => :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:module_result) }

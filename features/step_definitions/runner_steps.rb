@@ -177,7 +177,7 @@ Then(/^the processing retrieved should have a Root ModuleResult$/) do
 end
 
 Then(/^the Root ModuleResult retrieved should have a list of MetricResults$/) do
-  expect(@processing.root_module_result.metric_results.first).to be_a(MetricResult)
+  expect(@processing.root_module_result.metric_results.first).to be_a(TreeMetricResult)
 end
 
 Then(/^I should receive a processing error$/) do

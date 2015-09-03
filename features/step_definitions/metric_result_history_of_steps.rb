@@ -9,5 +9,5 @@ end
 
 Then(/^I should get a list of pairs date and value$/) do
   expect(@history.first[:date]).to be_a(ActiveSupport::TimeWithZone)
-  expect(@history.first[:metric_result]).to be_a(MetricResult)
+  expect(@history.first[:metric_result]).to be_a(TreeMetricResult)
 end

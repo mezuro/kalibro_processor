@@ -18,8 +18,8 @@ describe CompoundResults::Calculator do
       module_result.expects(:reload)
     end
 
-    it 'is expected to create a new MetricResult' do
-      MetricResult.expects(:create).with(metric: compound_metric_configuration.metric,
+    it 'is expected to create a new TreeMetricResult' do
+      TreeMetricResult.expects(:create).with(metric: compound_metric_configuration.metric,
                                          module_result: module_result,
                                          metric_configuration_id: compound_metric_configuration.id,
                                          value: value)

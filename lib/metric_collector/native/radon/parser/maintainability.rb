@@ -14,7 +14,7 @@ module MetricCollector
               value ||= self.default_value
 
               module_result = module_result(module_name, KalibroClient::Entities::Miscellaneous::Granularity::PACKAGE, processing)
-              MetricResult.create(metric: metric_configuration.metric, value: value,
+              TreeMetricResult.create(metric: metric_configuration.metric, value: value,
                                   module_result: module_result,
                                   metric_configuration_id: metric_configuration.id)
             end

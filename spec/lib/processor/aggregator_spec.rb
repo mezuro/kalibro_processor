@@ -28,7 +28,7 @@ describe Processor::Aggregator do
             context.native_metrics = native_metrics
             child.expects(:metric_results).returns(metric_results)
             root_module_result.expects(:pre_order).returns([root_module_result, child])
-            MetricResult.any_instance.expects(:save)
+            TreeMetricResult.any_instance.expects(:save)
           end
 
           it 'is expected to aggregate results' do
@@ -52,7 +52,7 @@ describe Processor::Aggregator do
             child.expects(:metric_results).returns(metric_results)
             another_child.expects(:metric_results).returns(metric_results)
             root_module_result.expects(:pre_order).returns([root_module_result, parent, child, another_child])
-            MetricResult.any_instance.expects(:save).twice
+            TreeMetricResult.any_instance.expects(:save).twice
             MetricResultAggregator.expects(:aggregated_value).twice
           end
 

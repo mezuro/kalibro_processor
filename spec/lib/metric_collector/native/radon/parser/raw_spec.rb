@@ -20,8 +20,8 @@ describe MetricCollector::Native::Radon::Parser::Raw do
 
         ModuleResult.expects(:create).with(kalibro_module: kalibro_module_package, processing: processing).returns(module_result)
 
-        MetricResult.expects(:create).with(metric: loc_configuration.metric, value: 14, module_result: module_result, metric_configuration_id: loc_configuration.id)
-        MetricResult.expects(:create).with(metric: lloc_configuration.metric, value: 10, module_result: module_result, metric_configuration_id: lloc_configuration.id)
+        TreeMetricResult.expects(:create).with(metric: loc_configuration.metric, value: 14, module_result: module_result, metric_configuration_id: loc_configuration.id)
+        TreeMetricResult.expects(:create).with(metric: lloc_configuration.metric, value: 10, module_result: module_result, metric_configuration_id: lloc_configuration.id)
 
         MetricCollector::Native::Radon::Parser::Raw.parse(raw_results, processing, loc_configuration)
         MetricCollector::Native::Radon::Parser::Raw.parse(raw_results, processing, lloc_configuration)

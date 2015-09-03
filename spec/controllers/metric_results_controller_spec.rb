@@ -10,7 +10,7 @@ describe MetricResultsController do
         module_result.expects(:metric_result_for).with(metric_result.metric).returns(metric_result)
         module_result.expects(:children).returns([module_result])
         metric_result.expects(:module_result).returns(module_result)
-        MetricResult.expects(:find).with(metric_result.id.to_s).returns(metric_result)
+        TreeMetricResult.expects(:find).with(metric_result.id.to_s).returns(metric_result)
       end
 
       context 'json format' do
@@ -34,7 +34,7 @@ describe MetricResultsController do
 
     context 'with valid ModuleResult instance' do
       before :each do
-        MetricResult.expects(:find).with(metric_result.id.to_s).returns(metric_result)
+        TreeMetricResult.expects(:find).with(metric_result.id.to_s).returns(metric_result)
         metric_result.expects(:processing).returns(processing)
         processing.expects(:repository).returns(repository)
         post :repository_id, id: metric_result.id, format: :json
@@ -51,7 +51,7 @@ describe MetricResultsController do
       let(:error_hash) { {error: 'RecordNotFound'} }
 
       before :each do
-        MetricResult.expects(:find).with(metric_result.id.to_s).raises(ActiveRecord::RecordNotFound)
+        TreeMetricResult.expects(:find).with(metric_result.id.to_s).raises(ActiveRecord::RecordNotFound)
 
         post :repository_id, id: metric_result.id, format: :json
       end
@@ -70,7 +70,7 @@ describe MetricResultsController do
     context 'with valid ModuleResult instance' do
       let(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
       before :each do
-        MetricResult.expects(:find).with(metric_result.id.to_s).returns(metric_result)
+        TreeMetricResult.expects(:find).with(metric_result.id.to_s).returns(metric_result)
         metric_result.expects(:metric_configuration).returns(metric_configuration)
         get :metric_configuration, id: metric_result.id, format: :json
       end
@@ -86,7 +86,7 @@ describe MetricResultsController do
       let(:error_hash) { {error: 'RecordNotFound'} }
 
       before :each do
-        MetricResult.expects(:find).with(metric_result.id.to_s).raises(ActiveRecord::RecordNotFound)
+        TreeMetricResult.expects(:find).with(metric_result.id.to_s).raises(ActiveRecord::RecordNotFound)
 
         get :metric_configuration, id: metric_result.id, format: :json
       end

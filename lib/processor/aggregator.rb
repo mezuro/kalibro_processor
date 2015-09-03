@@ -26,7 +26,7 @@ module Processor
 
         remaining_metrics.each do |metric|
           if module_result_child.kalibro_module.granularity >= KalibroClient::Entities::Miscellaneous::Granularity.new(metric.scope.to_s.to_sym)
-            metric_result = MetricResult.new(metric: metric, module_result: module_result_child, metric_configuration_id: metric_configuration(metric).id)
+            metric_result = TreeMetricResult.new(metric: metric, module_result: module_result_child, metric_configuration_id: metric_configuration(metric).id)
             metric_result.value = MetricResultAggregator.aggregated_value(metric_result)
             metric_result.save
           end
