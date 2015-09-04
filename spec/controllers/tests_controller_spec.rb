@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'database_cleaner'
 
 RSpec.describe TestsController, :type => :controller do
   describe 'clean_database' do
