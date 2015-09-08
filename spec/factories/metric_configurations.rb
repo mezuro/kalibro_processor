@@ -78,7 +78,7 @@ FactoryGirl.define do
     end
 
     trait :flog_compound_metric_configuration do
-      metric { FactoryGirl.build(:kalibro_gatekeeper_client_compound_flog_metric) }
+      metric { FactoryGirl.build(:compound_flog_metric) }
       weight 1
       aggregation_form :AVERAGE
       reading_group_id 1

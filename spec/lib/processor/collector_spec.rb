@@ -9,7 +9,7 @@ describe Processor::Collector do
       let!(:code_dir) { "/tmp/test" }
       let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir) }
       let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
-      let!(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:analizo_native_metric)) }
+      let!(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:native_metric, :analizo)) }
       let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
       let!(:analizo_metric_collector_list) { FactoryGirl.build(:analizo_metric_collector_list) }
 

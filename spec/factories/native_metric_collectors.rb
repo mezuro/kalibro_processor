@@ -2,7 +2,8 @@ require 'metric_collector'
 
 class NativeMetricCollector < MetricCollector::Base
   def initialize
-    super('Native', 'Only for tests', [FactoryGirl.build(:analizo_native_metric)])
+    metrics = [FactoryGirl.build(:native_metric, metric_collector_name: 'NativeMetricCollector')]
+    super('Native', 'Only for tests', metrics)
   end
 end
 

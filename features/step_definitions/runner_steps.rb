@@ -2,7 +2,7 @@ Given(/^I have a sample kalibro configuration with native metrics$/) do
   @kalibro_configuration = FactoryGirl.create(:kalibro_configuration, id: nil)
   metric_configuration = FactoryGirl.create(:metric_configuration,
                                             {id: nil,
-                                             metric: FactoryGirl.build(:loc),
+                                             metric: FactoryGirl.build(:loc_metric),
                                              reading_group_id: @reading_group.id,
                                              kalibro_configuration_id: @kalibro_configuration.id})
   range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
@@ -110,7 +110,7 @@ end
 
 Given(/^I add the "(.*?)" analizo metric with scope "(.*?)" and code "(.*?)"$/) do |name, scope, code|
   @metric_configuration = FactoryGirl.create(:metric_configuration,
-                                             {metric: FactoryGirl.build(:analizo_native_metric, name: name, scope: scope, code: code),
+                                             {metric: FactoryGirl.build(:native_metric, :analizo, name: name, scope: scope, code: code),
                                              reading_group_id: @reading_group.id,
                                              kalibro_configuration_id: @kalibro_configuration.id})
 end

@@ -9,7 +9,5 @@ FactoryGirl.define do
     end
 
     factory :metric_result_with_value, traits: [:with_value]
-
-    initialize_with { TreeMetricResult.new() }
   end
 end
