@@ -56,7 +56,7 @@ Rails.application.routes.draw do
   resources :process_times, only: [:index, :show]
   get 'process_times/:id/processing' => 'process_times#processing'
 
-  post 'tests/clean_database' => 'tests#clean_database'
+  post 'tests/clean_database' => 'tests#clean_database' unless Rails.env == "production"
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
