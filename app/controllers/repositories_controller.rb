@@ -131,7 +131,7 @@ class RepositoriesController < ApplicationController
   def cancel_process
     if set_repository
       processing = @repository.processings.last
-      processing.update(state: "CANCELED") unless processing.state == "READY"
+      processing.update(state: "CANCELED") unless processing.nil? || processing.state == "READY"
 
       respond_with_json({})
     end

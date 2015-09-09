@@ -527,17 +527,32 @@ RSpec.describe RepositoriesController, :type => :controller do
   end
 
   describe 'cancel_process' do
-    let!(:processing) { FactoryGirl.build(:processing, state: "PREPARING") }
+    context 'with a valid processing' do
+      let!(:processing) { FactoryGirl.build(:processing, state: "PREPARING") }
 
-    before :each do
-      processing.expects(:update).with(state: "CANCELED")
-      repository.expects(:processings).returns([processing])
-      Repository.expects(:find).with(repository.id).returns(repository)
+      before :each do
+        processing.expects(:update).with(state: "CANCELED")
+        repository.expects(:processings).returns([processing])
+        Repository.expects(:find).with(repository.id).returns(repository)
 
-      get :cancel_process, id: repository.id, format: :json
+        get :cancel_process, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
     end
 
-    it { is_expected.to respond_with(:success) }
+    context 'with a nil processing' do
+      let!(:processing) { nil }
+
+      before :each do
+        repository.expects(:processings).returns([processing])
+        Repository.expects(:find).with(repository.id).returns(repository)
+
+        get :cancel_process, id: repository.id, format: :json
+      end
+
+      it { is_expected.to respond_with(:success) }
+    end
   end
 
   describe 'branches' do
