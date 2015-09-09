@@ -1,34 +1,27 @@
 require 'rails_helper'
 
 describe TreeMetricResult, :type => :model do
-
-  describe 'associations' do
-    it { is_expected.to belong_to(:module_result) }
-  end
-
   describe 'method' do
     let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
 
     describe 'range' do
       subject { FactoryGirl.build(:metric_result_with_value, module_result: FactoryGirl.build(:module_result)) }
 
+      before :each do
+        subject.expects(:metric_configuration).returns(metric_configuration)
+      end
+
       context 'with finite ranges' do
         let!(:range) { FactoryGirl.build(:range) }
         let!(:yet_another_range) { FactoryGirl.build(:yet_another_range) }
 
         before :each do
-          KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
-            returns(metric_configuration)
           KalibroClient::Entities::Configurations::KalibroRange.expects(:ranges_of).
-            with(subject.metric_configuration.id).returns([range, yet_another_range])
+            with(metric_configuration.id).returns([range, yet_another_range])
         end
 
         it 'should return the range that contains the aggregated value of the metric result' do
           expect(subject.range).to eq(range)
-        end
-
-        after :each do
-          Rails.cache.clear # This test depends on metric configuration
         end
       end
 
@@ -36,17 +29,12 @@ describe TreeMetricResult, :type => :model do
         let!(:infinite_range) { FactoryGirl.build(:range, :infinite) }
 
         before :each do
-          subject.expects(:metric_configuration).returns(metric_configuration)
           KalibroClient::Entities::Configurations::KalibroRange.expects(:ranges_of).
             with(metric_configuration.id).returns([infinite_range])
         end
 
         it 'should return the range that contains the aggregated value of the metric result' do
           expect(subject.range).to eq(infinite_range)
-        end
-
-        after :each do
-          Rails.cache.clear # This test depends on metric configuration
         end
       end
     end
@@ -123,24 +111,6 @@ describe TreeMetricResult, :type => :model do
 
       it "should be a float values array" do
         expect(subject.descendant_values).to be_a(Array)
-      end
-    end
-
-    describe 'metric' do
-      subject { FactoryGirl.build(:metric_result, metric: nil, module_result: FactoryGirl.build(:module_result)) }
-
-      before :each do
-        KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
-          with(subject.metric_configuration_id).
-          returns(metric_configuration)
-      end
-
-      it 'is expected to be a KalibroClient::Entities::Miscellaneous::Metric' do
-        expect(subject.metric).to be_a(KalibroClient::Entities::Miscellaneous::Metric)
-      end
-
-      after :each do
-        Rails.cache.clear # This test depends on metric configuration
       end
     end
   end
