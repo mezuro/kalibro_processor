@@ -68,7 +68,7 @@ Feature: Runner run
     And I should have a READY processing for the given repository
     And the processing retrieved should not have any ModuleResults
 
-  @clear_repository @kalibro_configuration_restart @wip
+  @clear_repository @kalibro_configuration_restart
   Scenario: An existing ruby repository with a configuration with Flay (Hotspot Metrics)
     Given I have a sample configuration with the Flay hotspot metric
     And I have a sample ruby repository

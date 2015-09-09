@@ -202,7 +202,7 @@ end
 
 Then(/^the ModuleResults should have HotspotResults for the (\w+) metric$/) do |metric_code|
   @hotspot_results = @processing.module_results.map { |module_result|
-    module_result.hotspot_results
+    module_result.hotspot_metric_results
   }.flatten
 
   expect(@hotspot_results).not_to be_empty
