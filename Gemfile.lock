@@ -1,12 +1,3 @@
-GIT
-  remote: https://github.com/mezuro/kalibro_client.git
-  revision: 0e7c1d419cf057ac050ffd54021599b341cd0956
-  branch: create_kalibro_range_range
-  specs:
-    kalibro_client (1.3.0)
-      activesupport (>= 2.2.1)
-      faraday_middleware (~> 0.10.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -169,6 +160,9 @@ GEM
       multi_json (~> 1.2)
     json (1.8.3)
     json_pure (1.8.2)
+    kalibro_client (1.4.0)
+      activesupport (>= 2.2.1)
+      faraday_middleware (~> 0.10.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.11)
@@ -377,7 +371,7 @@ DEPENDENCIES
   foreman (~> 0.78.0)
   git (~> 1.2.7)
   jbuilder (~> 2.0)
-  kalibro_client!
+  kalibro_client (~> 1.4)
   metric_fu (~> 4.12.0)
   mocha
   pg
