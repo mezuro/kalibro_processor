@@ -17,8 +17,4 @@ class MetricResult < ActiveRecord::Base
   def metric
     @metric ||= self.metric_configuration.metric
   end
-
-  def types
-    %w(TreeMetricResult HotspotMetricResult)
-  end
 end

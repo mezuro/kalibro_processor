@@ -31,12 +31,6 @@ describe MetricResult, :type => :model do
       end
     end
 
-    describe 'types' do
-      it 'is expected to return the types as a string array' do
-        expect(subject.types).to eq(%w(TreeMetricResult HotspotMetricResult))
-      end
-    end
-
     describe 'metric' do
       subject { FactoryGirl.build(:tree_metric_result, metric: nil, module_result: FactoryGirl.build(:module_result)) }
 
