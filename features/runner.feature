@@ -39,7 +39,7 @@ Feature: Runner run
     When I run for the given repository
     Then I should receive a processing error
 
-  @clear_repository @kalibro_configuration_restart @wip
+  @clear_repository @kalibro_configuration_restart
   Scenario: Aggregating some metric values
     Given I have sample readings
     And I have a sample kalibro configuration

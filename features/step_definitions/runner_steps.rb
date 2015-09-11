@@ -220,5 +220,5 @@ end
 
 
 Then(/^the Root ModuleResult retrieved should have exactly "(.*?)" MetricResults$/) do |count|
-  expect(@processing.root_module_result.metric_results.count).to be_eq(count.to_i)
+  expect(@processing.root_module_result.metric_results.count).to eq(count.to_i)
 end
