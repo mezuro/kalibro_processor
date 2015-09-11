@@ -14,12 +14,16 @@ module Processor
       context.processing.module_results.each do |module_result|
         metrics_check_list = wanted_metrics.clone
 
-        module_result.metric_results.each { |metric_result|
+        module_result.metric_results.each do |metric_result|
           metrics_check_list.delete(metric_key(metric_result.metric))
-        }
+        end
 
-        metrics_check_list.each do |metric_key, metric_configuration|
-          MetricResult.create(value: default_value_from(metric_configuration),
+        native_metrics = metrics_check_list.select do |metric_key, metric_configuration|
+          !metric_configuration.metric.is_a?(KalibroClient::Entities::Miscellaneous::HotspotMetric)
+        end
+
+        native_metrics.each do |metric_key, metric_configuration|
+          TreeMetricResult.create(value: default_value_from(metric_configuration),
                               module_result: module_result,
                               metric_configuration_id: metric_configuration.id)
         end

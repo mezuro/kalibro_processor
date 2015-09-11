@@ -30,6 +30,12 @@ FactoryGirl.define do
       metric { FactoryGirl.build(:compound_metric) }
     end
 
+    trait :hotspot do
+      reading_group_id nil
+      aggregation_form nil
+      weight nil
+    end
+
     trait :sum_metric_configuration do
       aggregation_form :SUM
     end
@@ -50,6 +56,11 @@ FactoryGirl.define do
       metric { FactoryGirl.build(:saikuro_metric) }
     end
 
+    trait :flay do
+      hotspot
+      metric { FactoryGirl.build(:flay_metric) }
+    end
+
     trait :cyclomatic do
       metric { FactoryGirl.build(:cyclomatic_metric) }
     end
@@ -67,7 +78,7 @@ FactoryGirl.define do
     end
 
     trait :flog_compound_metric_configuration do
-      metric { FactoryGirl.build(:kalibro_gatekeeper_client_compound_flog_metric) }
+      metric { FactoryGirl.build(:compound_flog_metric) }
       weight 1
       aggregation_form :AVERAGE
       reading_group_id 1
@@ -87,6 +98,7 @@ FactoryGirl.define do
     factory :flog_compound_metric_configuration, traits: [:flog_compound_metric_configuration]
     factory :saikuro_metric_configuration, traits: [:saikuro]
     factory :saikuro_compound_metric_configuration, traits: [:saikuro_compound_metric_configuration]
+    factory :flay_metric_configuration, traits: [:flay]
     factory :sum_metric_configuration, traits: [:sum_metric_configuration]
     factory :cyclomatic_metric_configuration, traits: [:cyclomatic]
     factory :maintainability_metric_configuration, traits: [:maintainability]

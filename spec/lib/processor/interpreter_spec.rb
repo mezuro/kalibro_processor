@@ -9,7 +9,7 @@ describe Processor::Interpreter do
         let!(:code_dir) { "/tmp/test" }
         let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir) }
         let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
-        let!(:metric_result) { FactoryGirl.build(:metric_result,
+        let!(:metric_result) { FactoryGirl.build(:tree_metric_result,
                                                  metric_configuration: metric_configuration) }
         let!(:module_result) { FactoryGirl.build(:module_result_class_granularity,
                                                  metric_results: [metric_result]) }

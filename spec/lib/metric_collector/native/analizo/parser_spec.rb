@@ -17,7 +17,7 @@ describe MetricCollector::Native::Analizo::Parser, :type => :model do
 
       subject { MetricCollector::Native::Analizo::Parser.new(processing: processing, wanted_metrics: wanted_metrics_list) }
 
-      it 'is expected to parse the raw results into ModuleResults and MetricResults' do
+      it 'is expected to parse the raw results into ModuleResults and TreeMetricResults' do
         YAML.expects(:load_documents).with(analizo_metric_collector_list.raw_result).returns(analizo_metric_collector_list.parsed_result)
         KalibroModule.expects(:new).with(long_name: "", granularity: KalibroClient::Entities::Miscellaneous::Granularity::SOFTWARE).returns(root_kalibro_module)
         KalibroModule.expects(:new).with(long_name: "Class.Module", granularity: KalibroClient::Entities::Miscellaneous::Granularity::CLASS).returns(class_kalibro_module)
@@ -25,7 +25,7 @@ describe MetricCollector::Native::Analizo::Parser, :type => :model do
         ModuleResult.expects(:find_by_module_and_processing).with(class_kalibro_module, processing).returns(module_result)
         root_kalibro_module.expects(:save)
         ModuleResult.expects(:create).with(kalibro_module: root_kalibro_module, processing: processing).returns(module_result)
-        MetricResult.expects(:create).with(metric: metric_collector_details.supported_metrics["acc"], value: 0.0, module_result: module_result, metric_configuration_id: wanted_metric_configuration.id)
+        TreeMetricResult.expects(:create).with(metric: metric_collector_details.supported_metrics["acc"], value: 0.0, module_result: module_result, metric_configuration_id: wanted_metric_configuration.id)
 
         subject.parse_all(analizo_metric_collector_list.raw_result)
       end

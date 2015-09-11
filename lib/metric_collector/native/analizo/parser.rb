@@ -35,7 +35,7 @@ module MetricCollector
         end
 
         def new_metric_result(module_result, code, value)
-          MetricResult.create(metric: self.wanted_metrics[code].metric, value: value.to_f, module_result: module_result, metric_configuration_id: self.wanted_metrics[code].id)
+          TreeMetricResult.create(metric: self.wanted_metrics[code].metric, value: value.to_f, module_result: module_result, metric_configuration_id: self.wanted_metrics[code].id)
         end
 
         def module_result(module_name, granularity)

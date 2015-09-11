@@ -69,6 +69,18 @@ Feature: Runner run
     And the processing retrieved should not have any ModuleResults
 
   @clear_repository @kalibro_configuration_restart
+  Scenario: An existing ruby repository with a configuration with Flay (Hotspot Metrics)
+    Given I have a sample configuration with the Flay hotspot metric
+    And I have a sample ruby repository
+    And I have a processing within the sample repository
+    When I run for the given repository
+    Then the repository code_directory should exist
+    And I should have a READY processing for the given repository
+    And I should have some ModuleResults
+    And the ModuleResults should have HotspotResults for the flay metric
+    And the HotspotResults should have other related results indicating the duplication
+
+  @clear_repository @kalibro_configuration_restart
   Scenario: An existing python repository with a configuration with Cyclomatic Complexity
     Given I have sample readings
     And I have a sample configuration with the Cyclomatic python native metric

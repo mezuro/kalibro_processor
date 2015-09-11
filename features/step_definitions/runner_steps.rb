@@ -2,7 +2,7 @@ Given(/^I have a sample kalibro configuration with native metrics$/) do
   @kalibro_configuration = FactoryGirl.create(:kalibro_configuration, id: nil)
   metric_configuration = FactoryGirl.create(:metric_configuration,
                                             {id: nil,
-                                             metric: FactoryGirl.build(:loc),
+                                             metric: FactoryGirl.build(:loc_metric),
                                              reading_group_id: @reading_group.id,
                                              kalibro_configuration_id: @kalibro_configuration.id})
   range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
@@ -34,6 +34,16 @@ Given(/^I have a sample configuration with the (\w+) native metric$/) do |metric
                                                      kalibro_configuration_id: @configuration.id)
   compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: compound_metric_configuration.id})
   compound_range.save
+end
+
+Given(/^I have a sample configuration with the (\w+) hotspot metric$/) do |metric|
+  metric_configuration_factory = (metric + "_metric_configuration").downcase
+  metric_factory = (metric + "_metric").downcase
+  @configuration = FactoryGirl.create(:ruby_configuration, id: nil)
+  metric = FactoryGirl.build(metric_factory.to_sym)
+  @metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
+                                             metric: metric,
+                                             kalibro_configuration_id: @configuration.id)
 end
 
 Given(/^I have a sample repository$/) do
@@ -100,7 +110,7 @@ end
 
 Given(/^I add the "(.*?)" analizo metric with scope "(.*?)" and code "(.*?)"$/) do |name, scope, code|
   @metric_configuration = FactoryGirl.create(:metric_configuration,
-                                             {metric: FactoryGirl.build(:analizo_native_metric, name: name, scope: scope, code: code),
+                                             {metric: FactoryGirl.build(:native_metric, :analizo, name: name, scope: scope, code: code),
                                              reading_group_id: @reading_group.id,
                                              kalibro_configuration_id: @kalibro_configuration.id})
 end
@@ -167,7 +177,7 @@ Then(/^the processing retrieved should have a Root ModuleResult$/) do
 end
 
 Then(/^the Root ModuleResult retrieved should have a list of MetricResults$/) do
-  expect(@processing.root_module_result.metric_results.first).to be_a(MetricResult)
+  expect(@processing.root_module_result.metric_results.first).to be_a(TreeMetricResult)
 end
 
 Then(/^I should receive a processing error$/) do
@@ -185,6 +195,29 @@ Then(/^the Root ModuleResult retrieved should not have a MetricResult for the co
   expect(@processing.root_module_result.metric_results.select {
     |metric_result| metric_result.metric_configuration_id == id1 || metric_result.metric_configuration_id == id2 }).to be_empty
 end
+
+Then(/^I should have some ModuleResults$/) do
+  expect(@processing.module_results).not_to be_empty
+end
+
+Then(/^the ModuleResults should have HotspotResults for the (\w+) metric$/) do |metric_code|
+  @hotspot_results = @processing.module_results.map { |module_result|
+    module_result.hotspot_metric_results
+  }.flatten
+
+  expect(@hotspot_results).not_to be_empty
+
+  @hotspot_results.each do |hotspot_result|
+    expect(hotspot_result.metric.code).to eq(metric_code)
+  end
+end
+
+Then(/^the HotspotResults should have other related results indicating the duplication$/) do
+  @hotspot_results.each do |hotspot_result|
+    expect(hotspot_result.related_results).not_to be_empty
+  end
+end
+
 
 Then(/^the Root ModuleResult retrieved should have exactly "(.*?)" MetricResults$/) do |count|
   expect(@processing.root_module_result.metric_results.count).to be_eq(count.to_i)

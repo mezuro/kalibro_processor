@@ -17,7 +17,7 @@ describe MetricResultAggregator, :type => :model do
       end
 
       context 'when value is nil and the values array is not empty' do
-        subject { FactoryGirl.build(:metric_result, module_result: FactoryGirl.build(:module_result)) }
+        subject { FactoryGirl.build(:tree_metric_result, module_result: FactoryGirl.build(:module_result)) }
 
         it 'should calculate the mean value of the values array' do
           KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
@@ -55,7 +55,7 @@ describe MetricResultAggregator, :type => :model do
       end
 
       context 'when the metric_results are not from a leaf module' do
-        subject { FactoryGirl.build(:metric_result_with_value) }
+        subject { FactoryGirl.build(:tree_metric_result_with_value) }
 
         it 'should return the value' do
           expect(MetricResultAggregator.aggregated_value(subject)).to eq(subject.value)

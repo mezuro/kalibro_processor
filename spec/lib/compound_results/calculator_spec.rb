@@ -4,7 +4,7 @@ require 'compound_results'
 describe CompoundResults::Calculator do
   describe 'calculate' do
     let! (:module_result) { FactoryGirl.build(:module_result) }
-    let! (:metric_result) { FactoryGirl.build(:metric_result) }
+    let! (:metric_result) { FactoryGirl.build(:tree_metric_result) }
     let! (:compound_metric_configuration) { FactoryGirl.build(:compound_metric_configuration) }
     let! (:metric_configuration) { FactoryGirl.build(:metric_configuration) }
     let! (:value) { 13.0 }
@@ -18,8 +18,8 @@ describe CompoundResults::Calculator do
       module_result.expects(:reload)
     end
 
-    it 'is expected to create a new MetricResult' do
-      MetricResult.expects(:create).with(metric: compound_metric_configuration.metric,
+    it 'is expected to create a new TreeMetricResult' do
+      TreeMetricResult.expects(:create).with(metric: compound_metric_configuration.metric,
                                          module_result: module_result,
                                          metric_configuration_id: compound_metric_configuration.id,
                                          value: value)

@@ -10,7 +10,7 @@ describe Processor::MetricResultsChecker do
       let(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir) }
       let(:flog_metric_configuration) { FactoryGirl.build(:flog_metric_configuration) }
       let(:saikuro_metric_configuration) { FactoryGirl.build(:saikuro_metric_configuration, id: 1) }
-      let(:metric_result) { FactoryGirl.build(:metric_result,
+      let(:metric_result) { FactoryGirl.build(:tree_metric_result,
                                                metric_configuration: saikuro_metric_configuration) }
       let(:module_result) { FactoryGirl.build(:module_result_class_granularity) }
       let(:processing) { FactoryGirl.build(:processing, repository: repository, root_module_result: module_result, module_results: [module_result]) }
@@ -26,8 +26,8 @@ describe Processor::MetricResultsChecker do
           MetricCollector::Native::MetricFu::Parser.expects(:default_value_from).with(flog_metric_configuration.metric.code).returns(default_value)
         end
 
-        it 'is expected to create a MetricResult with the default value for this metric' do
-          MetricResult.expects(:create).with(value: default_value, module_result: module_result, metric_configuration_id: flog_metric_configuration.id)
+        it 'is expected to create a TreeMetricResult with the default value for this metric' do
+          TreeMetricResult.expects(:create).with(value: default_value, module_result: module_result, metric_configuration_id: flog_metric_configuration.id)
 
           Processor::MetricResultsChecker.task(context)
         end

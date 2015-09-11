@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150613123922) do
+ActiveRecord::Schema.define(version: 20150909210112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,7 +46,13 @@ ActiveRecord::Schema.define(version: 20150613123922) do
     t.float    "value"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "type",                              default: "MetricResult", null: false
+    t.integer  "line_number"
+    t.text     "message"
+    t.integer  "related_hotspot_metric_results_id"
   end
+
+  add_index "metric_results", ["related_hotspot_metric_results_id"], name: "index_metric_results_on_related_hotspot_metric_results_id", using: :btree
 
   create_table "module_results", force: :cascade do |t|
     t.float    "grade"
@@ -82,6 +88,9 @@ ActiveRecord::Schema.define(version: 20150613123922) do
     t.datetime "updated_at"
   end
 
+  create_table "related_hotspot_metric_results", force: :cascade do |t|
+  end
+
   create_table "repositories", force: :cascade do |t|
     t.string   "name",                     limit: 255
     t.string   "scm_type",                 limit: 255
@@ -97,4 +106,5 @@ ActiveRecord::Schema.define(version: 20150613123922) do
     t.string   "branch",                               default: "master", null: false
   end
 
+  add_foreign_key "metric_results", "related_hotspot_metric_results", column: "related_hotspot_metric_results_id"
 end

@@ -488,7 +488,7 @@ RSpec.describe RepositoriesController, :type => :controller do
   end
 
   describe 'metric_result_history_of' do
-    let(:metric_result) { FactoryGirl.build(:metric_result_with_value) }
+    let(:metric_result) { FactoryGirl.build(:tree_metric_result_with_value) }
     let(:kalibro_module) { FactoryGirl.build(:kalibro_module, id: 1) }
     let(:module_result) { FactoryGirl.build(:module_result) }
     let(:processing) { FactoryGirl.build(:processing) }

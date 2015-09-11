@@ -18,8 +18,8 @@ describe MetricCollector::Native::MetricFu::Parser::Saikuro do
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_method_reprocess, processing).returns(module_result)
         kalibro_module_method_process.expects(:save)
         ModuleResult.expects(:create).with(kalibro_module: kalibro_module_method_process, processing: processing).returns(module_result)
-        MetricResult.expects(:create).with(metric: metric_configuration.metric, value: 5.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
-        MetricResult.expects(:create).with(metric: metric_configuration.metric, value: 10.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
+        TreeMetricResult.expects(:create).with(metric: metric_configuration.metric, value: 5.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
+        TreeMetricResult.expects(:create).with(metric: metric_configuration.metric, value: 10.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
         MetricCollector::Native::MetricFu::Parser::Saikuro.parse(saikuro_results, processing, metric_configuration)
       end
     end

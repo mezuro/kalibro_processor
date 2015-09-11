@@ -16,7 +16,7 @@ module MetricCollector
               module_name = module_name + '.' + result['name']
               module_result = module_result(module_name, granularity, processing)
               value = result['complexity'].to_f
-              MetricResult.create(metric: metric_configuration.metric, value: value, module_result: module_result,
+              TreeMetricResult.create(metric: metric_configuration.metric, value: value, module_result: module_result,
                                   metric_configuration_id: metric_configuration.id)
             end
           end

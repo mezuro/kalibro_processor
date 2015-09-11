@@ -26,9 +26,9 @@ describe MetricCollector::Native::Radon::Parser::Cyclomatic do
         kalibro_module_method1.expects(:save)
 
         ModuleResult.expects(:create).with(kalibro_module: kalibro_module_method1, processing: processing).returns(module_result)
-        MetricResult.expects(:create).with(metric: metric_configuration.metric, value: 1.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
-        MetricResult.expects(:create).with(metric: metric_configuration.metric, value: 5.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
-        MetricResult.expects(:create).with(metric: metric_configuration.metric, value: 3.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
+        TreeMetricResult.expects(:create).with(metric: metric_configuration.metric, value: 1.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
+        TreeMetricResult.expects(:create).with(metric: metric_configuration.metric, value: 5.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
+        TreeMetricResult.expects(:create).with(metric: metric_configuration.metric, value: 3.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
       end
 
       it 'is expected to parse the results into a module result' do

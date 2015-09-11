@@ -60,7 +60,7 @@ describe ModuleResult, :type => :model do
       end
 
       context 'when a module result has not the specific metric' do
-        let(:another_metric) { FactoryGirl.build(:analizo_native_metric) }
+        let(:another_metric) { FactoryGirl.build(:acc_metric) }
         it 'should return the metric_result' do
           expect(subject.metric_result_for(another_metric)).to be_nil
         end
