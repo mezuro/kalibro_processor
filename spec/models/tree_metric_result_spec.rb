@@ -5,7 +5,7 @@ describe TreeMetricResult, :type => :model do
     let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
 
     describe 'range' do
-      subject { FactoryGirl.build(:metric_result_with_value, module_result: FactoryGirl.build(:module_result)) }
+      subject { FactoryGirl.build(:tree_metric_result_with_value, module_result: FactoryGirl.build(:module_result)) }
 
       before :each do
         subject.expects(:metric_configuration).returns(metric_configuration)
@@ -40,7 +40,7 @@ describe TreeMetricResult, :type => :model do
     end
 
     describe 'has_grade?' do
-      subject { FactoryGirl.build(:metric_result) }
+      subject { FactoryGirl.build(:tree_metric_result) }
 
       context 'without a range' do
         before :each do
@@ -82,7 +82,7 @@ describe TreeMetricResult, :type => :model do
     end
 
     describe 'grade' do
-      subject { FactoryGirl.build(:metric_result) }
+      subject { FactoryGirl.build(:tree_metric_result) }
 
       it "should call range's grade" do
         range = FactoryGirl.build(:range)
@@ -94,8 +94,8 @@ describe TreeMetricResult, :type => :model do
     end
 
     describe 'descendant_values' do
-      subject { FactoryGirl.build(:metric_result) }
-      let(:son) { FactoryGirl.build(:metric_result_with_value) }
+      subject { FactoryGirl.build(:tree_metric_result) }
+      let(:son) { FactoryGirl.build(:tree_metric_result_with_value) }
       let!(:module_result) { FactoryGirl.build(:module_result) }
 
       before :each do

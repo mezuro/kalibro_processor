@@ -21,8 +21,8 @@ describe Processor::Aggregator do
           }
           let!(:native_metrics) { { "Analizo" => native_metric_configurations } }
           let!(:all_metrics) { [native_metric_configurations.first.metric, native_metric_configurations.last.metric] }
-          let!(:metric_results) { [FactoryGirl.build(:metric_result, :with_value, metric_configuration: native_metric_configurations.first, metric: native_metric_configurations.first.metric),
-                                   FactoryGirl.build(:metric_result, :with_value, metric_configuration: native_metric_configurations.last, metric: native_metric_configurations.last.metric)] }
+          let!(:metric_results) { [FactoryGirl.build(:tree_metric_result, :with_value, metric_configuration: native_metric_configurations.first, metric: native_metric_configurations.first.metric),
+                                   FactoryGirl.build(:tree_metric_result, :with_value, metric_configuration: native_metric_configurations.last, metric: native_metric_configurations.last.metric)] }
 
           before :each do
             context.native_metrics = native_metrics
@@ -45,7 +45,7 @@ describe Processor::Aggregator do
           }
           let!(:native_metrics) { { "Radon" => native_metric_configurations } }
           let!(:all_metrics) { [native_metric_configurations.first.metric] }
-          let!(:metric_results) { [FactoryGirl.build(:metric_result, :with_value, metric_configuration: native_metric_configurations.first, metric: native_metric_configurations.first.metric)] }
+          let!(:metric_results) { [FactoryGirl.build(:tree_metric_result, :with_value, metric_configuration: native_metric_configurations.first, metric: native_metric_configurations.first.metric)] }
 
           before :each do
             context.native_metrics = native_metrics

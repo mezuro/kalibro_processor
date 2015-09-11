@@ -17,7 +17,7 @@ describe MetricResult, :type => :model do
     end
 
     describe 'metric_configuration' do
-      subject { FactoryGirl.build(:metric_result, metric: nil, module_result: FactoryGirl.build(:module_result)) }
+      subject { FactoryGirl.build(:tree_metric_result, metric: nil, module_result: FactoryGirl.build(:module_result)) }
 
       it 'is expected to find it' do
         KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
@@ -38,7 +38,7 @@ describe MetricResult, :type => :model do
     end
 
     describe 'metric' do
-      subject { FactoryGirl.build(:metric_result, metric: nil, module_result: FactoryGirl.build(:module_result)) }
+      subject { FactoryGirl.build(:tree_metric_result, metric: nil, module_result: FactoryGirl.build(:module_result)) }
 
       before :each do
         subject.expects(:metric_configuration).returns(metric_configuration)

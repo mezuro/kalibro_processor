@@ -3,7 +3,7 @@ require 'rails_helper'
 describe MetricResultsController do
   describe 'method' do
     describe 'descendant_values' do
-      let!(:metric_result) { FactoryGirl.build(:metric_result, :with_value, id: 1) }
+      let!(:metric_result) { FactoryGirl.build(:tree_metric_result, :with_value, id: 1) }
       let!(:module_result) { FactoryGirl.build(:module_result) }
 
       before :each do
@@ -28,7 +28,7 @@ describe MetricResultsController do
   end
 
   describe 'repository_id' do
-    let(:metric_result) { FactoryGirl.build(:metric_result, id: 1) }
+    let(:metric_result) { FactoryGirl.build(:tree_metric_result, id: 1) }
     let(:processing) { FactoryGirl.build(:processing) }
     let(:repository) { FactoryGirl.build(:repository, id: 2) }
 
@@ -65,7 +65,7 @@ describe MetricResultsController do
   end
 
   describe 'metric_configuration' do
-    let!(:metric_result) { FactoryGirl.build(:metric_result, id: 1) }
+    let!(:metric_result) { FactoryGirl.build(:tree_metric_result, id: 1) }
 
     context 'with valid ModuleResult instance' do
       let(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
