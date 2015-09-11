@@ -36,14 +36,12 @@ describe MetricResult, :type => :model do
         let!(:infinite_range) { FactoryGirl.build(:range, :infinite) }
 
         before :each do
-          KalibroClient::Entities::Configurations::MetricConfiguration.expects(:find).
-            returns(metric_configuration)
+          subject.expects(:metric_configuration).returns(metric_configuration)
           KalibroClient::Entities::Configurations::KalibroRange.expects(:ranges_of).
-            with(subject.metric_configuration.id).returns([infinite_range])
+            with(metric_configuration.id).returns([infinite_range])
         end
 
         it 'should return the range that contains the aggregated value of the metric result' do
-          pending "We should handle conversions from string to Float on KalibroClient"
           expect(subject.range).to eq(infinite_range)
         end
 
