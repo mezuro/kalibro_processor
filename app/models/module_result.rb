@@ -44,8 +44,6 @@ class ModuleResult < ActiveRecord::Base
     HotspotMetricResult.where(module_result_id: descendants.map(&:id))
   end
 
-  private
-
   def self.pre_order_traverse(module_result, &block)
     if block_given?
       yield module_result
