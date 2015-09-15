@@ -4,6 +4,7 @@ FactoryGirl.define do
     parent nil
     grade 10.0
     metric_results { [FactoryGirl.build(:tree_metric_result)] }
+    hotspot_metric_results { [FactoryGirl.build(:hotspot_metric_result)] }
 
     trait :class do
       kalibro_module { FactoryGirl.build(:kalibro_module, granularity: FactoryGirl.build(:class_granularity)) }
