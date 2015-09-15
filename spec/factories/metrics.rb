@@ -2,7 +2,7 @@ FactoryGirl.define  do
   factory :metric, class: KalibroClient::Entities::Miscellaneous::Metric do
     name "Afferent Connections per Class (used to calculate COF - Coupling Factor)"
     code "acc"
-    type 'NativeMetricSnapshot'
+    type 'TestMetricSnapshot'
     scope :SOFTWARE
 
     initialize_with { new(type, name, code, scope) }
@@ -20,6 +20,7 @@ FactoryGirl.define  do
       name "Native Metric"
       code "NM"
       description "A native metric"
+      metric_collector_name 'NativeTestCollector'
 
       initialize_with { new(name, code, scope, languages, metric_collector_name) }
     end
@@ -47,6 +48,7 @@ FactoryGirl.define  do
     trait :hotspot do
       type 'HotspotMetricSnapshot'
       scope nil
+      languages [:RUBY]
     end
 
     factory :hotspot_metric, class: KalibroClient::Entities::Miscellaneous::HotspotMetric do
@@ -55,6 +57,7 @@ FactoryGirl.define  do
       name "Hotspot Metric"
       code "HM"
       description "A hotspot metric"
+      metric_collector_name 'HotspotTestCollector'
 
       initialize_with { new(name, code, languages, metric_collector_name) }
     end

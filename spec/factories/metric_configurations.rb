@@ -36,6 +36,11 @@ FactoryGirl.define do
       weight nil
     end
 
+    trait :hotspot_metric do
+      hotspot
+      metric { FactoryGirl.build(:hotspot_metric) }
+    end
+
     trait :sum_metric_configuration do
       aggregation_form :SUM
     end
@@ -94,6 +99,7 @@ FactoryGirl.define do
     end
 
     factory :compound_metric_configuration, traits: [:compound_metric]
+    factory :hotspot_metric_configuration, traits: [:hotspot_metric]
     factory :flog_metric_configuration, traits: [:flog]
     factory :flog_compound_metric_configuration, traits: [:flog_compound_metric_configuration]
     factory :saikuro_metric_configuration, traits: [:saikuro]
