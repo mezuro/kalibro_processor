@@ -8,7 +8,7 @@ describe ModuleResultsController do
     describe 'get' do
       context 'with valid ModuleResult instance' do
         before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
+          ModuleResult.expects(:find).with(module_result.id).returns(module_result)
 
           post :get, id: module_result.id, format: :json
         end
@@ -22,7 +22,7 @@ describe ModuleResultsController do
 
       context 'with invalid ModuleResult instance' do
         before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
+          ModuleResult.expects(:find).with(module_result.id).raises(ActiveRecord::RecordNotFound)
 
           post :get, id: module_result.id, format: :json
         end
@@ -65,7 +65,7 @@ describe ModuleResultsController do
     describe 'metric_results' do
       context 'with valid ModuleResult instance' do
         before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
+          ModuleResult.expects(:find).with(module_result.id).returns(module_result)
 
           post :metric_results, id: module_result.id, format: :json
         end
@@ -79,9 +79,72 @@ describe ModuleResultsController do
 
       context 'with invalid ModuleResult instance' do
         before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
+          ModuleResult.expects(:find).with(module_result.id).raises(ActiveRecord::RecordNotFound)
 
           post :metric_results, id: module_result.id, format: :json
+        end
+
+        it { is_expected.to respond_with(:unprocessable_entity) }
+
+        it 'should return the error_hash' do
+          expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
+        end
+      end
+    end
+
+    describe 'hotspot_metric_results' do
+      context 'with valid ModuleResult instance' do
+        before :each do
+          ModuleResult.expects(:find).with(module_result.id).returns(module_result)
+
+          get :hotspot_metric_results, id: module_result.id, format: :json
+        end
+
+        it { is_expected.to respond_with(:success) }
+
+        it 'should return the hotspot_metric_results' do
+          expect(JSON.parse(response.body)).to eq(JSON.parse({ hotspot_metric_results: module_result.hotspot_metric_results }.to_json))
+        end
+      end
+
+      context 'with invalid ModuleResult instance' do
+        before :each do
+          ModuleResult.expects(:find).with(module_result.id).raises(ActiveRecord::RecordNotFound)
+
+          get :hotspot_metric_results, id: module_result.id, format: :json
+        end
+
+        it { is_expected.to respond_with(:unprocessable_entity) }
+
+        it 'should return the error_hash' do
+          expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
+        end
+      end
+    end
+
+    describe 'descendant_hotspot_metric_results' do
+      let(:hotspot_metric_results) { FactoryGirl.build_list(:hotspot_metric_result, 2, :with_id) }
+
+      context 'with valid ModuleResult instance' do
+        before :each do
+          ModuleResult.expects(:find).with(module_result.id).returns(module_result)
+          module_result.expects(:descendant_hotspot_metric_results).returns(hotspot_metric_results)
+
+          get :descendant_hotspot_metric_results, id: module_result.id, format: :json
+        end
+
+        it { is_expected.to respond_with(:success) }
+
+        it 'should return the descendant hotspot metric result' do
+          expect(JSON.parse(response.body)).to eq(JSON.parse({hotspot_metric_results: hotspot_metric_results}.to_json))
+        end
+      end
+
+      context 'with invalid ModuleResult instance' do
+        before :each do
+          ModuleResult.expects(:find).with(module_result.id).raises(ActiveRecord::RecordNotFound)
+
+          get :descendant_hotspot_metric_results, id: module_result.id, format: :json
         end
 
         it { is_expected.to respond_with(:unprocessable_entity) }
@@ -97,7 +160,7 @@ describe ModuleResultsController do
 
       context 'with valid ModuleResult instance' do
         before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
+          ModuleResult.expects(:find).with(module_result.id).returns(module_result)
           module_result_with_parent.parent = module_result
           module_result.children << module_result_with_parent
 
@@ -113,7 +176,7 @@ describe ModuleResultsController do
 
       context 'with invalid ModuleResult instance' do
         before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
+          ModuleResult.expects(:find).with(module_result.id).raises(ActiveRecord::RecordNotFound)
 
           post :children, id: module_result.id, format: :json
         end
@@ -132,7 +195,7 @@ describe ModuleResultsController do
 
       context 'with valid ModuleResult instance' do
         before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).returns(module_result)
+          ModuleResult.expects(:find).with(module_result.id).returns(module_result)
           module_result.expects(:processing).returns(processing)
           processing.expects(:repository).returns(repository)
           post :repository_id, id: module_result.id, format: :json
@@ -147,7 +210,7 @@ describe ModuleResultsController do
 
       context 'with invalid ModuleResult instance' do
         before :each do
-          ModuleResult.expects(:find).with(module_result.id.to_s).raises(ActiveRecord::RecordNotFound)
+          ModuleResult.expects(:find).with(module_result.id).raises(ActiveRecord::RecordNotFound)
 
           post :repository_id, id: module_result.id, format: :json
         end

@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   get 'module_results/:id' => 'module_results#get'
   get 'module_results/:id/exists' => 'module_results#exists'
   get 'module_results/:id/metric_results' => 'module_results#metric_results'
+  get 'module_results/:id/hotspot_metric_results' => 'module_results#hotspot_metric_results'
+  get 'module_results/:id/descendant_hotspot_metric_results' => 'module_results#descendant_hotspot_metric_results'
   get 'module_results/:id/children' => 'module_results#children'
   get 'module_results/:id/repository_id' => 'module_results#repository_id'
   get 'module_results/:id/kalibro_module' => 'module_results#kalibro_module'

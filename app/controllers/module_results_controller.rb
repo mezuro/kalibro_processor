@@ -1,69 +1,52 @@
 class ModuleResultsController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, KalibroClient::Errors::RecordNotFound, with: :not_found
+  before_action :set_module_result, except: [:exists]
+
   def get
-    record = find_module_result
-    # The method find_module_result returns a hash if the record is not found. Otherwise, it returns a ModuleResult's instance
-    response = record.is_a?(ModuleResult) ? { module_result: record } : record
-    format_response(record, response)
+    format_response({ module_result: @module_result })
   end
 
   def kalibro_module
-    respond_to do |format|
-      format.json { render json: {kalibro_module: ModuleResult.find(params[:id].to_i).kalibro_module} }
-    end
+    format_response({ kalibro_module: @module_result.kalibro_module })
   end
 
   def exists
-    respond_to do |format|
-      format.json { render json: {exists: ModuleResult.exists?(params[:id].to_i)} }
-    end
+    format_response({ exists: ModuleResult.exists?(params[:id].to_i) })
   end
 
   def metric_results
-    record = find_module_result
-    return_value = record.is_a?(ModuleResult) ? { metric_results: record.metric_results } : record
-    format_response(record, return_value)
+    format_response({ metric_results: @module_result.metric_results })
+  end
+
+  def hotspot_metric_results
+    format_response({ hotspot_metric_results: @module_result.hotspot_metric_results })
+  end
+
+  def descendant_hotspot_metric_results
+    format_response({ hotspot_metric_results: @module_result.descendant_hotspot_metric_results })
   end
 
   def children
-    record = find_module_result
-    if record.is_a?(ModuleResult)
-      return_value = { module_results: record.children }
-    else
-      return_value = record
-    end
-
-    format_response(record, return_value)
+    format_response({ module_results: @module_result.children })
   end
 
   def repository_id
-    record = find_module_result
-
-    respond_to do |format|
-      if record.is_a?(ModuleResult)
-        format.json { render json: {repository_id: record.processing.repository.id} }
-      else
-        format.json { render json: record, status: :unprocessable_entity }
-      end
-    end
+    format_response({ repository_id: @module_result.processing.repository.id })
   end
 
   private
 
-  def find_module_result
-    begin
-      ModuleResult.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      {errors: 'RecordNotFound'}
+  def format_response(record, **options)
+    respond_to do |format|
+      format.json { render json: record, **options }
     end
   end
 
-  def format_response(record, return_value)
-    respond_to do |format|
-      if record.is_a?(ModuleResult)
-        format.json { render json: return_value }
-      else
-        format.json { render json: return_value, status: :unprocessable_entity }
-      end
-    end
+  def not_found
+    format_response({ errors: 'RecordNotFound' }, status: :unprocessable_entity)
+  end
+
+  def set_module_result
+    @module_result = ModuleResult.find(params[:id].to_i)
   end
 end
