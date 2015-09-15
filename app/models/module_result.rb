@@ -33,21 +33,23 @@ class ModuleResult < ActiveRecord::Base
   def pre_order
     root = self
     root = root.parent until root.parent.nil?
-    @pre_order ||= self.class.pre_order_traverse(root).to_a
+    @pre_order ||= pre_order_traverse(root).to_a
   end
 
   def descendants
-    @descendants ||= self.class.pre_order_traverse(self).to_a
+    @descendants ||= pre_order_traverse(self).to_a
   end
 
   def descendant_hotspot_metric_results
     HotspotMetricResult.where(module_result_id: descendants.map(&:id))
   end
 
-  def self.pre_order_traverse(module_result, &block)
+  protected
+
+  def pre_order_traverse(module_result, &block)
     if block_given?
       yield module_result
-      module_result.children.each { |child| self.pre_order_traverse(child, &block) }
+      module_result.children.each { |child| pre_order_traverse(child, &block) }
     else
       Enumerator.new do |yielder|
         pre_order_traverse(module_result) { |descendant| yielder << descendant }

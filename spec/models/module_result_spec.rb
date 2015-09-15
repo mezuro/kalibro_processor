@@ -158,7 +158,7 @@ describe ModuleResult, :type => :model do
       let!(:pre_order_module_results) { [subject] }
 
       before :each do
-        ModuleResult.expects(:pre_order_traverse).with(subject).returns(pre_order_module_results.to_enum)
+        subject.expects(:pre_order_traverse).with(subject).returns(pre_order_module_results.to_enum)
       end
 
       it 'is expected to return the descendant ModuleResults' do
@@ -176,9 +176,10 @@ describe ModuleResult, :type => :model do
       end
 
       it 'is expected to return the Hotspot MetricResults related with the descendant ModuleResults ids' do
-        HotspotMetricResult.expects(:where).with(module_result_id: [subject.id])
+        result_mock = mock
+        HotspotMetricResult.expects(:where).with(module_result_id: [subject.id]).returns(result_mock)
 
-        subject.descendant_hotspot_metric_results
+        expect(subject.descendant_hotspot_metric_results).to eq(result_mock)
       end
     end
   end
