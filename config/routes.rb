@@ -7,9 +7,13 @@ Rails.application.routes.draw do
 
   root 'information#data'
 
-  get 'metric_results/:id/descendant_values' => 'metric_results#descendant_values'
-  get 'metric_results/:id/repository_id' => 'metric_results#repository_id'
-  get 'metric_results/:id/metric_configuration' => 'metric_results#metric_configuration'
+  resources :tree_metric_results, only: [] do
+    member do
+      get 'repository_id'
+      get 'metric_configuration'
+      get 'descendant_values'
+    end
+  end
 
   get 'module_results/:id' => 'module_results#get'
   get 'module_results/:id/exists' => 'module_results#exists'
