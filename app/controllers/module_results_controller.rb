@@ -36,10 +36,6 @@ class ModuleResultsController < ApplicationController
 
   private
 
-  def not_found
-    format_response({ errors: 'RecordNotFound' }, status: :unprocessable_entity)
-  end
-
   def set_module_result
     @module_result = ModuleResult.find(params[:id].to_i)
   end
