@@ -15,6 +15,14 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :hotspot_metric_results, only: [] do
+    member do
+      get 'repository_id'
+      get 'metric_configuration'
+      get 'related_results'
+    end
+  end
+
   get 'module_results/:id' => 'module_results#get'
   get 'module_results/:id/exists' => 'module_results#exists'
   get 'module_results/:id/metric_results' => 'module_results#metric_results'

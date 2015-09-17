@@ -12,7 +12,10 @@ class MetricResultsController < ApplicationController
 
   protected
 
-  def set_metric_result
+  # This controller is never instantiated. Therefore this line won't be covered.
+  # :nocov:
+  def set_metric_results
     raise NotImplementedError
   end
+  # :nocov:
 end
