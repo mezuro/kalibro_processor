@@ -36,12 +36,6 @@ class ModuleResultsController < ApplicationController
 
   private
 
-  def format_response(record, **options)
-    respond_to do |format|
-      format.json { render json: record, **options }
-    end
-  end
-
   def not_found
     format_response({ errors: 'RecordNotFound' }, status: :unprocessable_entity)
   end
