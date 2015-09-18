@@ -15,7 +15,7 @@ class ModuleResultsController < ApplicationController
   end
 
   def metric_results
-    format_response({ metric_results: @module_result.metric_results })
+    format_response({ tree_metric_results: @module_result.metric_results })
   end
 
   def hotspot_metric_results
