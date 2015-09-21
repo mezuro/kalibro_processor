@@ -19,7 +19,7 @@ class ModuleResultsController < ApplicationController
   end
 
   def hotspot_metric_results
-    format_response({ hotspot_metric_results: @module_result.hotspot_metric_results })
+    format_response({ hotspot_metric_results: @module_result.descendant_hotspot_metric_results })
   end
 
   def descendant_hotspot_metric_results

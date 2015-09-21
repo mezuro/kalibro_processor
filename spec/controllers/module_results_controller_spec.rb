@@ -94,7 +94,10 @@ describe ModuleResultsController do
 
     describe 'hotspot_metric_results' do
       context 'with valid ModuleResult instance' do
+        let!(:hotspot_metric_results) { [FactoryGirl.build(:hotspot_metric_result)] }
+
         before :each do
+          module_result.expects(:descendant_hotspot_metric_results).returns(hotspot_metric_results)
           ModuleResult.expects(:find).with(module_result.id).returns(module_result)
 
           get :hotspot_metric_results, id: module_result.id, format: :json
@@ -103,7 +106,7 @@ describe ModuleResultsController do
         it { is_expected.to respond_with(:success) }
 
         it 'should return the hotspot_metric_results' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse({ hotspot_metric_results: module_result.hotspot_metric_results }.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({ hotspot_metric_results: hotspot_metric_results }.to_json))
         end
       end
 
