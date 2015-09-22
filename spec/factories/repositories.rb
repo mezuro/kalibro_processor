@@ -17,11 +17,15 @@ FactoryGirl.define do
       description "SBKing"
     end
 
-    trait :ruby do
+    trait :kalibro_processor do
       name "KalibroProcessor"
       scm_type "GIT"
       address "https://github.com/mezuro/kalibro_processor"
       description "Kalibro Processor"
+    end
+
+    trait :ruby do
+      kalibro_processor
     end
 
     trait :python do

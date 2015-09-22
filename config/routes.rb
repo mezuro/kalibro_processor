@@ -7,13 +7,27 @@ Rails.application.routes.draw do
 
   root 'information#data'
 
-  get 'metric_results/:id/descendant_values' => 'metric_results#descendant_values'
-  get 'metric_results/:id/repository_id' => 'metric_results#repository_id'
-  get 'metric_results/:id/metric_configuration' => 'metric_results#metric_configuration'
+  resources :tree_metric_results, only: [] do
+    member do
+      get 'repository_id'
+      get 'metric_configuration'
+      get 'descendant_values'
+    end
+  end
+
+  resources :hotspot_metric_results, only: [] do
+    member do
+      get 'repository_id'
+      get 'metric_configuration'
+      get 'related_results'
+    end
+  end
 
   get 'module_results/:id' => 'module_results#get'
   get 'module_results/:id/exists' => 'module_results#exists'
   get 'module_results/:id/metric_results' => 'module_results#metric_results'
+  get 'module_results/:id/hotspot_metric_results' => 'module_results#hotspot_metric_results'
+  get 'module_results/:id/descendant_hotspot_metric_results' => 'module_results#descendant_hotspot_metric_results'
   get 'module_results/:id/children' => 'module_results#children'
   get 'module_results/:id/repository_id' => 'module_results#repository_id'
   get 'module_results/:id/kalibro_module' => 'module_results#kalibro_module'

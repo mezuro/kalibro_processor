@@ -17,4 +17,8 @@ class TreeMetricResult < MetricResult
       metric_result.value if metric_result
     }.compact
   end
+
+  def as_json(options={})
+    super(except: [:line_number, :message, :related_hotspot_metric_results_id], **options)
+  end
 end

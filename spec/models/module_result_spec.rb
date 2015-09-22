@@ -152,5 +152,35 @@ describe ModuleResult, :type => :model do
         end
       end
     end
+
+    describe 'descendants' do
+      subject { FactoryGirl.build(:module_result) }
+      let!(:pre_order_module_results) { [subject] }
+
+      before :each do
+        subject.expects(:pre_order_traverse).with(subject).returns(pre_order_module_results.to_enum)
+      end
+
+      it 'is expected to return the descendant ModuleResults' do
+        expect(subject.descendants).to be_a(Array)
+        expect(subject.descendants).to eq(pre_order_module_results)
+      end
+    end
+
+    describe 'descendant_hotspot_metric_results' do
+      subject { FactoryGirl.build(:module_result) }
+      let!(:descendant_module_results) { [subject] }
+
+      before :each do
+        subject.expects(:descendants).returns(descendant_module_results)
+      end
+
+      it 'is expected to return the Hotspot MetricResults related with the descendant ModuleResults ids' do
+        result_mock = mock
+        HotspotMetricResult.expects(:where).with(module_result_id: [subject.id]).returns(result_mock)
+
+        expect(subject.descendant_hotspot_metric_results).to eq(result_mock)
+      end
+    end
   end
 end

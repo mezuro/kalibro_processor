@@ -32,18 +32,28 @@ class ModuleResult < ActiveRecord::Base
 
   def pre_order
     root = self
-    root = root.parent until root.parent==nil
-    @pre_order ||= pre_order_traverse(root)
+    root = root.parent until root.parent.nil?
+    @pre_order ||= pre_order_traverse(root).to_a
   end
 
-  private
+  def descendants
+    @descendants ||= pre_order_traverse(self).to_a
+  end
 
-  def pre_order_traverse(module_result)
-    pre_order_array = [module_result]
-    children = module_result.children
-    unless children.empty?
-      children.each { |child| pre_order_array += pre_order_traverse(child) }
+  def descendant_hotspot_metric_results
+    HotspotMetricResult.where(module_result_id: descendants.map(&:id))
+  end
+
+  protected
+
+  def pre_order_traverse(module_result, &block)
+    if block_given?
+      yield module_result
+      module_result.children.each { |child| pre_order_traverse(child, &block) }
+    else
+      Enumerator.new do |yielder|
+        pre_order_traverse(module_result) { |descendant| yielder << descendant }
+      end
     end
-    pre_order_array
   end
 end
