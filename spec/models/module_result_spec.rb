@@ -75,7 +75,7 @@ describe ModuleResult, :type => :model do
       before :each do
         name_filtered_results = Object.new
         name_filtered_results.expects(:where).
-          with("kalibro_modules.granlrty" => kalibro_module.granularity.to_s).
+          with("kalibro_modules.granularity" => kalibro_module.granularity.to_s).
           returns([module_result])
 
         processing_filtered_results = Object.new

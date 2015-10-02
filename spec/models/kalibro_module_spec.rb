@@ -2,6 +2,19 @@ require 'rails_helper'
 
 describe KalibroModule, :type => :model do
 
+=begin
+  describe 'initialize' do
+    let(:long_name) { 'app.model.kalibro_module' }
+    let(:granularity) { 'CLASS' }
+
+    it 'is expected to set long_name and granularity' do
+      subject = KalibroModule.new(long_name: long_name, granularity: granularity)
+
+      expect(subject.long_name).to eq(long_name)
+      expect(subject.granularity).to eq(KalibroClient::Entities::Miscellaneous::Granularity.new(granularity.to_sym))
+    end
+  end
+=end
   describe 'associations' do
     it { is_expected.to belong_to(:module_result) }
   end
@@ -70,6 +83,27 @@ describe KalibroModule, :type => :model do
             expect(parent.name).to eq(['pre_name'])
           end
         end
+      end
+    end
+
+    describe 'granularity=' do
+
+      subject { FactoryGirl.build( :kalibro_module ) }
+
+      it "is expected to convert the value to string" do
+        granularity = mock("granularity")
+        granularity.expects(:to_s).returns("CLASS")
+
+        subject.granularity = granularity
+      end
+    end
+
+    describe 'granularity' do
+
+      subject { FactoryGirl.build( :kalibro_module ) }
+
+      it 'is expected to return a KalibroClient::Entities::Miscellaneous::Granularity instance' do
+        expect(subject.granularity).to be_a(KalibroClient::Entities::Miscellaneous::Granularity)
       end
     end
   end

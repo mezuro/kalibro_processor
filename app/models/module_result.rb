@@ -13,7 +13,7 @@ class ModuleResult < ActiveRecord::Base
     ModuleResult.joins(:kalibro_module).
       where(processing: processing).
       where("kalibro_modules.long_name" => kalibro_module.long_name).
-      where("kalibro_modules.granlrty" => kalibro_module.granularity.to_s).first
+      where("kalibro_modules.granularity" => kalibro_module.granularity.to_s).first
   end
 
   def metric_result_for(metric)
