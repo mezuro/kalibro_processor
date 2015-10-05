@@ -1,20 +1,6 @@
 require 'rails_helper'
 
 describe KalibroModule, :type => :model do
-
-=begin
-  describe 'initialize' do
-    let(:long_name) { 'app.model.kalibro_module' }
-    let(:granularity) { 'CLASS' }
-
-    it 'is expected to set long_name and granularity' do
-      subject = KalibroModule.new(long_name: long_name, granularity: granularity)
-
-      expect(subject.long_name).to eq(long_name)
-      expect(subject.granularity).to eq(KalibroClient::Entities::Miscellaneous::Granularity.new(granularity.to_sym))
-    end
-  end
-=end
   describe 'associations' do
     it { is_expected.to belong_to(:module_result) }
   end
