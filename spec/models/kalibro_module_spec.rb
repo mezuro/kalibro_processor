@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe KalibroModule, :type => :model do
-
   describe 'associations' do
     it { is_expected.to belong_to(:module_result) }
   end
@@ -70,6 +69,27 @@ describe KalibroModule, :type => :model do
             expect(parent.name).to eq(['pre_name'])
           end
         end
+      end
+    end
+
+    describe 'granularity=' do
+
+      subject { FactoryGirl.build( :kalibro_module ) }
+
+      it "is expected to convert the value to string" do
+        granularity = mock("granularity")
+        granularity.expects(:to_s).returns("CLASS")
+
+        subject.granularity = granularity
+      end
+    end
+
+    describe 'granularity' do
+
+      subject { FactoryGirl.build( :kalibro_module ) }
+
+      it 'is expected to return a KalibroClient::Entities::Miscellaneous::Granularity instance' do
+        expect(subject.granularity).to be_a(KalibroClient::Entities::Miscellaneous::Granularity)
       end
     end
   end
