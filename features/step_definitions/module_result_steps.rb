@@ -23,11 +23,11 @@ When(/^I request the hotspot metric results for the "(.*?)" module result$/) do 
 end
 
 When(/^I request for the ModuleResult associated with the given MetricResult's id$/) do
-  visit(metric_result_module_result_path(@metric_result.id))
+  get metric_result_module_result_path(@metric_result.id), format: :json
 end
 
 When(/^I request for the ModuleResult of the MetricResult with id "(.*?)"$/) do |id|
-  visit(metric_result_module_result_path(id))
+  get metric_result_module_result_path(id), format: :json
 end
 
 Then(/^I should get the following hotspot metric results:$/) do |table|
@@ -45,9 +45,9 @@ Then(/^I should get the following hotspot metric results:$/) do |table|
 end
 
 Then(/^I should get the given ModuleResult json$/) do
-  expect(page.body).to eq(@module_result.to_j)
+  expect(last_response.body).to eq({module_result: @module_result}.to_json)
 end
 
 Then(/^I should get an error response$/) do
-  pending # express the regexp above with the code you wish you had
+  expect(last_response.status).to eq(404)
 end

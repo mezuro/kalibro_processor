@@ -12,9 +12,8 @@ Feature: ModuleResult retrieval
     And I have the root ModuleResult of the given processing
     And I have the first MetricResult of the given ModuleResult
     When I request for the ModuleResult associated with the given MetricResult's id
-    Then I should get the given ModuleResult
+    Then I should get the given ModuleResult json
 
-  @wip
   Scenario: With an invalid MetricResult id
     When I request for the ModuleResult of the MetricResult with id "42"
     Then I should get an error response
