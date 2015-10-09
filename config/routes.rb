@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'metric_results/:id/module_result' => 'metric_results#module_result'
+  get 'metric_results/:id/module_result' => 'metric_results#module_result', as: 'metric_result_module_result'
 
   get 'module_results/:id' => 'module_results#get'
   get 'module_results/:id/exists' => 'module_results#exists'
