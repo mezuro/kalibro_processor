@@ -10,6 +10,8 @@ class MetricResultsController < ApplicationController
     format_response({ metric_configuration: @metric_result.metric_configuration })
   end
 
+  def module_result; end
+
   protected
 
   # This controller is never instantiated. Therefore this line won't be covered.
