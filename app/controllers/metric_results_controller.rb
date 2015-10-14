@@ -10,12 +10,21 @@ class MetricResultsController < ApplicationController
     format_response({ metric_configuration: @metric_result.metric_configuration })
   end
 
+  def module_result
+    format_response({module_result: @metric_result.module_result})
+  end
+
   protected
 
-  # This controller is never instantiated. Therefore this line won't be covered.
-  # :nocov:
-  def set_metric_results
-    raise NotImplementedError
+  def set_metric_result
+    begin
+      @metric_result = MetricResult.find(params[:id].to_i)
+      true
+    rescue ActiveRecord::RecordNotFound => exception
+      respond_to do |format|
+        format.json { render json: {errors: [exception.message]}, status: :not_found }
+      end
+      false
+    end
   end
-  # :nocov:
 end
