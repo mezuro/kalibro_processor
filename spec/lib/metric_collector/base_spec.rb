@@ -42,5 +42,34 @@ describe MetricCollector::Base, :type => :model do
         expect { MetricCollector::Base.available? }.to raise_error(NotImplementedError)
       end
     end
+
+    describe 'parse_supported_metrics' do
+      subject { MetricCollector::Base.new("", "", []) }
+      let(:metrics) { {metrics:
+                        {flog:
+                          {name: "Pain",
+                           description: "",
+                           scope: "METHOD",
+                           type: "NativeMetricSnapshot"},
+                         flay:
+                          {name: "Duplicate Code",
+                           description: "",
+                           scope: "PACKAGE",
+                           type: "HotspotMetricSnapshot"}
+                        }
+                      }
+                    }
+
+      before :each do
+        YAML.expects(:load_file).with("#{Rails.root}/lib/metric_collector/native/metric_fu/metrics.yml").returns(metrics)
+      end
+
+      it 'is expected to return a code => Metric hash' do
+        supported_metrics = { flog: FactoryGirl.build(:flog_metric, description: ''),
+                              flay: FactoryGirl.build(:flay_metric, description: '') }
+
+        expect(subject.parse_supported_metrics("#{Rails.root}/lib/metric_collector/native/metric_fu/metrics.yml", "MetricFu", [:RUBY])).to eq(supported_metrics)
+      end
+    end
   end
 end

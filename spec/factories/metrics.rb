@@ -98,14 +98,14 @@ FactoryGirl.define  do
     trait :metric_fu do
       languages [:RUBY]
       metric_collector_name "MetricFu"
-      scope :METHOD
+      scope 'METHOD'
     end
 
     factory :flog_metric, parent: :native_metric do
       metric_fu
 
       name "Pain"
-      code 'flog'
+      code :flog
     end
 
     factory :saikuro_metric,  parent: :native_metric do
@@ -119,7 +119,8 @@ FactoryGirl.define  do
       metric_fu
 
       name "Duplicate Code"
-      code 'flay'
+      code :flay
+      scope FactoryGirl.build(:software_granularity)
     end
 
 
