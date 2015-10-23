@@ -13,13 +13,15 @@
     :name: Pain
     :description: Measures how hard (painful) it is to test the code
     :scope: METHOD
+    :type: NativeMetricSnapshot
 
   :saikuro:
     :name: Cyclomatic Complexity
     :description: Cyclomatic complexity is a graphical measurement of the number of possible paths through the normal flow of a program
     :scope: METHOD
+    :type: NativeMetricSnapshot
 
   :flay:
     :name: Duplicate Code
     :description: 'Flay analyzes code for structural similarities. Differences in literal values, variable, class, method names, whitespace, programming style, braces vs do/end, etc are all ignored'
-    :scope: PACKAGE
+    :type: HotspotMetricSnapshot

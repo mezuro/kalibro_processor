@@ -15,13 +15,13 @@ module MetricCollector
           parsed_result = YAML.load_file(yaml_file_path)
 
           wanted_metric_configurations.each do |metric_configuration|
-            code = metric_configuration.metric.code
+            code = metric_configuration.metric.code.to_s
             @parsers[code].parse(parsed_result[code.to_sym], processing, metric_configuration)
           end
         end
 
         def self.default_value_from(metric_code)
-          @parsers[metric_code].default_value
+          @parsers[metric_code.to_s].default_value
         end
       end
     end

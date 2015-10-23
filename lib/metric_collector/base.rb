@@ -20,6 +20,18 @@ module MetricCollector
 
     def self.available?; raise NotImplementedError; end
 
+    def parse_supported_metrics(metrics_path, metric_collector_name, languages)
+      supported_metrics = {}
+      YAML.load_file(metrics_path)[:metrics].each do | key, value |
+        if value[:type] == "NativeMetricSnapshot"
+          supported_metrics[key] = KalibroClient::Entities::Miscellaneous::NativeMetric.new(value[:name], key, value[:scope], languages, metric_collector_name)
+        else
+          supported_metrics[key] = KalibroClient::Entities::Miscellaneous::HotspotMetric.new(value[:name], key, languages, metric_collector_name)
+        end
+      end
+      supported_metrics
+    end
+
     protected
 
     def processing=(processing)
