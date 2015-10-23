@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'metric_collector'
 
 describe MetricCollector::Native::MetricFu::Collector, :type => :model do
-  subject{ MetricCollector::Native::MetricFu::Collector.new }
+  subject { MetricCollector::Native::MetricFu::Collector.new }
 
   describe 'collect_metrics' do
     let(:code_directory) { Dir.pwd }
