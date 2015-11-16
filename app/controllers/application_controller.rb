@@ -10,9 +10,9 @@ class ApplicationController < ActionController::Base
       format.json { render json: record, **options }
     end
   end
-  
+
   def not_found
-    format_response({ errors: 'RecordNotFound' }, status: :unprocessable_entity)
+    format_response({ errors: 'RecordNotFound' }, status: :not_found)
   end
 
 end

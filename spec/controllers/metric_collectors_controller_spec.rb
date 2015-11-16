@@ -64,7 +64,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
         post :find, name: metric_collector_name, format: :json
       end
 
-      it { is_expected.to respond_with(:unprocessable_entity) }
+      it { is_expected.to respond_with(:not_found) }
 
       it 'is expected to return the error_hash' do
         expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))

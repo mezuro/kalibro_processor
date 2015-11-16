@@ -12,7 +12,7 @@ class RepositoriesController < ApplicationController
     rescue Git::GitExecuteError
       respond_with_json({errors: ["#{scm_type}ExecuteError: Invalid url"]}, :unprocessable_entity)
     rescue NotImplementedError
-      respond_with_json({errors: ["#{scm_type}: Branch listing is not supported for this SCM type"]}, :not_found)
+      respond_with_json({errors: ["#{scm_type}: Branch listing is not supported for this SCM type"]}, :unprocessable_entity)
     end
   end
 
@@ -144,7 +144,7 @@ class RepositoriesController < ApplicationController
       @repository = Repository.find(params[:id].to_i)
       true
     rescue ActiveRecord::RecordNotFound => exception
-      respond_with_json({errors: [exception.message]}, :unprocessable_entity)
+      respond_with_json({errors: [exception.message]}, :not_found)
       false
     end
   end
@@ -154,7 +154,7 @@ class RepositoriesController < ApplicationController
       @kalibro_module_name = KalibroModule.find(params[:kalibro_module_id].to_i).long_name
       true
     rescue ActiveRecord::RecordNotFound => exception
-      respond_with_json({errors: [exception.message]}, :unprocessable_entity)
+      respond_with_json({errors: [exception.message]}, :not_found)
       false
     end
   end

@@ -33,7 +33,7 @@ class ProcessingsController < ApplicationController
       @processing = Processing.find(params[:id].to_i)
       true
     rescue ActiveRecord::RecordNotFound => exception
-      respond_with_json({errors: [exception.message]}, :unprocessable_entity)
+      respond_with_json({errors: [exception.message]}, :not_found)
       false
     end
   end

@@ -33,7 +33,7 @@ shared_examples 'MetricResultsController' do
           get :repository_id, id: metric_result.id, format: :json
         end
 
-        it { is_expected.to respond_with(:unprocessable_entity) }
+        it { is_expected.to respond_with(:not_found) }
 
         it 'should return the error_hash' do
           expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
@@ -69,7 +69,7 @@ shared_examples 'MetricResultsController' do
           get :metric_configuration, id: metric_result.id, format: :json
         end
 
-        it { is_expected.to respond_with(:unprocessable_entity) }
+        it { is_expected.to respond_with(:not_found) }
 
         it 'should return the error_hash' do
           expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
