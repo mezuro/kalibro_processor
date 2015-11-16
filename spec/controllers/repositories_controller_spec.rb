@@ -39,7 +39,7 @@ RSpec.describe RepositoriesController, :type => :controller do
         get :show, id: repository.id, format: :json
       end
 
-      it { is_expected.to respond_with(:unprocessable_entity) }
+      it { is_expected.to respond_with(:not_found) }
 
       it 'should return the error description' do
         expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ['ActiveRecord::RecordNotFound']}.to_json))
@@ -479,7 +479,7 @@ RSpec.describe RepositoriesController, :type => :controller do
         post :module_result_history_of, id: repository.id, kalibro_module_id: kalibro_module.id, format: :json
       end
 
-      it { is_expected.to respond_with(:unprocessable_entity) }
+      it { is_expected.to respond_with(:not_found) }
 
       it 'should return an error' do
         expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ['ActiveRecord::RecordNotFound']}.to_json))
@@ -518,7 +518,7 @@ RSpec.describe RepositoriesController, :type => :controller do
         post :metric_result_history_of, id: repository.id, kalibro_module_id: kalibro_module.id, format: :json
       end
 
-      it { is_expected.to respond_with(:unprocessable_entity) }
+      it { is_expected.to respond_with(:not_found) }
 
       it 'should return an error' do
         expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ['ActiveRecord::RecordNotFound']}.to_json))
@@ -609,7 +609,7 @@ RSpec.describe RepositoriesController, :type => :controller do
         post :branches, url: url, scm_type: scm_type, format: :json
       end
 
-      it { is_expected.to respond_with(:not_found) }
+      it { is_expected.to respond_with(:unprocessable_entity) }
 
       it 'should return an error hash' do
         expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ["#{scm_type}: Branch listing is not supported for this SCM type"]}.to_json))
