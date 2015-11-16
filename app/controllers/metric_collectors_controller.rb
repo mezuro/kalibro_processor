@@ -28,7 +28,7 @@ class MetricCollectorsController < ApplicationController
       if return_value[:error].nil?
         format.json { render json: return_value}
       else
-        format.json { render json: return_value, status: :unprocessable_entity }
+        format.json { render json: return_value, status: :not_found }
       end
     end
   end
