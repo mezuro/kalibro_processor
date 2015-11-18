@@ -218,7 +218,14 @@ Then(/^the HotspotResults should have other related results indicating the dupli
   end
 end
 
-
 Then(/^the Root ModuleResult retrieved should have exactly "(.*?)" MetricResults$/) do |count|
   expect(@processing.root_module_result.metric_results.count).to eq(count.to_i)
+end
+
+Then(/^at least one MetricResult should be non\-zero$/) do
+  metric_results = @processing.root_module_result.metric_results
+
+  values = metric_results.map { |metric_result| metric_result.value }
+
+  expect(values.reduce(:+)).to_not eq(0)
 end

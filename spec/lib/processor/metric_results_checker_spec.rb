@@ -13,7 +13,8 @@ describe Processor::MetricResultsChecker do
       let(:metric_result) { FactoryGirl.build(:tree_metric_result,
                                                metric_configuration: saikuro_metric_configuration) }
       let(:module_result) { FactoryGirl.build(:module_result_class_granularity) }
-      let(:processing) { FactoryGirl.build(:processing, repository: repository, root_module_result: module_result, module_results: [module_result]) }
+      let(:root_module_result) { FactoryGirl.build(:module_result, :software, metric_results: []) }
+      let(:processing) { FactoryGirl.build(:processing, repository: repository, root_module_result: root_module_result, module_results: [root_module_result, module_result]) }
       let(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 
       context 'when there is a wanted metric that produced no results for the given module' do
@@ -30,6 +31,14 @@ describe Processor::MetricResultsChecker do
           TreeMetricResult.expects(:create).with(value: default_value, module_result: module_result, metric_configuration_id: flog_metric_configuration.id)
 
           Processor::MetricResultsChecker.task(context)
+        end
+
+        it 'is NOT expected to create TreeMetricResult for the root module result' do
+          TreeMetricResult.expects(:create).with(value: default_value, module_result: module_result, metric_configuration_id: flog_metric_configuration.id)
+
+          Processor::MetricResultsChecker.task(context)
+
+          expect(root_module_result.metric_results).to be_empty
         end
       end
 
