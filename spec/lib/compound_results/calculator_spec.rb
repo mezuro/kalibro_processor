@@ -14,7 +14,7 @@ describe CompoundResults::Calculator do
       CompoundResults::JavascriptEvaluator.any_instance.expects(:add_function).with(compound_metric_configuration.metric.code, compound_metric_configuration.metric.script)
       CompoundResults::JavascriptEvaluator.any_instance.expects(:evaluate).with("#{compound_metric_configuration.metric.code}").returns(value)
       metric_result.expects(:metric_configuration).returns(metric_configuration)
-      module_result.expects(:metric_results).returns([metric_result])
+      module_result.expects(:tree_metric_results).returns([metric_result])
       module_result.expects(:reload)
     end
 

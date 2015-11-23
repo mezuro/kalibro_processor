@@ -41,8 +41,8 @@ class Repository < ActiveRecord::Base
     self.processings.each do |processing|
       module_result = processing.module_results.select { |module_result| module_result.kalibro_module.long_name == module_name }.first
       unless module_result.nil?
-        module_result.metric_results.each do |metric_result|
-          history << {date: processing.updated_at, metric_result: metric_result} if metric_result.metric.name == metric_name
+        module_result.tree_metric_results.each do |tree_metric_result|
+          history << {date: processing.updated_at, tree_metric_result: tree_metric_result, metric_result: tree_metric_result} if tree_metric_result.metric.name == metric_name
         end
       end
     end
