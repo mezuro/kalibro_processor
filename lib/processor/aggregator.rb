@@ -20,15 +20,15 @@ module Processor
       # The upper nodes of the tree need the children to be calculated first, so we reverse the pre_order
       pre_order_module_results.reverse_each do | module_result_child |
 
-        already_calculated_metrics = module_result_child.metric_results.map { |metric_result| metric_result.metric}
+        already_calculated_metrics = module_result_child.tree_metric_results.map { |tree_metric_result| tree_metric_result.metric}
 
         remaining_metrics = @all_metrics.reject { |metric| already_calculated_metrics.include?(metric) }
 
         remaining_metrics.each do |metric|
           if module_result_child.kalibro_module.granularity >= KalibroClient::Entities::Miscellaneous::Granularity.new(metric.scope.to_s.to_sym)
-            metric_result = TreeMetricResult.new(metric: metric, module_result: module_result_child, metric_configuration_id: metric_configuration(metric).id)
-            metric_result.value = MetricResultAggregator.aggregated_value(metric_result)
-            metric_result.save
+            tree_metric_result = TreeMetricResult.new(metric: metric, module_result: module_result_child, metric_configuration_id: metric_configuration(metric).id)
+            tree_metric_result.value = MetricResultAggregator.aggregated_value(tree_metric_result)
+            tree_metric_result.save
           end
         end
       end

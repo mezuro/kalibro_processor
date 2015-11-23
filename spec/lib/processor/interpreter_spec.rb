@@ -12,7 +12,7 @@ describe Processor::Interpreter do
         let!(:metric_result) { FactoryGirl.build(:tree_metric_result,
                                                  metric_configuration: metric_configuration) }
         let!(:module_result) { FactoryGirl.build(:module_result_class_granularity,
-                                                 metric_results: [metric_result]) }
+                                                 tree_metric_results: [metric_result]) }
         let!(:processing) { FactoryGirl.build(:processing, repository: repository, root_module_result: module_result) }
         let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 
@@ -27,8 +27,8 @@ describe Processor::Interpreter do
           let!(:quotient) { (reading.grade * weight) / weight }
 
           before :each do
-            module_result.metric_results.first.expects(:has_grade?).returns(true)
-            module_result.metric_results.first.expects(:range).returns(range)
+            module_result.tree_metric_results.first.expects(:has_grade?).returns(true)
+            module_result.tree_metric_results.first.expects(:range).returns(range)
             module_result.expects(:update).with(grade: quotient)
             metric_result.expects(:metric_configuration).returns(metric_configuration)
             range.expects(:reading).returns(reading)
@@ -42,7 +42,7 @@ describe Processor::Interpreter do
         context 'when the module_result does not have a grade' do
           before :each do
             metric_result.expects(:metric_configuration).returns(metric_configuration)
-            module_result.metric_results.first.expects(:has_grade?).returns(false)
+            module_result.tree_metric_results.first.expects(:has_grade?).returns(false)
             module_result.expects(:update).with(grade: 0)
           end
 

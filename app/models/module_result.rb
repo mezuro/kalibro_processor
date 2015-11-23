@@ -1,7 +1,7 @@
 class ModuleResult < ActiveRecord::Base
   has_one :kalibro_module, dependent: :destroy #It can go wrong if someday we want to destroy only module results and not the whole processing
   has_many :children, foreign_key: 'parent_id', class_name: 'ModuleResult', dependent: :destroy
-  has_many :metric_results, class_name: 'TreeMetricResult', dependent: :destroy
+  has_many :tree_metric_results, dependent: :destroy
   has_many :hotspot_metric_results, dependent: :destroy
 
   belongs_to :parent, class_name: 'ModuleResult'
@@ -18,7 +18,7 @@ class ModuleResult < ActiveRecord::Base
 
   def metric_result_for(metric)
     self.reload # reloads to get recently created TreeMetricResults
-    self.metric_results.each {|metric_result| return metric_result if metric_result.metric == metric}
+    self.tree_metric_results.each {|metric_result| return metric_result if metric_result.metric == metric}
     return nil
   end
 
@@ -42,6 +42,16 @@ class ModuleResult < ActiveRecord::Base
 
   def descendant_hotspot_metric_results
     HotspotMetricResult.where(module_result_id: descendants.map(&:id))
+  end
+
+  def metric_results
+    warn('DEPRECATED: `ModuleResult#metric_results` has been renamed to `ModuleResult#tree_metric_results`')
+    self.tree_metric_results
+  end
+
+  def metric_results=(value)
+    warn('DEPRECATED: `ModuleResult#metric_results=` has been renamed to `ModuleResult#tree_metric_results=`')
+    self.tree_metric_results = value
   end
 
   protected
