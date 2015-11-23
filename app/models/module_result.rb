@@ -16,7 +16,7 @@ class ModuleResult < ActiveRecord::Base
       where("kalibro_modules.granularity" => kalibro_module.granularity.to_s).first
   end
 
-  def metric_result_for(metric)
+  def tree_metric_result_for(metric)
     self.reload # reloads to get recently created TreeMetricResults
     self.tree_metric_results.each {|metric_result| return metric_result if metric_result.metric == metric}
     return nil
