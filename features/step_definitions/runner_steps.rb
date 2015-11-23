@@ -225,7 +225,7 @@ end
 Then(/^at least one MetricResult should be non\-zero$/) do
   metric_results = @processing.root_module_result.metric_results
 
-  values = metric_results.map { |metric_result| metric_result.value }
+  values = metric_results.map { |metric_result| metric_result.value.abs }
 
   expect(values.reduce(:+)).to_not eq(0)
 end
