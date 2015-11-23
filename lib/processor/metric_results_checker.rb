@@ -11,7 +11,8 @@ module Processor
         }
       end
 
-      context.processing.module_results.each do |module_result|
+      module_results = context.processing.module_results - [context.processing.root_module_result]
+      module_results.each do |module_result|
         metrics_check_list = wanted_metrics.clone
 
         module_result.metric_results.each do |metric_result|
