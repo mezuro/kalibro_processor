@@ -54,7 +54,7 @@ RSpec.describe ProcessingsController, :type => :controller do
         get :show, id: processing.id, format: :json
       end
 
-      it { is_expected.to respond_with(:unprocessable_entity) }
+      it { is_expected.to respond_with(:not_found) }
 
       it 'should return the error description' do
         expect(JSON.parse(response.body)).to eq(JSON.parse({errors: ['ActiveRecord::RecordNotFound']}.to_json))

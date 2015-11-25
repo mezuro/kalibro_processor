@@ -27,7 +27,7 @@ describe ModuleResultsController do
           post :get, id: module_result.id, format: :json
         end
 
-        it { is_expected.to respond_with(:unprocessable_entity) }
+        it { is_expected.to respond_with(:not_found) }
 
         it 'should return the error_hash' do
           expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
@@ -73,7 +73,7 @@ describe ModuleResultsController do
         it { is_expected.to respond_with(:success) }
 
         it 'should return the metric_results' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse({ tree_metric_results: module_result.metric_results }.to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse({ tree_metric_results: module_result.tree_metric_results }.to_json))
         end
       end
 
@@ -84,7 +84,7 @@ describe ModuleResultsController do
           post :metric_results, id: module_result.id, format: :json
         end
 
-        it { is_expected.to respond_with(:unprocessable_entity) }
+        it { is_expected.to respond_with(:not_found) }
 
         it 'should return the error_hash' do
           expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
@@ -117,7 +117,7 @@ describe ModuleResultsController do
           get :hotspot_metric_results, id: module_result.id, format: :json
         end
 
-        it { is_expected.to respond_with(:unprocessable_entity) }
+        it { is_expected.to respond_with(:not_found) }
 
         it 'should return the error_hash' do
           expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
@@ -150,7 +150,7 @@ describe ModuleResultsController do
           get :descendant_hotspot_metric_results, id: module_result.id, format: :json
         end
 
-        it { is_expected.to respond_with(:unprocessable_entity) }
+        it { is_expected.to respond_with(:not_found) }
 
         it 'should return the error_hash' do
           expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
@@ -184,7 +184,7 @@ describe ModuleResultsController do
           post :children, id: module_result.id, format: :json
         end
 
-        it { is_expected.to respond_with(:unprocessable_entity) }
+        it { is_expected.to respond_with(:not_found) }
 
         it 'should return the error_hash' do
           expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
@@ -218,7 +218,7 @@ describe ModuleResultsController do
           post :repository_id, id: module_result.id, format: :json
         end
 
-        it { is_expected.to respond_with(:unprocessable_entity) }
+        it { is_expected.to respond_with(:not_found) }
 
         it 'should return the error_hash' do
           expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))

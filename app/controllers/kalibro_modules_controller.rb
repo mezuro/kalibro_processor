@@ -20,7 +20,7 @@ class KalibroModulesController < ApplicationController
       status = :ok
     rescue ActiveRecord::RecordNotFound
       response = {error: 'RecordNotFound'}
-      status = :unprocessable_entity
+      status = :not_found
     end
 
     respond_to do |format|
@@ -39,4 +39,3 @@ class KalibroModulesController < ApplicationController
       @kalibro_module = KalibroModule.find(params[:id].to_i)
     end
 end
-

@@ -11,11 +11,12 @@ module Processor
         }
       end
 
-      context.processing.module_results.each do |module_result|
+      module_results = context.processing.module_results - [context.processing.root_module_result]
+      module_results.each do |module_result|
         metrics_check_list = wanted_metrics.clone
 
-        module_result.metric_results.each do |metric_result|
-          metrics_check_list.delete(metric_key(metric_result.metric))
+        module_result.tree_metric_results.each do |tree_metric_result|
+          metrics_check_list.delete(metric_key(tree_metric_result.metric))
         end
 
         native_metrics = metrics_check_list.select do |metric_key, metric_configuration|

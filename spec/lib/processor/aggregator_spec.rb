@@ -21,12 +21,12 @@ describe Processor::Aggregator do
           }
           let!(:native_metrics) { { "Analizo" => native_metric_configurations } }
           let!(:all_metrics) { [native_metric_configurations.first.metric, native_metric_configurations.last.metric] }
-          let!(:metric_results) { [FactoryGirl.build(:tree_metric_result, :with_value, metric_configuration: native_metric_configurations.first, metric: native_metric_configurations.first.metric),
+          let!(:tree_metric_results) { [FactoryGirl.build(:tree_metric_result, :with_value, metric_configuration: native_metric_configurations.first, metric: native_metric_configurations.first.metric),
                                    FactoryGirl.build(:tree_metric_result, :with_value, metric_configuration: native_metric_configurations.last, metric: native_metric_configurations.last.metric)] }
 
           before :each do
             context.native_metrics = native_metrics
-            child.expects(:metric_results).returns(metric_results)
+            child.expects(:tree_metric_results).returns(tree_metric_results)
             root_module_result.expects(:pre_order).returns([root_module_result, child])
             TreeMetricResult.any_instance.expects(:save)
           end
@@ -45,12 +45,12 @@ describe Processor::Aggregator do
           }
           let!(:native_metrics) { { "Radon" => native_metric_configurations } }
           let!(:all_metrics) { [native_metric_configurations.first.metric] }
-          let!(:metric_results) { [FactoryGirl.build(:tree_metric_result, :with_value, metric_configuration: native_metric_configurations.first, metric: native_metric_configurations.first.metric)] }
+          let!(:tree_metric_results) { [FactoryGirl.build(:tree_metric_result, :with_value, metric_configuration: native_metric_configurations.first, metric: native_metric_configurations.first.metric)] }
 
           before :each do
             context.native_metrics = native_metrics
-            child.expects(:metric_results).returns(metric_results)
-            another_child.expects(:metric_results).returns(metric_results)
+            child.expects(:tree_metric_results).returns(tree_metric_results)
+            another_child.expects(:tree_metric_results).returns(tree_metric_results)
             root_module_result.expects(:pre_order).returns([root_module_result, parent, child, another_child])
             TreeMetricResult.any_instance.expects(:save).twice
             MetricResultAggregator.expects(:aggregated_value).twice

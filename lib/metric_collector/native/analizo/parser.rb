@@ -53,6 +53,7 @@ module MetricCollector
         def parse(result_map)
           if result_map['_filename'].nil?
             module_result = module_result("ROOT", KalibroClient::Entities::Miscellaneous::Granularity::SOFTWARE)
+            self.processing.update!(root_module_result: module_result)
           else
             module_result = module_result(module_name(result_map['_filename'].last, result_map['_module']), KalibroClient::Entities::Miscellaneous::Granularity::CLASS)
           end

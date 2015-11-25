@@ -7,9 +7,9 @@ module Processor
       all_module_results.each do | module_result_child |
         numerator = 0
         denominator = 0
-        module_result_child.metric_results.each do |metric_result|
-          weight = metric_result.metric_configuration.weight
-          grade = metric_result.has_grade? ? metric_result.range.reading.grade : 0
+        module_result_child.tree_metric_results.each do |tree_metric_result|
+          weight = tree_metric_result.metric_configuration.weight
+          grade = tree_metric_result.has_grade? ? tree_metric_result.range.reading.grade : 0
           numerator += weight*grade
           denominator += weight
         end

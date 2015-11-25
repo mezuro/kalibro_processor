@@ -3,8 +3,30 @@ require 'rails_helper'
 describe ModuleResult, :type => :model do
   describe 'associations' do
     it { is_expected.to have_one(:kalibro_module).dependent(:destroy) }
-    it { is_expected.to have_many(:metric_results).dependent(:destroy) }
+    it { is_expected.to have_many(:tree_metric_results).dependent(:destroy) }
     it { is_expected.to belong_to(:processing) }
+
+    context 'metric_results' do
+      describe 'getter' do
+        it 'is expected to call the tree_metric_results and print a deprecation warning' do
+          subject.expects(:tree_metric_results)
+          subject.expects(:warn).with('DEPRECATED: `ModuleResult#metric_results` has been renamed to `ModuleResult#tree_metric_results`')
+
+          subject.metric_results
+        end
+      end
+
+      describe 'setter' do
+        it 'is expected to call the tree_metric_results and print a deprecation warning' do
+          value = []
+
+          subject.expects(:tree_metric_results=).with(value)
+          subject.expects(:warn).with('DEPRECATED: `ModuleResult#metric_results=` has been renamed to `ModuleResult#tree_metric_results=`')
+
+          subject.metric_results = value
+        end
+      end
+    end
 
     # Usually we do not touch the database on unit tests. But this is kind of a intricated self-relationship so it's worth the cost.
     context 'with children and parent associations' do
@@ -43,26 +65,26 @@ describe ModuleResult, :type => :model do
   end
 
   describe 'method' do
-    describe 'metric_result_for' do
+    describe 'tree_metric_result_for' do
       subject { FactoryGirl.build(:module_result) }
 
-      let(:metric_result) {subject.metric_results.first}
+      let(:metric_result) {subject.tree_metric_results.first}
 
       before :each do
         subject.expects(:reload)
       end
 
       context 'when a module result has the specific metric' do
-        let(:metric) { subject.metric_results.first.metric }
+        let(:metric) { subject.tree_metric_results.first.metric }
         it 'should return the metric_result' do
-          expect(subject.metric_result_for(metric)).to eq(metric_result)
+          expect(subject.tree_metric_result_for(metric)).to eq(metric_result)
         end
       end
 
       context 'when a module result has not the specific metric' do
         let(:another_metric) { FactoryGirl.build(:acc_metric) }
         it 'should return the metric_result' do
-          expect(subject.metric_result_for(another_metric)).to be_nil
+          expect(subject.tree_metric_result_for(another_metric)).to be_nil
         end
       end
     end

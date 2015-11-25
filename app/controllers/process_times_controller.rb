@@ -14,7 +14,7 @@ class ProcessTimesController < ApplicationController
       status = :ok
     rescue ActiveRecord::RecordNotFound
       response = {error: 'RecordNotFound'}
-      status = :unprocessable_entity
+      status = :not_found
     end
 
     respond_to do |format|

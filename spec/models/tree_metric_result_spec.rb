@@ -101,7 +101,7 @@ describe TreeMetricResult, :type => :model do
       before :each do
         subject.expects(:module_result).returns(module_result)
         module_result.expects(:children).returns([module_result, module_result])
-        module_result.expects(:metric_result_for).at_least_once.
+        module_result.expects(:tree_metric_result_for).at_least_once.
           with(subject.metric).returns(son)
       end
 

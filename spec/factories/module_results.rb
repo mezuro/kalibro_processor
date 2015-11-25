@@ -3,7 +3,7 @@ FactoryGirl.define do
     kalibro_module { FactoryGirl.build(:kalibro_module) }
     parent nil
     grade 10.0
-    metric_results { [FactoryGirl.build(:tree_metric_result)] }
+    tree_metric_results { [FactoryGirl.build(:tree_metric_result)] }
     hotspot_metric_results { [FactoryGirl.build(:hotspot_metric_result)] }
 
     trait :class do
@@ -12,6 +12,10 @@ FactoryGirl.define do
 
     trait :package do
       kalibro_module { FactoryGirl.build(:kalibro_module, granularity: FactoryGirl.build(:package_granularity)) }
+    end
+
+    trait :software do
+      kalibro_module { FactoryGirl.build(:kalibro_module, granularity: FactoryGirl.build(:software_granularity)) }
     end
 
     trait :with_id do
