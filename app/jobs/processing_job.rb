@@ -13,6 +13,13 @@ class ProcessingJob < ActiveJob::Base
     ScheduledProcessingJob.set(wait: period.days).perform_later(@context.repository) if period > 0
   end
 
+  # As for Rails 4.2.4 with Ruby 2.2.3, the rescue order is bottom up
+  # So this general rescue should come first to be the last one handled
+  rescue_from(Exception) do |exception|
+    ExceptionNotifier.notify_exception(exception)
+    raise exception
+  end
+
   rescue_from(Errors::ProcessingCanceledError) do
     @context.processing.destroy
   end

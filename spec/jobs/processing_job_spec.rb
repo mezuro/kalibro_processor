@@ -55,6 +55,7 @@ describe ProcessingJob, :type => :job do
         context 'with a canceled processing' do
           before :each do
             processing.state = "CANCELED"
+            ExceptionNotifier.stubs(:notify_exception).raises(RuntimeError) # Ensure no notification is getting out
           end
 
           it 'is expected to destroy the processing' do
@@ -67,6 +68,7 @@ describe ProcessingJob, :type => :job do
           let!(:error_message) { 'Error message' }
           before :each do
             Processor::Preparer.expects(:perform).raises(Errors::ProcessingError, error_message)
+            ExceptionNotifier.stubs(:notify_exception).raises(RuntimeError) # Ensure no notification is getting out
           end
 
           it 'is expected to update the processing state to ERROR' do
@@ -81,11 +83,25 @@ describe ProcessingJob, :type => :job do
             Processor::Preparer.expects(:perform)
             Processor::Downloader.expects(:perform)
             Processor::Collector.expects(:perform).raises(Errors::EmptyModuleResultsError)
+            ExceptionNotifier.stubs(:notify_exception).raises(RuntimeError) # Ensure no notification is getting out
           end
+
           it 'is expected to update the processing state to READY' do
             processing.expects(:update).with(state: 'READY')
 
             ProcessingJob.perform_later(repository, processing)
+          end
+        end
+
+        context 'with an unexpected error' do
+          let(:exception) { KalibroClient::Errors::RecordNotFound.new }
+          before :each do
+            Processor::Preparer.expects(:perform).raises(exception)
+          end
+
+          it 'is expected to raise the error and notify' do
+            ExceptionNotifier.expects(:notify_exception).with(exception)
+            expect{ ProcessingJob.perform_later(repository, processing) }.to raise_error(exception)
           end
         end
       end
