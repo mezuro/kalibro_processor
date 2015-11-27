@@ -13,3 +13,9 @@ Then(/^"(.*?)" should be a git repository at the HEAD of the remote (?:default|"
   branch ||= "master"
   expect(git.object('HEAD').sha).to eq(git.object("#{git.remote.name}/#{branch}").sha)
 end
+
+
+Then(/^"(.+?)" should be a git repository with "(.+?)" as it's remote URL$/) do |directory, remote_url|
+  git = Git.open(directory)
+  expect(git.remote.url).to eq(remote_url)
+end

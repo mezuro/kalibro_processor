@@ -16,6 +16,13 @@ module Downloaders
 
     def self.get(address, directory, branch)
       if Dir.exists?(directory) and is_git?(directory)
+        g = Git.open(directory)
+        remote = g.remote
+        if remote.url != address
+          g.remove_remote('origin')
+          g.add_remote('origin', address)
+        end
+
         checkout(directory, branch)
       else
         clone(address, directory, branch)
