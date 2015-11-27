@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 describe MetricResult, :type => :model do
+  describe 'validations' do
+    it { is_expected.to validate_uniqueness_of(:metric_configuration_id).scoped_to(:module_result_id) }
+  end
+
   describe 'associations' do
     it { is_expected.to belong_to(:module_result) }
   end
