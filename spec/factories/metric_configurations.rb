@@ -23,7 +23,7 @@ FactoryGirl.define do
     kalibro_configuration_id 1
 
     trait :with_id do
-      id 1
+      sequence(:id, 1)
     end
 
     trait :compound_metric do

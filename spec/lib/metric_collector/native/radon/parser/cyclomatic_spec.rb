@@ -25,7 +25,8 @@ describe MetricCollector::Native::Radon::Parser::Cyclomatic do
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_function, processing).returns(module_result)
         kalibro_module_method1.expects(:save)
 
-        ModuleResult.expects(:create).with(kalibro_module: kalibro_module_method1, processing: processing).returns(module_result)
+        module_result.expects(:update).with(kalibro_module: kalibro_module_method1)
+        ModuleResult.expects(:create).with(processing: processing).returns(module_result)
         TreeMetricResult.expects(:create).with(metric: metric_configuration.metric, value: 1.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
         TreeMetricResult.expects(:create).with(metric: metric_configuration.metric, value: 5.0, module_result: module_result, metric_configuration_id: metric_configuration.id)
         TreeMetricResult.expects(:create).with(metric: metric_configuration.metric, value: 3.0, module_result: module_result, metric_configuration_id: metric_configuration.id)

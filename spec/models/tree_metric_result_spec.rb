@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 describe TreeMetricResult, :type => :model do
+  describe 'validations' do
+    it { is_expected.to validate_uniqueness_of(:metric_configuration_id).scoped_to(:module_result_id) }
+  end
+
+
   describe 'method' do
     let!(:metric_configuration) { FactoryGirl.build(:metric_configuration) }
 

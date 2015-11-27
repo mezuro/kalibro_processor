@@ -5,6 +5,7 @@ FactoryGirl.define do
     grade 10.0
     tree_metric_results { [FactoryGirl.build(:tree_metric_result)] }
     hotspot_metric_results { [FactoryGirl.build(:hotspot_metric_result)] }
+    processing { FactoryGirl.build(:processing, :with_id) }
 
     trait :class do
       kalibro_module { FactoryGirl.build(:kalibro_module, granularity: FactoryGirl.build(:class_granularity)) }

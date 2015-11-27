@@ -16,6 +16,10 @@ FactoryGirl.define do
       repository { FactoryGirl.build(:repository, period: 2) }
     end
 
+    trait :with_id do
+      sequence(:id, 1)
+    end
+
     factory :processing_with_error, traits: [:error]
     factory :periodic_processing, traits: [:periodic]
   end
