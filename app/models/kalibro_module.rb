@@ -2,7 +2,8 @@ require 'validators/kalibro_module_long_name_validator'
 
 class KalibroModule < ActiveRecord::Base
   belongs_to :module_result # one for each MetricCollector
-  validates_with KalibroModuleLongNameValidator
+  validates :module_result, presence: true
+  validates_with KalibroModuleLongNameValidator, unless: 'self.module_result.nil?'
 
   def name=(value)
     self.long_name = value
