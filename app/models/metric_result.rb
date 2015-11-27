@@ -1,7 +1,6 @@
 class MetricResult < ActiveRecord::Base
   attr_writer :metric
   belongs_to :module_result
-  validates :metric_configuration_id, uniqueness: { scope: :module_result_id }
 
   def metric_configuration=(value)
     self.metric_configuration_id = value.id
