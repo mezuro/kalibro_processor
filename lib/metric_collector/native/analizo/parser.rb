@@ -44,10 +44,10 @@ module MetricCollector
 
           if module_result.nil?
             kalibro_module.save
-            ModuleResult.create(kalibro_module: kalibro_module, processing: self.processing)
-          else
-            module_result
+            module_result = ModuleResult.create(processing: self.processing)
+            module_result.update(kalibro_module: kalibro_module)
           end
+          return module_result
         end
 
         def parse(result_map)

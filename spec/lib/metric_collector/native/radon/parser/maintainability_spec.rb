@@ -16,7 +16,8 @@ describe MetricCollector::Native::Radon::Parser::Maintainability do
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_package, processing).returns(nil)
         kalibro_module_package.expects(:save)
 
-        ModuleResult.expects(:create).with(kalibro_module: kalibro_module_package, processing: processing).returns(module_result)
+        module_result.expects(:update).with(kalibro_module: kalibro_module_package)
+        ModuleResult.expects(:create).with(processing: processing).returns(module_result)
 
         TreeMetricResult.expects(:create).with(metric: mi_configuration.metric, value: 100.0, module_result: module_result, metric_configuration_id: mi_configuration.id)
 

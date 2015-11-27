@@ -24,7 +24,8 @@ describe MetricCollector::Native::Analizo::Parser, :type => :model do
         ModuleResult.expects(:find_by_module_and_processing).with(root_kalibro_module, processing).returns(nil)
         ModuleResult.expects(:find_by_module_and_processing).with(class_kalibro_module, processing).returns(module_result)
         root_kalibro_module.expects(:save)
-        ModuleResult.expects(:create).with(kalibro_module: root_kalibro_module, processing: processing).returns(module_result)
+        module_result.expects(:update).with(kalibro_module: root_kalibro_module)
+        ModuleResult.expects(:create).with(processing: processing).returns(module_result)
         processing.expects(:update!).with(root_module_result: module_result)
         TreeMetricResult.expects(:create).with(metric: metric_collector_details.supported_metrics["acc"], value: 0.0, module_result: module_result, metric_configuration_id: wanted_metric_configuration.id)
 
