@@ -1,3 +1,4 @@
+require 'fileutils'
 module Downloaders
   class SvnDownloader < Base
     def self.available?
@@ -15,7 +16,12 @@ module Downloaders
 
     def self.get(address, directory, branch)
       if Dir.exist?(directory) and is_svn?(directory)
-        update(directory)
+        if get_repository_url(directory) != address
+          FileUtils.remove_entry_secure(directory, force=true)
+          checkout(address, directory)
+        else
+          update(directory)
+        end
       else
         checkout(address,directory)
       end
@@ -38,6 +44,16 @@ module Downloaders
       # Copy contents of address to a new directory
       checkout = `svn checkout #{address} #{directory}`
       raise Errors::SvnExecuteError.new('Failed to checkout to svn repository') if checkout.nil?
+    end
+
+    def self.get_repository_url(directory)
+      info = `svn info #{directory}`
+      unless info.nil?
+        info.lines.each do |line|
+          return line[5..-1].chomp if line.start_with? 'URL: '
+        end
+      end
+      raise Errors::SvnExecuteError.new('Failed to retrieve repository info')
     end
   end
 end

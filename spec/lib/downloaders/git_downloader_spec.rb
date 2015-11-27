@@ -28,6 +28,7 @@ describe Downloaders::GitDownloader do
     describe 'retrieve! (get)' do
       let(:directory) { "/tmp/test" }
       let(:address) { "http://test.test" }
+      let(:other_address) { "http://test.test/other.git" }
       let(:branch_name) { 'test' }
 
       context 'when the directory exists' do
@@ -35,21 +36,45 @@ describe Downloaders::GitDownloader do
           Dir.expects(:exists?).with(directory).at_least_once.returns(true)
         end
         context 'and it is a git repository' do
+          context 'and the remote is the same' do
+            it 'is expected to open, fetch and checkout the repository' do
+              git = Object.new
+              remote = mock()
+              git.expects(:fetch).returns(true)
+              git.expects(:checkout).with("#{branch_name}").returns("")
+              git.expects(:remote).returns(remote).twice
+              remote.expects(:name).returns("name")
+              remote.expects(:url).returns(address)
+              git.expects(:reset_hard).with("name" + "/#{branch_name}")
 
-          it 'is expected to open, fetch and checkout the repository' do
-            git = Object.new
-            remote = mock()
-            git.expects(:fetch).returns(true)
-            git.expects(:checkout).with("#{branch_name}").returns("")
-            git.expects(:remote).returns(remote)
-            remote.expects(:name).returns("name")
-            git.expects(:reset_hard).with("name" + "/#{branch_name}")
+              Dir.expects(:exists?).with("#{directory}/.git").returns(true)
 
-            Dir.expects(:exists?).with("#{directory}/.git").returns(true)
+              Git.expects(:open).with(directory).returns(git).twice
 
-            Git.expects(:open).with(directory).returns(git)
+              subject.class.retrieve!(address, directory, branch_name)
+            end
+          end
 
-            subject.class.retrieve!(address, directory, branch_name)
+          context 'and the remote has changed' do
+            it 'is expected to open, fetch and checkout the repository' do
+              git = Object.new
+              remote = mock()
+              git.expects(:fetch).returns(true)
+              git.expects(:checkout).with("#{branch_name}").returns("")
+              git.expects(:remote).returns(remote).twice
+              remote.expects(:name).returns("name")
+              remote.expects(:url).returns(other_address)
+              git.expects(:remove_remote).with('origin')
+              git.expects(:add_remote).with('origin', address)
+
+              git.expects(:reset_hard).with("name" + "/#{branch_name}")
+
+              Dir.expects(:exists?).with("#{directory}/.git").returns(true)
+
+              Git.expects(:open).with(directory).returns(git).twice
+
+              subject.class.retrieve!(address, directory, branch_name)
+            end
           end
         end
 

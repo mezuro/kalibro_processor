@@ -9,3 +9,8 @@ end
 Then(/^"(.*?)" should be a svn repository$/) do |directory|
   expect(Dir.exists?("#{directory}/.svn")).to be_truthy
 end
+
+
+Then(/^"(.+?)" should be a svn repository with "(.+?)" as it's remote URL$/) do |directory, address|
+  expect(Downloaders::SvnDownloader.get_repository_url(directory)).to eq(address)
+end
