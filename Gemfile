@@ -19,7 +19,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'rails-html-sanitizer', '~> 1.0'
 
 # Kalibro integration
-gem 'kalibro_client', '~> 1.4'
+gem 'kalibro_client', '~> 2.1'
 
 # YAML parser required for properly compactibility between mri and rbx
 gem 'psych', '~>2.0.12'
@@ -50,6 +50,8 @@ gem 'exception_notification', '~> 4.1.0'
 # foreman export systemd /usr/lib/systemd/system -a kalibro_processor -c worker=10
 #
 gem 'foreman', '~> 0.78.0'
+
+gem 'kolekti', git: 'https://github.com/mezuro/kolekti.git', branch: 'analizo_test'
 
 group :test do
   # Easier test writing

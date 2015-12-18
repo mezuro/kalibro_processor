@@ -7,8 +7,9 @@ module Processor
     def initialize(params={})
       @repository = params[:repository]
       @processing = params[:processing]
-      @native_metrics = {}
-      MetricCollector::Native::ALL.each_key { |key| @native_metrics[key] = [] }
+      @native_metrics = Hash.new do |hash, key|
+        hash[key] = []
+      end
       @compound_metrics = []
     end
   end

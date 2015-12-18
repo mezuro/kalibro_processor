@@ -93,3 +93,15 @@ Feature: Runner run
     And I should have a READY processing for the given repository
     And the processing retrieved should have a Root ModuleResult
     And the Root ModuleResult retrieved should have a list of MetricResults
+
+  @clear_repository @kalibro_configuration_restart
+  Scenario: An existing java repository with a configuration with Analizo
+    Given I have sample readings
+    And I have a sample kalibro configuration with native metrics
+    And I have a sample repository
+    And I have a processing within the sample repository
+    When I run for the given repository
+    Then the repository code_directory should exist
+    And I should have a READY processing for the given repository
+    And the processing retrieved should have a Root ModuleResult
+    And the Root ModuleResult retrieved should have a list of MetricResults
