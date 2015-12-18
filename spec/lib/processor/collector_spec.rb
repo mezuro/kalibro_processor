@@ -9,15 +9,15 @@ describe Processor::Collector do
       let!(:code_dir) { "/tmp/test" }
       let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir) }
       let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
-      let!(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:native_metric, :analizo)) }
+      let!(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:native_metric, :metric_fu)) }
       let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
-      let!(:analizo_metric_collector_list) { FactoryGirl.build(:analizo_metric_collector_list) }
+      let!(:metric_fu_metric_collector_list) { FactoryGirl.build(:metric_fu_metric_collector_lists) }
 
       before :each do
         context.processing.expects(:reload)
         context.expects(:native_metrics).returns({metric_configuration.metric.metric_collector_name => [metric_configuration]})
-        MetricCollector::Native::Analizo::Collector.any_instance.expects(:parse_supported_metrics).returns(analizo_metric_collector_list.parsed)
-        MetricCollector::Native::Analizo::Collector.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
+        MetricCollector::Native::MetricFu::Collector.any_instance.expects(:parse_supported_metrics).returns(metric_fu_metric_collector_list)
+        MetricCollector::Native::MetricFu::Collector.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
       end
 
       context 'without producing module_results' do
