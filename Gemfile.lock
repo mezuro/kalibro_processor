@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/mezuro/kolekti.git
-  revision: 82689c31bd4317758323ae396bcf1d483bbd6023
+  revision: 5e5f0eab90784b574dd35bff6f3cbd63c79ddb4e
   branch: analizo_test
   specs:
     kolekti (0.0.1.alpha)
