@@ -42,7 +42,13 @@ module Processor
     end
 
     def self.default_value_from(metric_configuration)
-      "MetricCollector::Native::#{metric_configuration.metric.metric_collector_name}::Parser".constantize.default_value_from(metric_configuration.metric.code)
+      begin
+        parser = "MetricCollector::Native::#{metric_configuration.metric.metric_collector_name}::Parser".constantize
+      rescue NameError
+        return Kolekti.default_metric_value(metric_configuration)
+      end
+
+      parser.default_value_from(metric_configuration.metric.code)
     end
   end
 end
