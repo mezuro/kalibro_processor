@@ -16,7 +16,7 @@ describe MetricCollector::Native::Radon::Parser::Raw do
         ModuleResult.expects(:find_by_module_and_processing).times(2).with(kalibro_module_package, processing)
             .returns(nil)
             .then.returns(module_result)
-        kalibro_module_package.expects(:save)
+        kalibro_module_package.expects(:save!)
 
         module_result.expects(:update).with(kalibro_module: kalibro_module_package)
         ModuleResult.expects(:create).with(processing: processing).returns(module_result)

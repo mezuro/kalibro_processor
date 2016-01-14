@@ -23,7 +23,7 @@ describe MetricCollector::Native::Analizo::Parser, :type => :model do
         KalibroModule.expects(:new).with(long_name: "Class.Module", granularity: KalibroClient::Entities::Miscellaneous::Granularity::CLASS).returns(class_kalibro_module)
         ModuleResult.expects(:find_by_module_and_processing).with(root_kalibro_module, processing).returns(nil)
         ModuleResult.expects(:find_by_module_and_processing).with(class_kalibro_module, processing).returns(module_result)
-        root_kalibro_module.expects(:save)
+        root_kalibro_module.expects(:save!)
         module_result.expects(:update).with(kalibro_module: root_kalibro_module)
         ModuleResult.expects(:create).with(processing: processing).returns(module_result)
         processing.expects(:update!).with(root_module_result: module_result)

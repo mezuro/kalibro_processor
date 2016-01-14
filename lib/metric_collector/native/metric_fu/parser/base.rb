@@ -31,7 +31,7 @@ module MetricCollector
             if module_result.nil?
               module_result = ModuleResult.create(processing: processing)
               kalibro_module.module_result = module_result
-              kalibro_module.save
+              kalibro_module.save!
               module_result.update(kalibro_module: kalibro_module)
             end
             return module_result
