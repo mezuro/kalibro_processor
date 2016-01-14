@@ -45,7 +45,7 @@ class KalibroModule < ActiveRecord::Base
   private
 
   def find_or_instantiate(name, granularity)
-    found_modules = KalibroModule.where(long_name: name.join('.'), granularity: granularity.to_s)
+    found_modules = KalibroModule.joins(:module_result).where(long_name: name.join('.'), granularity: granularity.to_s, 'module_results.processing_id' => self.module_result.processing.id)
 
     unless found_modules.empty?
       found_modules.first
