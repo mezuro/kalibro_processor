@@ -23,7 +23,7 @@ describe MetricCollector::Native::Radon::Parser::Cyclomatic do
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_method1, processing).returns(nil)
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_method2, processing).returns(module_result)
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module_function, processing).returns(module_result)
-        kalibro_module_method1.expects(:save)
+        kalibro_module_method1.expects(:save!)
 
         module_result.expects(:update).with(kalibro_module: kalibro_module_method1)
         ModuleResult.expects(:create).with(processing: processing).returns(module_result)

@@ -24,6 +24,13 @@ FactoryGirl.define do
       description "Kalibro Processor"
     end
 
+    trait :noosfero do
+      name "Noosfero"
+      scm_type "GIT"
+      address "https://gitlab.com/noosfero/noosfero.git"
+      description "Noosfero - a web-based social platform"
+    end
+
     trait :ruby do
       kalibro_processor
     end

@@ -24,6 +24,7 @@ describe Processor::TreeBuilder do
           ModuleResult.expects(:find_by_module_and_processing).at_least_once.returns(nil)
           root_module_result.kalibro_module.expects(:parent).twice.returns(nil)
           ModuleResult.expects(:create).with(kalibro_module: root_module_result.kalibro_module, processing: processing).returns(root_module_result)
+          root_module_result.kalibro_module.expects(:save!)
           processing.expects(:update).twice.with(root_module_result: root_module_result).returns(true)
         end
 

@@ -40,6 +40,8 @@ module Processor
       parent_module_result = ModuleResult.find_by_module_and_processing(parent_module, processing)
       if parent_module_result.nil?
         parent_module_result = ModuleResult.create(kalibro_module: parent_module, processing: processing)
+        parent_module.module_result = parent_module_result
+        parent_module.save! unless parent_module.persisted?
         module_results << parent_module_result
       end
 

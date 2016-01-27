@@ -47,30 +47,51 @@ describe KalibroModule, :type => :model do
 
       context 'with CLASS granularity' do
         let(:granularity) { FactoryGirl.build(:granularity, type: KalibroClient::Entities::Miscellaneous::Granularity::CLASS) }
+        let(:parent_granularity) { FactoryGirl.build(:granularity, type: KalibroClient::Entities::Miscellaneous::Granularity::PACKAGE) }
+        let(:module_result) { FactoryGirl.build(:module_result) }
+        let(:parent_module) { FactoryGirl.build(:kalibro_module, {granularity: parent_granularity, name: ['pre_name'], module_result: module_result}) }
+        let!(:module_result_join) { mock('module_result_join') }
 
-        context 'with just one element on name' do
-          subject { FactoryGirl.build(:kalibro_module, {granularity: granularity, name: ['name']}) }
+        context 'with a not persisted module with same name' do
+          context 'and just one element on name' do
+            subject { FactoryGirl.build(:kalibro_module, {granularity: granularity, name: ['name'], module_result: module_result}) }
 
-          it 'should return a new Module with granularity SOFTWARE and name ROOT' do
-            parent = subject.parent
+            it 'should return a new Module with granularity SOFTWARE and name ROOT' do
+              parent = subject.parent
 
-            expect(parent.granularity.type).to eq(KalibroClient::Entities::Miscellaneous::Granularity::SOFTWARE)
-            expect(parent.name).to eq(["ROOT"])
+              expect(parent.granularity.type).to eq(KalibroClient::Entities::Miscellaneous::Granularity::SOFTWARE)
+              expect(parent.name).to eq(["ROOT"])
+            end
+          end
+
+          context 'and more than one element on name' do
+
+            before :each do
+              KalibroClient::Entities::Miscellaneous::Granularity.any_instance.expects(:parent).returns(parent_granularity)
+
+              module_result_join.expects(:where).with(long_name: parent_module.long_name, granularity: parent_module.granularity.to_s, 'module_results.processing_id' => parent_module.module_result.processing.id).returns([])
+              KalibroModule.expects(:joins).with(:module_result).returns(module_result_join)
+            end
+
+            subject { FactoryGirl.build(:kalibro_module, {granularity: granularity, name: ['pre_name', 'name'], module_result: module_result}) }
+
+            it 'should return a new Module with granularity PACKAGE and name pre_name' do
+              parent = subject.parent
+
+              expect(parent.granularity.type).to eq(KalibroClient::Entities::Miscellaneous::Granularity::PACKAGE)
+              expect(parent.name).to eq(['pre_name'])
+            end
           end
         end
 
-        context 'with just more than one element on name' do
-          before :each do
-            KalibroClient::Entities::Miscellaneous::Granularity.any_instance.expects(:parent).returns(FactoryGirl.build(:granularity, type: KalibroClient::Entities::Miscellaneous::Granularity::PACKAGE))
-          end
+        context 'with a already existing module with this name' do
+          subject { FactoryGirl.build(:kalibro_module, {granularity: granularity, name: ['pre_name', 'name'], module_result: module_result}) }
 
-          subject { FactoryGirl.build(:kalibro_module, {granularity: granularity, name: ['pre_name', 'name']}) }
+          it 'is expected to find and return the existing module' do
+            module_result_join.expects(:where).with(long_name: parent_module.long_name, granularity: parent_module.granularity.to_s, 'module_results.processing_id' => parent_module.module_result.processing.id).returns([parent_module])
+            KalibroModule.expects(:joins).with(:module_result).returns(module_result_join)
 
-          it 'should return a new Module with granularity PACKAGE and name pre_name' do
-            parent = subject.parent
-
-            expect(parent.granularity.type).to eq(KalibroClient::Entities::Miscellaneous::Granularity::PACKAGE)
-            expect(parent.name).to eq(['pre_name'])
+            expect(subject.parent).to eq(parent_module)
           end
         end
       end

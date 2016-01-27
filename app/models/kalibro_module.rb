@@ -22,11 +22,11 @@ class KalibroModule < ActiveRecord::Base
     if self.granularity.type == KalibroClient::Entities::Miscellaneous::Granularity::SOFTWARE
       return nil
     elsif self.name.length <= 1
-      return KalibroModule.new({granularity: KalibroClient::Entities::Miscellaneous::Granularity.new(KalibroClient::Entities::Miscellaneous::Granularity::SOFTWARE), name: "ROOT"})
+      find_or_instantiate(["ROOT"], KalibroClient::Entities::Miscellaneous::Granularity.new(KalibroClient::Entities::Miscellaneous::Granularity::SOFTWARE))
     else
       new_granularity = self.granularity.parent
       new_granularity = KalibroClient::Entities::Miscellaneous::Granularity::PACKAGE if new_granularity.type == KalibroClient::Entities::Miscellaneous::Granularity::SOFTWARE # if the parent is not the ROOT, so, it should be a PACKAGE not a SOFTWARE
-      return KalibroModule.new({granularity: new_granularity, name: self.name[0..-2]}) # 0..-2 creates a range from 0 to the element before the last element
+      find_or_instantiate(self.name[0..-2], new_granularity)
     end
   end
 
@@ -40,5 +40,17 @@ class KalibroModule < ActiveRecord::Base
 
   def to_s
     self.short_name
+  end
+
+  private
+
+  def find_or_instantiate(name, granularity)
+    found_modules = KalibroModule.joins(:module_result).where(long_name: name.join('.'), granularity: granularity.to_s, 'module_results.processing_id' => self.module_result.processing.id)
+
+    unless found_modules.empty?
+      found_modules.first
+    else
+      KalibroModule.new(name: name, granularity: granularity)
+    end
   end
 end
