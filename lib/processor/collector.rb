@@ -7,6 +7,8 @@ module Processor
   class Collector < ProcessingStep
     protected
 
+    # FIXME: Once all collectors get under Kolekti's structure, rewrite this from scratch
+    #        There are several unnecessary conditionals
     def self.task(context)
       kolekti_collector_names = Set.new(Kolekti.available_collectors.map(&:name))
       kolekti_metrics, native_metrics = context.native_metrics.partition do |metric_collector_name, _|

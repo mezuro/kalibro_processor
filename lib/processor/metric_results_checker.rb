@@ -45,6 +45,7 @@ module Processor
       begin
         parser = "MetricCollector::Native::#{metric_configuration.metric.metric_collector_name}::Parser".constantize
       rescue NameError
+        # FIXME: Once all collectors get under Kolekti's structure just the line below will be necessary
         return Kolekti.default_metric_value(metric_configuration)
       end
 
