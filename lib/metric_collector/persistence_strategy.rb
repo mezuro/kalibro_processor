@@ -9,7 +9,6 @@ module MetricCollector
       @processing = processing
     end
 
-
     def create_tree_metric_result(metric_configuration, module_name, value, granularity)
       TreeMetricResult.transaction do
         module_result = find_or_create_module_result(module_name, granularity)
