@@ -1,4 +1,5 @@
 module MetricCollector
+  # FIXME: Once all collectors have been extracted, this class should not exist anymore
   class Base
     attr_reader :details
 
@@ -34,10 +35,15 @@ module MetricCollector
 
     protected
 
+    # FIXME: Once all collectors have been extracted, this class should not exist anymore
+    # :nocov:
     def processing=(processing)
       @processing = processing
     end
+    # :nocov:
 
+    # FIXME: Once all collectors have been extracted, this class should not exist anymore
+    # :nocov:
     def wanted_metrics=(wanted_metric_configurations)
       @wanted_metrics = {}
       wanted_metric_configurations.each do |metric_configuration|
@@ -46,13 +52,20 @@ module MetricCollector
         end
       end
     end
+    # :nocov:
 
+    # FIXME: Once all collectors have been extracted, this class should not exist anymore
+    # :nocov:
     def wanted_metrics
       @wanted_metrics
     end
+    # :nocov:
 
+    # FIXME: Once all collectors have been extracted, this class should not exist anymore
+    # :nocov:
     def processing
       @processing
     end
+    # :nocov:
   end
 end
