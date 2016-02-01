@@ -51,7 +51,8 @@ gem 'exception_notification', '~> 4.1.0'
 #
 gem 'foreman', '~> 0.78.0'
 
-gem 'kolekti', git: 'https://github.com/mezuro/kolekti.git', branch: 'analizo_test'
+gem 'kolekti'
+gem 'kolekti_analizo', git: 'https://github.com/mezuro/kolekti_analizo'
 
 group :test do
   # Easier test writing

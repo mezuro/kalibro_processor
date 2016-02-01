@@ -1,10 +1,9 @@
 GIT
-  remote: https://github.com/mezuro/kolekti.git
-  revision: 7cfc2446e198d4eaa6fbd12b444a09f2310f0194
-  branch: analizo_test
+  remote: https://github.com/mezuro/kolekti_analizo
+  revision: a66fe82a17fff5d70060174f68987f1bed218e77
   specs:
-    kolekti (0.0.1.alpha)
-      kalibro_client (~> 2.1)
+    kolekti_analizo (0.0.1.alpha)
+      kolekti
 
 GEM
   remote: https://rubygems.org/
@@ -161,6 +160,8 @@ GEM
     kalibro_client (2.1.2)
       activesupport (>= 2.2.1)
       faraday_middleware (~> 0.10.0)
+    kolekti (0.0.1.alpha)
+      kalibro_client (~> 2.1)
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.11)
@@ -194,7 +195,7 @@ GEM
     metric_fu-Saikuro (1.1.3)
     mime-types (2.6.1)
     mini_portile (0.6.2)
-    minitest (5.8.3)
+    minitest (5.8.4)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
     multi_json (1.11.2)
@@ -350,7 +351,8 @@ DEPENDENCIES
   git (~> 1.2.7)
   jbuilder (~> 2.0)
   kalibro_client (~> 2.1)
-  kolekti!
+  kolekti
+  kolekti_analizo!
   metric_fu (~> 4.12.0)
   mocha
   pg
