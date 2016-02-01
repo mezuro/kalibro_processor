@@ -10,7 +10,7 @@ module MetricCollector
     end
 
     def find_or_create_module_result(module_name, granularity)
-      kalibro_module = KalibroModule.new(long_name: module_name, granularity: granularity)
+      kalibro_module = new_kalibro_module(module_name, granularity)
 
       module_result = ModuleResult.find_by_module_and_processing(kalibro_module, @processing)
       return module_result unless module_result.nil?
@@ -50,6 +50,12 @@ module MetricCollector
 
         RelatedHotspotMetricResults.create!(hotspot_metric_results: saved_results)
       end
+    end
+
+    private
+
+    def new_kalibro_module(module_name, granularity)
+      KalibroModule.new(long_name: module_name, granularity: granularity)
     end
   end
 end
