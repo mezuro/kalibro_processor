@@ -9,18 +9,6 @@ module MetricCollector
       @processing = processing
     end
 
-    def find_or_create_module_result(module_name, granularity)
-      kalibro_module = new_kalibro_module(module_name, granularity)
-
-      module_result = ModuleResult.find_by_module_and_processing(kalibro_module, @processing)
-      return module_result unless module_result.nil?
-
-      module_result = ModuleResult.create!(processing: @processing)
-      kalibro_module.module_result = module_result
-      kalibro_module.save!
-      module_result.update!(kalibro_module: kalibro_module)
-      module_result
-    end
 
     def create_tree_metric_result(metric_configuration, module_name, value, granularity)
       TreeMetricResult.transaction do
@@ -53,6 +41,19 @@ module MetricCollector
     end
 
     private
+
+    def find_or_create_module_result(module_name, granularity)
+      kalibro_module = new_kalibro_module(module_name, granularity)
+
+      module_result = ModuleResult.find_by_module_and_processing(kalibro_module, @processing)
+      return module_result unless module_result.nil?
+
+      module_result = ModuleResult.create!(processing: @processing)
+      kalibro_module.module_result = module_result
+      kalibro_module.save!
+      module_result.update!(kalibro_module: kalibro_module)
+      module_result
+    end
 
     def new_kalibro_module(module_name, granularity)
       KalibroModule.new(long_name: module_name, granularity: granularity)
