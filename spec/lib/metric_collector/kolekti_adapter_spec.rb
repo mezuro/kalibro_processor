@@ -25,7 +25,7 @@ describe MetricCollector::KolektiAdapter do
           end
         end
 
-        it 'is expected to return all the collectors' do
+        it 'is expected to return an empty list' do
           expect(MetricCollector::KolektiAdapter.available).to be_empty
         end
       end

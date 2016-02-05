@@ -4,7 +4,7 @@ require 'metric_collector'
 RSpec.describe MetricCollectorsController, :type => :controller do
   describe 'all_names' do
     context 'with an available collector' do
-      let(:names) { ["MetricFu","Radon", "Analizo"] }
+      let(:names) { ["MetricFu", "Radon", "Analizo"] }
       before :each do
         MetricCollector::Native::MetricFu::Collector.expects(:available?).returns(true)
         MetricCollector::Native::Radon::Collector.expects(:available?).returns(true)
@@ -20,7 +20,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
     end
 
     context 'with an unavailable collector' do
-      let(:names) { ["MetricFu","Radon", "Analizo"] }
+      let(:names) { ["MetricFu", "Radon", "Analizo"] }
       before :each do
         MetricCollector::Native::MetricFu::Collector.expects(:available?).returns(true)
         MetricCollector::Native::Radon::Collector.expects(:available?).returns(true)
