@@ -2,6 +2,7 @@ require 'metric_collector/native/metric_fu'
 require 'metric_collector/native/radon'
 
 module MetricCollector
+  # Once all collectors are under Kolekti's structure, this module will be dropped in favour of KolektiAdapter
   module Native
     ALL = {
       "MetricFu" => MetricCollector::Native::MetricFu::Collector,

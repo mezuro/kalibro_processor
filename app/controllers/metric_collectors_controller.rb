@@ -2,7 +2,7 @@ require 'metric_collector'
 
 class MetricCollectorsController < ApplicationController
   def all_names
-    names = {metric_collector_names: MetricCollector::Native.available.keys }
+    names = {metric_collector_names: MetricCollector::Native.available.keys.concat(MetricCollector::KolektiAdapter.available.map { |collector| collector.name }) }
 
     respond_to do |format|
       format.json { render json: names }
@@ -11,12 +11,14 @@ class MetricCollectorsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.json { render json: MetricCollector::Native.details}
+      format.json { render json: MetricCollector::Native.details.concat(MetricCollector::KolektiAdapter.details) }
     end
   end
 
   def find
-    details = MetricCollector::Native.details.select{ |d| d.name == params[:name] }.first
+    details = MetricCollector::Native.details.
+                concat(MetricCollector::KolektiAdapter.details).
+                select{ |d| d.name == params[:name] }.first
 
     if details.nil?
       return_value = {error: Errors::NotFoundError.new("Metric Collector #{params[:name]} not found.")}
