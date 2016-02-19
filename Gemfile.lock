@@ -157,11 +157,11 @@ GEM
       multi_json (~> 1.2)
     json (1.8.3)
     json_pure (1.8.2)
-    kalibro_client (2.1.2)
+    kalibro_client (3.0.0)
       activesupport (>= 2.2.1)
       faraday_middleware (~> 0.10.0)
-    kolekti (0.0.1.alpha)
-      kalibro_client (~> 2.1)
+    kolekti (0.0.1.alpha2)
+      kalibro_client (~> 3.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.11)
@@ -350,7 +350,7 @@ DEPENDENCIES
   foreman (~> 0.78.0)
   git (~> 1.2.7)
   jbuilder (~> 2.0)
-  kalibro_client (~> 2.1)
+  kalibro_client (~> 3.0)
   kolekti
   kolekti_analizo!
   metric_fu (~> 4.12.0)
