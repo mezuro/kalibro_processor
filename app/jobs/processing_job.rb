@@ -17,6 +17,7 @@ class ProcessingJob < ActiveJob::Base
   # So this general rescue should come first to be the last one handled
   rescue_from(Exception) do |exception|
     ExceptionNotifier.notify_exception(exception)
+    @context.processing.update(state: 'ERROR', error_message: exception.message) if exception.is_a?(NoMethodError)
     raise exception
   end
 

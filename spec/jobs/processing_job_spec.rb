@@ -68,10 +68,9 @@ describe ProcessingJob, :type => :job do
           let!(:error_message) { 'Error message' }
           before :each do
             Processor::Preparer.expects(:perform).raises(Errors::ProcessingError, error_message)
-            ExceptionNotifier.stubs(:notify_exception).raises(RuntimeError) # Ensure no notification is getting out
           end
 
-          it 'is expected to update the processing state to ERROR' do
+          it 'is expected to update the processing state to ERROR if a ProcessingError is raised' do
             processing.expects(:update).with(state: 'ERROR', error_message: error_message)
 
             ProcessingJob.perform_later(repository, processing)
@@ -83,7 +82,6 @@ describe ProcessingJob, :type => :job do
             Processor::Preparer.expects(:perform)
             Processor::Downloader.expects(:perform)
             Processor::Collector.expects(:perform).raises(Errors::EmptyModuleResultsError)
-            ExceptionNotifier.stubs(:notify_exception).raises(RuntimeError) # Ensure no notification is getting out
           end
 
           it 'is expected to update the processing state to READY' do
@@ -95,13 +93,20 @@ describe ProcessingJob, :type => :job do
 
         context 'with an unexpected error' do
           let(:exception) { KalibroClient::Errors::RecordNotFound.new }
-          before :each do
-            Processor::Preparer.expects(:perform).raises(exception)
-          end
+          let(:no_method_error) { NoMethodError.new("NoMethodError") }
 
           it 'is expected to raise the error and notify' do
+            Processor::Preparer.expects(:perform).raises(exception)
             ExceptionNotifier.expects(:notify_exception).with(exception)
             expect{ ProcessingJob.perform_later(repository, processing) }.to raise_error(exception)
+          end
+
+          it 'is expected to update the processing state to ERROR if a NoMethodError is raised' do
+            Processor::Preparer.expects(:perform).raises(no_method_error)
+            processing.expects(:update).with(state: 'ERROR', error_message: "NoMethodError")
+
+            ExceptionNotifier.expects(:notify_exception).with(no_method_error)
+            expect{ ProcessingJob.perform_later(repository, processing) }.to raise_error(no_method_error)
           end
         end
       end
