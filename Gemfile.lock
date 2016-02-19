@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/mezuro/kolekti_analizo
-  revision: a66fe82a17fff5d70060174f68987f1bed218e77
+  revision: 99de0bb4f6eb1a0bb411d52d791e530a9d524406
   specs:
-    kolekti_analizo (0.0.1.alpha)
+    kolekti_analizo (0.0.1)
       kolekti
 
 GEM
@@ -160,7 +160,7 @@ GEM
     kalibro_client (3.0.0)
       activesupport (>= 2.2.1)
       faraday_middleware (~> 0.10.0)
-    kolekti (0.0.1.alpha2)
+    kolekti (0.0.1)
       kalibro_client (~> 3.0)
     launchy (2.4.3)
       addressable (~> 2.3)
