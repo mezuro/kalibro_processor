@@ -3,7 +3,7 @@ FactoryGirl.define  do
     name "Afferent Connections per Class (used to calculate COF - Coupling Factor)"
     code "acc"
     type 'TestMetricSnapshot'
-    scope :SOFTWARE
+    scope { { "type" => :SOFTWARE } }
 
     initialize_with { new(type, name, code, scope) }
 
@@ -37,7 +37,7 @@ FactoryGirl.define  do
 
       name "Compound Metric"
       code "CM"
-      scope :SOFTWARE
+      scope { { "type" => :SOFTWARE } }
       description "A compound metric"
 
       initialize_with { new(name, code, scope, script) }
@@ -47,7 +47,7 @@ FactoryGirl.define  do
 
     trait :hotspot do
       type 'HotspotMetricSnapshot'
-      scope nil
+      scope { { "type" => "SOFTWARE" } }
       languages [:RUBY]
     end
 
@@ -74,7 +74,7 @@ FactoryGirl.define  do
 
       name "Afferent Connections per Class (used to calculate COF - Coupling Factor)"
       code "acc"
-      scope :CLASS
+      scope { { "type" => :CLASS } }
     end
 
     factory :total_abstract_classes_metric, parent: :native_metric do
@@ -82,7 +82,7 @@ FactoryGirl.define  do
 
       name "Total Abstract Classes"
       code "total_abstract_classes"
-      scope :SOFTWARE
+      scope { { "type" => :SOFTWARE } }
     end
 
     factory :loc_metric, parent: :native_metric do
@@ -90,7 +90,7 @@ FactoryGirl.define  do
 
       name "Lines of Code"
       code "loc"
-      scope "CLASS"
+      scope { { "type" => "CLASS" } }
     end
 
     # MetricFu factories
@@ -98,7 +98,7 @@ FactoryGirl.define  do
     trait :metric_fu do
       languages [:RUBY]
       metric_collector_name "MetricFu"
-      scope 'METHOD'
+      scope { { "type" => 'METHOD' } }
     end
 
     factory :flog_metric, parent: :native_metric do
@@ -120,7 +120,7 @@ FactoryGirl.define  do
 
       name "Duplicate Code"
       code :flay
-      scope FactoryGirl.build(:software_granularity)
+      scope { { "type" => "SOFTWARE" } }
     end
 
 
@@ -137,7 +137,7 @@ FactoryGirl.define  do
     trait :radon do
       languages [:PYTHON]
       metric_collector_name "Radon"
-      scope :METHOD
+      scope { { "type" => :METHOD } }
     end
 
     factory :cyclomatic_metric, parent: :native_metric do
@@ -152,7 +152,7 @@ FactoryGirl.define  do
 
       name "Maintainability Index"
       code 'mi'
-      scope :PACKAGE
+      scope { { "type" => :PACKAGE } }
     end
 
     factory :lines_of_code_metric, parent: :native_metric do
@@ -160,7 +160,7 @@ FactoryGirl.define  do
 
       name "Lines of code"
       code 'loc'
-      scope :PACKAGE
+      scope { { "type" => :PACKAGE } }
     end
 
     factory :logical_lines_of_code_metric, parent: :native_metric do
@@ -168,7 +168,7 @@ FactoryGirl.define  do
 
       name "Logical lines of code"
       code 'lloc'
-      scope :PACKAGE
+      scope { { "type" => :PACKAGE } }
     end
   end
 end
