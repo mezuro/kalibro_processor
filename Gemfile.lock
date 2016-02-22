@@ -1,8 +1,9 @@
 GIT
   remote: https://github.com/mezuro/kolekti_analizo
-  revision: 99de0bb4f6eb1a0bb411d52d791e530a9d524406
+  revision: a66fe82a17fff5d70060174f68987f1bed218e77
+  branch: stable
   specs:
-    kolekti_analizo (0.0.1)
+    kolekti_analizo (0.0.1.alpha)
       kolekti
 
 GEM
