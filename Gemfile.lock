@@ -161,7 +161,7 @@ GEM
     kalibro_client (3.0.0)
       activesupport (>= 2.2.1)
       faraday_middleware (~> 0.10.0)
-    kolekti (0.0.1)
+    kolekti (0.0.2)
       kalibro_client (~> 3.0)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -368,4 +368,4 @@ DEPENDENCIES
   therubyracer
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
