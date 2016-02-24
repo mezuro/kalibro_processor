@@ -10,6 +10,7 @@ development: &development
   pool: 5
   username: kalibro_processor
   password: kalibro_processor
+  template: template0 # avoid encoding mismatch issue by ignoring the default template
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -21,6 +22,7 @@ test: &test
   pool: 5
   username: kalibro_processor
   password: kalibro_processor
+  template: template0
 
 production:
   adapter: postgresql
@@ -29,6 +31,7 @@ production:
   pool: 5
   username: kalibro_processor
   password: kalibro_processor
+  template: template0
 
 local:
   <<: *development
