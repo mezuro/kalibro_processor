@@ -42,6 +42,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
     context 'with an available collector' do
       before :each do
         MetricCollector::Native.expects(:details).returns([metric_collector_details])
+        MetricCollector::KolektiAdapter.expects(:details).returns([])
 
         post :find, name: metric_collector_details.name, format: :json
       end
@@ -59,6 +60,8 @@ RSpec.describe MetricCollectorsController, :type => :controller do
 
       before :each do
         MetricCollector::Native.expects(:details).returns([metric_collector_details])
+        MetricCollector::KolektiAdapter.expects(:details).returns([])
+
         post :find, name: metric_collector_name, format: :json
       end
 
