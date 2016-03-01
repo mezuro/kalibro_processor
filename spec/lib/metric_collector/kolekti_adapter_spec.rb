@@ -7,22 +7,19 @@ describe MetricCollector::KolektiAdapter do
   describe 'method' do
     describe 'available' do
       context 'when all the collectors are available' do
+        let(:collector) { FactoryGirl.build(:kolekti_metric_collector) }
         before :each do
-          Kolekti.collectors.each do |collector|
-            collector.expects(:available?).returns(true)
-          end
+          Kolekti.expects(:collectors).returns([collector])
         end
 
         it 'is expected to return all the collectors' do
-          expect(MetricCollector::KolektiAdapter.available).to eq(Kolekti.collectors)
+          expect(MetricCollector::KolektiAdapter.available).to eq([collector])
         end
       end
 
       context 'when none of the collectors are available' do
         before :each do
-          Kolekti.collectors.each do |collector|
-            collector.expects(:available?).returns(false)
-          end
+          Kolekti.expects(:collectors).returns([])
         end
 
         it 'is expected to return an empty list' do

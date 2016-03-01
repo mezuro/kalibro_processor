@@ -1,10 +1,10 @@
 GIT
   remote: https://github.com/mezuro/kolekti_analizo
-  revision: a66fe82a17fff5d70060174f68987f1bed218e77
+  revision: 1d7dc1505f4b57fb6dd9a1d77391b5c93f4bb293
   branch: stable
   specs:
-    kolekti_analizo (0.0.1.alpha)
-      kolekti
+    kolekti_analizo (0.0.1)
+      kolekti (~> 1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -158,10 +158,10 @@ GEM
       multi_json (~> 1.2)
     json (1.8.3)
     json_pure (1.8.2)
-    kalibro_client (3.0.0)
+    kalibro_client (3.0.1)
       activesupport (>= 2.2.1)
-      faraday_middleware (~> 0.10.0)
-    kolekti (0.0.2)
+      faraday_middleware (~> 0.9)
+    kolekti (1.0.0)
       kalibro_client (~> 3.0)
     launchy (2.4.3)
       addressable (~> 2.3)

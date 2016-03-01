@@ -1,7 +1,7 @@
 module MetricCollector
   module KolektiAdapter
     def self.available
-      Kolekti.collectors.select(&:available?)
+      Kolekti.collectors
     end
 
     def self.details
