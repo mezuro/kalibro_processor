@@ -6,13 +6,13 @@ KalibroProcessor is the processing web service for Mezuro.
 
 == v1.1.10 - 03/03/2016
 
-*	Fix missing mock on MetricCollectors find spec to avoid caching errors
-*	Adapt kalibro_processor to the new Kolekti API for registering collectors
+* Fix missing mock on MetricCollectors find spec to avoid caching errors
+* Adapt kalibro_processor to the new Kolekti API for registering collectors
 * Update kolekti_analizo to v0.0.3
 
 == v1.1.9 - 26/02/2016
 
-*	Avoid encoding mismatch issue with PgSQL
+* Avoid encoding mismatch issue with PgSQL
 
 == v1.1.8 - 24/02/2016
 
@@ -20,7 +20,7 @@ KalibroProcessor is the processing web service for Mezuro.
 
 == v1.1.7 - 22/02/2016
 
-*	Adjust scope to the new format required by kalibro configuration
+* Adjust scope to the new format required by kalibro configuration
 * Capture NoMethodErrors on ProcessingJobs
 * Update kolekti, kalibro_client and kolekti_analizo
 
@@ -28,7 +28,7 @@ KalibroProcessor is the processing web service for Mezuro.
 
 * Use kolekti
 * Use kolekti_analizo
-*	Get default metric value from Kolekti
+* Get default metric value from Kolekti
 * Update documentation
 
 == v1.1.6 - 27/01/2016
