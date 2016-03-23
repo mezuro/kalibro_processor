@@ -19,7 +19,7 @@ end
 Given(/^I have a sample configuration with the (\w+) native metric$/) do |metric|
   metric_configuration_factory = (metric + "_metric_configuration").downcase
   metric_factory = (metric + "_metric").downcase
-  @configuration = FactoryGirl.create(:ruby_configuration, id: nil)
+  @configuration = FactoryGirl.create(:kalibro_configuration, id: nil)
   metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
                                             {id: 4,
                                              metric: FactoryGirl.build(metric_factory.to_sym),
@@ -39,7 +39,7 @@ end
 Given(/^I have a sample configuration with the (\w+) hotspot metric$/) do |metric|
   metric_configuration_factory = (metric + "_metric_configuration").downcase
   metric_factory = (metric + "_metric").downcase
-  @configuration = FactoryGirl.create(:ruby_configuration, id: nil)
+  @configuration = FactoryGirl.create(:kalibro_configuration, id: nil)
   metric = FactoryGirl.build(metric_factory.to_sym)
   @metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
                                              metric: metric,
@@ -58,10 +58,14 @@ Given(/^I have a sample ruby repository within the sample project$/) do
   @repository = FactoryGirl.create(:ruby_repository, :with_project_id, kalibro_configuration: @configuration)
 end
 
+Given(/^I have a sample php repository$/) do
+  @repository = FactoryGirl.create(:php_repository, :with_project_id, kalibro_configuration: @configuration)
+end
+
 Given(/^I have a sample configuration with the (\w+) python native metric$/) do |metric|
   metric_configuration_factory = (metric + "_metric_configuration").downcase
   metric_factory = (metric + "_metric").downcase
-  @configuration = FactoryGirl.create(:python_configuration, id: nil)
+  @configuration = FactoryGirl.create(:kalibro_configuration, id: nil)
   metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
                                             {id: 4,
                                              metric: FactoryGirl.build(metric_factory.to_sym),

@@ -82,6 +82,11 @@ FactoryGirl.define do
       metric { FactoryGirl.build(:logical_lines_of_code_metric) }
     end
 
+    trait :phpmd do
+      hotspot
+      metric { FactoryGirl.build(:phpmd_metric) }
+    end
+
     trait :flog_compound_metric_configuration do
       metric { FactoryGirl.build(:compound_flog_metric) }
       weight 1
@@ -101,6 +106,7 @@ FactoryGirl.define do
     factory :compound_metric_configuration, traits: [:compound_metric]
     factory :hotspot_metric_configuration, traits: [:hotspot_metric]
     factory :flog_metric_configuration, traits: [:flog]
+    factory :phpmd_metric_configuration, traits: [:phpmd]
     factory :flog_compound_metric_configuration, traits: [:flog_compound_metric_configuration]
     factory :saikuro_metric_configuration, traits: [:saikuro]
     factory :saikuro_compound_metric_configuration, traits: [:saikuro_compound_metric_configuration]

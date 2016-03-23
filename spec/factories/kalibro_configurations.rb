@@ -16,8 +16,8 @@
 
 FactoryGirl.define do
   factory :kalibro_configuration, class: KalibroClient::Entities::Configurations::KalibroConfiguration do
-    name "Java"
-    description "Code metrics for Java."
+    name "Test Kalibro Configuration"
+    description "Test Kalibro Configuration."
 
     trait :with_id do
       id 1
@@ -30,17 +30,5 @@ FactoryGirl.define do
     id 12
     name "Perl"
     description "Code metrics for Perl."
-  end
-
-  factory :ruby_configuration, class: KalibroClient::Entities::Configurations::KalibroConfiguration do
-    id 13
-    name "Ruby"
-    description "Code metrics for Ruby."
-  end
-
-  factory :python_configuration, class: KalibroClient::Entities::Configurations::KalibroConfiguration do
-    id 14
-    name "Python"
-    description "Code metrics for Python."
   end
 end

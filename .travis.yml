@@ -40,7 +40,7 @@ script:
   - pushd kalibro_configurations
   - bundle exec rails s -p 8083 -d
   - popd
-  - bundle exec rake cucumber
+  - bundle exec cucumber --tags ~@docker
 
 notifications:
   email:

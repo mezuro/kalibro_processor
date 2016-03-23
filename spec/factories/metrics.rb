@@ -170,5 +170,17 @@ FactoryGirl.define  do
       code 'lloc'
       scope { { "type" => :PACKAGE } }
     end
+
+    trait :phpmd do
+      languages [:PHP]
+      metric_collector_name "CodeClimate PHPMD"
+    end
+
+    factory :phpmd_metric, parent: :hotspot_metric do
+      phpmd
+
+      name "Controversial/CamelCaseVariableName"
+      code :ccvn
+    end
   end
 end
