@@ -31,6 +31,13 @@ FactoryGirl.define do
       description "Noosfero - a web-based social platform"
     end
 
+    trait :arquigrafia do
+      name "Arquigrafia"
+      scm_type "GIT"
+      address "https://github.com/anapaula/Arquigrafia-Laravel.git"
+      description "Arquigrafia"
+    end
+
     trait :ruby do
       kalibro_processor
     end
@@ -40,6 +47,10 @@ FactoryGirl.define do
       scm_type "GIT"
       address "https://github.com/mezuro/kalibro_client_py"
       description "Python version for KalibroClient"
+    end
+
+    trait :php do
+      arquigrafia
     end
 
     trait :another_branch do
@@ -53,6 +64,7 @@ FactoryGirl.define do
     factory :sbking_repository, traits: [:sbking]
     factory :ruby_repository, traits: [:ruby]
     factory :python_repository, traits: [:python]
+    factory :php_repository, traits: [:php]
     factory :custom_branch, traits: [:another_branch]
   end
 end

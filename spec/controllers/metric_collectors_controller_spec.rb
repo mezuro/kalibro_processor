@@ -3,36 +3,26 @@ require 'metric_collector'
 
 RSpec.describe MetricCollectorsController, :type => :controller do
   describe 'all_names' do
-    context 'with an available collector' do
-      let(:names) { ["MetricFu", "Radon", "Analizo"] }
-      before :each do
-        MetricCollector::Native::MetricFu::Collector.expects(:available?).returns(true)
-        MetricCollector::Native::Radon::Collector.expects(:available?).returns(true)
+    let(:names) { ["MetricFu", "Radon", "Analizo"] }
 
-        get :all_names, format: :json
-      end
+    before :each do
+      MetricCollector::Native.expects(:available).returns({
+        "MetricFu" => MetricCollector::Native::MetricFu::Collector,
+        "Radon"    => MetricCollector::Native::Radon::Collector
+      })
 
-      it { is_expected.to respond_with(:success) }
+      # Don't create an actual instance of the collector to avoid attempting to call the analizo executable
+      MetricCollector::KolektiAdapter.expects(:available).returns([
+        mock("Analizo", name: "Analizo").responds_like_instance_of(Kolekti::Analizo::Collector)
+      ])
 
-      it 'is expected to return the list of metric collector names converted to JSON' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse({metric_collector_names: names}.to_json))
-      end
+      get :all_names, format: :json
     end
 
-    context 'with an unavailable collector' do
-      let(:names) { ["MetricFu", "Radon", "Analizo"] }
-      before :each do
-        MetricCollector::Native::MetricFu::Collector.expects(:available?).returns(true)
-        MetricCollector::Native::Radon::Collector.expects(:available?).returns(true)
+    it { is_expected.to respond_with(:success) }
 
-        get :all_names, format: :json
-      end
-
-      it { is_expected.to respond_with(:success) }
-
-      it 'is expected to return the list of metric collector names converted to JSON' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse({metric_collector_names: names}.to_json))
-      end
+    it 'is expected to return the list of metric collector names converted to JSON' do
+      expect(JSON.parse(response.body)).to eq(JSON.parse({metric_collector_names: names}.to_json))
     end
   end
 
