@@ -180,12 +180,12 @@ GEM
       multi_json (~> 1.2)
     json (1.8.3)
     json_pure (1.8.3)
-    kalibro_client (4.0.0.alpha1)
+    kalibro_client (4.0.0)
       activesupport (>= 2.2.1)
       faraday_middleware (~> 0.9)
       likeno (~> 1.1)
-    kolekti (1.0.2.alpha1)
-      kalibro_client (>= 4.0.0.a, < 5)
+    kolekti (1.0.2)
+      kalibro_client (~> 4.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.13)
@@ -386,8 +386,8 @@ DEPENDENCIES
   foreman (~> 0.78.0)
   git (~> 1.2.7)
   jbuilder (~> 2.0)
-  kalibro_client (~> 4.0.0.a)
-  kolekti (>= 1.0.2a)
+  kalibro_client (~> 4.0)
+  kolekti
   kolekti_analizo!
   kolekti_cc_phpmd!
   metric_fu (~> 4.12.0)

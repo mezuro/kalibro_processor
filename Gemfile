@@ -19,7 +19,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'rails-html-sanitizer', '~> 1.0'
 
 # Kalibro integration
-gem 'kalibro_client', '~> 4.0.0.a' 
+gem 'kalibro_client', '~> 4.0'
 
 # YAML parser required for properly compactibility between mri and rbx
 gem 'psych', '~>2.0.12'
@@ -51,7 +51,7 @@ gem 'exception_notification', '~> 4.1.0'
 #
 gem 'foreman', '~> 0.78.0'
 
-gem 'kolekti', '>= 1.0.2a'
+gem 'kolekti'
 gem 'kolekti_analizo', github: 'mezuro/kolekti_analizo', branch: 'stable'
 gem 'kolekti_cc_phpmd', github: 'mezuro/kolekti_cc_phpmd', branch: 'stable'
 
