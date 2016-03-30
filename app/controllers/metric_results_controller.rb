@@ -1,5 +1,5 @@
 class MetricResultsController < ApplicationController
-  rescue_from ActiveRecord::RecordNotFound, KalibroClient::Errors::RecordNotFound, with: :not_found
+  rescue_from ActiveRecord::RecordNotFound, Likeno::Errors::RecordNotFound, with: :not_found
   before_action :set_metric_result
 
   def repository_id
