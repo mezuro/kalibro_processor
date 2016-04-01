@@ -4,6 +4,10 @@ KalibroProcessor is the processing web service for Mezuro.
 
 == Unreleased
 
+== v1.2.1 - 01/04/2016
+
+* Update kalibro_client
+
 == v1.2.0 - 28/03/2016
 
 * Add CodeClimate PHPMD collector
