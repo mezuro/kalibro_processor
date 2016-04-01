@@ -1,5 +1,5 @@
 class ModuleResultsController < ApplicationController
-  rescue_from ActiveRecord::RecordNotFound, Likeno::Errors::RecordNotFound, with: :not_found
+  rescue_from ActiveRecord::RecordNotFound, KalibroClient::Errors::RecordNotFound, with: :not_found
   before_action :set_module_result, except: [:exists]
 
   def get

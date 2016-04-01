@@ -92,7 +92,7 @@ describe ProcessingJob, :type => :job do
         end
 
         context 'with an unexpected error' do
-          let(:exception) { Likeno::Errors::RecordNotFound.new }
+          let(:exception) { KalibroClient::Errors::RecordNotFound.new }
           let(:no_method_error) { NoMethodError.new("NoMethodError") }
 
           it 'is expected to raise the error and notify' do
