@@ -11,6 +11,10 @@ module CompoundResults
       @module_result.reload # reloads to make sure that all the metric results are available
       @module_result.tree_metric_results.each { |metric_result| evaluator.add_function(metric_result.metric_configuration.metric.code, "return #{metric_result.value};") }
 
+      @module_result.hotspot_metric_results.each do |hotspot_metric_result|
+        evaluator.add_function(hotspot_metric_result.metric_configuration.metric.code, "throw Error('Cannot use hotspot metric codes to create compound metrics.')")
+      end
+
       @compound_metric_configurations.each do |compound_metric_configuration|
         evaluator.add_function(compound_metric_configuration.metric.code, compound_metric_configuration.metric.script)
       end
