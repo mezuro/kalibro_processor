@@ -117,3 +117,13 @@ Feature: Runner run
     And I should have a READY processing for the given repository
     And I should have some ModuleResults
     And the ModuleResults should have HotspotResults for the ccvn metric
+
+  @clear_repository @kalibro_configuration_restart
+  Scenario: Source code analysis when a compound metric uses a hotspot metric code
+    Given I have a sample configuration with the Flay hotspot metric
+    And I use the hotspot metric to create a compound metric
+    And I have a sample ruby repository
+    And I have a processing within the sample repository
+    When I run for the given repository
+    Then the analysis should terminate with an ERROR
+    And the error message should be "Cannot use hotspot metric codes to create compound metrics."
