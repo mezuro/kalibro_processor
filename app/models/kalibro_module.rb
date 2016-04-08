@@ -42,6 +42,12 @@ class KalibroModule < ActiveRecord::Base
     self.short_name
   end
 
+  def module_results
+    STDERR.puts 'DEPRECATED: use KalibroModule#module_result instead'
+    mr = self.module_result
+    mr.nil? ? [] : [mr]
+  end
+
   private
 
   def find_or_instantiate(name, granularity)
