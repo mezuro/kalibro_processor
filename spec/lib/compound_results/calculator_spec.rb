@@ -36,7 +36,7 @@ describe CompoundResults::Calculator do
       before :each do
         CompoundResults::JavascriptEvaluator.any_instance.expects(:evaluate).with("#{compound_metric_configuration.metric.code}").raises(V8::Error.new("Cannot use hotspot metric codes to create compound metrics.", nil, nil))
         CompoundResults::JavascriptEvaluator.any_instance.expects(:add_function).with(compound_metric_configuration.metric.code, compound_metric_configuration.metric.script)
-        CompoundResults::JavascriptEvaluator.any_instance.expects(:add_function).with(hotspot_metric_configuration.metric.code, "throw Error('Cannot use hotspot metric codes to create compound metrics.')")
+        CompoundResults::JavascriptEvaluator.any_instance.expects(:add_function).with(hotspot_metric_configuration.metric.code, "throw Error('Cannot use hotspot metric codes to create compound metrics.');")
         hotspot_metric_result.expects(:metric_configuration).returns(hotspot_metric_configuration)
         module_result.expects(:hotspot_metric_results).returns([hotspot_metric_result])
         module_result.expects(:tree_metric_results).returns([])
