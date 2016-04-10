@@ -117,5 +117,30 @@ describe KalibroModule, :type => :model do
         expect(subject.granularity).to be_a(KalibroClient::Entities::Miscellaneous::Granularity)
       end
     end
+
+    # This tests covers a deprecated method and should be removed in the future
+    describe 'module_results' do
+      context 'when there is a module result associated' do
+        let(:module_result) { FactoryGirl.build(:module_result) }
+
+        before :each do
+          subject.expects(:module_result).returns(module_result)
+        end
+
+        it 'is expected to return a list with the single module result associated with the kalibro module' do
+          expect(subject.module_results).to eq([module_result])
+        end
+      end
+
+      context 'when there is no module result associated' do
+        before :each do
+          subject.expects(:module_result).returns(nil)
+        end
+
+        it 'is expected to return an empty list' do
+          expect(subject.module_results).to eq([])
+        end
+      end
+    end
   end
 end
