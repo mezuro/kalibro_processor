@@ -5,6 +5,7 @@ KalibroProcessor is the processing web service for Mezuro.
 == Unreleased
 
 * Deprecates KalibroModule#module_results
+* Handle errors of compound metrics that use hotspot metric codes on their scripts
 
 == v1.2.1 - 01/04/2016
 

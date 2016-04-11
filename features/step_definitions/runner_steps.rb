@@ -148,6 +148,14 @@ Given(/^I add the "(.*?)" native metric to the sample configuration$/) do |metri
   range.save
 end
 
+Given(/^I use the hotspot metric to create a compound metric$/) do
+  code = @metric_configuration.metric.code
+  @compound = FactoryGirl.create(:compound_metric_configuration,
+                                  metric: FactoryGirl.build(:compound_metric, code: "cm", script: "return #{code}() * 2;"),
+                                  kalibro_configuration_id: @configuration.id)
+
+end
+
 When(/^I run for the given repository$/) do
   @repository.process(@processing)
 end
@@ -232,4 +240,20 @@ Then(/^at least one MetricResult should be non\-zero$/) do
   values = metric_results.map { |metric_result| metric_result.value.abs }
 
   expect(values.reduce(:+)).to_not eq(0)
+end
+
+Then(/^the analysis should terminate with an ERROR$/) do
+  @processing.reload
+  while(true)
+    unless @processing.state.ends_with?("ING")
+      break
+    else
+      sleep(2)
+    end
+  end
+  expect(@processing.state).to eq('ERROR')
+end
+
+Then(/^the error message should be "(.*?)"$/) do |error_message|
+  expect(@processing.error_message).to match(error_message)
 end
