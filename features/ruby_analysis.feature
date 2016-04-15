@@ -3,7 +3,7 @@ Feature: Ruby Analysis
   As a regular user
   I should be able to run the whole processing
 
-  @clear_repository @kalibro_configuration_restart
+  @wip @clear_repository @kalibro_configuration_restart
   Scenario: An existing ruby repository with a configuration with Flay (Hotspot Metrics)
     Given I have sample readings
     And I have a sample configuration with the Flay hotspot metric

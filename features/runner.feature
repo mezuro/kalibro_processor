@@ -18,7 +18,7 @@ Feature: Runner run
     And at least one MetricResult should be non-zero
     And the Root ModuleResult retrieved should not have a MetricResult for the compound metric
 
-  @clear_repository @kalibro_configuration_restart
+  @wip @clear_repository @kalibro_configuration_restart
   Scenario: An existing ruby repository with a configuration with Saikuro and Flog
     Given I have sample readings
     And I have a sample configuration with the Saikuro native metric
@@ -70,7 +70,7 @@ Feature: Runner run
     And I should have a READY processing for the given repository
     And the processing retrieved should not have any ModuleResults
 
-  @clear_repository @kalibro_configuration_restart
+  @wip @clear_repository @kalibro_configuration_restart
   Scenario: An existing ruby repository with a configuration with Flay (Hotspot Metrics)
     Given I have a sample configuration with the Flay hotspot metric
     And I have a sample ruby repository
@@ -107,7 +107,7 @@ Feature: Runner run
     And the processing retrieved should have a Root ModuleResult
     And the Root ModuleResult retrieved should have a list of MetricResults
 
-  @clear_repository @kalibro_configuration_restart @docker
+  @wip @clear_repository @kalibro_configuration_restart @docker
   Scenario: An existing php repository with a configuration with PHPMD (Hotspot Metrics)
     Given I have a sample configuration with the PHPMD hotspot metric
     And I have a sample php repository
@@ -118,7 +118,7 @@ Feature: Runner run
     And I should have some ModuleResults
     And the ModuleResults should have HotspotResults for the ccvn metric
 
-  @clear_repository @kalibro_configuration_restart
+  @wip @clear_repository @kalibro_configuration_restart
   Scenario: Source code analysis when a compound metric uses a hotspot metric code
     Given I have a sample configuration with the Flay hotspot metric
     And I use the hotspot metric to create a compound metric

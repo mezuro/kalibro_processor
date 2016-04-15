@@ -26,8 +26,8 @@ describe Processor::MetricResultsChecker do
           context.native_metrics['Analizo'] << acc_metric_configuration
           metric_result.expects(:metric).returns(FactoryGirl.build(:saikuro_metric))
           module_result.expects(:tree_metric_results).at_least_once.returns([metric_result])
-          MetricCollector::Native::MetricFu::Parser.expects(:default_value_from).with(flog_metric_configuration.metric.code).returns(default_value)
           Kolekti.expects(:default_metric_value).with(acc_metric_configuration).returns(default_value)
+          Kolekti.expects(:default_metric_value).with(flog_metric_configuration).returns(default_value)
         end
 
         it 'is expected to create a TreeMetricResult with the default value for the metrics' do

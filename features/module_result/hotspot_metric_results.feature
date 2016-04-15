@@ -3,7 +3,7 @@ Feature: Module Result Hotspot Metric Results
   As a regular user
   I should be able to get the Hotspot Metric Results of a given Module Result
 
-  @clear_repository @kalibro_configuration_restart
+  @wip @clear_repository @kalibro_configuration_restart
   Scenario: A READY processing with results for the Flay metric
     Given I have a sample configuration with the Flay hotspot metric
     And I have the kalibro processor ruby repository with revision "v0.11.0"
