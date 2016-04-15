@@ -1,10 +1,10 @@
 GIT
   remote: git://github.com/mezuro/kolekti_analizo.git
-  revision: 8d4cdf8b6fba0abc443c7696c5305d12d91a3a5e
+  revision: 758401b1dee88efdd237ea9808387a60f94ffd34
   branch: stable
   specs:
-    kolekti_analizo (0.0.4)
-      kolekti (~> 1.0.1)
+    kolekti_analizo (0.0.5)
+      kolekti (~> 1.1)
 
 GIT
   remote: git://github.com/mezuro/kolekti_cc_phpmd.git
@@ -183,7 +183,7 @@ GEM
       activesupport (>= 2.2.1)
       faraday_middleware (~> 0.9)
       likeno (~> 1.1)
-    kolekti (1.0.2)
+    kolekti (1.1.3)
       kalibro_client (~> 4.0)
     launchy (2.4.3)
       addressable (~> 2.3)
