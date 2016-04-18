@@ -58,7 +58,33 @@ describe Processor::Collector do
     end
 
     describe 'collect_kolekti_metrics' do
-      pending
+      let(:persistence_strategy) { mock }
+      let(:wanted_metrics) {
+        {metric_configuration.metric.metric_collector_name => [metric_configuration]}
+      }
+      let(:runner) { mock }
+
+      before :each do
+        MetricCollector::PersistenceStrategy.expects(:new).with(processing).returns(persistence_strategy)
+        Kolekti::Runner.expects(:new).with(repository.code_directory, [metric_configuration], persistence_strategy).returns(runner)
+        runner.expects(:clean_output)
+      end
+
+      context 'when collecting metrics suceeds' do
+        it 'is expected to run then clean the output' do
+          runner.expects(:run_wanted_metrics)
+
+          described_class.collect_kolekti_metrics(context, wanted_metrics)
+        end
+      end
+
+      context 'when collecting metrics fails' do
+        let(:error) { StandardError.new }
+        it 'is expected to run then clean the output' do
+          runner.expects(:run_wanted_metrics).raises(error)
+          expect { described_class.collect_kolekti_metrics(context, wanted_metrics) }.to raise_error(error)
+        end
+      end
     end
   end
 end
