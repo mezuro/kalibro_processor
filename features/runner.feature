@@ -18,7 +18,7 @@ Feature: Runner run
     And at least one MetricResult should be non-zero
     And the Root ModuleResult retrieved should not have a MetricResult for the compound metric
 
-  @wip @clear_repository @kalibro_configuration_restart
+  @clear_repository @kalibro_configuration_restart
   Scenario: An existing ruby repository with a configuration with Saikuro and Flog
     Given I have sample readings
     And I have a sample configuration with the Saikuro native metric
@@ -107,7 +107,7 @@ Feature: Runner run
     And the processing retrieved should have a Root ModuleResult
     And the Root ModuleResult retrieved should have a list of MetricResults
 
-  @wip @clear_repository @kalibro_configuration_restart @docker
+  @clear_repository @kalibro_configuration_restart @docker
   Scenario: An existing php repository with a configuration with PHPMD (Hotspot Metrics)
     Given I have a sample configuration with the PHPMD hotspot metric
     And I have a sample php repository
