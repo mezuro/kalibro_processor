@@ -28,7 +28,7 @@ module MetricCollector
       end
     end
 
-    def create_hotspot_metric_results(metric_configuration, results)
+    def create_related_hotspot_metric_results(metric_configuration, results)
       HotspotMetricResult.transaction do
         saved_results = results.map do |result|
           # It's fine that this creates it's own transaction since ActiveRecord will squash it into the parent

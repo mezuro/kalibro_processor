@@ -3,7 +3,7 @@ Feature: ModuleResult retrieval
   As a kalibro_client developer
   I should be able to make a request that returns the ModuleResult of a given MetricResult id
 
-  @wip @clear_repository @kalibro_configuration_restart
+  @clear_repository @kalibro_configuration_restart
   Scenario: With a valid MetricResult id
     Given I have a sample configuration with the Flay hotspot metric
     And I have the kalibro processor ruby repository with revision "v0.11.0"

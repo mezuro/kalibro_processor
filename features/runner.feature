@@ -70,7 +70,7 @@ Feature: Runner run
     And I should have a READY processing for the given repository
     And the processing retrieved should not have any ModuleResults
 
-  @wip @clear_repository @kalibro_configuration_restart
+  @clear_repository @kalibro_configuration_restart
   Scenario: An existing ruby repository with a configuration with Flay (Hotspot Metrics)
     Given I have a sample configuration with the Flay hotspot metric
     And I have a sample ruby repository
@@ -118,7 +118,7 @@ Feature: Runner run
     And I should have some ModuleResults
     And the ModuleResults should have HotspotResults for the ccvn metric
 
-  @wip @clear_repository @kalibro_configuration_restart
+  @clear_repository @kalibro_configuration_restart
   Scenario: Source code analysis when a compound metric uses a hotspot metric code
     Given I have a sample configuration with the Flay hotspot metric
     And I use the hotspot metric to create a compound metric
