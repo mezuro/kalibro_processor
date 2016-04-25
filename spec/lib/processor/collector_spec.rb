@@ -5,11 +5,11 @@ require 'processor'
 describe Processor::Collector do
   describe 'methods' do
     let(:kalibro_configuration) { FactoryGirl.build(:kalibro_configuration) }
-    let!(:code_dir) { "/tmp/test" }
-    let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir) }
-    let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
-    let!(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:native_metric, :metric_fu)) }
-    let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
+    let(:code_dir) { "/tmp/test" }
+    let(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir) }
+    let(:processing) { FactoryGirl.build(:processing, repository: repository) }
+    let(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:native_metric, :metric_fu)) }
+    let(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
 
     describe 'task' do
       let!(:parse_supported_metrics) { mock }
