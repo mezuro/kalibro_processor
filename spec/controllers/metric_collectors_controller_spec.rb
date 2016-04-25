@@ -13,7 +13,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
       # Don't create an actual instance of the collector to avoid attempting to call the analizo executable
       MetricCollector::KolektiAdapter.expects(:available).returns([
         mock("Analizo", name: "Analizo").responds_like_instance_of(Kolekti::Analizo::Collector),
-        mock("MetricFu", name: "MetricFu").responds_like_instance_of(KolektiMetricfu::Collector)
+        mock("MetricFu", name: "MetricFu").responds_like_instance_of(Kolekti::Metricfu::Collector)
       ])
 
       get :all_names, format: :json

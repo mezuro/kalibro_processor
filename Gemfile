@@ -54,7 +54,7 @@ gem 'foreman', '~> 0.78.0'
 gem 'kolekti'
 gem 'kolekti_analizo', github: 'mezuro/kolekti_analizo', branch: 'stable'
 gem 'kolekti_cc_phpmd', github: 'mezuro/kolekti_cc_phpmd', branch: 'stable'
-gem 'kolekti_metricfu', github: 'mezuro/kolekti_metricfu', branch: 'master' # FIXME: use branch stable when it gets created
+gem 'kolekti_metricfu', github: 'mezuro/kolekti_metricfu', branch: 'stable'
 
 group :test do
   # Easier test writing
