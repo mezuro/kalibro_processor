@@ -4,6 +4,8 @@ KalibroProcessor is the processing web service for Mezuro.
 
 == Unreleased
 
+* Use kolekti_metricfu
+* Fix persistence strategy use of Kolekti's hostpost metric results API
 * Deprecates KalibroModule#module_results
 * Handle errors of compound metrics that use hotspot metric codes on their scripts
 

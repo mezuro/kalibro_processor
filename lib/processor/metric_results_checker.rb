@@ -49,7 +49,11 @@ module Processor
         return Kolekti.default_metric_value(metric_configuration)
       end
 
+      # This path was only exercised by the Analizo collector, and should eventually go away when we move
+      # everything to Kolekti.
+      # :nocov:
       parser.default_value_from(metric_configuration.metric.code)
+      # :nocov:
     end
   end
 end

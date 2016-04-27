@@ -4,21 +4,22 @@ require 'processor'
 
 describe Processor::Collector do
   describe 'methods' do
+    let(:kalibro_configuration) { FactoryGirl.build(:kalibro_configuration) }
+    let(:code_dir) { "/tmp/test" }
+    let(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir) }
+    let(:processing) { FactoryGirl.build(:processing, repository: repository) }
+    let(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:native_metric, :metric_fu)) }
+    let(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
+
     describe 'task' do
-      let(:kalibro_configuration) { FactoryGirl.build(:kalibro_configuration) }
-      let!(:code_dir) { "/tmp/test" }
-      let!(:repository) { FactoryGirl.build(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir) }
-      let!(:processing) { FactoryGirl.build(:processing, repository: repository) }
-      let!(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:native_metric, :metric_fu)) }
-      let!(:context) { FactoryGirl.build(:context, repository: repository, processing: processing) }
-      let!(:metric_fu_metric_collector_list) { FactoryGirl.build(:metric_fu_metric_collector_lists) }
+      let!(:parse_supported_metrics) { mock }
 
       context 'with only supported metrics' do
         before :each do
           context.processing.expects(:reload)
           context.expects(:native_metrics).returns({metric_configuration.metric.metric_collector_name => [metric_configuration]})
-          MetricCollector::Native::MetricFu::Collector.any_instance.expects(:parse_supported_metrics).returns(metric_fu_metric_collector_list)
-          MetricCollector::Native::MetricFu::Collector.any_instance.expects(:collect_metrics).with(code_dir, [metric_configuration], processing)
+          described_class.expects(:collect_kolekti_metrics).with(context, {'MetricFu' => [metric_configuration]})
+          described_class.expects(:collect_native_metrics).with(context, {})
         end
 
         context 'without producing module_results' do
@@ -53,6 +54,36 @@ describe Processor::Collector do
     describe 'state' do
       it 'is expected to return "COLLECTING"' do
         expect(Processor::Collector.state).to eq("COLLECTING")
+      end
+    end
+
+    describe 'collect_kolekti_metrics' do
+      let(:persistence_strategy) { mock }
+      let(:wanted_metrics) {
+        {metric_configuration.metric.metric_collector_name => [metric_configuration]}
+      }
+      let(:runner) { mock }
+
+      before :each do
+        MetricCollector::PersistenceStrategy.expects(:new).with(processing).returns(persistence_strategy)
+        Kolekti::Runner.expects(:new).with(repository.code_directory, [metric_configuration], persistence_strategy).returns(runner)
+        runner.expects(:clean_output)
+      end
+
+      context 'when collecting metrics suceeds' do
+        it 'is expected to run then clean the output' do
+          runner.expects(:run_wanted_metrics)
+
+          described_class.collect_kolekti_metrics(context, wanted_metrics)
+        end
+      end
+
+      context 'when collecting metrics fails' do
+        let(:error) { StandardError.new }
+        it 'is expected to run then clean the output' do
+          runner.expects(:run_wanted_metrics).raises(error)
+          expect { described_class.collect_kolekti_metrics(context, wanted_metrics) }.to raise_error(error)
+        end
       end
     end
   end

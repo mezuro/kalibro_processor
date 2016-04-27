@@ -36,12 +36,15 @@ module Processor
       raise Errors::EmptyModuleResultsError if context.processing.module_results.empty?
     end
 
+    # This method will be removed when integration with kolekti is completed
+    # :nocov:
     def self.collect_native_metrics(context, wanted_metrics)
       wanted_metrics.each do |metric_collector_name, metrics|
         collector = MetricCollector::Native::ALL[metric_collector_name].new
         collector.collect_metrics(context.repository.code_directory, metrics, context.processing)
       end
     end
+    # :nocov:
 
     def self.collect_kolekti_metrics(context, wanted_metrics)
       persistence_strategy = MetricCollector::PersistenceStrategy.new(context.processing)

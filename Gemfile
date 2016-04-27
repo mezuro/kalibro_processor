@@ -54,6 +54,7 @@ gem 'foreman', '~> 0.78.0'
 gem 'kolekti'
 gem 'kolekti_analizo', github: 'mezuro/kolekti_analizo', branch: 'stable'
 gem 'kolekti_cc_phpmd', github: 'mezuro/kolekti_cc_phpmd', branch: 'stable'
+gem 'kolekti_metricfu', github: 'mezuro/kolekti_metricfu', branch: 'stable'
 
 group :test do
   # Easier test writing
@@ -98,10 +99,6 @@ end
 
 # Some statistics
 gem 'descriptive-statistics', '~> 2.1.2'
-
-# Ruby Collector
-gem 'metric_fu', '~> 4.12.0'
-gem 'debug_inspector' # this is a dependency after updating metric_fu to 4.11.4
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

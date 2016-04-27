@@ -74,7 +74,7 @@ describe MetricCollector::PersistenceStrategy do
     end
   end
 
-  describe 'create_hotspot_metric_results' do
+  describe 'create_related_hotspot_metric_results' do
     let(:hotspot_metric_result) { FactoryGirl.build(:hotspot_metric_result) }
     let(:hotspot_metric_result_attributes) {
       attributes = hotspot_metric_result.attributes.slice('line_number', 'message')
@@ -94,7 +94,7 @@ describe MetricCollector::PersistenceStrategy do
     end
 
     it 'should create the hotspot metric results and ensure they are related' do
-      subject.create_hotspot_metric_results(metric_configuration, attributes_list)
+      subject.create_related_hotspot_metric_results(metric_configuration, attributes_list)
     end
   end
 end
