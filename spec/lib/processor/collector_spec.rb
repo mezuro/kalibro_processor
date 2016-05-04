@@ -19,7 +19,6 @@ describe Processor::Collector do
           context.processing.expects(:reload)
           context.expects(:native_metrics).returns({metric_configuration.metric.metric_collector_name => [metric_configuration]})
           described_class.expects(:collect_kolekti_metrics).with(context, {'MetricFu' => [metric_configuration]})
-          described_class.expects(:collect_native_metrics).with(context, {})
         end
 
         context 'without producing module_results' do

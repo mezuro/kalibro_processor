@@ -7,44 +7,26 @@ module Processor
   class Collector < ProcessingStep
     protected
 
-    # FIXME: Once all collectors get under Kolekti's structure, rewrite this from scratch
-    #        There are several unnecessary conditionals
     def self.task(context)
       kolekti_collector_names = Set.new(Kolekti.collectors.map(&:name))
-      kolekti_metrics, native_metrics = context.native_metrics.partition do |metric_collector_name, _|
-        kolekti_collector_names.include? metric_collector_name
-      end
-
-      native_metrics, unknown_metrics = native_metrics.partition do |metric_collector_name, _|
-        MetricCollector::Native::ALL.include? metric_collector_name
+      kolekti_metrics, unknown_metrics = context.native_metrics.partition do |metric_collector_name, _|
+        kolekti_collector_names.include?(metric_collector_name)
       end
 
       # Work around the fact that Hash#partition does not return hashes
       kolekti_metrics = Hash[kolekti_metrics]
-      native_metrics = Hash[native_metrics]
       unknown_metrics = Hash[unknown_metrics]
 
       unless unknown_metrics.empty?
-        unknown_collector_names = unknown_metrics.keys.uniq.join(', ')
+        unknown_collector_names = unknown_metrics.keys.join(', ')
         raise Errors::NotFoundError.new("Metric collectors #{unknown_collector_names} not found")
       end
 
       collect_kolekti_metrics(context, kolekti_metrics)
-      collect_native_metrics(context, native_metrics)
 
       context.processing.reload
       raise Errors::EmptyModuleResultsError if context.processing.module_results.empty?
     end
-
-    # This method will be removed when integration with kolekti is completed
-    # :nocov:
-    def self.collect_native_metrics(context, wanted_metrics)
-      wanted_metrics.each do |metric_collector_name, metrics|
-        collector = MetricCollector::Native::ALL[metric_collector_name].new
-        collector.collect_metrics(context.repository.code_directory, metrics, context.processing)
-      end
-    end
-    # :nocov:
 
     def self.collect_kolekti_metrics(context, wanted_metrics)
       persistence_strategy = MetricCollector::PersistenceStrategy.new(context.processing)

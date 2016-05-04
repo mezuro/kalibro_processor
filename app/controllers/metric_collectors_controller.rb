@@ -2,8 +2,7 @@ require 'metric_collector'
 
 class MetricCollectorsController < ApplicationController
   def all_names
-    names = { metric_collector_names: MetricCollector::Native.available.keys.concat(
-      MetricCollector::KolektiAdapter.available.map(&:name)) }
+    names = { metric_collector_names: MetricCollector::KolektiAdapter.available.map(&:name) }
 
     respond_to do |format|
       format.json { render json: names }
@@ -12,26 +11,19 @@ class MetricCollectorsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.json { render json: MetricCollector::Native.details.concat(MetricCollector::KolektiAdapter.details) }
+      format.json { render json: MetricCollector::KolektiAdapter.details }
     end
   end
 
   def find
-    details = MetricCollector::Native.details.
-                concat(MetricCollector::KolektiAdapter.details).
-                find { |d| d.name == params[:name] }
-
-    if details.nil?
-      return_value = { error: Errors::NotFoundError.new("Metric Collector #{params[:name]} not found.") }
-    else
-      return_value = { metric_collector_details: details }
-    end
+    details = MetricCollector::KolektiAdapter.details.find { |d| d.name == params[:name] }
 
     respond_to do |format|
-      if return_value[:error].nil?
-        format.json { render json: return_value }
+      if details.nil?
+        error = Errors::NotFoundError.new("Metric Collector #{params[:name]} not found.")
+        format.json { render status: :not_found, json: { error: error } }
       else
-        format.json { render json: return_value, status: :not_found }
+        format.json { render json: { metric_collector_details: details } }
       end
     end
   end

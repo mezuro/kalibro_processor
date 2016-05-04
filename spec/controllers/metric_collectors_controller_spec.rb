@@ -3,17 +3,13 @@ require 'metric_collector'
 
 RSpec.describe MetricCollectorsController, :type => :controller do
   describe 'all_names' do
-    let(:names) { ["Radon", "Analizo", "MetricFu"] }
+    let(:names) { ["Analizo", "MetricFu"] }
 
     before :each do
-      MetricCollector::Native.expects(:available).returns({
-        "Radon"    => MetricCollector::Native::Radon::Collector
-      })
-
       # Don't create an actual instance of the collector to avoid attempting to call the analizo executable
       MetricCollector::KolektiAdapter.expects(:available).returns([
-        mock("Analizo", name: "Analizo").responds_like_instance_of(Kolekti::Analizo::Collector),
-        mock("MetricFu", name: "MetricFu").responds_like_instance_of(Kolekti::Metricfu::Collector)
+        mock("Analizo", name: "Analizo").responds_like_instance_of(Kolekti::Collector),
+        mock("MetricFu", name: "MetricFu").responds_like_instance_of(Kolekti::Collector)
       ])
 
       get :all_names, format: :json
@@ -31,8 +27,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
 
     context 'with an available collector' do
       before :each do
-        MetricCollector::Native.expects(:details).returns([metric_collector_details])
-        MetricCollector::KolektiAdapter.expects(:details).returns([])
+        MetricCollector::KolektiAdapter.expects(:details).returns([metric_collector_details])
 
         post :find, name: metric_collector_details.name, format: :json
       end
@@ -49,8 +44,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
       let(:error_hash) { {error: Errors::NotFoundError.new("Metric collector #{metric_collector_name} not found.")} }
 
       before :each do
-        MetricCollector::Native.expects(:details).returns([metric_collector_details])
-        MetricCollector::KolektiAdapter.expects(:details).returns([])
+        MetricCollector::KolektiAdapter.expects(:details).returns([metric_collector_details])
 
         post :find, name: metric_collector_name, format: :json
       end
@@ -67,8 +61,8 @@ RSpec.describe MetricCollectorsController, :type => :controller do
     context 'with an available collector' do
       let!(:metric_collector_details) { FactoryGirl.build(:metric_collector_details) }
       before :each do
-        MetricCollector::Native.expects(:details).returns([metric_collector_details])
-        MetricCollector::KolektiAdapter.expects(:details).returns([])
+        MetricCollector::KolektiAdapter.expects(:details).returns([metric_collector_details])
+
         get :index, format: :json
       end
 
@@ -81,8 +75,8 @@ RSpec.describe MetricCollectorsController, :type => :controller do
 
     context 'without available collectors' do
       before :each do
-        MetricCollector::Native.expects(:details).returns([])
         MetricCollector::KolektiAdapter.expects(:details).returns([])
+
         get :index, format: :json
       end
 
