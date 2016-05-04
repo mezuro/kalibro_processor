@@ -3,9 +3,7 @@ require 'metric_collector/native/radon'
 module MetricCollector
   # Once all collectors are under Kolekti's structure, this module will be dropped in favour of KolektiAdapter
   module Native
-    ALL = {
-      "Radon" => MetricCollector::Native::Radon::Collector
-    }
+    ALL = {}
 
     def self.available
       ALL.select {|name, collector| collector.available?}
