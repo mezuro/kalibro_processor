@@ -26,8 +26,8 @@ GIT
 
 GIT
   remote: git://github.com/mezuro/kolekti_radon.git
-  revision: ec13db3b596ef898956140b7abe37f30ac07f599
-  branch: collector
+  revision: 79a30f1e4b3e29fabedfef02950c6d48c57e05d7
+  branch: stable
   specs:
     kolekti_radon (0.0.1)
       kolekti

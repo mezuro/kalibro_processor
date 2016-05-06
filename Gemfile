@@ -55,7 +55,7 @@ gem 'kolekti'
 gem 'kolekti_analizo', github: 'mezuro/kolekti_analizo', branch: 'stable'
 gem 'kolekti_cc_phpmd', github: 'mezuro/kolekti_cc_phpmd', branch: 'stable'
 gem 'kolekti_metricfu', github: 'mezuro/kolekti_metricfu', branch: 'stable'
-gem 'kolekti_radon', github: 'mezuro/kolekti_radon', branch: 'collector'
+gem 'kolekti_radon', github: 'mezuro/kolekti_radon', branch: 'stable'
 
 group :test do
   # Easier test writing
