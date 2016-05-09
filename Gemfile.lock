@@ -24,6 +24,14 @@ GIT
       kolekti (~> 1.1)
       metric_fu (~> 4.12.0)
 
+GIT
+  remote: git://github.com/mezuro/kolekti_radon.git
+  revision: 79a30f1e4b3e29fabedfef02950c6d48c57e05d7
+  branch: stable
+  specs:
+    kolekti_radon (0.0.1)
+      kolekti
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -396,6 +404,7 @@ DEPENDENCIES
   kolekti_analizo!
   kolekti_cc_phpmd!
   kolekti_metricfu!
+  kolekti_radon!
   mocha
   pg
   psych (~> 2.0.12)

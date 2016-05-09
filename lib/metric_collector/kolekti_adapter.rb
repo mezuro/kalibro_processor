@@ -5,18 +5,11 @@ module MetricCollector
     end
 
     def self.details
-      # This cache will represent a HUGE improvement for MetricCollectorsController response times
-      Rails.cache.fetch("metric_collector/kolekti/details", expires_in: 1.day) do
-        @details = []
-
-        available.each do |collector|
-          @details << MetricCollector::Details.new(name: collector.name,
-                                                   description: collector.description,
-                                                   supported_metrics: collector.supported_metrics)
-        end
+      available.map do |collector|
+        MetricCollector::Details.new(name: collector.name,
+                                     description: collector.description,
+                                     supported_metrics: collector.supported_metrics)
       end
-
-      @details
     end
   end
 end
