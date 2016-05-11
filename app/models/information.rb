@@ -1,5 +1,5 @@
 class Information
-  VERSION="1.2.1"
+  VERSION="1.3.0"
   LICENSE="AGPLv3"
   REPOSITORY_URL="https://github.com/mezuro/kalibro_processor"
 

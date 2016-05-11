@@ -4,6 +4,8 @@ KalibroProcessor is the processing web service for Mezuro.
 
 == Unreleased
 
+== v1.3.0 - 11/05/2016
+
 * Use kolekti_radon (and remove the whole Native collecting structure)
 * Use kolekti_metricfu
 * Fix persistence strategy use of Kolekti's hostpost metric results API
