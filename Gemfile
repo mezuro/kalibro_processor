@@ -55,6 +55,8 @@ gem 'kolekti'
 gem 'kolekti_analizo', github: 'mezuro/kolekti_analizo', branch: 'stable'
 gem 'kolekti_cc_phpmd', github: 'mezuro/kolekti_cc_phpmd', branch: 'stable'
 gem 'kolekti_metricfu', github: 'mezuro/kolekti_metricfu', branch: 'stable'
+# FIXME: Version 0.2.5 requires ruby >= 2.1 while CentOS 7 is still running 2.0.0
+gem 'unparser', '< 0.2.5'
 gem 'kolekti_radon', github: 'mezuro/kolekti_radon', branch: 'stable'
 
 group :test do

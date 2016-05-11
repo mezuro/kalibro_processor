@@ -4,6 +4,8 @@ KalibroProcessor is the processing web service for Mezuro.
 
 == Unreleased
 
+* Fix ruby 2.0.0 support
+
 == v1.3.0 - 11/05/2016
 
 * Use kolekti_radon (and remove the whole Native collecting structure)
