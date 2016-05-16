@@ -17,10 +17,10 @@ GIT
 
 GIT
   remote: git://github.com/mezuro/kolekti_metricfu.git
-  revision: 1045ca8a637f42ab1d626e6c63c5f3e35d8c7f8f
+  revision: 931e783f4b6c1d5295f2080006f62b31d7906699
   branch: stable
   specs:
-    kolekti_metricfu (0.0.2)
+    kolekti_metricfu (0.0.3)
       kolekti (~> 1.1)
       metric_fu (~> 4.12.0)
 
@@ -329,7 +329,7 @@ GEM
       rspec-mocks (~> 3.3.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
-    ruby-progressbar (1.8.0)
+    ruby-progressbar (1.8.1)
     ruby_parser (3.8.2)
       sexp_processor (~> 4.1)
     sdoc (0.4.1)
