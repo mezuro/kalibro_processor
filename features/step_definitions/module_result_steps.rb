@@ -14,7 +14,7 @@ When(/^I request the hotspot metric results for the "(.*?)" module result$/) do 
     @processing.root_module_result
   else
     @processing.module_results.joins(:kalibro_module).references(:kalibro_modules)
-      .where('kalibro_modules.long_name': module_name).first
+      .where('kalibro_modules.long_name' => module_name).first
   end
   expect(module_result).not_to be_nil, "expected module result with name '#{module_name}', not found"
 
