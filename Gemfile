@@ -19,7 +19,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'rails-html-sanitizer', '~> 1.0'
 
 # Kalibro integration
-gem 'kalibro_client', '~> 4.0'
+#gem 'kalibro_client', '~> 4.0'
+gem 'kalibro_client', github: 'mezuro/kalibro_client', branch: 'kalibro_configuration_language'
 
 # YAML parser required for properly compactibility between mri and rbx
 gem 'psych', '~>2.0.12'
