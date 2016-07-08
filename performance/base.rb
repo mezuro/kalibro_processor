@@ -1,11 +1,22 @@
+require 'database_cleaner'
+require 'kalibro_client/kalibro_cucumber_helpers'
+
 module Performance
   class Base
     def initialize
       @results = {}
     end
 
-    def setup; end
-    def teardown; end
+    def setup
+      DatabaseCleaner.strategy = :truncation
+      KalibroClient::KalibroCucumberHelpers.clean_configurations
+      DatabaseCleaner.clean
+    end
+
+    def teardown
+      KalibroClient::KalibroCucumberHelpers.clean_configurations
+      DatabaseCleaner.clean
+    end
 
     def subject; raise NotImplementedError; end
 
