@@ -10,7 +10,16 @@ module Performance
       super
 
       kalibro_configuration = FactoryGirl.create(:kalibro_configuration)
-      metric_configuration = FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:maintainability_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id)
+      metric_configurations = [
+        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:maintainability_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
+        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:acc_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
+        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:flog_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
+        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:loc_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
+        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:saikuro_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
+        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:logical_lines_of_code_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
+        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:cyclomatic_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
+        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:lines_of_code_metric, code: 'pyloc'), id: nil, kalibro_configuration_id: kalibro_configuration.id)
+      ]
       code_dir = "/tmp/test"
       repository = FactoryGirl.create(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir)
       root_module_result = FactoryGirl.create(:module_result,
@@ -45,11 +54,13 @@ module Performance
       end
 
       previous_module_results.each do |module_result|
-        FactoryGirl.create(:tree_metric_result,
-                           module_result: module_result,
-                           metric_configuration: metric_configuration,
-                           metric: metric_configuration.metric,
-                           value: rand)
+        metric_configurations.each do |metric_configuration|
+          FactoryGirl.create(:tree_metric_result,
+                             module_result: module_result,
+                             metric_configuration: metric_configuration,
+                             metric: metric_configuration.metric,
+                             value: rand)
+        end
       end
 
       puts "Done creating #{ModuleResult.count} ModuleResults and #{MetricResult.count} MetricResults that will get aggregated following"
