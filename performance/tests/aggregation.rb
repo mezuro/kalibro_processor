@@ -13,7 +13,7 @@ module Performance
       metric_configuration = FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:maintainability_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id)
       code_dir = "/tmp/test"
       repository = FactoryGirl.create(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir)
-      root_module_result = FactoryGirl.create(:module_result, id: nil, processing: nil)
+      root_module_result = FactoryGirl.create(:module_result, id: nil, processing: nil, tree_metric_results: [], hotspot_metric_results: [])
       processing = FactoryGirl.create(:processing, repository: repository, root_module_result: root_module_result, id: nil)
       @context = FactoryGirl.build(:context, repository: repository, processing: processing)
 
@@ -23,7 +23,7 @@ module Performance
 
         previous_module_results.each do |parent|
           (0..(TREE_WIDTH - 1)).each do
-            next_module_results << FactoryGirl.create(:module_result, id: nil, processing: processing, parent: parent)
+            next_module_results << FactoryGirl.create(:module_result, id: nil, processing: processing, parent: parent, tree_metric_results: [], hotspot_metric_results: [])
           end
         end
 
