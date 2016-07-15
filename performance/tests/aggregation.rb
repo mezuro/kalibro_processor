@@ -10,12 +10,17 @@ module Performance
       super
 
       kalibro_configuration = FactoryGirl.create(:kalibro_configuration)
-      metric_configuration = FactoryGirl.build(:metric_configuration, metric: FactoryGirl.build(:maintainability_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id)
+      metric_configuration = FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:maintainability_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id)
       code_dir = "/tmp/test"
       repository = FactoryGirl.create(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir)
-      root_module_result = FactoryGirl.create(:module_result, id: nil, processing: nil, tree_metric_results: [], hotspot_metric_results: [])
+      root_module_result = FactoryGirl.create(:module_result,
+                                              id: nil, processing: nil,
+                                              tree_metric_results: [],
+                                              hotspot_metric_results: [])
+      FactoryGirl.create(:kalibro_module_with_package_granularity, module_result: root_module_result, long_name: "ROOT")
       processing = FactoryGirl.create(:processing, repository: repository, root_module_result: root_module_result, id: nil)
       @context = FactoryGirl.build(:context, repository: repository, processing: processing)
+      Processor::Preparer.metrics_list(@context)
 
       previous_module_results = [root_module_result]
       (0..(TREE_HEIGHT - 2)).each do # The first level is the ROOT
@@ -23,7 +28,16 @@ module Performance
 
         previous_module_results.each do |parent|
           (0..(TREE_WIDTH - 1)).each do
-            next_module_results << FactoryGirl.create(:module_result, id: nil, processing: processing, parent: parent, tree_metric_results: [], hotspot_metric_results: [])
+            next_module_results << FactoryGirl.create(:module_result,
+                                                      id: nil,
+                                                      processing: processing,
+                                                      parent: parent,
+                                                      tree_metric_results: [],
+                                                      hotspot_metric_results: [])
+            FactoryGirl.create(:kalibro_module_with_package_granularity,
+                                module_result: next_module_results.last,
+                                long_name: [*('a'..'z'),*('0'..'9')].shuffle[0,8].join # random unique name
+                              )
           end
         end
 
@@ -43,6 +57,11 @@ module Performance
 
     def subject
       Processor::Aggregator.task(@context)
+    end
+
+    def teardown
+      puts "Aggregation produced #{ModuleResult.count} ModuleResults and #{MetricResult.count} MetricResults"
+      super
     end
   end
 end
