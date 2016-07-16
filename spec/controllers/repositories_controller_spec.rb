@@ -173,9 +173,9 @@ RSpec.describe RepositoriesController, :type => :controller do
   end
 
   describe 'process' do
-    context 'with a successful processing' do
-      let!(:processing) { FactoryGirl.build(:processing) }
+    let(:processing) { FactoryGirl.build(:processing) }
 
+    context 'with a successful processing' do
       before :each do
         Processing.expects(:create).with(repository: repository, state: "PREPARING").returns(processing)
         Repository.expects(:find).with(repository.id).returns(repository)
@@ -189,6 +189,7 @@ RSpec.describe RepositoriesController, :type => :controller do
 
     context 'with an unsuccessful processing' do
       before :each do
+        Processing.expects(:create).with(repository: repository, state: "PREPARING").returns(processing)
         Repository.expects(:find).with(repository.id).returns(repository)
         repository.expects(:process).raises(Errors::ProcessingError)
 
