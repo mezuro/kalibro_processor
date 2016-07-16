@@ -332,6 +332,7 @@ GEM
       rspec-mocks (~> 3.3.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
+    ruby-prof (0.15.9)
     ruby-progressbar (1.8.1)
     ruby_parser (3.8.2)
       sexp_processor (~> 4.1)
@@ -414,6 +415,7 @@ DEPENDENCIES
   rails (= 4.2.4)
   rails-html-sanitizer (~> 1.0)
   rspec-rails (~> 3.3.2)
+  ruby-prof
   sdoc (~> 0.4.0)
   shoulda-matchers (~> 2.8.0)
   simplecov

@@ -91,6 +91,9 @@ group :development, :test do
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
   gem 'capistrano-rvm', "~>0.1.0"
+
+  # Ruby profilling
+  gem 'ruby-prof'
 end
 
 # Acceptance tests
