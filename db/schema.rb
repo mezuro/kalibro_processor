@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160720185413) do
+ActiveRecord::Schema.define(version: 20160720185414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20160720185413) do
   end
 
   add_index "kalibro_modules", ["long_name", "granularity"], name: "index_kalibro_modules_on_long_name_and_granularity", using: :btree
+  add_index "kalibro_modules", ["module_result_id"], name: "index_kalibro_modules_on_module_result_id", using: :btree
 
   create_table "metric_results", force: :cascade do |t|
     t.integer  "module_result_id"
@@ -69,6 +70,7 @@ ActiveRecord::Schema.define(version: 20160720185413) do
   end
 
   add_index "module_results", ["parent_id"], name: "index_module_results_on_parent_id", using: :btree
+  add_index "module_results", ["processing_id"], name: "index_module_results_on_processing_id", using: :btree
 
   create_table "process_times", force: :cascade do |t|
     t.string   "state",         limit: 255
@@ -78,6 +80,8 @@ ActiveRecord::Schema.define(version: 20160720185413) do
     t.float    "time"
   end
 
+  add_index "process_times", ["processing_id"], name: "index_process_times_on_processing_id", using: :btree
+
   create_table "processings", force: :cascade do |t|
     t.string   "state",                 limit: 255
     t.integer  "repository_id"
@@ -86,6 +90,8 @@ ActiveRecord::Schema.define(version: 20160720185413) do
     t.integer  "root_module_result_id"
     t.text     "error_message"
   end
+
+  add_index "processings", ["repository_id"], name: "index_processings_on_repository_id", using: :btree
 
   create_table "projects", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -111,6 +117,8 @@ ActiveRecord::Schema.define(version: 20160720185413) do
     t.string   "code_directory",           limit: 255
     t.string   "branch",                               default: "master", null: false
   end
+
+  add_index "repositories", ["project_id"], name: "index_repositories_on_project_id", using: :btree
 
   add_foreign_key "kalibro_modules", "module_results", on_delete: :cascade
   add_foreign_key "metric_results", "module_results", on_delete: :cascade
