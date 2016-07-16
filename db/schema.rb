@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151002172231) do
+ActiveRecord::Schema.define(version: 20160720183503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,43 +33,35 @@ ActiveRecord::Schema.define(version: 20151002172231) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "kalibro_modules", force: :cascade do |t|
-    t.string   "long_name",        limit: 255
-    t.string   "granularity",      limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "module_result_id"
+    t.string  "long_name",        limit: 255
+    t.string  "granularity",      limit: 255
+    t.integer "module_result_id"
   end
 
   create_table "metric_results", force: :cascade do |t|
-    t.integer  "module_result_id"
-    t.integer  "metric_configuration_id"
-    t.float    "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "type",                              default: "MetricResult", null: false
-    t.integer  "line_number"
-    t.text     "message"
-    t.integer  "related_hotspot_metric_results_id"
+    t.integer "module_result_id"
+    t.integer "metric_configuration_id"
+    t.float   "value"
+    t.string  "type",                              default: "MetricResult", null: false
+    t.integer "line_number"
+    t.text    "message"
+    t.integer "related_hotspot_metric_results_id"
   end
 
   add_index "metric_results", ["related_hotspot_metric_results_id"], name: "index_metric_results_on_related_hotspot_metric_results_id", using: :btree
 
   create_table "module_results", force: :cascade do |t|
-    t.float    "grade"
-    t.integer  "parent_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "processing_id"
+    t.float   "grade"
+    t.integer "parent_id"
+    t.integer "processing_id"
   end
 
   add_index "module_results", ["parent_id"], name: "index_module_results_on_parent_id", using: :btree
 
   create_table "process_times", force: :cascade do |t|
-    t.string   "state",         limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "processing_id"
-    t.float    "time"
+    t.string  "state",         limit: 255
+    t.integer "processing_id"
+    t.float   "time"
   end
 
   create_table "processings", force: :cascade do |t|

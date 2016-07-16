@@ -4,6 +4,7 @@ KalibroProcessor is the processing web service for Mezuro.
 
 == Unreleased
 
+* Remove timestamp columns from KalibroModule, ModuleResult, MetricResult and ProcessTime
 * Transform TreeMetricResult#descendant_values into a single query for performance
 * Fix possible inconsistency in module result creation (lack of transaction)
 * Improve acceptance tests by fixing small bugs and adding processing times
