@@ -44,14 +44,16 @@ module MetricCollector
     def find_or_create_module_result(module_name, granularity)
       kalibro_module = new_kalibro_module(module_name, granularity)
 
-      module_result = ModuleResult.find_by_module_and_processing(kalibro_module, @processing)
-      return module_result unless module_result.nil?
-
-      module_result = ModuleResult.create!(processing: @processing)
-      kalibro_module.module_result = module_result
-      kalibro_module.save!
-      module_result.update!(kalibro_module: kalibro_module)
-      module_result
+      ModuleResult.transaction do
+        module_result = ModuleResult.find_by_module_and_processing(kalibro_module, @processing)
+        if !module_result.nil?
+          module_result
+        else
+          kalibro_module.build_module_result(processing: @processing)
+          kalibro_module.save!
+          kalibro_module.module_result
+        end
+      end
     end
 
     def new_kalibro_module(module_name, granularity)

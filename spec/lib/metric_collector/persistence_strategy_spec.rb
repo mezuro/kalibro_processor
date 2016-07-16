@@ -4,7 +4,7 @@ require 'metric_collector'
 describe MetricCollector::PersistenceStrategy do
   let(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
   let(:processing) { FactoryGirl.build(:processing) }
-  let(:module_result) { FactoryGirl.build(:module_result) }
+  let(:module_result) { FactoryGirl.build(:module_result, processing: processing) }
   let(:metric_configuration) { FactoryGirl.build(:metric_configuration, :with_id) }
 
   subject { described_class.new(processing) }
@@ -24,12 +24,12 @@ describe MetricCollector::PersistenceStrategy do
       before do
         subject.expects(:new_kalibro_module).returns(kalibro_module)
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module, processing).returns module_result
-      end
-
-      it 'is expected to create a tree metric result' do
         TreeMetricResult.expects(:create!).with(module_result: module_result,
                                                 metric_configuration_id: metric_configuration.id,
                                                 value: value).returns tree_metric_result
+      end
+
+      it 'is expected to create a tree metric result' do
         subject.create_tree_metric_result(metric_configuration, kalibro_module.long_name, value, kalibro_module.granularity)
       end
     end
@@ -38,15 +38,16 @@ describe MetricCollector::PersistenceStrategy do
       before do
         subject.expects(:new_kalibro_module).returns(kalibro_module)
         ModuleResult.expects(:find_by_module_and_processing).with(kalibro_module, processing).returns nil
-        ModuleResult.expects(:create!).with(processing: processing).returns module_result
+        kalibro_module.expects(:build_module_result).with(processing: processing) do
+          kalibro_module.module_result = module_result
+        end
         kalibro_module.expects(:save!)
-        module_result.expects(:update!).with(kalibro_module: kalibro_module)
-      end
-
-      it 'is expected to create a tree metric result' do
         TreeMetricResult.expects(:create!).with(module_result: module_result,
                                                 metric_configuration_id: metric_configuration.id,
                                                 value: value).returns tree_metric_result
+      end
+
+      it 'is expected to create a tree metric result' do
         subject.create_tree_metric_result(metric_configuration, kalibro_module.long_name, value, kalibro_module.granularity)
       end
     end
