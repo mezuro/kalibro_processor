@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151002172231) do
+ActiveRecord::Schema.define(version: 20160720185413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 20151002172231) do
     t.integer  "module_result_id"
   end
 
+  add_index "kalibro_modules", ["long_name", "granularity"], name: "index_kalibro_modules_on_long_name_and_granularity", using: :btree
+
   create_table "metric_results", force: :cascade do |t|
     t.integer  "module_result_id"
     t.integer  "metric_configuration_id"
@@ -52,7 +54,11 @@ ActiveRecord::Schema.define(version: 20151002172231) do
     t.integer  "related_hotspot_metric_results_id"
   end
 
+  add_index "metric_results", ["metric_configuration_id"], name: "index_metric_results_on_metric_configuration_id", using: :btree
+  add_index "metric_results", ["module_result_id", "metric_configuration_id"], name: "metric_results_module_res_metric_cfg_uniq_idx", unique: true, where: "((type)::text = 'TreeMetricResult'::text)", using: :btree
+  add_index "metric_results", ["module_result_id"], name: "index_metric_results_on_module_result_id", using: :btree
   add_index "metric_results", ["related_hotspot_metric_results_id"], name: "index_metric_results_on_related_hotspot_metric_results_id", using: :btree
+  add_index "metric_results", ["type"], name: "index_metric_results_on_type", using: :btree
 
   create_table "module_results", force: :cascade do |t|
     t.float    "grade"
@@ -106,5 +112,13 @@ ActiveRecord::Schema.define(version: 20151002172231) do
     t.string   "branch",                               default: "master", null: false
   end
 
+  add_foreign_key "kalibro_modules", "module_results", on_delete: :cascade
+  add_foreign_key "metric_results", "module_results", on_delete: :cascade
   add_foreign_key "metric_results", "related_hotspot_metric_results", column: "related_hotspot_metric_results_id"
+  add_foreign_key "module_results", "module_results", column: "parent_id"
+  add_foreign_key "module_results", "processings", on_delete: :cascade
+  add_foreign_key "process_times", "processings", on_delete: :cascade
+  add_foreign_key "processings", "module_results", column: "root_module_result_id"
+  add_foreign_key "processings", "repositories"
+  add_foreign_key "repositories", "projects"
 end

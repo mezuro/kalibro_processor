@@ -4,6 +4,7 @@ KalibroProcessor is the processing web service for Mezuro.
 
 == Unreleased
 
+* Optimize database structure by adding foreign keys and indexes where needed
 * Insert in one query all aggregated MetricResults
 * Aggregate values by tree levels
 * Enable ModuleResult tree walking by level
