@@ -18,10 +18,9 @@ end
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
-# Requiring since the Gemfile is not requiring it
-require 'database_cleaner'
-
 require 'cucumber/rails'
+# database_cleaner is set up manually below
+Cucumber::Rails::Database.autorun_database_cleaner = false
 
 # require 'capybara/poltergeist'
 # Capybara.default_driver = :poltergeist
@@ -49,36 +48,29 @@ require 'cucumber/rails'
 #
 ActionController::Base.allow_rescue = false
 
-# Remove/comment out the lines below if your app doesn't have a database.
-# For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
-begin
-  DatabaseCleaner.strategy = :transaction
-rescue NameError
-  raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
+# Setup database_cleaner.
+# Ensure we can disable the transaction strategy for tests that spawn other
+# processes/threads, otherwise data won't be visible to them. Ideally we'd just use
+# before hooks to set the strategy, but they always run after Around hooks (too late).
+# There is also no way to get the current strategy to restore it later.
+
+require 'database_cleaner'
+
+DatabaseCleaner.clean_with(:truncation)
+
+Around('@no_transaction') do |scenario, block|
+  DatabaseCleaner.strategy = :truncation
+  DatabaseCleaner.cleaning(&block)
 end
 
-# You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
-# See the DatabaseCleaner documentation for details. Example:
-#
-#   Before('@no-txn,@selenium,@culerity,@celerity,@javascript') do
-#     # { :except => [:widgets] } may not do what you expect here
-#     # as Cucumber::Rails::Database.javascript_strategy overrides
-#     # this setting.
-#     DatabaseCleaner.strategy = :truncation
-#   end
-#
-#   Before('~@no-txn', '~@selenium', '~@culerity', '~@celerity', '~@javascript') do
-#     DatabaseCleaner.strategy = :transaction
-#   end
-#
-
-# Possible values are :truncation and :transaction
-# The :transaction strategy is faster, but might give you threading problems.
-# See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
-Cucumber::Rails::Database.javascript_strategy = :truncation
+Around('~@no_transaction') do |scenario, block|
+  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner.cleaning(&block)
+end
 
 # Kalibro hooks
-require 'kalibro_client/kalibro_cucumber_helpers/hooks.rb'
+require 'kalibro_client/kalibro_cucumber_helpers/hooks'
+KalibroClient::KalibroCucumberHelpers.clean_configurations
 
 # Some steps access this module directly. Require it here so we don't need this line in every step definition that uses some class on this module.
 require 'downloaders'
