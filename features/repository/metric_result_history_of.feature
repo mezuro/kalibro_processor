@@ -7,7 +7,7 @@ Feature: Metric Result History Of
   Scenario: After processing an existing repository with a kalibro configuration
     Given I have sample readings
     And I have a sample kalibro configuration with native metrics
-    And I have a sample repository within the sample project
+    And I have a sample repository
     And I have a processing within the sample repository
     And I run for the given repository
     When I get the history for the first metric result of the root

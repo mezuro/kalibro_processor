@@ -87,7 +87,7 @@ Feature: Runner run
     Given I have sample readings
     And I have a sample configuration with the Cyclomatic python native metric
     And I add the "Maintainability" native metric to the sample configuration
-    And I have a sample python repository within the sample project
+    And I have a sample python repository
     And I have a processing within the sample repository
     When I run for the given repository
     Then the repository code_directory should exist

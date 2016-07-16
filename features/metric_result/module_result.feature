@@ -5,8 +5,7 @@ Feature: ModuleResult retrieval
 
   @clear_repository @kalibro_configuration_restart
   Scenario: With a valid MetricResult id
-    Given I have sample readings
-    And I have a sample configuration with the Flay hotspot metric
+    Given I have a sample configuration with the Flay hotspot metric
     And I have the kalibro processor ruby repository with revision "v0.11.0"
     And I have a processing within the sample repository
     And I run for the given repository
@@ -15,5 +14,5 @@ Feature: ModuleResult retrieval
     Then I should get the given ModuleResult json
 
   Scenario: With an invalid MetricResult id
-    When I request for the ModuleResult of the MetricResult with id "42"
+    When I request for the ModuleResult of the MetricResult with id "0"
     Then I should get an error response

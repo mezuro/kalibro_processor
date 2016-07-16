@@ -1,159 +1,217 @@
 Given(/^I have a sample kalibro configuration with native metrics$/) do
-  @kalibro_configuration = FactoryGirl.create(:kalibro_configuration, id: nil)
+  @configuration = FactoryGirl.create(:kalibro_configuration)
+
   metric_configuration = FactoryGirl.create(:metric_configuration,
-                                            {id: nil,
-                                             metric: FactoryGirl.build(:loc_metric),
-                                             reading_group_id: @reading_group.id,
-                                             kalibro_configuration_id: @kalibro_configuration.id})
-  range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
-  range.save
+    metric: FactoryGirl.build(:loc_metric),
+    reading_group_id: @reading_group.id,
+    kalibro_configuration_id: @configuration.id)
+
+  range = FactoryGirl.create(:range,
+    reading_id: @reading.id,
+    beginning: '-INF',
+    end: 'INF',
+    metric_configuration_id: metric_configuration.id)
+
   compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
-                                                     metric: FactoryGirl.build(:compound_metric,
-                                                                               script: "return loc() * 2;"),
-                                                     reading_group_id: @reading_group.id,
-                                                     kalibro_configuration_id: @kalibro_configuration.id)
-  compound_range = FactoryGirl.build(:range, {reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: compound_metric_configuration.id})
-  compound_range.save
+    metric: FactoryGirl.build(:compound_metric, script: "return loc() * 2;"),
+    reading_group_id: @reading_group.id,
+    kalibro_configuration_id: @configuration.id)
+
+  compound_range = FactoryGirl.create(:range,
+    reading_id: @reading.id,
+    beginning: '-INF',
+    end: 'INF',
+    metric_configuration_id: compound_metric_configuration.id)
 end
 
 Given(/^I have a sample configuration with the (\w+) native metric$/) do |metric|
   metric_configuration_factory = (metric + "_metric_configuration").downcase
   metric_factory = (metric + "_metric").downcase
-  @configuration = FactoryGirl.create(:kalibro_configuration, id: nil)
+
+  @configuration = FactoryGirl.create(:kalibro_configuration)
+
   metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
-                                            {id: 4,
-                                             metric: FactoryGirl.build(metric_factory.to_sym),
-                                             reading_group_id: @reading_group.id,
-                                             kalibro_configuration_id: @configuration.id})
-  range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
-  range.save
-  compound_metric_configuration = FactoryGirl.create(metric_configuration_factory.sub("_", "_compound_").to_sym,
-                                                     id: 5,
-                                             metric: FactoryGirl.build(("compound_" + metric_factory).to_sym),
-                                                     reading_group_id: @reading_group.id,
-                                                     kalibro_configuration_id: @configuration.id)
-  compound_range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: compound_metric_configuration.id})
-  compound_range.save
+    metric: FactoryGirl.build(metric_factory.to_sym),
+    reading_group_id: @reading_group.id,
+    kalibro_configuration_id: @configuration.id)
+
+  range = FactoryGirl.create(:range,
+    reading_id: @reading.id,
+    beginning: '-INF', end: 'INF',
+    metric_configuration_id: metric_configuration.id)
+
+  compound_metric_configuration_factory = metric_configuration_factory.sub("_", "_compound_")
+  compound_metric_factory = "compound_" + metric_factory
+
+  compound_metric_configuration = FactoryGirl.create(compound_metric_configuration_factory.to_sym,
+    metric: FactoryGirl.build(compound_metric_factory.to_sym),
+    reading_group_id: @reading_group.id,
+    kalibro_configuration_id: @configuration.id)
+
+  compound_range = FactoryGirl.create(:range,
+    reading_id: @reading.id,
+    beginning: '-INF',
+    end: 'INF',
+    metric_configuration_id: compound_metric_configuration.id)
 end
 
 Given(/^I have a sample configuration with the (\w+) hotspot metric$/) do |metric|
   metric_configuration_factory = (metric + "_metric_configuration").downcase
   metric_factory = (metric + "_metric").downcase
-  @configuration = FactoryGirl.create(:kalibro_configuration, id: nil)
-  metric = FactoryGirl.build(metric_factory.to_sym)
+
+  @configuration = FactoryGirl.create(:kalibro_configuration)
+
   @metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
-                                             metric: metric,
-                                             kalibro_configuration_id: @configuration.id)
+    metric: FactoryGirl.build(metric_factory.to_sym),
+    kalibro_configuration_id: @configuration.id)
 end
 
+Given(/^I have a sample configuration with the (\w+) python native metric$/) do |metric|
+  metric_configuration_factory = (metric + "_metric_configuration").downcase
+  metric_factory = (metric + "_metric").downcase
+
+  @configuration = FactoryGirl.create(:kalibro_configuration)
+
+  metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
+    metric: FactoryGirl.build(metric_factory.to_sym),
+    reading_group_id: @reading_group.id,
+    kalibro_configuration_id: @configuration.id)
+
+  range = FactoryGirl.create(:range,
+    reading_id: @reading.id,
+    beginning: '-INF',
+    :end => 'INF',
+    metric_configuration_id: metric_configuration.id)
+end
+
+
 Given(/^I have a sample repository$/) do
-  @repository = FactoryGirl.create(:sbking_repository, kalibro_configuration: @kalibro_configuration)
+  @repository = FactoryGirl.create(:sbking_repository, kalibro_configuration: @configuration)
 end
 
 Given(/^I have a sample ruby repository$/) do
   @repository = FactoryGirl.create(:ruby_repository, kalibro_configuration: @configuration)
 end
 
-Given(/^I have a sample ruby repository within the sample project$/) do
-  @repository = FactoryGirl.create(:ruby_repository, :with_project_id, kalibro_configuration: @configuration)
-end
-
 Given(/^I have a sample php repository$/) do
-  @repository = FactoryGirl.create(:php_repository, :with_project_id, kalibro_configuration: @configuration)
+  @repository = FactoryGirl.create(:php_repository,  kalibro_configuration: @configuration)
 end
 
-Given(/^I have a sample configuration with the (\w+) python native metric$/) do |metric|
-  metric_configuration_factory = (metric + "_metric_configuration").downcase
-  metric_factory = (metric + "_metric").downcase
-  @configuration = FactoryGirl.create(:kalibro_configuration, id: nil)
-  metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
-                                            {id: 4,
-                                             metric: FactoryGirl.build(metric_factory.to_sym),
-                                             reading_group_id: @reading_group.id,
-                                             kalibro_configuration_id: @configuration.id})
-  range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
-  range.save
-end
-
-Given(/^I have a sample python repository within the sample project$/) do
+Given(/^I have a sample python repository$/) do
   @repository = FactoryGirl.create(:python_repository, kalibro_configuration: @configuration)
 end
 
-Given(/^I have a sample repository within the sample project$/) do
-  @repository = FactoryGirl.create(:sbking_repository, :with_project_id, kalibro_configuration: @kalibro_configuration)
+Given(/^I assign the repository to the project$/) do
+  expect(@repository).to_not be_nil
+  expect(@project).to_not be_nil
+  repository.update_attributes(project: @project)
 end
 
 Given(/^I have a processing within the sample repository$/) do
-  @processing = FactoryGirl.create(:processing, repository: @repository, state: "PREPARING")
+  @processing = Processing.create!(repository: @repository, state: "PREPARING")
 end
 
 Given(/^I have a compound metric with an invalid script$/) do
-  invalid_compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
-                                                             metric: FactoryGirl.build(:compound_metric,
-                                                                                       script: "rtrnaqdfwqefwqr213r2145211234ed a = b=2",
-                                                                                       code: "ACM"),
-                                                             reading_group_id: @reading_group.id,
-                                                             kalibro_configuration_id: @kalibro_configuration.id)
-  compound_range = FactoryGirl.build(:range, {reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: invalid_compound_metric_configuration.id})
-  compound_range.save
+  compound_metric = FactoryGirl.build(:compound_metric,
+    script: "rtrnaqdfwqefwqr213r2145211234ed a = b=2",
+    code: "ACM")
+
+  compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
+    metric: compound_metric,
+    reading_group_id: @reading_group.id,
+    kalibro_configuration_id: @configuration.id)
+
+  compound_range = FactoryGirl.create(:range,
+    reading_id: @reading.id,
+    beginning: '-INF',
+    :end => 'INF',
+    metric_configuration_id: compound_metric_configuration.id)
 end
 
 Given(/^I have sample readings$/) do
   @reading_group = FactoryGirl.create(:reading_group)
-  @reading = FactoryGirl.create(:reading, {reading_group_id: @reading_group.id})
+  @reading = FactoryGirl.create(:reading,
+    reading_group_id: @reading_group.id)
 end
 
 Given(/^I have a sample kalibro configuration$/) do
-  @kalibro_configuration = FactoryGirl.create(:kalibro_configuration, name: "teste")
+  @configuration = FactoryGirl.create(:kalibro_configuration,
+    name: "teste")
 end
 
 Given(/^I have a range for this metric configuration$/) do
-  range = FactoryGirl.build(:range, {reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @metric_configuration.id})
-  range.save
+  range = FactoryGirl.create(:range,
+    reading_id: @reading.id,
+    beginning: '-INF', :end => 'INF',
+    metric_configuration_id: @metric_configuration.id)
 end
 
 Given(/^I add the "(.*?)" analizo metric with scope "(.*?)" and code "(.*?)"$/) do |name, scope, code|
+  metric = FactoryGirl.build(:native_metric, :analizo,
+    name: name,
+    scope: scope,
+    code: code)
+
   @metric_configuration = FactoryGirl.create(:metric_configuration,
-                                             {metric: FactoryGirl.build(:native_metric, :analizo, name: name, scope: scope, code: code),
-                                             reading_group_id: @reading_group.id,
-                                             kalibro_configuration_id: @kalibro_configuration.id})
+    metric: metric,
+    reading_group_id: @reading_group.id,
+    kalibro_configuration_id: @configuration.id)
 end
 
 Given(/^I have two compound metrics with script "(.*?)" and "(.*?)"$/) do |script1, script2|
+  compound_metric = FactoryGirl.build(:compound_metric,
+    script: script1,
+    code: "compound_metric")
+
   @compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
-                                                        metric: FactoryGirl.build(:compound_metric, script: script1,
-                                                                                   code: "compound_metric"),
-                                                                                   reading_group_id: @reading_group.id,
-                                                                                   kalibro_configuration_id: @kalibro_configuration.id)
+    metric: compound_metric,
+    reading_group_id: @reading_group.id,
+    kalibro_configuration_id: @configuration.id)
+
+  other_compound_metric = FactoryGirl.build(:compound_metric,
+    script: script2,
+    code: "ACM")
+
   @other_compound_metric_configuration = FactoryGirl.create(:compound_metric_configuration,
-                                                        metric: FactoryGirl.build(:compound_metric, script: script2,
-                                                                                   code: "ACM"),
-                                                                                   reading_group_id: @reading_group.id,
-                                                                                   kalibro_configuration_id: @kalibro_configuration.id)
-  compound_range = FactoryGirl.build(:range, {reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @compound_metric_configuration.id})
-  compound_range.save
-  other_compound_range = FactoryGirl.build(:range, {reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: @other_compound_metric_configuration.id})
-  other_compound_range.save
+    metric: other_compound_metric,
+    reading_group_id: @reading_group.id,
+    kalibro_configuration_id: @configuration.id)
+
+  compound_range = FactoryGirl.create(:range,
+    reading_id: @reading.id,
+    beginning: '-INF', :end => 'INF',
+    metric_configuration_id: @compound_metric_configuration.id)
+
+  other_compound_range = FactoryGirl.create(:range,
+    reading_id: @reading.id,
+    beginning: '-INF',
+    :end => 'INF',
+    metric_configuration_id: @other_compound_metric_configuration.id)
 end
 
 Given(/^I add the "(.*?)" native metric to the sample configuration$/) do |metric|
   metric_configuration_factory = (metric + "_metric_configuration").downcase
   metric_factory = (metric + "_metric").downcase
+
   metric_configuration = FactoryGirl.create(metric_configuration_factory.to_sym,
-                                            {id: 4,
-                                             metric: FactoryGirl.build(metric_factory.to_sym),
-                                             reading_group_id: @reading_group.id,
-                                             kalibro_configuration_id: @configuration.id})
-  range = FactoryGirl.build(:range, {id: nil, reading_id: @reading.id, beginning: '-INF', :end => 'INF', metric_configuration_id: metric_configuration.id})
-  range.save
+    metric: FactoryGirl.build(metric_factory.to_sym),
+    reading_group_id: @reading_group.id,
+    kalibro_configuration_id: @configuration.id)
+
+  range = FactoryGirl.create(:range,
+    reading_id: @reading.id,
+    beginning: '-INF',
+    :end => 'INF',
+    metric_configuration_id: metric_configuration.id)
 end
 
 Given(/^I use the hotspot metric to create a compound metric$/) do
   code = @metric_configuration.metric.code
-  @compound = FactoryGirl.create(:compound_metric_configuration,
-                                  metric: FactoryGirl.build(:compound_metric, code: "cm", script: "return #{code}() * 2;"),
-                                  kalibro_configuration_id: @configuration.id)
+  metric = FactoryGirl.build(:compound_metric, code: "cm", script: "return #{code}() * 2;")
 
+  @compound = FactoryGirl.create(:compound_metric_configuration,
+    metric: metric,
+    kalibro_configuration_id: @configuration.id)
 end
 
 When(/^I run for the given repository$/) do
