@@ -59,6 +59,12 @@ gem 'kolekti_metricfu', github: 'mezuro/kolekti_metricfu', branch: 'stable'
 gem 'unparser', '< 0.2.5'
 gem 'kolekti_radon', github: 'mezuro/kolekti_radon', branch: 'stable'
 
+# Some statistics
+gem 'descriptive-statistics', '~> 2.1.2'
+
+# Bulk SQL inserts
+gem 'activerecord-import'
+
 group :test do
   # Easier test writing
   gem "shoulda-matchers", '~>2.8.0'
@@ -103,8 +109,7 @@ group :cucumber do
   # gem 'database_cleaner' # Removed because it is getting added above.
 end
 
-# Some statistics
-gem 'descriptive-statistics', '~> 2.1.2'
+
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
