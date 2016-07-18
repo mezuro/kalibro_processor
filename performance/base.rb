@@ -1,10 +1,18 @@
+require 'fileutils'
 require 'database_cleaner'
 require 'kalibro_client/kalibro_cucumber_helpers'
 
 module Performance
   class Base
-    def initialize
-      @results = {}
+    def initialize(num_runs: nil, measure_mode: nil, save_reports: true)
+      if num_runs.nil?
+        num_runs = ENV.key?('PROFILE_NUM_RUNS') ? ENV['PROFILE_NUM_RUNS'].to_i : 1
+      end
+
+      @num_runs = num_runs
+      @measure_mode = measure_mode
+      @save_reports = save_reports
+      @results = []
     end
 
     def setup
@@ -21,56 +29,62 @@ module Performance
     def subject; raise NotImplementedError; end
 
     def run
-      self.run_process_time
-      self.run_wall_time
+      STDERR.puts "Profiling #{self.class.name}"
 
+      if @measure_mode
+        RubyProf.measure_mode = RubyProf.const_get(@measure_mode)
+      end
+
+      @results = (1..@num_runs).map do |i|
+        STDERR.puts "Setup: start"
+        self.setup
+        STDERR.puts "Setup: finish"
+
+        STDERR.puts "Run #{i}: start"
+        prof = RubyProf.profile do
+          self.subject
+        end
+        STDERR.puts "Run #{i}: finish"
+
+        STDERR.puts "Teardown: start"
+        self.teardown
+        STDERR.puts "Teardown: finish"
+
+        prof
+      end
+
+      self.save_reports if @save_reports
       self.print
     end
 
     protected
 
-    def run_wall_time
-      self.setup
-
-      RubyProf.measure_mode = RubyProf::WALL_TIME
-
-      @results['Wall Time'] = []
-      (1..5).each do |it|
-        @results['Wall Time'] << RubyProf.profile do
-          self.subject
-        end
-      end
-
-      self.teardown
-    end
-
-    def run_process_time
-      self.setup
-
-      RubyProf.measure_mode = RubyProf::PROCESS_TIME
-
-      @results['Process Time'] = []
-      (1..5).each do |it|
-        @results['Process Time'] << RubyProf.profile do
-          self.subject
-        end
-      end
-
-      self.teardown
-    end
-
     def print
-      puts "\n"
-      puts "#{self.class.name}\n----------"
+      puts "#{@measure_mode.to_s}:"
 
-      @results.each do |title, result|
-        total = 0.0
-
-        result.each { |r| r.threads.each { |thread| total += thread.total_time} }
-
-        puts "* #{title}: #{total/result.count}"
+      if RubyProf.measure_mode == RubyProf::WALL_TIME
+        totals = @results.map { |r| r.threads.map(&:total_time).max }
+      else
+        totals = @results.map { |r| r.threads.map(&:total_time).reduce(:+) }
       end
-      puts "\n"
+
+      totals.each do |time|
+        puts "  #{time}"
+      end
+
+      puts "  Average: #{totals.reduce(:+) / @results.count}"
+      puts
+    end
+
+    def save_reports
+      path = "prof/#{self.class.name}"
+      FileUtils.mkdir_p(path)
+      base_prof = Time.now.strftime('%Y-%m-%d_%H-%M-%S')
+
+      @results.each_with_index do |result, i|
+        printer = RubyProf::MultiPrinter.new(result)
+        printer.print(path: path, profile: "#{base_prof}_#{i}")
+      end
     end
   end
 end
