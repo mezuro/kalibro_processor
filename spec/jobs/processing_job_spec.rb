@@ -29,6 +29,8 @@ describe ProcessingJob, :type => :job do
             Processor::Aggregator.expects(:perform)
             Processor::CompoundResultCalculator.expects(:perform)
             Processor::Interpreter.expects(:perform)
+
+            periodic_processing.expects(:update).with(state: "READY")
           end
 
           it 'should process the repository periodically' do
