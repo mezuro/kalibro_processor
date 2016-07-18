@@ -6,60 +6,51 @@ module Performance
     TREE_HEIGHT = 10
     TREE_WIDTH = 2
 
+    METRICS = [
+      FactoryGirl.build(:maintainability_metric),
+      FactoryGirl.build(:acc_metric),
+      FactoryGirl.build(:flog_metric),
+      FactoryGirl.build(:loc_metric),
+      FactoryGirl.build(:saikuro_metric),
+      FactoryGirl.build(:logical_lines_of_code_metric),
+      FactoryGirl.build(:cyclomatic_metric),
+      FactoryGirl.build(:lines_of_code_metric, code: 'pyloc'),
+    ]
+
     def setup
       super
 
       kalibro_configuration = FactoryGirl.create(:kalibro_configuration)
-      metric_configurations = [
-        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:maintainability_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
-        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:acc_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
-        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:flog_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
-        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:loc_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
-        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:saikuro_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
-        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:logical_lines_of_code_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
-        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:cyclomatic_metric), id: nil, kalibro_configuration_id: kalibro_configuration.id),
-        FactoryGirl.create(:metric_configuration, metric: FactoryGirl.build(:lines_of_code_metric, code: 'pyloc'), id: nil, kalibro_configuration_id: kalibro_configuration.id)
-      ]
-      code_dir = "/tmp/test"
+      metric_configurations = METRICS.map do |metric|
+        FactoryGirl.create(:metric_configuration, metric: metric,
+                           kalibro_configuration_id: kalibro_configuration.id)
+      end
 
-      repository = FactoryGirl.create(:repository, scm_type: "GIT", kalibro_configuration: kalibro_configuration, code_directory: code_dir)
-      root_module_result = FactoryGirl.create(:module_result,
-                                              id: nil, processing: nil,
-                                              tree_metric_results: [],
-                                              hotspot_metric_results: [])
-      FactoryGirl.create(:kalibro_module_with_package_granularity, module_result: root_module_result, long_name: "ROOT")
-      processing = FactoryGirl.create(:processing, repository: repository, root_module_result: root_module_result, id: nil)
+      repository = FactoryGirl.create(:repository, kalibro_configuration: kalibro_configuration)
+      processing = FactoryGirl.create(:processing, repository: repository)
+      module_results_tree = FactoryGirl.create(:module_results_tree, processing: processing,
+                                               width: TREE_WIDTH, height: TREE_HEIGHT)
+      processing.update!(root_module_result: module_results_tree.root)
+
+      FactoryGirl.create(:kalibro_module_with_package_granularity, module_result: module_results_tree.root,
+                         long_name: "ROOT")
+
       @context = FactoryGirl.build(:context, repository: repository, processing: processing)
       Processor::Preparer.metrics_list(@context)
 
-      previous_module_results = [root_module_result]
-      ModuleResult.transaction do
-        (0..(TREE_HEIGHT - 2)).each do # The first level is the ROOT
-          next_module_results = []
+      kalibro_modules = module_results_tree.all.map do |module_result|
+        FactoryGirl.build(:kalibro_module_with_package_granularity, module_result: module_result,
+                          long_name: random_name)
+      end
+      KalibroModule.import!(kalibro_modules)
 
-          previous_module_results.each do |parent|
-            (0..(TREE_WIDTH - 1)).each do
-              next_module_results << ModuleResult.create!(processing: processing,
-                                                          parent_id: parent.id)
-              FactoryGirl.create(:kalibro_module_with_package_granularity,
-                                  module_result: next_module_results.last,
-                                  long_name: [*('a'..'z'),*('0'..'9')].shuffle[0,8].join # random unique name
-                                )
-            end
-          end
-
-          previous_module_results = next_module_results
+      tree_metric_results = module_results_tree.levels.last.flat_map do |module_result|
+        metric_configurations.map do |metric_configuration|
+          TreeMetricResult.new(metric_configuration_id: metric_configuration.id, module_result: module_result,
+                               value: rand)
         end
       end
-
-      tree_metric_results = []
-      previous_module_results.each do |module_result|
-        metric_configurations.each do |metric_configuration|
-          tree_metric_results << [module_result.id, metric_configuration.id, rand]
-        end
-      end
-
-      TreeMetricResult.import([:module_result_id, :metric_configuration_id, :value], tree_metric_results)
+      TreeMetricResult.import!(tree_metric_results)
 
       puts "Done creating #{ModuleResult.count} ModuleResults and #{MetricResult.count} MetricResults that will get aggregated following"
     end
@@ -71,6 +62,12 @@ module Performance
     def teardown
       puts "Aggregation produced #{ModuleResult.count} ModuleResults and #{MetricResult.count} MetricResults"
       super
+    end
+
+    protected
+
+    def random_name
+      [*('a'..'z'),*('0'..'9')].shuffle[0,8].join
     end
   end
 end
