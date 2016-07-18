@@ -14,10 +14,10 @@ class TreeMetricResult < MetricResult
   def grade; self.range.grade; end
 
   def descendant_values
-    module_result.children.map { |child|
-      metric_result = child.tree_metric_result_for(self.metric)
-      metric_result.value if metric_result
-    }.compact
+    self.class.
+      joins(:module_result).
+      where('module_results.parent_id' => module_result_id).
+      pluck(:value)
   end
 
   def as_json(options={})

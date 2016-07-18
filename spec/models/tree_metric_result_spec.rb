@@ -100,22 +100,16 @@ describe TreeMetricResult, :type => :model do
 
     describe 'descendant_values' do
       subject { FactoryGirl.build(:tree_metric_result) }
-      let(:son) { FactoryGirl.build(:tree_metric_result_with_value) }
-      let!(:module_result) { FactoryGirl.build(:module_result) }
 
       before :each do
-        subject.expects(:module_result).returns(module_result)
-        module_result.expects(:children).returns([module_result, module_result])
-        module_result.expects(:tree_metric_result_for).at_least_once.
-          with(subject.metric).returns(son)
+        query = mock()
+        described_class.expects(:joins).with(:module_result).returns(query)
+        query.expects(:where).with('module_results.parent_id' => subject.module_result_id).returns(query)
+        query.expects(:pluck).with(:value).returns([2.0, 2.0])
       end
 
       it "should return an array with all its children's values" do
         expect(subject.descendant_values).to eq([2.0, 2.0])
-      end
-
-      it "should be a float values array" do
-        expect(subject.descendant_values).to be_a(Array)
       end
     end
   end
