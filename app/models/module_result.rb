@@ -30,8 +30,27 @@ class ModuleResult < ActiveRecord::Base
     @pre_order ||= pre_order_traverse(root).to_a
   end
 
+  def level_order
+    return @level_order unless @level_order.nil?
+    return processing.root_module_result.level_order unless parent.nil?
+
+    @level_order = descendants_by_level.flatten
+  end
+
   def descendants
-    @descendants ||= pre_order_traverse(self).to_a
+    @descendants ||= descendants_by_level.flatten
+  end
+
+  def descendants_by_level
+    level = [self]
+    descendants = []
+
+    until level.empty? do
+      descendants << level
+      level = fetch_all_children(level)
+    end
+
+    descendants
   end
 
   def descendant_hotspot_metric_results
@@ -60,4 +79,13 @@ class ModuleResult < ActiveRecord::Base
       end
     end
   end
+
+  def fetch_all_children(parents)
+    self.class.
+      where(parent_id: parents.map(&:id)).
+      eager_load(:kalibro_module, :tree_metric_results).
+      to_a
+  end
+
+
 end
