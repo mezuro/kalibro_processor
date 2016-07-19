@@ -65,6 +65,8 @@ describe ModuleResult, :type => :model do
   end
 
   describe 'methods' do
+    subject { FactoryGirl.build(:module_result) }
+
     describe 'find_by_module_and_processing' do
       let(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
       let(:processing) { FactoryGirl.build(:processing) }
