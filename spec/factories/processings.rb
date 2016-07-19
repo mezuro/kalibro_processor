@@ -3,7 +3,6 @@ FactoryGirl.define do
     created_at "2011-10-20T18:26:43.151+00:00"
     updated_at "2011-10-20T18:26:43.151+00:00"
     state "READY"
-    root_module_result_id 13
     module_results { [] }
 
     association :repository, factory: :repository, strategy: :build
