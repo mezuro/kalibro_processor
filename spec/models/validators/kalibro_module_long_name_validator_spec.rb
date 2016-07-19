@@ -4,23 +4,18 @@ require 'validators/kalibro_module_long_name_validator'
 RSpec.describe KalibroModuleLongNameValidator, :type => :model do
   describe 'methods' do
     describe 'validate' do
-      subject { FactoryGirl.build(:kalibro_module) }
-      let!(:module_result) { FactoryGirl.build(:module_result, kalibro_module: same_name) }
-      let(:subject_module_result) { FactoryGirl.build(:module_result, processing: module_result.processing) }
-      let(:same_name) { FactoryGirl.build(:kalibro_module) }
-      let(:processing) { FactoryGirl.create(:processing) }
+      subject { FactoryGirl.build(:kalibro_module, module_result: module_result) }
+      let!(:existing_processing)     { FactoryGirl.create(:processing) }
+      let!(:existing_module_result)  { FactoryGirl.create(:module_result, kalibro_module: nil,
+                                                          processing: existing_processing) }
+      let!(:existing_kalibro_module) { FactoryGirl.create(:kalibro_module, module_result: existing_module_result) }
 
       context 'within the same processing' do
+        let!(:module_result) { FactoryGirl.create(:module_result, kalibro_module: nil,
+                                                  processing: existing_processing) }
+
         context 'and with the same granularity' do
           context 'and the same long name' do
-            before :each do
-              subject.module_result = subject_module_result
-              subject_module_result.kalibro_module = subject
-
-              same_name.save
-              module_result.save
-            end
-
             it 'is expected to add an error to the record' do
               subject.save
               expect(subject.errors).not_to be_empty
@@ -28,12 +23,8 @@ RSpec.describe KalibroModuleLongNameValidator, :type => :model do
           end
 
           context 'and a different long name' do
-            before :each do
-              subject.module_result = subject_module_result
-              subject_module_result.kalibro_module = subject
-            end
-
             it 'is expected to NOT add any errors' do
+              subject.long_name.reverse!
               subject.save
               expect(subject.errors).to be_empty
             end
@@ -44,16 +35,8 @@ RSpec.describe KalibroModuleLongNameValidator, :type => :model do
           let(:granularity) { FactoryGirl.build(:class_granularity) }
 
           context 'and the same long name' do
-            before :each do
-              subject.module_result = subject_module_result
-              subject_module_result.kalibro_module = subject
-              subject.granularity = granularity
-
-              same_name.save
-              module_result.save
-            end
-
             it 'is expected to NOT add any errors' do
+              subject.granularity = granularity
               subject.save
               expect(subject.errors).to be_empty
             end
@@ -62,19 +45,12 @@ RSpec.describe KalibroModuleLongNameValidator, :type => :model do
       end
 
       context 'within a different processing' do
-        let(:different_processing) { FactoryGirl.create(:processing) }
+        let!(:other_processing) { FactoryGirl.create(:processing) }
+        let!(:module_result)    { FactoryGirl.create(:module_result, kalibro_module: nil,
+                                                     processing: other_processing) }
 
         context 'and with the same granularity' do
           context 'and the same long name' do
-            before :each do
-              subject_module_result.processing = different_processing
-              subject.module_result = subject_module_result
-              subject_module_result.kalibro_module = subject
-
-              same_name.save
-              module_result.save
-            end
-
             it 'is expected to NOT add any errors' do
               subject.save
               expect(subject.errors).to be_empty

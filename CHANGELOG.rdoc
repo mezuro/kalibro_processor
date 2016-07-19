@@ -4,6 +4,7 @@ KalibroProcessor is the processing web service for Mezuro.
 
 == Unreleased
 
+* Improve acceptance tests by fixing small bugs and adding processing times
 * Introduce performance tests for Aggregator
 * Update KolektiMetricfu
 

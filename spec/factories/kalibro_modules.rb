@@ -4,7 +4,7 @@ FactoryGirl.define do
     name { ['home', 'user', 'project'] }
 
     trait :with_id do
-      id 51
+      sequence(:id, 1)
     end
 
     trait :with_granularity_software do

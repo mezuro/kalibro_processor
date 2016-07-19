@@ -1,10 +1,7 @@
-Given(/^I have the root ModuleResult of the given processing$/) do
-  @processing.reload # The processing instance in memory might not be synced with the database modifications made by a previous processing
-  @module_result = @processing.root_module_result
-end
-
-Given(/^I have the first MetricResult of the given ModuleResult$/) do
-  @metric_result = @module_result.metric_results.first
+Given(/^I have a hotspot MetricResult descendant of the root ModuleResult$/) do
+  @processing.reload
+  @metric_result = @processing.root_module_result.descendant_hotspot_metric_results.first
+  @module_result = @metric_result.module_result
 end
 
 When(/^I request the hotspot metric results for the "(.*?)" module result$/) do |module_name|

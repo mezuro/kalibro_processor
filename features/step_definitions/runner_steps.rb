@@ -158,6 +158,13 @@ end
 
 When(/^I run for the given repository$/) do
   @repository.process(@processing)
+  @processing.reload
+
+  if @processing.state == 'READY'
+    @processing.process_times(true).each do |process_time|
+      puts '%-15s %.4fs' % [process_time.state + ':', process_time.time]
+    end
+  end
 end
 
 When(/^I wait for the "(.*?)" state$/) do |state|

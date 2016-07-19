@@ -5,12 +5,12 @@ Feature: ModuleResult retrieval
 
   @clear_repository @kalibro_configuration_restart
   Scenario: With a valid MetricResult id
-    Given I have a sample configuration with the Flay hotspot metric
+    Given I have sample readings
+    And I have a sample configuration with the Flay hotspot metric
     And I have the kalibro processor ruby repository with revision "v0.11.0"
     And I have a processing within the sample repository
     And I run for the given repository
-    And I have the root ModuleResult of the given processing
-    And I have the first MetricResult of the given ModuleResult
+    And I have a hotspot MetricResult descendant of the root ModuleResult
     When I request for the ModuleResult associated with the given MetricResult's id
     Then I should get the given ModuleResult json
 
