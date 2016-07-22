@@ -188,19 +188,15 @@ describe ModuleResult, :type => :model do
     let(:non_root_module_results) { module_results - [module_results_tree.root] }
     subject { module_results_tree.root }
 
-    before :each do
-      # Ensure fetching the children of the last level is handled (and returns an empty list)
-      levels_with_last = module_results_tree.levels + [[]]
-      levels_with_last.each_cons(2) do |prev_level, level|
-        ModuleResult.any_instance.stubs(:fetch_all_children).with(prev_level).returns(level)
-      end
-    end
-
     describe 'level_order' do
       let(:level_order) { module_results_tree.levels.flatten }
 
       context 'when it is at the root' do
         context 'when there are children' do
+          before do
+            subject.expects(:descendants_by_level).returns(module_results_tree.levels)
+          end
+
           it 'is expected to return the level order tree traversal ' do
             expect(subject.level_order).to eq(level_order)
           end
@@ -209,6 +205,10 @@ describe ModuleResult, :type => :model do
         context 'when there are no children' do
           let(:module_results_tree) { FactoryGirl.build(:module_results_tree, :with_id, height: 1) }
 
+          before do
+            subject.expects(:descendants_by_level).returns([[subject]])
+          end
+
           it 'is expected to return an array with only itself' do
             expect(subject.level_order).to eq([subject])
           end
@@ -216,6 +216,10 @@ describe ModuleResult, :type => :model do
       end
 
       context 'when it is not at the root' do
+        before do
+          subject.expects(:descendants_by_level).returns(module_results_tree.levels)
+        end
+
         it 'is expected to return the level order tree traversal from the root' do
           expect(non_root_module_results.map(&:level_order)).to all(eq(level_order))
         end
@@ -223,6 +227,19 @@ describe ModuleResult, :type => :model do
     end
 
     describe 'descendants_by_level' do
+      before :each do
+        # Ensure fetching the children of the last level is handled (and returns an empty list)
+        levels_with_last = module_results_tree.levels + [[]]
+        levels_with_last.each_cons(2) do |parents, children|
+          where_mock = mock('where')
+          eager_load_mock = mock('eager_load')
+
+          eager_load_mock.expects(:to_a).returns(children)
+          where_mock.expects(:eager_load).returns(eager_load_mock)
+          ModuleResult.expects(:where).with(parent_id: parents.map(&:id)).returns(where_mock)
+        end
+      end
+
       it 'is expected to return a list with the levels from top to bottom' do
         expect(subject.descendants_by_level).to eq(module_results_tree.levels)
       end
