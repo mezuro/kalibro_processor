@@ -3,7 +3,8 @@ require 'processor'
 
 module Performance
   class ProcessingStepTest < Base
-    attr_reader :repository, :processing, :kalibro_configuration, :metric_configurations, :context
+    attr_reader :repository, :processing, :kalibro_configuration, :metric_configurations, :context,
+                :reading_group, :readings
 
     def initialize
       super
@@ -13,6 +14,8 @@ module Performance
       @repository = nil
       @processing = nil
       @context = nil
+      @reading_group = nil
+      @readings = nil
     end
 
     def setup
@@ -44,6 +47,26 @@ module Performance
         FactoryGirl.build(:cyclomatic_metric),
         FactoryGirl.build(:lines_of_code_metric, code: 'pyloc'),
       ]
+    end
+
+    def setup_ranges(partitions = 5)
+      @reading_group = FactoryGirl.create(:reading_group)
+
+      steps = (1..partitions-1).map { |i| i * (1.0 / partitions) }
+      steps = [0, *steps, 1]
+
+      @readings = (1..partitions).map do |i|
+        FactoryGirl.create(:reading, label: random_name, grade: i, reading_group_id: @reading_group.id)
+      end
+
+      metric_configurations.each do |mc|
+        next if mc.metric.type != 'NativeMetricSnapshot'
+
+        steps.each_cons(2).zip(@readings).each do |(beginning, end_val), reading|
+          FactoryGirl.create(:range, beginning: beginning, end: end_val, reading_id: reading.id,
+                             metric_configuration_id: mc.id, )
+        end
+      end
     end
 
     def setup_metric_results(tree_width, tree_height)
