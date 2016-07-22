@@ -102,6 +102,15 @@ describe ModuleResult, :type => :model do
         expect(JSON.parse(subject.to_json)['height']).to eq(JSON.parse(subject.to_json)['height'])
       end
     end
+  end
+
+  describe 'tree-walking methods' do
+    subject { FactoryGirl.build(:module_result) }
+
+    let(:module_results_tree) { FactoryGirl.build(:module_results_tree, :with_id, height: 3, width: 2) }
+    let(:module_results) { module_results_tree.all }
+    let(:non_root_module_results) { module_results - [module_results_tree.root] }
+    subject { module_results_tree.root }
 
     describe 'pre_order' do
       context 'when it does not have children' do
@@ -148,45 +157,6 @@ describe ModuleResult, :type => :model do
         end
       end
     end
-
-    describe 'descendants' do
-      subject { FactoryGirl.build(:module_result) }
-      let!(:pre_order_module_results) { [[subject]] }
-
-      before :each do
-        subject.expects(:descendants_by_level).returns(pre_order_module_results)
-      end
-
-      it 'is expected to return the descendant ModuleResults' do
-        expect(subject.descendants).to be_a(Array)
-        expect(subject.descendants).to eq(pre_order_module_results.flatten)
-      end
-    end
-
-    describe 'descendant_hotspot_metric_results' do
-      subject { FactoryGirl.build(:module_result) }
-      let!(:descendant_module_results) { [subject] }
-
-      before :each do
-        subject.expects(:descendants).returns(descendant_module_results)
-      end
-
-      it 'is expected to return the Hotspot MetricResults related with the descendant ModuleResults ids' do
-        result_mock = mock
-        HotspotMetricResult.expects(:where).with(module_result_id: [subject.id]).returns(result_mock)
-
-        expect(subject.descendant_hotspot_metric_results).to eq(result_mock)
-      end
-    end
-  end
-
-  describe 'tree-walking methods' do
-    subject { FactoryGirl.build(:module_result) }
-
-    let(:module_results_tree) { FactoryGirl.build(:module_results_tree, :with_id, height: 3, width: 2) }
-    let(:module_results) { module_results_tree.all }
-    let(:non_root_module_results) { module_results - [module_results_tree.root] }
-    subject { module_results_tree.root }
 
     describe 'level_order' do
       let(:level_order) { module_results_tree.levels.flatten }
@@ -242,6 +212,32 @@ describe ModuleResult, :type => :model do
 
       it 'is expected to return a list with the levels from top to bottom' do
         expect(subject.descendants_by_level).to eq(module_results_tree.levels)
+      end
+    end
+
+    describe 'descendants' do
+      let!(:pre_order_module_results) { [[subject]] }
+
+      before :each do
+        subject.expects(:descendants_by_level).returns(pre_order_module_results)
+      end
+
+      it 'is expected to return the descendant ModuleResults' do
+        expect(subject.descendants).to be_a(Array)
+        expect(subject.descendants).to eq(pre_order_module_results.flatten)
+      end
+    end
+
+    describe 'descendant_hotspot_metric_results' do
+      before :each do
+        subject.expects(:descendants).returns(module_results)
+      end
+
+      it 'is expected to return the Hotspot MetricResults related with the descendant ModuleResults ids' do
+        result_mock = mock
+        HotspotMetricResult.expects(:where).with(module_result_id: module_results.map(&:id)).returns(result_mock)
+
+        expect(subject.descendant_hotspot_metric_results).to eq(result_mock)
       end
     end
   end
