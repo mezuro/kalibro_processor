@@ -3,8 +3,8 @@ require 'processor'
 
 module Performance
   class ProcessingStepTest < Base
-    attr_reader :repository, :processing, :kalibro_configuration, :metric_configurations, :context
-    attr_reader :reading_group, :readings
+    attr_reader :repository, :processing, :kalibro_configuration, :metric_configurations, :context,
+                :reading_group, :readings
 
     def initialize
       super
