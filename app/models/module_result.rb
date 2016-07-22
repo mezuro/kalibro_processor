@@ -31,9 +31,10 @@ class ModuleResult < ActiveRecord::Base
   end
 
   def pre_order
-    root = self
-    root = root.parent until root.parent.nil?
-    @pre_order ||= pre_order_traverse(root).to_a
+    return @pre_order unless @pre_order.nil?
+    return processing.root_module_result.pre_order unless parent.nil?
+
+    @pre_order = pre_order_traverse(self).to_a
   end
 
   def descendants

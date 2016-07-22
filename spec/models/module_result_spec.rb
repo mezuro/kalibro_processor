@@ -164,11 +164,15 @@ describe ModuleResult, :type => :model do
       context 'when it is not the root module result' do
         let!(:root) { FactoryGirl.build(:module_result, id: 1)}
         let!(:child) { FactoryGirl.build(:module_result, id: 2)}
+        let!(:processing) { FactoryGirl.build(:processing, root_module_result: root)}
+
         before :each do
-          child.expects(:parent).twice.returns(root)
+          child.expects(:parent).returns(root)
+          child.expects(:processing).returns(processing)
           root.expects(:parent).returns(nil)
           root.expects(:children).returns([child])
         end
+
         it 'is expected to return the complete pre order tree traversal (from root)' do
           expect(child.pre_order).to eq([root, child])
         end
