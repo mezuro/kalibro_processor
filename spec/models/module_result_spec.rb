@@ -66,9 +66,9 @@ describe ModuleResult, :type => :model do
 
   describe 'methods' do
     describe 'find_by_module_and_processing' do
-      let!(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
-      let!(:processing) { FactoryGirl.build(:processing) }
-      let!(:module_result) { FactoryGirl.build(:module_result) }
+      let(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
+      let(:processing) { FactoryGirl.build(:processing) }
+      let(:module_result) { FactoryGirl.build(:module_result) }
 
       before :each do
         name_filtered_results = Object.new
