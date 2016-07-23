@@ -65,30 +65,6 @@ describe ModuleResult, :type => :model do
   end
 
   describe 'method' do
-    describe 'tree_metric_result_for' do
-      subject { FactoryGirl.build(:module_result) }
-
-      let(:metric_result) {subject.tree_metric_results.first}
-
-      before :each do
-        subject.expects(:reload)
-      end
-
-      context 'when a module result has the specific metric' do
-        let(:metric) { subject.tree_metric_results.first.metric }
-        it 'should return the metric_result' do
-          expect(subject.tree_metric_result_for(metric)).to eq(metric_result)
-        end
-      end
-
-      context 'when a module result has not the specific metric' do
-        let(:another_metric) { FactoryGirl.build(:acc_metric) }
-        it 'should return the metric_result' do
-          expect(subject.tree_metric_result_for(another_metric)).to be_nil
-        end
-      end
-    end
-
     describe 'find_by_module_and_processing' do
       let!(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
       let!(:processing) { FactoryGirl.build(:processing) }
