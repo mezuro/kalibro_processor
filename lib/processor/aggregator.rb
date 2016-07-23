@@ -42,7 +42,13 @@ module Processor
         end
       end
 
-      TreeMetricResult.import!(new_tree_metric_results)
+      # Do a bulk insert, but not with everything at once to avoid constructing and logging obscenely large queries.
+      # Performance of a batch of 100 seems to be the same or very close to a full bach of about 4000 records.
+      # The transaction still allows the database to perform as best as it can by committing all the data at once, but
+      # we avoid the monster queries.
+      TreeMetricResult.transaction do
+        TreeMetricResult.import!(new_tree_metric_results, batch_size: 100)
+      end
     end
 
     def self.state

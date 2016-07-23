@@ -34,7 +34,10 @@ describe Processor::Aggregator do
             module_result.hotspot_metric_results.build(metric_configuration_id: hotspot_metric_configuration.id)
           end
 
-          TreeMetricResult.expects(:import!)
+          TreeMetricResult.expects(:import!).with do |items, **args|
+            expect(items.length).to eq(module_results_tree.all.size - leaves.size)
+            expect(args).to include(batch_size: 100)
+          end
         end
 
         context 'with SUM aggregation form' do
