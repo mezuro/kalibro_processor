@@ -9,10 +9,8 @@ describe TreeMetricResultsController do
       let!(:module_result) { FactoryGirl.build(:module_result) }
 
       before :each do
-        module_result.expects(:tree_metric_result_for).with(metric_result.metric).returns(metric_result)
-        module_result.expects(:children).returns([module_result])
-        metric_result.expects(:module_result).returns(module_result)
-        TreeMetricResult.expects(:find).with(metric_result.id).returns(metric_result)
+        MetricResult.expects(:find).with(metric_result.id).returns(metric_result)
+        metric_result.expects(:descendant_values).returns([metric_result.value])
       end
 
       context 'json format' do
