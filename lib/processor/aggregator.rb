@@ -3,7 +3,7 @@ module Processor
     def self.task(context)
       # Only bother processing Tree metric configurations
       # Do nothing if there are none
-      metric_configurations = extract_tree_metric_configurations(context)
+      metric_configurations = context.tree_native_metrics
       return if metric_configurations.empty?
 
       # Find all the descendants of the root at once.
@@ -55,10 +55,6 @@ module Processor
       "AGGREGATING"
     end
 
-    def self.extract_tree_metric_configurations(context)
-      context.native_metrics.values.flatten.reject { |mc| mc.metric.type != 'NativeMetricSnapshot' }
-    end
-
     def self.module_results_by_id(descendants_by_level)
       results = {}
       descendants_by_level.each do |level|
@@ -75,6 +71,6 @@ module Processor
       DescriptiveStatistics::Stats.new(tree_metric_results.map(&:value)).send(aggregation_form)
     end
 
-    private_class_method :extract_tree_metric_configurations, :module_results_by_id, :aggregate_values
+    private_class_method :module_results_by_id, :aggregate_values
   end
 end
