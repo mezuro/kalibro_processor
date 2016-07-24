@@ -41,8 +41,7 @@ describe Processor::Interpreter do
               range.stubs(:reading).returns(reading)
             end
           end
-
-          KalibroClient::Entities::Configurations::KalibroRange.stubs(:ranges_of).with(mc.id).returns(ranges)
+          mc.stubs(:kalibro_ranges).returns(ranges)
 
           # The value for this metric result is the beginning of it's range, or -1 if it's meant to not be covered
           # by any of the ranges
@@ -50,8 +49,7 @@ describe Processor::Interpreter do
           value = value_range ? value_range.beginning : -1
 
           module_results.each do |module_result|
-            metric_result = module_result.tree_metric_results.build(metric_configuration_id: mc.id, value: value)
-            metric_result.stubs(:metric_configuration).returns(mc)
+            module_result.tree_metric_results.build(metric_configuration_id: mc.id, value: value)
           end
         end
       end
@@ -61,15 +59,27 @@ describe Processor::Interpreter do
           numerator = denominator = 0
           [tree_native_metrics, compound_metrics].each do |metrics|
             metrics.zip(readings) do |mc, reading|
-              numerator += reading.nil? ? 0 : reading.grade * mc.weight
+              next if reading.nil?
+              numerator += reading.grade * mc.weight
               denominator += mc.weight
             end
           end
 
           grade = numerator / denominator
           module_results.each do |module_result|
-            module_result.expects(:update).with(grade: grade)
+            module_result.expects(:update!).with(grade: grade)
           end
+
+          Processor::Interpreter.task(context)
+        end
+      end
+
+      context 'without tree metrics' do
+        let(:tree_native_metrics) { [] }
+        let(:compound_metrics) { [] }
+
+        it 'is expected to not update any records' do
+          ModuleResult.any_instance.expects(:update!).never
 
           Processor::Interpreter.task(context)
         end
@@ -77,7 +87,10 @@ describe Processor::Interpreter do
 
       context 'with tree metrics' do
         before :each do
-          module_results_tree.root.expects(:pre_order).returns(module_results)
+          query = mock('module_results')
+          processing.expects(:module_results).returns(query)
+          query.expects(:includes).with(:tree_metric_results).returns(query)
+          query.expects(:find_each).multiple_yields(*module_results)
 
           # Treat the tree native metrics and compound metrics as two distinct sets, each containing results for all
           # the defined readings, and one result that doesn't match any reading.
@@ -86,8 +99,7 @@ describe Processor::Interpreter do
 
           # Add hotspot metric results to make sure they are ignored as they should.
           module_results.each do |module_result|
-            metric_result = module_result.hotspot_metric_results.build(metric_configuration_id: hotspot_metric.id)
-            metric_result.stubs(:metric_configuration).returns(hotspot_metric)
+            module_result.hotspot_metric_results.build(metric_configuration_id: hotspot_metric.id)
           end
         end
 

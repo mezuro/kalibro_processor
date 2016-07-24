@@ -1,25 +1,45 @@
 module Processor
   class Interpreter < ProcessingStep
-    protected
-
     def self.task(context)
-      all_module_results = context.processing.root_module_result.pre_order
-      all_module_results.each do | module_result_child |
-        numerator = 0
-        denominator = 0
-        module_result_child.tree_metric_results.each do |tree_metric_result|
-          weight = tree_metric_result.metric_configuration.weight
-          grade = tree_metric_result.has_grade? ? tree_metric_result.range.reading.grade : 0
-          numerator += weight*grade
-          denominator += weight
+      metrics_and_ranges_by_id = extract_gradable_metric_configurations(context)
+      return if metrics_and_ranges_by_id.empty?
+
+      ModuleResult.transaction do
+        module_results = context.processing.module_results.includes(:tree_metric_results)
+        module_results.find_each do |module_result|
+          numerator = 0
+          denominator = 0
+
+          module_result.tree_metric_results.each do |tree_metric_result|
+            mc, ranges = metrics_and_ranges_by_id[tree_metric_result.metric_configuration_id]
+            next if mc.nil? || ranges.nil?
+
+            range = ranges.find { |range| range.range === tree_metric_result.value }
+            next if range.nil? || range.reading.nil?
+
+            numerator += mc.weight * range.reading.grade
+            denominator += mc.weight
+          end
+
+          avg_grade = denominator == 0 ? 0 : numerator / denominator
+          module_result.update!(grade: avg_grade)
         end
-        quotient = denominator == 0 ? 0 : numerator/denominator
-        module_result_child.update(grade: quotient)
       end
     end
 
     def self.state
       "INTERPRETING"
     end
+
+    def self.extract_gradable_metric_configurations(context)
+      Hash[context.tree_metrics.map { |mc|
+        ranges = mc.kalibro_ranges
+        next if ranges.empty?
+
+        [mc.id, [mc, ranges]]
+      }]
+    end
+
+    private_class_method :extract_gradable_metric_configurations
   end
 end
