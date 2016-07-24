@@ -12,5 +12,15 @@ module Processor
       end
       @compound_metrics = []
     end
+
+    def tree_native_metrics
+      native_metrics.values.flat_map { |metrics|
+        metrics.select { |mc| mc.metric.type == 'NativeMetricSnapshot' }
+      }
+    end
+
+    def tree_metrics
+      tree_native_metrics + compound_metrics
+    end
   end
 end
