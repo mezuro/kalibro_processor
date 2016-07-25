@@ -4,18 +4,26 @@ require 'kalibro_client/kalibro_cucumber_helpers'
 
 module Performance
   class Base
-    def initialize(num_runs: nil, measure_mode: nil, save_reports: true)
+    def initialize(num_runs: nil, measure_mode: nil, save_reports: true, rand_seed: nil)
       if num_runs.nil?
         num_runs = ENV.key?('PROFILE_NUM_RUNS') ? ENV['PROFILE_NUM_RUNS'].to_i : 1
+      end
+
+      if rand_seed.nil? && ENV.key?('PROFILE_RAND_SEED')
+        rand_seed = ENV['PROFILE_RAND_SEED'].to_i
       end
 
       @num_runs = num_runs
       @measure_mode = measure_mode
       @save_reports = save_reports
+      @rand_seed = rand_seed
       @results = []
     end
 
     def setup
+      Random.srand(@rand_seed) if @rand_seed
+      STDERR.puts "Using random seed #{Random::DEFAULT.seed}"
+
       DatabaseCleaner.strategy = :truncation
       KalibroClient::KalibroCucumberHelpers.clean_configurations
       DatabaseCleaner.clean
