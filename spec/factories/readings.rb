@@ -16,13 +16,26 @@
 
 FactoryGirl.define do
   factory :reading, class: KalibroClient::Entities::Configurations::Reading do
-    label "Good"
-    grade 10.5
     color "33DD33"
-    reading_group_id 31
+    good
 
     trait :with_id do
-      id 42
+      sequence(:id, 1)
+    end
+
+    trait :good do
+      label "Good"
+      grade 10.5
+    end
+
+    trait :average do
+      label "Average"
+      grade 6.0
+    end
+
+    trait :bad do
+      label "Bad"
+      grade 3.0
     end
 
     factory :reading_with_id, traits: [:with_id]
