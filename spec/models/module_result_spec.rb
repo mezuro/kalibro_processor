@@ -64,11 +64,13 @@ describe ModuleResult, :type => :model do
     end
   end
 
-  describe 'method' do
+  describe 'methods' do
+    subject { FactoryGirl.build(:module_result) }
+
     describe 'find_by_module_and_processing' do
-      let!(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
-      let!(:processing) { FactoryGirl.build(:processing) }
-      let!(:module_result) { FactoryGirl.build(:module_result) }
+      let(:kalibro_module) { FactoryGirl.build(:kalibro_module) }
+      let(:processing) { FactoryGirl.build(:processing) }
+      let(:module_result) { FactoryGirl.build(:module_result) }
 
       before :each do
         name_filtered_results = Object.new
@@ -92,8 +94,6 @@ describe ModuleResult, :type => :model do
     end
 
     describe 'to_json' do
-      subject { FactoryGirl.build(:module_result) }
-
       it 'is expected to add the kalibro_module to the JSON' do
         expect(JSON.parse(subject.to_json)['kalibro_module']).to eq(JSON.parse(subject.kalibro_module.to_json))
       end
@@ -104,6 +104,15 @@ describe ModuleResult, :type => :model do
         expect(JSON.parse(subject.to_json)['height']).to eq(JSON.parse(subject.to_json)['height'])
       end
     end
+  end
+
+  describe 'tree-walking methods' do
+    subject { FactoryGirl.build(:module_result) }
+
+    let(:module_results_tree) { FactoryGirl.build(:module_results_tree, :with_id, height: 3, width: 2) }
+    let(:module_results) { module_results_tree.all }
+    let(:non_root_module_results) { module_results - [module_results_tree.root] }
+    subject { module_results_tree.root }
 
     describe 'pre_order' do
       context 'when it does not have children' do
@@ -151,31 +160,46 @@ describe ModuleResult, :type => :model do
       end
     end
 
+    describe 'descendants_by_level' do
+      before :each do
+        # Ensure fetching the children of the last level is handled (and returns an empty list)
+        levels_with_last = module_results_tree.levels + [[]]
+        levels_with_last.each_cons(2) do |parents, children|
+          where_mock = mock('where')
+          eager_load_mock = mock('eager_load')
+
+          eager_load_mock.expects(:to_a).returns(children)
+          where_mock.expects(:eager_load).returns(eager_load_mock)
+          ModuleResult.expects(:where).with(parent_id: parents.map(&:id)).returns(where_mock)
+        end
+      end
+
+      it 'is expected to return a list with the levels from top to bottom' do
+        expect(subject.descendants_by_level).to eq(module_results_tree.levels)
+      end
+    end
+
     describe 'descendants' do
-      subject { FactoryGirl.build(:module_result) }
-      let!(:pre_order_module_results) { [subject] }
+      let!(:pre_order_module_results) { [[subject]] }
 
       before :each do
-        subject.expects(:pre_order_traverse).with(subject).returns(pre_order_module_results.to_enum)
+        subject.expects(:descendants_by_level).returns(pre_order_module_results)
       end
 
       it 'is expected to return the descendant ModuleResults' do
         expect(subject.descendants).to be_a(Array)
-        expect(subject.descendants).to eq(pre_order_module_results)
+        expect(subject.descendants).to eq(pre_order_module_results.flatten)
       end
     end
 
     describe 'descendant_hotspot_metric_results' do
-      subject { FactoryGirl.build(:module_result) }
-      let!(:descendant_module_results) { [subject] }
-
       before :each do
-        subject.expects(:descendants).returns(descendant_module_results)
+        subject.expects(:descendants).returns(module_results)
       end
 
       it 'is expected to return the Hotspot MetricResults related with the descendant ModuleResults ids' do
         result_mock = mock
-        HotspotMetricResult.expects(:where).with(module_result_id: [subject.id]).returns(result_mock)
+        HotspotMetricResult.expects(:where).with(module_result_id: module_results.map(&:id)).returns(result_mock)
 
         expect(subject.descendant_hotspot_metric_results).to eq(result_mock)
       end

@@ -1,54 +1,80 @@
-require 'metric_result_aggregator'
-
 module Processor
   class Aggregator < ProcessingStep
-    protected
+    def self.task(context)
+      # Only bother processing Tree metric configurations
+      # Do nothing if there are none
+      metric_configurations = extract_tree_metric_configurations(context)
+      return if metric_configurations.empty?
 
-    def self.task(runner)
-      @native_metrics = runner.native_metrics
-      set_all_metrics
-      aggregate(runner.processing.root_module_result.pre_order)
+      # Find all the descendants of the root at once.
+      root = context.processing.root_module_result
+      descendants_by_level = root.descendants_by_level
+      # Keep a hash to allow looking up parents by id without going to the DB again
+      module_results_by_id = module_results_by_id(descendants_by_level)
+
+      new_tree_metric_results = []
+
+      # Process levels bottom-up to ensure every descendants has been aggregated already when a module result is
+      # processed
+      descendants_by_level.reverse_each do |level|
+        # Group module results in each level by their parents and aggregate the results for the group, to then be
+        # written to the parent
+        level.group_by(&:parent_id).each do |parent_id, children|
+          next if parent_id.nil?
+          parent = module_results_by_id[parent_id]
+
+          metric_configurations.each do |mc|
+            # Ensure we won't try to aggregate into something of an unexpected granularity
+            next if parent.kalibro_module.granularity < mc.metric.scope
+
+            # Don't create a result if the parent already has a result for this metric
+            next if parent.tree_metric_results.any? { |tmr| tmr.metric_configuration_id == mc.id }
+
+            # Get all the metric results for this metric configuration from all the module results in the group
+            tree_metric_results = children.map { |module_result|
+              module_result.tree_metric_results.find { |tmr| tmr.metric_configuration_id == mc.id }
+            }.compact
+
+            # Aggregate the results and save
+            new_value = aggregate_values(tree_metric_results, mc)
+            new_tree_metric_results << parent.tree_metric_results.build(metric_configuration_id: mc.id, value: new_value)
+          end
+        end
+      end
+
+      # Do a bulk insert, but not with everything at once to avoid constructing and logging obscenely large queries.
+      # Performance of a batch of 100 seems to be the same or very close to a full bach of about 4000 records.
+      # The transaction still allows the database to perform as best as it can by committing all the data at once, but
+      # we avoid the monster queries.
+      TreeMetricResult.transaction do
+        TreeMetricResult.import!(new_tree_metric_results, batch_size: 100)
+      end
     end
 
     def self.state
       "AGGREGATING"
     end
 
-    private
-
-    def self.aggregate(pre_order_module_results)
-      # The upper nodes of the tree need the children to be calculated first, so we reverse the pre_order
-      pre_order_module_results.reverse_each do | module_result_child |
-
-        already_calculated_metrics = module_result_child.tree_metric_results.map { |tree_metric_result| tree_metric_result.metric}
-
-        remaining_metrics = @all_metrics.reject { |metric| already_calculated_metrics.include?(metric) }
-
-        remaining_metrics.each do |metric|
-          if module_result_child.kalibro_module.granularity >= KalibroClient::Entities::Miscellaneous::Granularity.new(metric.scope.to_s.to_sym)
-            tree_metric_result = TreeMetricResult.new(metric: metric, module_result: module_result_child, metric_configuration_id: metric_configuration(metric).id)
-            tree_metric_result.value = MetricResultAggregator.aggregated_value(tree_metric_result)
-            tree_metric_result.save
-          end
-        end
-      end
+    def self.extract_tree_metric_configurations(context)
+      context.native_metrics.values.flatten.reject { |mc| mc.metric.type != 'NativeMetricSnapshot' }
     end
 
-    def self.set_all_metrics
-      @all_metrics = []
-      @native_metrics.each_value do |metric_configurations|
-        metric_configurations.each do |metric_configuration|
-          @all_metrics << metric_configuration.metric
+    def self.module_results_by_id(descendants_by_level)
+      results = {}
+      descendants_by_level.each do |level|
+        level.each do |module_result|
+          results[module_result.id] = module_result
         end
       end
+
+      results
     end
 
-    def self.metric_configuration(metric)
-      @native_metrics.each_value do |metric_configurations|
-        metric_configurations.each do |metric_configuration|
-          return metric_configuration if metric_configuration.metric == metric
-        end
-      end
+    def self.aggregate_values(tree_metric_results, metric_configuration)
+      aggregation_form = metric_configuration.aggregation_form.to_s.downcase
+      DescriptiveStatistics::Stats.new(tree_metric_results.map(&:value)).send(aggregation_form)
     end
+
+    private_class_method :extract_tree_metric_configurations, :module_results_by_id, :aggregate_values
   end
 end
