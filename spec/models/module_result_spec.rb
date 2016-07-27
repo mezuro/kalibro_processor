@@ -160,44 +160,6 @@ describe ModuleResult, :type => :model do
       end
     end
 
-    describe 'level_order' do
-      let(:level_order) { module_results_tree.levels.flatten }
-
-      context 'when it is at the root' do
-        context 'when there are children' do
-          before do
-            subject.expects(:descendants_by_level).returns(module_results_tree.levels)
-          end
-
-          it 'is expected to return the level order tree traversal ' do
-            expect(subject.level_order).to eq(level_order)
-          end
-        end
-
-        context 'when there are no children' do
-          let(:module_results_tree) { FactoryGirl.build(:module_results_tree, :with_id, height: 1) }
-
-          before do
-            subject.expects(:descendants_by_level).returns([[subject]])
-          end
-
-          it 'is expected to return an array with only itself' do
-            expect(subject.level_order).to eq([subject])
-          end
-        end
-      end
-
-      context 'when it is not at the root' do
-        before do
-          subject.expects(:descendants_by_level).returns(module_results_tree.levels)
-        end
-
-        it 'is expected to return the level order tree traversal from the root' do
-          expect(non_root_module_results.map(&:level_order)).to all(eq(level_order))
-        end
-      end
-    end
-
     describe 'descendants_by_level' do
       before :each do
         # Ensure fetching the children of the last level is handled (and returns an empty list)

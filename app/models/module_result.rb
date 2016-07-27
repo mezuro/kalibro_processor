@@ -30,13 +30,6 @@ class ModuleResult < ActiveRecord::Base
     @pre_order ||= pre_order_traverse(root).to_a
   end
 
-  def level_order
-    return @level_order unless @level_order.nil?
-    return processing.root_module_result.level_order unless parent.nil?
-
-    @level_order = descendants_by_level.flatten
-  end
-
   def descendants
     @descendants ||= descendants_by_level.flatten
   end
