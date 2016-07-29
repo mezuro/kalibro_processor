@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160729163933) do
+ActiveRecord::Schema.define(version: 20160729165157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 20160729163933) do
   end
 
   add_index "module_results", ["parent_id"], name: "index_module_results_on_parent_id", using: :btree
+  add_index "module_results", ["processing_id"], name: "index_module_results_on_processing_id", using: :btree
 
   create_table "process_times", force: :cascade do |t|
     t.string   "state",         limit: 255
