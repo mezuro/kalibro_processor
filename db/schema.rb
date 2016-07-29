@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160729165157) do
+ActiveRecord::Schema.define(version: 20160729170405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,9 @@ ActiveRecord::Schema.define(version: 20160729165157) do
     t.datetime "updated_at"
     t.integer  "module_result_id"
   end
+
+  add_index "kalibro_modules", ["long_name", "granularity"], name: "index_kalibro_modules_on_long_name_and_granularity", using: :btree
+  add_index "kalibro_modules", ["module_result_id"], name: "index_kalibro_modules_on_module_result_id", using: :btree
 
   create_table "metric_results", force: :cascade do |t|
     t.integer  "module_result_id"
