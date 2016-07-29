@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151002172231) do
+ActiveRecord::Schema.define(version: 20160729163933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,7 +52,10 @@ ActiveRecord::Schema.define(version: 20151002172231) do
     t.integer  "related_hotspot_metric_results_id"
   end
 
+  add_index "metric_results", ["metric_configuration_id"], name: "index_metric_results_on_metric_configuration_id", using: :btree
+  add_index "metric_results", ["module_result_id"], name: "index_metric_results_on_module_result_id", using: :btree
   add_index "metric_results", ["related_hotspot_metric_results_id"], name: "index_metric_results_on_related_hotspot_metric_results_id", using: :btree
+  add_index "metric_results", ["type"], name: "index_metric_results_on_type", using: :btree
 
   create_table "module_results", force: :cascade do |t|
     t.float    "grade"
