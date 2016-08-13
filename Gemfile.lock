@@ -216,8 +216,8 @@ GEM
       faraday_middleware
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
-    mail (2.6.3)
-      mime-types (>= 1.16, < 3)
+    mail (2.6.4)
+      mime-types (>= 1.16, < 4)
     main (6.2.0)
       arrayfields (>= 4.7.4)
       chronic (>= 0.6.2)
