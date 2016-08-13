@@ -210,7 +210,7 @@ GEM
       kalibro_client (~> 4.0)
     launchy (2.4.3)
       addressable (~> 2.3)
-    libv8 (3.16.14.11)
+    libv8 (3.16.14.15)
     likeno (1.1.0)
       activesupport (>= 2.2.1)
       faraday_middleware
