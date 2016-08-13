@@ -82,7 +82,7 @@ GEM
     arrayfields (4.9.2)
     ast (2.3.0)
     builder (3.2.2)
-    byebug (6.0.2)
+    byebug (9.0.5)
     cane (2.6.2)
       parallel
     capistrano (3.4.0)
