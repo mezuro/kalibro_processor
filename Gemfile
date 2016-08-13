@@ -100,6 +100,9 @@ group :development, :test do
 
   # Ruby profilling
   gem 'ruby-prof'
+
+  # Easier gem upgrading
+  gem 'gisdatigo', '~>0.0.1'
 end
 
 # Acceptance tests
