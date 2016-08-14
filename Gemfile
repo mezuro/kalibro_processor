@@ -102,7 +102,7 @@ group :development, :test do
   gem 'ruby-prof'
 
   # Easier gem upgrading
-  gem 'gisdatigo', '~>0.0.1'
+  gem 'gisdatigo', '~>0.1.0'
 end
 
 # Acceptance tests
