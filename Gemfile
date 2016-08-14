@@ -87,7 +87,7 @@ group :development, :test do
   gem 'spring', group: :development
 
   # Test framework
-  gem 'rspec-rails', '~> 3.3.2'
+  gem 'rspec-rails', '~> 3.5.1'
 
   # Fixtures made easy
   gem 'factory_girl_rails', '~> 4.5.0'
