@@ -51,6 +51,10 @@ gem 'exception_notification', '~> 4.1.0'
 #
 gem 'foreman', '~> 0.78.0'
 
+# FIXME: the latest release of codeclimate gem requires activesupport ~>4.2, while
+# rails 5 requires 5.0.0.1.
+gem 'codeclimate', github: 'codeclimate/codeclimate', branch: 'master'
+
 gem 'kolekti'
 gem 'kolekti_analizo', github: 'mezuro/kolekti_analizo', branch: 'stable'
 gem 'kolekti_cc_phpmd', github: 'mezuro/kolekti_cc_phpmd', branch: 'stable'
