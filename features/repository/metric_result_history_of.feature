@@ -3,7 +3,7 @@ Feature: Metric Result History Of
   As a regular user
   I should be able to retrieve the history for a given metric result
 
-  @clear_repository @kalibro_configuration_restart
+  @clear_repository @kalibro_configuration_restart @wip
   Scenario: After processing an existing repository with a kalibro configuration
     Given I have sample readings
     And I have a sample kalibro configuration with native metrics

@@ -39,5 +39,5 @@ chdir APP_ROOT do
   system! 'rake tmp:create'
 
   puts "\n== Restarting application server =="
-  system "touch tmp/restart.txt"
+  system! 'bin/rails restart'
 end
