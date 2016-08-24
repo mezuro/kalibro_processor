@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe ModuleResultsController, :type => :routing do
-  before { skip "Updating to rails 5" }
   describe "routing" do
     it { is_expected.to route(:get, '/module_results/1').
                   to(controller: :module_results, action: :get, id: 1) }

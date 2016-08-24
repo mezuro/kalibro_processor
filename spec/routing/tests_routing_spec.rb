@@ -1,7 +1,6 @@
 require "rails_helper"
 
 describe TestsController, :type => :routing do
-  before { skip "Updating to rails 5" }
   describe "routing" do
     context 'outside production environment' do
       it { is_expected.to route(:post, '/tests/clean_database').
