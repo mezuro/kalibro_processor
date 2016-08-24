@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 describe ModuleResult, :type => :model do
-  before { skip "Updating to rails 5" }
-  describe 'associations' do
+    describe 'associations' do
     it { is_expected.to have_one(:kalibro_module).dependent(:destroy) }
     it { is_expected.to have_many(:tree_metric_results).dependent(:destroy) }
     it { is_expected.to belong_to(:processing) }

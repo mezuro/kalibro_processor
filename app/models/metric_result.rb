@@ -1,4 +1,4 @@
-class MetricResult < ActiveRecord::Base
+class MetricResult < ApplicationRecord
   attr_writer :metric
   belongs_to :module_result
 

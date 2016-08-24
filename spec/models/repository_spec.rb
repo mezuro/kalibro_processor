@@ -2,8 +2,7 @@ require 'rails_helper'
 require 'downloaders'
 
 describe Repository, :type => :model do
-  before { skip "Updating to rails 5" }
-  describe 'validations' do
+    describe 'validations' do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:address) }
     it { is_expected.to validate_presence_of(:kalibro_configuration_id) }

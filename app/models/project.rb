@@ -1,4 +1,4 @@
-class Project < ActiveRecord::Base
+class Project < ApplicationRecord
   has_many :repositories, dependent: :destroy
 
   validates :name, presence: true

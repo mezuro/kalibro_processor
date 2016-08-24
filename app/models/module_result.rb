@@ -1,4 +1,4 @@
-class ModuleResult < ActiveRecord::Base
+class ModuleResult < ApplicationRecord
   has_one :kalibro_module, dependent: :destroy #It can go wrong if someday we want to destroy only module results and not the whole processing
   has_many :children, foreign_key: 'parent_id', class_name: 'ModuleResult', dependent: :destroy
   has_many :tree_metric_results, dependent: :destroy

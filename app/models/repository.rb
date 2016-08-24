@@ -1,6 +1,6 @@
 require 'downloaders'
 
-class Repository < ActiveRecord::Base
+class Repository < ApplicationRecord
   belongs_to :project
   has_many :processings, dependent: :destroy
 
