@@ -22,11 +22,11 @@ chdir APP_ROOT do
   unless File.exist?('config/database.yml')
     cp 'config/database.yml.sample', 'config/database.yml'
   end
-  unless File.exist?("config/repositories.yml")
-    system "cp config/repositories.yml.sample config/repositories.yml"
+  unless File.exist?('config/repositories.yml')
+    cp 'config/repositories.yml.sample', 'config/repositories.yml'
   end
-  unless File.exist?("features/support/kalibro_cucumber_helpers.yml")
-    system "cp features/support/kalibro_cucumber_helpers.yml.sample features/support/kalibro_cucumber_helpers.yml"
+  unless File.exist?('features/support/kalibro_cucumber_helpers.yml')
+    cp 'features/support/kalibro_cucumber_helpers.yml.sample', 'features/support/kalibro_cucumber_helpers.yml'
   end
 
   puts "\n== Preparing database =="
