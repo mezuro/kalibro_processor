@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe InformationController do
-  before { skip "Updating to rails 5" }
   describe 'data' do
     describe 'html format' do
       before :each do

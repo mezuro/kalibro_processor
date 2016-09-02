@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe RepositoriesController, :type => :controller do
-  before { skip "Updating to rails 5" }
   let!(:repository) { FactoryGirl.build(:repository, id: 1) }
 
   describe 'index' do

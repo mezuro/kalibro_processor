@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe HotspotMetricResultsController do
-  before { skip "Updating to rails 5" }
   it_behaves_like 'MetricResultsController'
 
   describe 'method' do

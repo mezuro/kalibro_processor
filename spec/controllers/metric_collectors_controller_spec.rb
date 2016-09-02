@@ -2,7 +2,6 @@ require 'rails_helper'
 require 'metric_collector'
 
 RSpec.describe MetricCollectorsController, :type => :controller do
-  before { skip "Updating to rails 5" }
   describe 'all_names' do
     let(:names) { ["Analizo", "MetricFu"] }
 
@@ -42,7 +41,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
 
     context 'with an unavailable collector' do
       let(:metric_collector_name) { "BaseTool" }
-      let(:error_hash) { {error: Errors::NotFoundError.new("Metric collector #{metric_collector_name} not found.")} }
+      let(:error_hash) { {error: Errors::NotFoundError.new("Metric Collector #{metric_collector_name} not found.")} }
 
       before :each do
         MetricCollector::KolektiAdapter.expects(:details).returns([metric_collector_details])
@@ -53,7 +52,7 @@ RSpec.describe MetricCollectorsController, :type => :controller do
       it { is_expected.to respond_with(:not_found) }
 
       it 'is expected to return the error_hash' do
-        expect(JSON.parse(response.body)).to eq(JSON.parse(error_hash.to_json))
+        expect(JSON.parse(response.body).to_json).to eq(JSON.parse(error_hash.to_json).to_json)
       end
     end
   end

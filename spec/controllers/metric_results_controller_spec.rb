@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe MetricResultsController, :type => :controller do
-  before { skip "Updating to rails 5" }
   describe 'module_result' do
     context 'with a valid MetricResult id' do
       let!(:metric_result) { FactoryGirl.build(:metric_result, :with_id) }

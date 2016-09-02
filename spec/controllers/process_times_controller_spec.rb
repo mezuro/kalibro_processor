@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe ProcessTimesController, :type => :controller do
-  before { skip "Updating to rails 5" }
   let(:process_time) { FactoryGirl.build(:process_time) }
 
   describe "index" do

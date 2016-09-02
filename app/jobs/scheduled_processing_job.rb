@@ -1,4 +1,4 @@
-class ScheduledProcessingJob < ActiveJob::Base
+class ScheduledProcessingJob < ApplicationJob
   queue_as :default
 
   def perform(repository)

@@ -1,7 +1,7 @@
 require 'metric_collector'
 require 'processor'
 
-class ProcessingJob < ActiveJob::Base
+class ProcessingJob < ApplicationJob
   queue_as :default
 
   before_perform do |job|
