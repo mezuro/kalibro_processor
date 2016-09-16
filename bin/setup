@@ -35,6 +35,9 @@ chdir APP_ROOT do
   puts "\n== Removing old logs and tempfiles =="
   system! 'bin/rake log:clear tmp:clear'
 
+  puts "\n== Creating tempfiles  =="
+  system! 'rake tmp:create'
+
   puts "\n== Restarting application server =="
   system "touch tmp/restart.txt"
 end
