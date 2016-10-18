@@ -109,7 +109,8 @@ group :cucumber do
   # gem 'database_cleaner' # Removed because it is getting added above.
 end
 
-
+# Use puma as the app server
+gem 'puma'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

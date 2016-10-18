@@ -4,6 +4,8 @@ KalibroProcessor is the processing web service for Mezuro.
 
 == Unreleased
 
+- Replace webrick by puma
+
 == v.1.3.3 - 29/07/2016
 
 * Insert in one query all aggregated MetricResults
