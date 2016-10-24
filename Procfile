@@ -1,2 +1,2 @@
-web: bundle exec rails s -p $PORT -e $RAILS_ENV
+web: bundle exec puma -C config/puma.rb
 jobs: bundle exec rake jobs:work
